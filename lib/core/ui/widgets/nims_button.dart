@@ -4,16 +4,12 @@ class NIMSButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool loading;
-  final Color color;
-  final Color textColor;
 
   const NIMSButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.loading = false,
-    this.color = const Color(0xff61C36A),
-    this.textColor = Colors.white,
   });
 
   @override
@@ -23,12 +19,12 @@ class NIMSButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: loading ? null : onPressed,
         child: loading
-            ? const SizedBox(
+            ? SizedBox(
                 height: 22,
                 width: 22,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               )
             : Text(text),

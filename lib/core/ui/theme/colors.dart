@@ -82,7 +82,9 @@ class NIMSColors {
   static const violet06 = Color(0xFF9C27B0);
   static const violet07 = Color(0xFF6A0080);
 
-  // Black & White
+  // Black & White & Transparent
   static const black = Color(0xFF000000);
   static const white = Color(0xFFFFFFFF);
+  static const transparent = Color(0x00000000);
+
 }

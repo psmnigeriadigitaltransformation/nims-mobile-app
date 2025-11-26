@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:projects/app/router.dart';
 import 'package:projects/core/ui/widgets/nims_button.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -29,85 +29,93 @@ class LoginScreen extends ConsumerWidget {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 50),
+
+              /// -------------------------------
+              /// HELLO TEXT
+              /// -------------------------------
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Hello!",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+
+              /// -------------------------------
+              /// LOGIN TO GET STARTED TEXT
+              /// -------------------------------
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Login to get started.",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+
+              const SizedBox(height: 50),
 
               /// -------------------------------
               /// LOGIN ID INPUT
               /// -------------------------------
               TextField(
-                decoration: InputDecoration(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+                decoration: const InputDecoration(
+                  labelText: "Login ID",
                   hintText: "Enter your login ID",
-                  filled: true,
-                  fillColor: Colors.grey.shade100,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 18,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
+                  helperText: "",
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
               /// -------------------------------
               /// PASSWORD INPUT
               /// -------------------------------
               TextField(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
+                  labelText: "Password",
                   hintText: "Enter your password",
-                  filled: true,
-                  fillColor: Colors.grey.shade100,
-                  suffixIcon: const Icon(Icons.visibility_off),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 18,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
+                  helperText: "",
+                  suffixIcon: Padding(
+                    padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+                    child: Icon(Icons.visibility_off),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 8),
-
-              /// Forgot password
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Forgot password",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
+              const SizedBox(height: 86),
 
               /// -------------------------------
               /// LOGIN BUTTON
               /// -------------------------------
-              NIMSButton(text: "Login", onPressed: () {}),
+              NIMSButton(
+                text: "Login",
+                onPressed: () {
+                  context.pushNamed(dashboardScreen);
+                },
+                loading: false,
+              ),
 
-              SizedBox(height: size.height * 0.18),
+              SizedBox(height: size.height * 0.14),
 
               /// -------------------------------
-              /// FOOTER LOGOS + VERSION
+              /// FOOTER LOGOS
               /// -------------------------------
               Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // First footer logo placeholder
                       Container(
-                        height: 30,
-                        width: 30,
+                        height: 24,
+                        width: 24,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.grey.shade300,
@@ -117,12 +125,10 @@ class LoginScreen extends ConsumerWidget {
                         ),
                       ),
 
-                      const SizedBox(width: 16),
-
-                      // Second footer logo placeholder
+                      const SizedBox(width: 8),
                       Container(
-                        height: 30,
-                        width: 30,
+                        height: 24,
+                        width: 24,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.grey.shade300,
@@ -134,14 +140,19 @@ class LoginScreen extends ConsumerWidget {
 
                   const SizedBox(height: 8),
 
-                  const Text(
-                    "v1.0.0",
-                    style: TextStyle(fontSize: 13, color: Colors.black45),
+                  /// -------------------------------
+                  /// FOOTER VERSION
+                  /// -------------------------------
+                  Text(
+                    "v2.0.0",
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
             ],
           ),
         ),

@@ -1,12 +1,26 @@
 import 'package:go_router/go_router.dart';
+import 'package:projects/features/dashboard/presentation/dashboard_screen.dart';
 
-import '../core/ui/screens/textstyles_visualization_screen.dart';
+import '../features/auth/presentation/login_screen.dart';
 
-const loginRoute = '/login';
+const loginScreen = '/login_screen';
+const loginPath = '/login';
+
+const dashboardScreen = '/dashboard_screen';
+const dashboardPath = '/dashboard';
 
 final router = GoRouter(
-  initialLocation: loginRoute,
+  initialLocation: loginPath,
   routes: [
-    GoRoute(path: loginRoute, builder: (context, state) => TextStylesVisualizationScreen()),
+    GoRoute(
+      name: loginScreen,
+      path: loginPath,
+      builder: (context, state) => const DashboardScreen(),
+    ),
+    GoRoute(
+      name: dashboardScreen,
+      path: dashboardPath,
+      builder: (context, state) => const DashboardScreen(),
+    ),
   ],
 );
