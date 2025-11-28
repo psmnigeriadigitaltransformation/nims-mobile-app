@@ -4,7 +4,7 @@ import 'package:projects/core/ui/theme/colors.dart';
 
 enum QuickAction {
   facilities("Facilities", "lib/core/ui/icons/laboratory.png", NIMSColors.pink01),
-  manifests("Facilities", "lib/core/ui/icons/shopping_list.png", NIMSColors.violet01),
+  manifests("Manifests", "lib/core/ui/icons/shopping_list.png", NIMSColors.violet01),
   shipments("Shipments", "lib/core/ui/icons/delivery_bike.png", NIMSColors.green01),
   approvals("Approvals", "lib/core/ui/icons/approved.png", NIMSColors.blue01);
 

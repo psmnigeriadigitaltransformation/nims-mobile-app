@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:projects/core/ui/theme/text_styles.dart';
-import 'package:projects/core/ui/widgets/nims_button.dart';
+import 'package:projects/core/ui/widgets/nims_primary_button.dart';
 
 class TextStylesVisualizationScreen extends ConsumerWidget {
   const TextStylesVisualizationScreen({super.key});
