@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 import 'package:projects/features/dashboard/presentation/dashboard_screen.dart';
+import 'package:projects/features/manifest/presentation/add_new_manifest_screen.dart';
 import 'package:projects/features/pickup/presentation/result_pickup_screen.dart';
 import 'package:projects/features/pickup/presentation/specimen_pickup_screen.dart';
 import '../features/approval/presentation/result_dispatch_approval_screen.dart';
@@ -32,7 +33,7 @@ final router = GoRouter(
         if (kDebugMode) {
           print(routeType);
         }
-        return SpecimenPickUpScreen(routeType: routeType,);
+        return SpecimenPickUpScreen(routeType: routeType);
       },
     ),
     GoRoute(
@@ -40,13 +41,13 @@ final router = GoRouter(
       path: resultPickUpPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-              (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
           orElse: () => RouteType.geneXpertToSpoke,
         );
         if (kDebugMode) {
           print(routeType);
         }
-        return ResultPickUpScreen(routeType: routeType,);
+        return ResultPickUpScreen(routeType: routeType);
       },
     ),
     GoRoute(
@@ -54,13 +55,20 @@ final router = GoRouter(
       path: resultDispatchApprovalPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-              (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
           orElse: () => RouteType.geneXpertToSpoke,
         );
         if (kDebugMode) {
           print(routeType);
         }
-        return ResultDispatchApprovalScreen(routeType: routeType,);
+        return ResultDispatchApprovalScreen(routeType: routeType);
+      },
+    ),
+    GoRoute(
+      name: addNewManifestScreen,
+      path: addNewManifestPath,
+      builder: (context, state) {
+        return AddNewManifestScreen();
       },
     ),
   ],

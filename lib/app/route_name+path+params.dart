@@ -15,5 +15,8 @@ const resultPickUpPath = '/result_pickup';
 const resultDispatchApprovalScreen = 'result_dispatch_approval_screen';
 const resultDispatchApprovalPath = '/result_dispatch_approval';
 
+const addNewManifestScreen = 'add_new_manifest_screen';
+const addNewManifestPath = '/add_new_manifest';
+
 // QUERY PARAMS
 const routeTypeQueryParam = "route_type";

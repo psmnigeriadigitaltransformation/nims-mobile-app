@@ -7,4 +7,10 @@ class Mock {
     "Primary Health Care, Kuje",
     "National Hospital, Abuja",
   ];
+
+  static final specimenType = [
+    "Sputum",
+    "EID",
+    "Viral Load",
+  ];
 }
