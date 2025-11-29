@@ -36,7 +36,7 @@ class NIMSTransitCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                   color: statusBackgroundColor,
@@ -88,7 +88,7 @@ class NIMSTransitCard extends StatelessWidget {
                   sourceName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
@@ -101,7 +101,7 @@ class NIMSTransitCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.end,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),

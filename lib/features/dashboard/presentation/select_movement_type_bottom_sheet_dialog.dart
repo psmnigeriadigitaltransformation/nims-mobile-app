@@ -28,7 +28,15 @@ class SelectMovementTypeBottomSheetDialog extends StatelessWidget {
               ),
             ),
             SizedBox(height: 24),
-            ...RouteType.values.map(
+            Align(
+              alignment: AlignmentGeometry.centerLeft,
+              child: Text(
+                "Specimens",
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
+            SizedBox(height: 8),
+            ...RouteType.values.where((type) => type.category == RouteTypeCategory.specimen).map(
               (routeType) => Column(
                 children: [
                   InkWell(
@@ -49,7 +57,46 @@ class SelectMovementTypeBottomSheetDialog extends StatelessWidget {
                             color: Theme.of(context).dividerColor,
                           ),
                         ),
-                        // borderRadius: BorderRadiusGeometry.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8))
+                      ),
+                      child: Text(
+                        routeType.label,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 32),
+            Align(
+              alignment: AlignmentGeometry.centerLeft,
+              child: Text(
+                "Results",
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
+            SizedBox(height: 8),
+            ...RouteType.values.where((type) => type.category == RouteTypeCategory.result).map(
+                  (routeType) => Column(
+                children: [
+                  InkWell(
+                    splashColor: Theme.of(context).splashColor,
+                    highlightColor: Theme.of(context).highlightColor,
+                    onTap: () {
+                      onSelectMovementType(routeType);
+                    },
+                    child: Container(
+                      margin: EdgeInsetsGeometry.only(top: 0.5, bottom: 0.5),
+                      alignment: AlignmentGeometry.center,
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: NIMSColors.transparent,
+                        border: BoxBorder.fromLTRB(
+                          bottom: BorderSide(
+                            width: 0.5,
+                            color: Theme.of(context).dividerColor,
+                          ),
+                        ),
                       ),
                       child: Text(
                         routeType.label,

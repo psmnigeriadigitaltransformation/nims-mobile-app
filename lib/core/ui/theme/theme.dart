@@ -18,6 +18,7 @@ class NIMSTheme {
       tertiaryContainer: NIMSColors.grey01,
       outline: NIMSColors.grey03,
       surface: NIMSColors.white,
+      errorContainer: NIMSColors.red01,
     ),
     splashColor: NIMSColors.grey01,
     dividerColor: NIMSColors.grey03,
@@ -45,6 +46,7 @@ class NIMSTheme {
       tertiaryContainer: NIMSColors.grey01,
       outline: NIMSColors.grey03,
       surface: NIMSColors.white,
+      errorContainer: NIMSColors.red01,
     ),
     splashColor: NIMSColors.grey01,
     dividerColor: NIMSColors.grey03,
@@ -73,7 +75,7 @@ class NIMSTheme {
   );
 
   static final _dropdownMenuTheme = DropdownMenuThemeData(
-    textStyle: NIMSTextStyles.labelMedium.copyWith(color: NIMSColors.grey07),
+    textStyle: NIMSTextStyles.bodyMedium.copyWith(color: NIMSColors.grey07),
     inputDecorationTheme: _inputDecorationTheme,
     menuStyle: MenuStyle(
       backgroundColor: WidgetStatePropertyAll(NIMSColors.white),
@@ -143,7 +145,7 @@ class NIMSTheme {
       NIMSTextStyles.bodyMedium.copyWith(color: NIMSColors.grey07),
     ),
     hintStyle: WidgetStateProperty.all(
-      NIMSTextStyles.labelMedium.copyWith(color: NIMSColors.grey05),
+      NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.grey05),
     ),
     constraints: const BoxConstraints(minHeight: 48, maxHeight: 52),
     textCapitalization: TextCapitalization.none,
@@ -151,13 +153,13 @@ class NIMSTheme {
 
   /// Input Decoration Theme
   static final _inputDecorationTheme = InputDecorationTheme(
-    labelStyle: NIMSTextStyles.labelMedium.copyWith(color: NIMSColors.grey05),
+    labelStyle: NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.grey05),
     floatingLabelStyle: NIMSTextStyles.labelLarge.copyWith(
       color: NIMSColors.green05,
     ),
     helperStyle: NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.grey06),
     helperMaxLines: NIMSThemeTokens.inputDecorationThemeHelperMaxLines,
-    hintStyle: NIMSTextStyles.labelMedium.copyWith(color: NIMSColors.grey05),
+    hintStyle: NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.grey05),
     hintFadeDuration: const Duration(
       milliseconds:
           NIMSThemeTokens.inputDecorationThemeHintFadeDurationMilliseconds,
@@ -279,7 +281,7 @@ class NIMSTheme {
       padding: const EdgeInsets.symmetric(
         vertical: NIMSThemeTokens.filledButtonPaddingVertical,
       ),
-      textStyle: NIMSTextStyles.bodyMedium,
+      textStyle: NIMSTextStyles.labelLarge,
       enableFeedback: false,
     ),
   );

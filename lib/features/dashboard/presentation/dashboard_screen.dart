@@ -63,7 +63,7 @@ class DashboardScreen extends StatelessWidget {
                     padding: EdgeInsetsGeometry.directional(start: 4),
                     child: Text(
                       "Near Riders for Health HQ, Abuja ",
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: Theme.of(context).textTheme.bodySmall,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -128,11 +128,11 @@ class DashboardScreen extends StatelessWidget {
         const SizedBox(height: 16),
 
         SizedBox(
-          height: size.height * 0.50,
+          height: size.height * 0.47,
           child: ListView(
             children: [
               ...List.generate(
-                4,
+                6,
                 (x) => Padding(
                   padding: EdgeInsetsGeometry.symmetric(vertical: 4),
                   child: NIMSTransitCard(
@@ -149,6 +149,8 @@ class DashboardScreen extends StatelessWidget {
             ],
           ),
         ),
+
+        const SizedBox(height: 16),
 
         /// -------------------------------
         /// NEW PICK UP BUTTON
@@ -170,18 +172,27 @@ class DashboardScreen extends StatelessWidget {
               backgroundColor: Theme.of(context).colorScheme.surface,
               context: context,
               builder: (builder) => SelectMovementTypeBottomSheetDialog(
-                height: size.height * 0.31,
+                height: size.height * 0.40,
                 onSelectMovementType: (routeType) => {
-                  context.pushNamed(
-                    pickUpScreen,
-                    queryParameters: {routeTypeQueryParam: routeType.name},
-                  ),
+                  switch (routeType.category) {
+                    RouteTypeCategory.specimen => context.pushNamed(
+                      specimenPickUpScreen,
+                      queryParameters: {routeTypeQueryParam: routeType.name},
+                    ),
+
+                    RouteTypeCategory.result => context.pushNamed(
+                      resultPickUpScreen,
+                      queryParameters: {routeTypeQueryParam: routeType.name},
+                    ),
+                  },
                 },
               ),
             );
           },
           loading: false,
-        )
+        ),
+
+        const SizedBox(height: 24),
       ],
     );
   }

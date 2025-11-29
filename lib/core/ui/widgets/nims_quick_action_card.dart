@@ -30,7 +30,9 @@ class NIMSQuickActionCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             text,
-            style: Theme.of(context).textTheme.labelSmall,
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontSize: 10),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),

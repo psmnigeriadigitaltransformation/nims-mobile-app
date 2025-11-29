@@ -90,7 +90,7 @@ class NIMSTextStyles {
   static final bodyLarge = TextStyle(
     fontFamily: _defaultFontFamily,
     color: _defaultTextColor,
-    fontVariations: [FontVariation('wght', 800)],
+    fontVariations: [FontVariation('wght', 500)],
     fontSize: 16,
     height: 1.5,
     letterSpacing: 0.5,
@@ -99,7 +99,7 @@ class NIMSTextStyles {
   static final bodyMedium = TextStyle(
     fontFamily: _defaultFontFamily,
     color: _defaultTextColor,
-    fontVariations: [FontVariation('wght', 600)],
+    fontVariations: [FontVariation('wght', 500)],
     fontSize: 14,
     height: 1.43,
     letterSpacing: 0.25,
@@ -108,7 +108,7 @@ class NIMSTextStyles {
   static final bodySmall = TextStyle(
     fontFamily: _defaultFontFamily,
     color: _defaultTextColor,
-    fontVariations: [FontVariation('wght', 400)],
+    fontVariations: [FontVariation('wght', 500)],
     fontSize: 12,
     height: 1.33,
     letterSpacing: 0.4,
@@ -118,7 +118,7 @@ class NIMSTextStyles {
     fontFamily: _defaultFontFamily,
     color: _defaultTextColor,
     fontVariations: [FontVariation('wght', 700)],
-    fontSize: 14,
+    fontSize: 12,
     height: 1.43,
     letterSpacing: 0.1,
   );
@@ -126,17 +126,17 @@ class NIMSTextStyles {
   static final labelMedium = TextStyle(
     fontFamily: _defaultFontFamily,
     color: _defaultTextColor,
-    fontVariations: [FontVariation('wght', 600)],
-    fontSize: 12,
+    fontVariations: [FontVariation('wght', 700)],
+    fontSize: 11,
     height: 1.33,
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   );
 
   static final labelSmall = TextStyle(
     fontFamily: _defaultFontFamily,
     color: _defaultTextColor,
-    fontVariations: [FontVariation('wght', 500)],
-    fontSize: 11,
+    fontVariations: [FontVariation('wght', 700)],
+    fontSize: 10,
     height: 1.45,
     letterSpacing: 0.5,
   );

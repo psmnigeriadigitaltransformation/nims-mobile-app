@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 
 class NIMSManifestCard extends StatelessWidget {
   final String manifestID;
-  final String sourceName;
   final String destinationName;
 
   const NIMSManifestCard({
     super.key,
     required this.manifestID,
-    required this.sourceName,
     required this.destinationName,
   });
 
@@ -28,14 +26,14 @@ class NIMSManifestCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                   color: Theme.of(context).colorScheme.tertiaryContainer,
                 ),
                 child: Text(
                   manifestID,
-                  style: Theme.of(context).textTheme.labelSmall,
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),
               const Spacer(),
@@ -48,12 +46,32 @@ class NIMSManifestCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
             child: Row(
               children: [
                 Text(
                   destinationName,
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.tertiary),
+                ),
+                Spacer(),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.errorContainer.withAlpha(150),
+                    borderRadius: BorderRadiusGeometry.all(Radius.circular(4)),
+                  ),
+
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.symmetric(
+                      vertical: 2,
+                      horizontal: 8,
+                    ),
+                    child: Text(
+                      "Delete",
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -69,9 +87,7 @@ class NIMSManifestCard extends StatelessWidget {
                     "200 Samples",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
               ),
@@ -79,13 +95,11 @@ class NIMSManifestCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "GeneXpert",
+                    "Viral Load",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Image.asset(
                     "lib/core/ui/icons/ic_test_tube.png",

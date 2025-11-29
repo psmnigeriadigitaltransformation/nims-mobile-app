@@ -31,7 +31,7 @@ class LoginScreen extends StatelessWidget {
           padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text("Hello!", style: Theme.of(context).textTheme.bodyLarge),
+            child: Text("Hello!", style: Theme.of(context).textTheme.titleMedium),
           ),
         ),
 
@@ -44,7 +44,7 @@ class LoginScreen extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Text(
               "Login to get started.",
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
         ),
@@ -63,11 +63,13 @@ class LoginScreen extends StatelessWidget {
             decoration: const InputDecoration(
               labelText: "Login ID",
               hintText: "Enter your login ID",
+              helperText: "",
+              errorText: null,
             ),
           ),
         ),
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 8),
 
         /// -------------------------------
         /// PASSWORD INPUT
@@ -82,6 +84,8 @@ class LoginScreen extends StatelessWidget {
             decoration: const InputDecoration(
               labelText: "Password",
               hintText: "Enter your password",
+              helperText: "",
+              errorText: null,
               suffixIcon: Padding(
                 padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
                 child: Icon(Icons.visibility_off),

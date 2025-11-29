@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
-import 'package:projects/core/ui/theme/colors.dart';
-import 'package:projects/core/ui/widgets/nims_primary_button.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 import '../../../core/ui/widgets/nims_manifest_card.dart';
-import '../../../core/ui/widgets/nims_transit_card.dart';
+import '../../../core/ui/widgets/nims_primary_button.dart';
+import '../../../core/ui/widgets/nims_result_card.dart';
 import '../../dashboard/domain/mock.dart';
 
-class PickUpScreen extends StatelessWidget {
+class ResultPickUpScreen extends StatelessWidget {
   final RouteType routeType;
 
-  const PickUpScreen({super.key, required this.routeType});
+  const ResultPickUpScreen({super.key, required this.routeType});
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +31,19 @@ class PickUpScreen extends StatelessWidget {
               onPressed: () => {},
             ),
             Spacer(),
-            Flexible(
-              child: Text("Pick Up", style: TextTheme.of(context).titleSmall),
+            Text(
+              "Result Pick Up",
+              style: TextTheme.of(context).titleSmall,
+              textAlign: TextAlign.center,
             ),
             Spacer(),
+            SizedBox(width: 40),
           ],
         ),
 
         SizedBox(height: 8),
 
-        Text(routeType.label, style: TextTheme.of(context).labelMedium),
+        Text(routeType.label, style: TextTheme.of(context).bodySmall),
 
         SizedBox(height: 50),
 
@@ -59,7 +63,7 @@ class PickUpScreen extends StatelessWidget {
                 trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
                 selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
                 width: size.width - 80,
-                label: Text("Originating Facility"),
+                label: Text("PickUp Facility"),
                 dropdownMenuEntries: [
                   ...Mock.facilities.map(
                     (facility) => DropdownMenuEntry(
@@ -83,11 +87,11 @@ class PickUpScreen extends StatelessWidget {
         SizedBox(height: 40),
 
         /// -------------------------------
-        /// MANIFESTS
+        /// RESULTS
         /// -------------------------------
         Row(
           children: [
-            Text("Manifests", style: Theme.of(context).textTheme.titleSmall),
+            Text("Results", style: Theme.of(context).textTheme.titleSmall),
             Spacer(),
             Container(
               padding: EdgeInsetsGeometry.all(8),
@@ -104,7 +108,7 @@ class PickUpScreen extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
                     child: Text(
-                      "Add Manifest",
+                      "Select All",
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
@@ -117,26 +121,65 @@ class PickUpScreen extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
 
         SizedBox(
-          height: size.height * 0.50,
+          height: size.height * 0.56,
           child: ListView(
             children: [
+              Align(
+                alignment: AlignmentGeometry.centerLeft,
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 3,
+                        horizontal: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(4),
+                        ),
+                        color: Theme.of(context).colorScheme.tertiaryContainer,
+                      ),
+                      child: Text(
+                        "PC-288939-29930",
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "Sputum",
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
               ...List.generate(
                 4,
                 (x) => Padding(
-                  padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-                  child: NIMSManifestCard(
-                    sourceName: "Primary Health Care, Kuje",
-                    destinationName: "National Reference Lab",
-                    manifestID: 'NG-83992882-JJSKKS',
-                  ),
+                  padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
+                  child: NIMSResultCard(),
                 ),
               ),
             ],
           ),
         ),
+
+        /// ----------------------------------------
+        /// DISPATCH RESULTS BUTTON
+        /// ----------------------------------------
+        NIMSPrimaryButton(
+          text: "Dispatch Results",
+          onPressed: () {
+            context.pushNamed(resultDispatchApprovalScreen);
+          },
+        ),
+
+        const SizedBox(height: 24),
       ],
     );
   }
