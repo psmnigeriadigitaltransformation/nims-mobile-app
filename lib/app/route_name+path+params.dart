@@ -15,6 +15,15 @@ const resultPickUpPath = '/result_pickup';
 const resultDispatchApprovalScreen = 'result_dispatch_approval_screen';
 const resultDispatchApprovalPath = '/result_dispatch_approval';
 
+const specimenDispatchApprovalScreen = 'specimen_dispatch_approval_screen';
+const specimenDispatchApprovalPath = '/specimen_dispatch_approval';
+
+const resultDeliveryApprovalScreen = 'result_delivery_approval_screen';
+const resultDeliveryApprovalPath = '/result_delivery_approval';
+
+const specimenDeliveryApprovalScreen = 'specimen_delivery_approval_screen';
+const specimenDeliveryApprovalPath = '/specimen_delivery_approval';
+
 const addNewManifestScreen = 'add_new_manifest_screen';
 const addNewManifestPath = '/add_new_manifest';
 

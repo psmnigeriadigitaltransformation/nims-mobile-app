@@ -6,7 +6,10 @@ import 'package:projects/features/dashboard/presentation/dashboard_screen.dart';
 import 'package:projects/features/manifest/presentation/add_new_manifest_screen.dart';
 import 'package:projects/features/pickup/presentation/result_pickup_screen.dart';
 import 'package:projects/features/pickup/presentation/specimen_pickup_screen.dart';
-import '../features/approval/presentation/result_dispatch_approval_screen.dart';
+import '../features/approval/presentation/result/result_delivery_approval_screen.dart';
+import '../features/approval/presentation/result/result_dispatch_approval_screen.dart';
+import '../features/approval/presentation/specimen/specimen_delivery_approval_screen.dart';
+import '../features/approval/presentation/specimen/specimen_dispatch_approval_screen.dart';
 import '../features/auth/presentation/login_screen.dart';
 
 final router = GoRouter(
@@ -62,6 +65,48 @@ final router = GoRouter(
           print(routeType);
         }
         return ResultDispatchApprovalScreen(routeType: routeType);
+      },
+    ),
+    GoRoute(
+      name: specimenDispatchApprovalScreen,
+      path: specimenDispatchApprovalPath,
+      builder: (context, state) {
+        final routeType = RouteType.values.firstWhere(
+              (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          orElse: () => RouteType.spokeToPCRLabGeneXpert,
+        );
+        if (kDebugMode) {
+          print(routeType);
+        }
+        return SpecimenDispatchApprovalScreen(routeType: routeType);
+      },
+    ),
+    GoRoute(
+      name: specimenDeliveryApprovalScreen,
+      path: specimenDeliveryApprovalPath,
+      builder: (context, state) {
+        final routeType = RouteType.values.firstWhere(
+              (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          orElse: () => RouteType.spokeToPCRLabGeneXpert,
+        );
+        if (kDebugMode) {
+          print(routeType);
+        }
+        return SpecimenDeliveryApprovalScreen(routeType: routeType);
+      },
+    ),
+    GoRoute(
+      name: resultDeliveryApprovalScreen,
+      path: resultDeliveryApprovalPath,
+      builder: (context, state) {
+        final routeType = RouteType.values.firstWhere(
+              (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          orElse: () => RouteType.spokeToPCRLabGeneXpert,
+        );
+        if (kDebugMode) {
+          print(routeType);
+        }
+        return ResultDeliveryApprovalScreen(routeType: routeType);
       },
     ),
     GoRoute(

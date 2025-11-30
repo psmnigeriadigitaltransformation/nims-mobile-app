@@ -2,26 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
-import '../../../core/ui/theme/colors.dart';
-import '../../../core/ui/widgets/nims_manifest_card.dart';
-import '../../../core/ui/widgets/nims_primary_button.dart';
-import '../../../core/ui/widgets/nims_result_card.dart';
-import '../../../core/ui/widgets/nims_selected_result_card.dart';
-import '../../../core/ui/widgets/signature_pad.dart';
-import '../../dashboard/domain/mock.dart';
+import '../../../../core/ui/widgets/nims_primary_button.dart';
+import '../../../../core/ui/widgets/nims_selected_result_card.dart';
+import '../../../../core/ui/widgets/signature_pad.dart';
 
-class ResultDispatchApprovalScreen extends StatefulWidget {
+class ResultDeliveryApprovalScreen extends StatefulWidget {
   final RouteType routeType;
 
-  const ResultDispatchApprovalScreen({super.key, required this.routeType});
+  const ResultDeliveryApprovalScreen({super.key, required this.routeType});
 
   @override
-  State<ResultDispatchApprovalScreen> createState() =>
-      ResultDispatchApprovalScreenState();
+  State<ResultDeliveryApprovalScreen> createState() =>
+      ResultDeliveryApprovalScreenState();
 }
 
-class ResultDispatchApprovalScreenState
-    extends State<ResultDispatchApprovalScreen> {
+class ResultDeliveryApprovalScreenState
+    extends State<ResultDeliveryApprovalScreen> {
   final GlobalKey<SignaturePadState> signatureKey = GlobalKey();
 
   @override
@@ -42,7 +38,7 @@ class ResultDispatchApprovalScreenState
             ),
             Spacer(),
             Text(
-              "Result Dispatch Approval",
+              "Result Delivery Approval",
               style: TextTheme.of(context).titleSmall,
               textAlign: TextAlign.center,
             ),
@@ -110,12 +106,12 @@ class ResultDispatchApprovalScreenState
         SizedBox(height: 40),
 
         /// -------------------------------
-        /// SELECTED RESULTS
+        /// RESULTS
         /// -------------------------------
         Align(
           alignment: AlignmentGeometry.centerLeft,
           child: Text(
-            "Selected Results (2)",
+            "Results (2)",
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
