@@ -80,7 +80,7 @@ class DashboardScreen extends StatelessWidget {
         Container(
           padding: EdgeInsetsGeometry.symmetric(vertical: 16),
           child: SearchBar(
-            hintText: "Search for manifest, shipment or facility",
+            hintText: "Search for specimen, shipment or facility",
           ),
         ),
 
@@ -128,7 +128,7 @@ class DashboardScreen extends StatelessWidget {
         const SizedBox(height: 16),
 
         SizedBox(
-          height: size.height * 0.47,
+          height: size.height * 0.48,
           child: ListView(
             children: [
               ...List.generate(
@@ -150,7 +150,7 @@ class DashboardScreen extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 12.5),
 
         /// -------------------------------
         /// NEW PICK UP BUTTON
@@ -192,7 +192,7 @@ class DashboardScreen extends StatelessWidget {
           loading: false,
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
       ],
     );
   }

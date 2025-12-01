@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
-import 'package:projects/core/ui/widgets/nims_selected_manifest_card.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 import '../../../../core/ui/widgets/nims_primary_button.dart';
-import '../../../../core/ui/widgets/signature_pad.dart';
+import '../../../../core/ui/widgets/nims_selected_result_card.dart';
+import '../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
+import '../../../../core/ui/widgets/nims_signature_pad.dart';
 
-class SpecimenDispatchApprovalScreen extends StatefulWidget {
+class ResultDispatchApprovalScreen extends StatefulWidget {
   final RouteType routeType;
 
-  const SpecimenDispatchApprovalScreen({super.key, required this.routeType});
+  const ResultDispatchApprovalScreen({super.key, required this.routeType});
 
   @override
-  State<SpecimenDispatchApprovalScreen> createState() =>
+  State<ResultDispatchApprovalScreen> createState() =>
       ResultDispatchApprovalScreenState();
 }
 
 class ResultDispatchApprovalScreenState
-    extends State<SpecimenDispatchApprovalScreen> {
-  final GlobalKey<SignaturePadState> signatureKey = GlobalKey();
+    extends State<ResultDispatchApprovalScreen> {
+  final GlobalKey<NIMSSignaturePadState> signatureKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class ResultDispatchApprovalScreenState
             ),
             Spacer(),
             Text(
-              "Specimen Dispatch Approval",
+              "Result Dispatch Approval",
               style: TextTheme.of(context).titleSmall,
               textAlign: TextAlign.center,
             ),
@@ -56,62 +57,17 @@ class ResultDispatchApprovalScreenState
         /// -------------------------------------------
         /// ORIGINATING FACILITY + DESTINATION FACILITY
         /// -------------------------------------------
-        Column(
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsetsGeometry.only(left: 2.5),
-                  child: Image.asset(
-                    "lib/core/ui/icons/ic_origin_location.png",
-                    width: 16,
-                    height: 16,
-                  ),
-                ),
-                SizedBox(width: 16),
-                Text(
-                  "Gwagwalada General Hospital",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-            Align(
-              alignment: AlignmentGeometry.centerLeft,
-              child: Padding(
-                padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
-                child: Container(
-                  width: 1,
-                  color: Theme.of(context).colorScheme.secondary,
-                  height: 16,
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Image.asset(
-                  "lib/core/ui/icons/ic_destination_location.png",
-                  width: 21,
-                  height: 18,
-                ),
-                SizedBox(width: 16),
-                Text(
-                  "National Reference Lab",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ],
-        ),
+        NIMSOriginDestinationLinkView(),
 
         SizedBox(height: 40),
 
         /// -------------------------------
-        /// SELECTED MANIFESTS
+        /// SELECTED RESULTS
         /// -------------------------------
         Align(
           alignment: AlignmentGeometry.centerLeft,
           child: Text(
-            "Selected Manifests (2)",
+            "Selected Results (2)",
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
@@ -119,42 +75,26 @@ class ResultDispatchApprovalScreenState
         const SizedBox(height: 8),
 
         SizedBox(
-          height: size.height * 0.25,
-          child: ListView(
-            children: [
-              const SizedBox(height: 12),
-              ...List.generate(
-                4,
-                (x) => Padding(
-                  padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
-                  child: NimsSelectedManifestCard(),
+          height: size.height * 0.24,
+          child: Scrollbar(
+            thumbVisibility: true,
+            trackVisibility: true,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              children: [
+                ...List.generate(
+                  5,
+                  (x) => Padding(
+                    padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
+                    child: NIMSSelectedResultCard(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
 
         const SizedBox(height: 24),
-
-        /// -------------------------------
-        /// PICK UP TEMPERATURE INPUT
-        /// -------------------------------
-        Padding(
-          padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-          child: TextField(
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-            decoration: const InputDecoration(
-              labelText: "Pick Up Temperature",
-              hintText: "Enter pick up temperature",
-              helperText: "",
-              errorText: null,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 8),
 
         /// -------------------------------
         /// FULL NAME INPUT
@@ -223,7 +163,7 @@ class ResultDispatchApprovalScreenState
           height: 150,
           child: Padding(
             padding: EdgeInsetsGeometry.symmetric(horizontal: 9),
-            child: SignaturePad(
+            child: NIMSSignaturePad(
               key: signatureKey,
               strokeColor: Colors.black,
               backgroundColor: Theme.of(context).colorScheme.surface,
@@ -275,7 +215,7 @@ class ResultDispatchApprovalScreenState
         /// APPROVE BUTTON
         /// ----------------------------------------
         NIMSPrimaryButton(text: "Approve", onPressed: () {}),
-        SizedBox(height: 24),
+        SizedBox(height: 16),
       ],
     );
   }

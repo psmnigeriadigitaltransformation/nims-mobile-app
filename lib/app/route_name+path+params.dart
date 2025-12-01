@@ -27,5 +27,14 @@ const specimenDeliveryApprovalPath = '/specimen_delivery_approval';
 const addNewManifestScreen = 'add_new_manifest_screen';
 const addNewManifestPath = '/add_new_manifest';
 
+const routeDetailsScreen = 'route_details_screen';
+const routeDetailsPath = '/route_details';
+
+const dashboardManifestDetailsScreen = 'dashboard_manifest_details_screen';
+const dashboardManifestDetailsPath = '/dashboard_manifest_details';
+
+const dispatchApprovalManifestDetailsScreen = 'dispatch_approval_manifest_details_screen';
+const dispatchApprovalManifestDetailsPath = '/dispatch_approval_manifest_details';
+
 // QUERY PARAMS
 const routeTypeQueryParam = "route_type";

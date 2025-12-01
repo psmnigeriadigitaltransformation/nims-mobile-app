@@ -3,10 +3,10 @@ import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_result_card.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
-import '../../../core/ui/widgets/nims_manifest_card.dart';
-import '../../../core/ui/widgets/nims_primary_button.dart';
-import '../../../core/ui/widgets/nims_specimen_card.dart';
-import '../../dashboard/domain/mock.dart';
+import '../../../../core/ui/widgets/nims_manifest_card.dart';
+import '../../../../core/ui/widgets/nims_primary_button.dart';
+import '../../../../core/ui/widgets/nims_action_specimen_card.dart';
+import '../../../dashboard/domain/mock.dart';
 
 class AddNewManifestScreen extends StatelessWidget {
   const AddNewManifestScreen({super.key});
@@ -137,7 +137,7 @@ class AddNewManifestScreen extends StatelessWidget {
           label: Text("Specimen Type"),
           dropdownMenuEntries: [
             ...Mock.specimenType.map(
-                  (facility) => DropdownMenuEntry(
+              (facility) => DropdownMenuEntry(
                 value: facility,
                 labelWidget: Center(
                   child: Text(
@@ -195,25 +195,35 @@ class AddNewManifestScreen extends StatelessWidget {
         const SizedBox(height: 16),
 
         SizedBox(
-          height: size.height * 0.373,
-          child: ListView(
-            children: [
-              ...List.generate(
-                2,
-                (x) => Padding(
-                  padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-                  child: NIMSSpecimenCard(),
+          height: size.height * 0.318,
+          child: Scrollbar(
+            thumbVisibility: true,
+            trackVisibility: true,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              children: [
+                ...List.generate(
+                  10,
+                  (x) => Padding(
+                    padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+                    child: NIMSActionSpecimenCard(
+                      onTapAction: () {},
+                      actionLabel: "Delete",
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+
+        SizedBox(height: 58),
 
         // ----------------------------------------S
         /// SAVE MANIFEST BUTTON
         /// ----------------------------------------
         NIMSPrimaryButton(text: "Save Manifest", onPressed: () {}),
-        SizedBox(height: 24),
+        const SizedBox(height: 16),
       ],
     );
   }

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:projects/app/route_name+path+params.dart';
+
+import 'nims_status_chip.dart';
 
 class NIMSTransitCard extends StatelessWidget {
   final String status;
@@ -22,93 +26,91 @@ class NIMSTransitCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline,
-          width: 0.5,
-        ),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(4)),
-                  color: statusBackgroundColor,
-                ),
-                child: Text(
-                  status,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelSmall?.copyWith(color: statusColor),
-                ),
-              ),
-              const Spacer(),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 16,
-                color: Theme.of(context).colorScheme.tertiary.withAlpha(100),
-              ),
-            ],
+    return InkWell(
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      onTap: () {
+        context.pushNamed(routeDetailsScreen);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.outline,
+            width: 0.5,
           ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            child: Row(
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            Row(
               children: [
-                Text(
-                  sourceCode,
-                  style: Theme.of(context).textTheme.labelMedium,
+                NIMSStatusChip(
+                  status: status,
+                  statusBackgroundColor: statusBackgroundColor,
+                  statusColor: statusColor,
                 ),
-                Expanded(child: _buildDivider(context)),
-                Image.asset(
-                  "lib/core/ui/icons/fast_shipping.png",
-                  height: 16,
-                  width: 16,
-                ),
-                Expanded(flex: 1, child: _buildDivider(context)),
-                Text(
-                  destinationCode,
-                  style: Theme.of(context).textTheme.labelMedium,
+                const Spacer(),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.tertiary.withAlpha(100),
                 ),
               ],
             ),
-          ),
 
-          Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: Text(
-                  sourceName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.tertiary,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: Row(
+                children: [
+                  Text(
+                    sourceCode,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Expanded(child: _buildDivider(context)),
+                  Image.asset(
+                    "lib/core/ui/icons/ic_fast_shipping.png",
+                    height: 16,
+                    width: 16,
+                  ),
+                  Expanded(flex: 1, child: _buildDivider(context)),
+                  Text(
+                    destinationCode,
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                ],
+              ),
+            ),
+
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    sourceName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
                   ),
                 ),
-              ),
-              const Spacer(),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  destinationName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.end,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.tertiary,
+                const Spacer(),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    destinationName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

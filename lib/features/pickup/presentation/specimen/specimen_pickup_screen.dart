@@ -4,15 +4,14 @@ import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
-import '../../../core/ui/widgets/nims_manifest_card.dart';
-import '../../../core/ui/widgets/nims_primary_button.dart';
-import '../../../core/ui/widgets/nims_result_card.dart';
-import '../../dashboard/domain/mock.dart';
+import '../../../../core/ui/widgets/nims_manifest_card.dart';
+import '../../../../core/ui/widgets/nims_primary_button.dart';
+import '../../../dashboard/domain/mock.dart';
 
-class ResultPickUpScreen extends StatelessWidget {
+class SpecimenPickUpScreen extends StatelessWidget {
   final RouteType routeType;
 
-  const ResultPickUpScreen({super.key, required this.routeType});
+  const SpecimenPickUpScreen({super.key, required this.routeType});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,7 @@ class ResultPickUpScreen extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              "Result Pick Up",
+              "Specimen Pick Up",
               style: TextTheme.of(context).titleSmall,
               textAlign: TextAlign.center,
             ),
@@ -87,11 +86,11 @@ class ResultPickUpScreen extends StatelessWidget {
         SizedBox(height: 40),
 
         /// -------------------------------
-        /// RESULTS
+        /// MANIFESTS
         /// -------------------------------
         Row(
           children: [
-            Text("Results", style: Theme.of(context).textTheme.titleSmall),
+            Text("Manifests", style: Theme.of(context).textTheme.titleSmall),
             Spacer(),
             Container(
               padding: EdgeInsetsGeometry.all(8),
@@ -108,78 +107,62 @@ class ResultPickUpScreen extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
                     child: Text(
-                      "Select All",
+                      "Add Manifest",
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                     ),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  context.pushNamed(addNewManifestScreen);
+                },
               ),
             ),
           ],
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
 
         SizedBox(
-          height: size.height * 0.56,
-          child: ListView(
-            children: [
-              Align(
-                alignment: AlignmentGeometry.centerLeft,
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3,
-                        horizontal: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        color: Theme.of(context).colorScheme.tertiaryContainer,
-                      ),
-                      child: Text(
-                        "PC-288939-29930",
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
+          height: size.height * 0.482,
+          child: Scrollbar(
+            thumbVisibility: true,
+            trackVisibility: true,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              children: [
+                ...List.generate(
+                  8,
+                  (x) => Padding(
+                    padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+                    child: NIMSManifestCard(
+                      destinationName: "National Reference Lab",
+                      manifestID: 'NG-83992882-JJSKKS',
+                      onTap: (){
+                        context.pushNamed(dispatchApprovalManifestDetailsScreen);
+                      },
                     ),
-                    SizedBox(width: 8),
-                    Text(
-                      "Sputum",
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              ...List.generate(
-                4,
-                (x) => Padding(
-                  padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
-                  child: NIMSResultCard(),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
 
+        const SizedBox(height: 84),
+
         /// ----------------------------------------
-        /// DISPATCH RESULTS BUTTON
+        /// DISPATCH SPECIMENS BUTTON
         /// ----------------------------------------
         NIMSPrimaryButton(
-          text: "Dispatch Results",
+          text: "Dispatch Specimens",
           onPressed: () {
-            context.pushNamed(resultDispatchApprovalScreen);
+            context.pushNamed(specimenDispatchApprovalScreen);
           },
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
       ],
     );
   }

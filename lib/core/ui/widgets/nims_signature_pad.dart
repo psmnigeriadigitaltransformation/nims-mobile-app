@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class SignaturePad extends StatefulWidget {
+class NIMSSignaturePad extends StatefulWidget {
   final double strokeWidth;
   final Color strokeColor;
   final Color backgroundColor;
 
-  const SignaturePad({
+  const NIMSSignaturePad({
     super.key,
     this.strokeWidth = 1.5,
     this.strokeColor = Colors.black,
@@ -13,10 +13,10 @@ class SignaturePad extends StatefulWidget {
   });
 
   @override
-  State<SignaturePad> createState() => SignaturePadState();
+  State<NIMSSignaturePad> createState() => NIMSSignaturePadState();
 }
 
-class SignaturePadState extends State<SignaturePad> {
+class NIMSSignaturePadState extends State<NIMSSignaturePad> {
   List<Offset?> _points = [];
 
   @override
