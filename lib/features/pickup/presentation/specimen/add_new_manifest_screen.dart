@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_result_card.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
+import 'package:projects/features/pickup/presentation/specimen/specimen_deletion_confirmation_dialog.dart';
+import '../../../../core/ui/widgets/nims_error_button.dart';
 import '../../../../core/ui/widgets/nims_manifest_card.dart';
 import '../../../../core/ui/widgets/nims_primary_button.dart';
-import '../../../../core/ui/widgets/nims_action_specimen_card.dart';
+import '../../../../core/ui/widgets/nims_specimen_card.dart';
+import '../../../../core/ui/widgets/nims_secondary_button.dart';
 import '../../../dashboard/domain/mock.dart';
+import 'add_new_specimen_dialog.dart';
 
 class AddNewManifestScreen extends StatelessWidget {
   const AddNewManifestScreen({super.key});
@@ -50,85 +55,73 @@ class AddNewManifestScreen extends StatelessWidget {
         /// ---------------------------------------------------------
         /// ORIGINATING FACILITY + DESTINATION FACILITY DROPDOWN MENU
         /// ---------------------------------------------------------
-        Row(
-          children: [
-            Column(
-              children: [
-                Image.asset(
-                  "lib/core/ui/icons/ic_origin_location.png",
-                  width: 16,
-                  height: 16,
-                ),
-                Align(
-                  alignment: AlignmentGeometry.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
-                    child: Container(
-                      width: 1,
-                      color: Theme.of(context).colorScheme.secondary,
-                      height: 58,
+        SizedBox(
+          height: 150,
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsetsGeometry.only(top: 4),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      "lib/core/ui/icons/ic_origin_location.png",
+                      width: 16,
+                      height: 16,
                     ),
+                    Align(
+                      alignment: AlignmentGeometry.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
+                        child: Container(
+                          width: 1,
+                          color: Theme.of(context).colorScheme.secondary,
+                          height: 50,
+                        ),
+                      ),
+                    ),
+                    Image.asset(
+                      "lib/core/ui/icons/ic_destination_location.png",
+                      width: 16,
+                      height: 16,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 16),
+              Column(
+                spacing: 28,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Gwagwalada General Hospital",
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                ),
-                Image.asset(
-                  "lib/core/ui/icons/ic_destination_location.png",
-                  width: 16,
-                  height: 16,
-                ),
-              ],
-            ),
-            SizedBox(width: 16),
-            Column(
-              children: [
-                DropdownMenu<String>(
-                  trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                  selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
-                  width: size.width - 80,
-                  label: Text("PickUp Facility"),
-                  dropdownMenuEntries: [
-                    ...Mock.facilities.map(
-                      (facility) => DropdownMenuEntry(
-                        value: facility,
-                        labelWidget: Center(
-                          child: Text(
-                            facility,
-                            style: Theme.of(context).textTheme.bodySmall,
+                  DropdownMenu<String>(
+                    trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
+                    selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
+                    width: size.width - 80,
+                    label: Text("Destination Facility"),
+                    dropdownMenuEntries: [
+                      ...Mock.facilities.map(
+                        (facility) => DropdownMenuEntry(
+                          value: facility,
+                          labelWidget: Center(
+                            child: Text(
+                              facility,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
                           ),
+                          label: facility,
                         ),
-                        label: facility,
                       ),
-                    ),
-                  ],
-                  onSelected: (value) {},
-                ),
-                SizedBox(height: 16),
-                DropdownMenu<String>(
-                  trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                  selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
-                  width: size.width - 80,
-                  label: Text("Destination Facility"),
-                  dropdownMenuEntries: [
-                    ...Mock.facilities.map(
-                      (facility) => DropdownMenuEntry(
-                        value: facility,
-                        labelWidget: Center(
-                          child: Text(
-                            facility,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ),
-                        label: facility,
-                      ),
-                    ),
-                  ],
-                  onSelected: (value) {},
-                ),
-              ],
-            ),
-          ],
+                    ],
+                    onSelected: (value) {},
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-
-        SizedBox(height: 40),
 
         DropdownMenu<String>(
           trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
@@ -136,7 +129,7 @@ class AddNewManifestScreen extends StatelessWidget {
           width: size.width - 48,
           label: Text("Specimen Type"),
           dropdownMenuEntries: [
-            ...Mock.specimenType.map(
+            ...Mock.specimenTypes.map(
               (facility) => DropdownMenuEntry(
                 value: facility,
                 labelWidget: Center(
@@ -186,7 +179,12 @@ class AddNewManifestScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (builder) => AddNewSpecimenDialog(),
+                  );
+                },
               ),
             ),
           ],
@@ -195,7 +193,7 @@ class AddNewManifestScreen extends StatelessWidget {
         const SizedBox(height: 16),
 
         SizedBox(
-          height: size.height * 0.318,
+          height: size.height * 0.379,
           child: Scrollbar(
             thumbVisibility: true,
             trackVisibility: true,
@@ -206,8 +204,14 @@ class AddNewManifestScreen extends StatelessWidget {
                   10,
                   (x) => Padding(
                     padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-                    child: NIMSActionSpecimenCard(
-                      onTapAction: () {},
+                    child: NIMSSpecimenCard(
+                      onTapDelete: () {
+                        showDialog(
+                          context: context,
+                          builder: (builder) =>
+                              SpecimenDeletionConfirmationDialog(),
+                        );
+                      },
                       actionLabel: "Delete",
                     ),
                   ),
@@ -217,7 +221,7 @@ class AddNewManifestScreen extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: 58),
+        SizedBox(height: 28),
 
         // ----------------------------------------S
         /// SAVE MANIFEST BUTTON

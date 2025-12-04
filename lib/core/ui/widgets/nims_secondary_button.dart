@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
-class NIMSPrimaryButton extends StatelessWidget {
+class NIMSSecondaryButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool loading;
-  final bool enabled;
 
-  const NIMSPrimaryButton({
+  const NIMSSecondaryButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.loading = false,
-    this.enabled = true,
   });
 
   @override
@@ -21,18 +19,12 @@ class NIMSPrimaryButton extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: FilledButton(
+          onPressed: loading ? null : onPressed,
           style: Theme.of(context).filledButtonTheme.style?.copyWith(
-            backgroundColor: enabled
-                ? Theme.of(context).filledButtonTheme.style?.backgroundColor
-                : WidgetStateProperty.all(
-                    Theme.of(context).colorScheme.tertiaryContainer,
-                  ),
+            backgroundColor: WidgetStateProperty.all(
+              Theme.of(context).colorScheme.secondary,
+            ),
           ),
-          onPressed: loading
-              ? null
-              : enabled
-              ? onPressed
-              : null,
           child: loading
               ? SizedBox(
                   height: 22,

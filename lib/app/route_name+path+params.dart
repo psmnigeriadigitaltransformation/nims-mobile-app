@@ -30,11 +30,11 @@ const addNewManifestPath = '/add_new_manifest';
 const routeDetailsScreen = 'route_details_screen';
 const routeDetailsPath = '/route_details';
 
-const dashboardManifestDetailsScreen = 'dashboard_manifest_details_screen';
-const dashboardManifestDetailsPath = '/dashboard_manifest_details';
+const manifestDetailsScreen = 'manifest_details_screen';
+const manifestDetailsPath = '/manifest_details';
 
-const dispatchApprovalManifestDetailsScreen = 'dispatch_approval_manifest_details_screen';
-const dispatchApprovalManifestDetailsPath = '/dispatch_approval_manifest_details';
+const shipmentsScreen = 'shipments_screen';
+const shipmentsPath = '/shipments';
 
 // QUERY PARAMS
 const routeTypeQueryParam = "route_type";

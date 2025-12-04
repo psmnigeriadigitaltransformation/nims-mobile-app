@@ -3,17 +3,17 @@ import 'package:go_router/go_router.dart';
 import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 import 'package:projects/features/dashboard/presentation/dashboard_screen.dart';
-import 'package:projects/features/dashboard/presentation/dashboard_manifest_details_screen.dart';
 import 'package:projects/features/dashboard/presentation/route_details_screen.dart';
 import 'package:projects/features/pickup/presentation/specimen/add_new_manifest_screen.dart';
 import 'package:projects/features/pickup/presentation/result/result_pickup_screen.dart';
-import 'package:projects/features/pickup/presentation/specimen/specimen_pickup_screen.dart';
+import 'package:projects/features/pickup/presentation/specimen/shipments_screen.dart';
+import 'package:projects/features/pickup/presentation/specimen/manifests_screen.dart';
 import '../features/delivery/presentation/result/result_delivery_approval_screen.dart';
 import '../features/delivery/presentation/specimen/specimen_delivery_approval_screen.dart';
 import '../features/pickup/presentation/result/result_dispatch_approval_screen.dart';
 import '../features/pickup/presentation/specimen/specimen_dispatch_approval_screen.dart';
 import '../features/auth/presentation/login_screen.dart';
-import '../features/pickup/presentation/specimen/dispatch_approval_manifest_details_screen.dart';
+import '../features/pickup/presentation/specimen/manifest_details_screen.dart';
 
 final router = GoRouter(
   initialLocation: loginPath,
@@ -39,7 +39,7 @@ final router = GoRouter(
         if (kDebugMode) {
           print(routeType);
         }
-        return SpecimenPickUpScreen(routeType: routeType);
+        return ManifestsScreen(routeType: routeType);
       },
     ),
     GoRoute(
@@ -134,22 +134,8 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      name: dashboardManifestDetailsScreen,
-      path: dashboardManifestDetailsPath,
-      builder: (context, state) {
-        final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
-          orElse: () => RouteType.spokeToPCRLabGeneXpert,
-        );
-        if (kDebugMode) {
-          print(routeType);
-        }
-        return DashboardManifestDetailsScreen(routeType: routeType);
-      },
-    ),
-    GoRoute(
-      name: dispatchApprovalManifestDetailsScreen,
-      path: dispatchApprovalManifestDetailsPath,
+      name: manifestDetailsScreen,
+      path: manifestDetailsPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
               (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
@@ -158,7 +144,21 @@ final router = GoRouter(
         if (kDebugMode) {
           print(routeType);
         }
-        return DispatchApprovalManifestDetailsScreen(routeType: routeType);
+        return ManifestDetailsScreen(routeType: routeType);
+      },
+    ),
+    GoRoute(
+      name: shipmentsScreen,
+      path: shipmentsPath,
+      builder: (context, state) {
+        final routeType = RouteType.values.firstWhere(
+              (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          orElse: () => RouteType.spokeToPCRLabGeneXpert,
+        );
+        if (kDebugMode) {
+          print(routeType);
+        }
+        return ShipmentsScreen(routeType: routeType);
       },
     ),
   ],

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
-import 'package:projects/core/ui/widgets/nims_specimen_card.dart';
 import 'package:projects/core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 
-class DashboardManifestDetailsScreen extends StatelessWidget {
+import '../../../../core/ui/widgets/nims_specimen_card.dart';
+
+class ManifestDetailsScreen extends StatelessWidget {
   final RouteType routeType;
 
-  const DashboardManifestDetailsScreen({super.key, required this.routeType});
+  const ManifestDetailsScreen({super.key, required this.routeType});
 
   @override
   Widget build(BuildContext context) {
@@ -43,40 +44,42 @@ class DashboardManifestDetailsScreen extends StatelessWidget {
 
         SizedBox(height: 50),
 
-        /// ----------------------------------------
-        /// ORIGINATING FACILITY DROPDOWN MENU
-        /// ----------------------------------------
+        /// -------------------------------------------
+        /// ORIGINATING FACILITY + DESTINATION FACILITY
+        /// -------------------------------------------
         NIMSOriginDestinationLinkView(),
 
-        SizedBox(height: 40),
+        SizedBox(height: 24),
 
         Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              "Specimen Type",
-              style: Theme.of(context).textTheme.labelLarge,
+              "Sputum",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
-            Spacer(),
-            Row(
-              children: [
-                Text(
-                  "Sputum",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.end,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                Image.asset(
-                  "lib/core/ui/icons/ic_test_tube.png",
-                  height: 16,
-                  width: 16,
-                ),
-              ],
+            Image.asset(
+              "lib/core/ui/icons/ic_test_tube.png",
+              height: 16,
+              width: 16,
             ),
           ],
         ),
 
-        SizedBox(height: 40),
+        // Row(
+        //   children: [
+        //     Text(
+        //       "Specimen Type",
+        //       style: Theme.of(context).textTheme.bodyMS,
+        //     ),
+        //     Spacer(),
+        //
+        //   ],
+        // ),
+        SizedBox(height: 24),
 
         /// -------------------------------
         /// MANIFESTS
@@ -84,7 +87,7 @@ class DashboardManifestDetailsScreen extends StatelessWidget {
         Align(
           alignment: AlignmentGeometry.centerLeft,
           child: Text(
-            "Specimens (2)",
+            "Specimens (10)",
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
@@ -92,21 +95,26 @@ class DashboardManifestDetailsScreen extends StatelessWidget {
         const SizedBox(height: 16),
 
         SizedBox(
-          height: size.height * 0.565,
-          child: ListView(
-            children: [
-              ...List.generate(
-                2,
-                (x) => Padding(
-                  padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-                  child: NIMSSpecimenCard(),
+          height: size.height * 0.63,
+          child: Scrollbar(
+            thumbVisibility: true,
+            trackVisibility: true,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              children: [
+                ...List.generate(
+                  10,
+                  (x) => Padding(
+                    padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+                    child: NIMSSpecimenCard(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
       ],
     );
   }

@@ -4,9 +4,11 @@ import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
+import '../../../../core/ui/widgets/nims_error_button.dart';
 import '../../../../core/ui/widgets/nims_manifest_card.dart';
 import '../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../core/ui/widgets/nims_result_card.dart';
+import '../../../../core/ui/widgets/nims_secondary_button.dart';
 import '../../../dashboard/domain/mock.dart';
 
 class ResultPickUpScreen extends StatelessWidget {
@@ -91,7 +93,7 @@ class ResultPickUpScreen extends StatelessWidget {
         /// -------------------------------
         Row(
           children: [
-            Text("Results", style: Theme.of(context).textTheme.titleSmall),
+            Text("Specimens (8)", style: Theme.of(context).textTheme.titleSmall),
             Spacer(),
             Container(
               padding: EdgeInsetsGeometry.all(8),
@@ -102,7 +104,6 @@ class ResultPickUpScreen extends StatelessWidget {
               ),
 
               child: InkWell(
-                splashColor: Theme.of(context).splashColor,
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 child: Center(
                   child: Padding(
@@ -124,7 +125,7 @@ class ResultPickUpScreen extends StatelessWidget {
         const SizedBox(height: 24),
 
         SizedBox(
-          height: size.height * 0.50,
+          height: size.height * 0.515,
           child: Scrollbar(
             thumbVisibility: true,
             trackVisibility: true,
@@ -163,12 +164,154 @@ class ResultPickUpScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                // const SizedBox(height: 12),
+                const SizedBox(height: 12),
                 ...List.generate(
                   20,
                   (x) => Padding(
                     padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
-                    child: NIMSResultCard(),
+
+                    child: NIMSResultCard(
+                      actionLabel: "Reject",
+                      onTapAction: () {
+                        showDialog(
+                          context: context,
+                          builder: (builder) => Dialog(
+                            insetPadding: EdgeInsets.symmetric(horizontal: 20),
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.surface,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Row(
+                                    children: [
+                                      NIMSRoundIconButton(
+                                        icon: Icons.close,
+                                        onPressed: context.pop,
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        "Rejection Reason",
+                                        style: TextTheme.of(context).titleSmall,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Spacer(),
+                                      SizedBox(width: 40),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 8),
+
+                                  Row(
+                                    children: [
+                                      const Spacer(),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 3,
+                                          horizontal: 6,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(4),
+                                          ),
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.tertiaryContainer,
+                                        ),
+                                        child: Text(
+                                          "PC-288939-29930",
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.labelSmall,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 24),
+                                      Text(
+                                        "20 Y",
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodySmall,
+                                      ),
+                                      const SizedBox(width: 24),
+                                      Text(
+                                        "M",
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodySmall,
+                                      ),
+                                      const Spacer(),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 40),
+
+                                  /// -------------------------------
+                                  ///REASON FOR REJECTION INPUT
+                                  /// -------------------------------
+                                  DropdownMenu<String>(
+                                    trailingIcon: Icon(
+                                      Icons.keyboard_arrow_down_rounded,
+                                    ),
+                                    selectedTrailingIcon: Icon(
+                                      Icons.keyboard_arrow_up_rounded,
+                                    ),
+                                    width: size.width - 100,
+                                    label: Text("Reason for Rejection"),
+                                    dropdownMenuEntries: [
+                                      ...Mock.reasonsForRejection.map(
+                                        (facility) => DropdownMenuEntry(
+                                          value: facility,
+                                          labelWidget: Center(
+                                            child: Text(
+                                              facility,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.bodySmall,
+                                            ),
+                                          ),
+                                          label: facility,
+                                        ),
+                                      ),
+                                    ],
+                                    onSelected: (value) {},
+                                  ),
+
+                                  SizedBox(height: 100),
+
+                                  /// -------------------------------
+                                  /// CONFIRM + CANCEL BUTTONS
+                                  /// -------------------------------
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: NIMSErrorButton(
+                                          text: "Confirm",
+                                          onPressed: context.pop,
+                                        ),
+                                      ),
+                                      SizedBox(height: 16),
+                                      Expanded(
+                                        child: NIMSSecondaryButton(
+                                          text: "Cancel",
+                                          onPressed: context.pop,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 16),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -176,7 +319,8 @@ class ResultPickUpScreen extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 60),
+        const SizedBox(height: 45.5),
+
         /// ----------------------------------------
         /// DISPATCH RESULTS BUTTON
         /// ----------------------------------------

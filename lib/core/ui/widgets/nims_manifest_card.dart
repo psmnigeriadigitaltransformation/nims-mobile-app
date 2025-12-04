@@ -3,25 +3,31 @@ import 'package:flutter/material.dart';
 class NIMSManifestCard extends StatelessWidget {
   final String manifestID;
   final String destinationName;
-  final VoidCallback onTap;
+  final VoidCallback onTapManifest;
+  final VoidCallback onTapDelete;
+  final bool isSelected;
 
   const NIMSManifestCard({
     super.key,
     required this.manifestID,
     required this.destinationName,
-    required this.onTap,
+    required this.onTapManifest,
+    required this.isSelected,
+    required this.onTapDelete,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: onTapManifest,
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: Border.all(
-            color: Theme.of(context).colorScheme.outline,
+            color: isSelected
+                ? Theme.of(context).colorScheme.tertiary
+                : Theme.of(context).colorScheme.outline,
             width: 0.5,
           ),
         ),
@@ -64,25 +70,29 @@ class NIMSManifestCard extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.errorContainer.withAlpha(150),
-                      borderRadius: BorderRadiusGeometry.all(
-                        Radius.circular(4),
+                  InkWell(
+                    onTap: onTapDelete,
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.errorContainer.withAlpha(150),
+                        borderRadius: BorderRadiusGeometry.all(
+                          Radius.circular(4),
+                        ),
                       ),
-                    ),
-
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.symmetric(
-                        vertical: 2,
-                        horizontal: 8,
-                      ),
-                      child: Text(
-                        "Delete",
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.error,
+                      child: Padding(
+                        padding: EdgeInsetsGeometry.symmetric(
+                          vertical: 2,
+                          horizontal: 8,
+                        ),
+                        child: Text(
+                          "Delete",
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.error,
+                              ),
                         ),
                       ),
                     ),
@@ -98,7 +108,7 @@ class NIMSManifestCard extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 4),
                     child: Text(
-                      "200 Samples",
+                      "200 Specimens",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall,

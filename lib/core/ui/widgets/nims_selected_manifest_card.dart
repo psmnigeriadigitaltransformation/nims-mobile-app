@@ -10,7 +10,7 @@ class NIMSSelectedManifestCard extends StatelessWidget {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       onTap: () {
-        context.pushNamed(dispatchApprovalManifestDetailsScreen);
+        context.pushNamed(manifestDetailsScreen);
       },
       child: Container(
         decoration: BoxDecoration(

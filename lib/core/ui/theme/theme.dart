@@ -12,10 +12,12 @@ class NIMSTheme {
       primary: NIMSColors.green05,
       inversePrimary: NIMSColors.green01,
       secondary: NIMSColors.grey05,
+      secondaryContainer: NIMSColors.green01,
       error: NIMSColors.red05,
       brightness: Brightness.light,
       tertiary: NIMSColors.grey07,
       tertiaryContainer: NIMSColors.grey01,
+      onTertiaryContainer: NIMSColors.grey05,
       outline: NIMSColors.grey03,
       surface: NIMSColors.white,
       errorContainer: NIMSColors.red01,
@@ -25,7 +27,7 @@ class NIMSTheme {
     hintColor: NIMSColors.grey05,
     highlightColor: NIMSColors.grey01,
     textTheme: _textTheme,
-    inputDecorationTheme: _inputDecorationTheme,
+    inputDecorationTheme: _primaryInputDecorationTheme,
     filledButtonTheme: _buttonTheme,
     searchBarTheme: _searchBarTheme,
     dropdownMenuTheme: _dropdownMenuTheme,
@@ -40,10 +42,12 @@ class NIMSTheme {
       primary: NIMSColors.green05,
       inversePrimary: NIMSColors.green01,
       secondary: NIMSColors.grey05,
+      secondaryContainer: NIMSColors.green01,
       error: NIMSColors.red05,
       brightness: Brightness.light,
       tertiary: NIMSColors.grey07,
       tertiaryContainer: NIMSColors.grey01,
+      onTertiaryContainer: NIMSColors.grey05,
       outline: NIMSColors.grey03,
       surface: NIMSColors.white,
       errorContainer: NIMSColors.red01,
@@ -53,7 +57,7 @@ class NIMSTheme {
     hintColor: NIMSColors.grey05,
     highlightColor: NIMSColors.grey01,
     textTheme: _textTheme,
-    inputDecorationTheme: _inputDecorationTheme,
+    inputDecorationTheme: _primaryInputDecorationTheme,
     filledButtonTheme: _buttonTheme,
     searchBarTheme: _searchBarTheme,
     dropdownMenuTheme: _dropdownMenuTheme,
@@ -76,7 +80,7 @@ class NIMSTheme {
 
   static final _dropdownMenuTheme = DropdownMenuThemeData(
     textStyle: NIMSTextStyles.bodyMedium.copyWith(color: NIMSColors.grey07),
-    inputDecorationTheme: _inputDecorationTheme,
+    inputDecorationTheme: _primaryInputDecorationTheme,
     menuStyle: MenuStyle(
       backgroundColor: WidgetStatePropertyAll(NIMSColors.white),
       shadowColor: WidgetStatePropertyAll(NIMSColors.transparent),
@@ -152,7 +156,7 @@ class NIMSTheme {
   );
 
   /// Input Decoration Theme
-  static final _inputDecorationTheme = InputDecorationTheme(
+  static final _primaryInputDecorationTheme = InputDecorationTheme(
     labelStyle: NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.grey05),
     floatingLabelStyle: NIMSTextStyles.labelLarge.copyWith(
       color: NIMSColors.green05,
@@ -204,7 +208,7 @@ class NIMSTheme {
     hoverColor: NIMSColors.grey02,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(
-        NIMSThemeTokens.inputDecorationThemeBorderRadius,
+        NIMSThemeTokens.primaryInputDecorationThemeBorderRadius,
       ),
       borderSide: const BorderSide(
         color: NIMSColors.grey03,
@@ -214,7 +218,7 @@ class NIMSTheme {
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(
-        NIMSThemeTokens.inputDecorationThemeBorderRadius,
+        NIMSThemeTokens.primaryInputDecorationThemeBorderRadius,
       ),
       borderSide: const BorderSide(
         color: NIMSColors.grey03,
@@ -224,7 +228,7 @@ class NIMSTheme {
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(
-        NIMSThemeTokens.inputDecorationThemeBorderRadius,
+        NIMSThemeTokens.primaryInputDecorationThemeBorderRadius,
       ),
       borderSide: const BorderSide(
         color: NIMSColors.green05,
@@ -234,16 +238,16 @@ class NIMSTheme {
     ),
     disabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(
-        NIMSThemeTokens.inputDecorationThemeBorderRadius,
+        NIMSThemeTokens.primaryInputDecorationThemeBorderRadius,
       ),
-      borderSide: const BorderSide(
-        color: NIMSColors.grey03,
+      borderSide:  BorderSide(
+        color: NIMSColors.grey02,
         width: NIMSThemeTokens.inputDecorationThemeBorderWidth,
       ),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(
-        NIMSThemeTokens.inputDecorationThemeBorderRadius,
+        NIMSThemeTokens.primaryInputDecorationThemeBorderRadius,
       ),
       borderSide: const BorderSide(
         color: NIMSColors.red03,
@@ -252,7 +256,7 @@ class NIMSTheme {
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(
-        NIMSThemeTokens.inputDecorationThemeBorderRadius,
+        NIMSThemeTokens.primaryInputDecorationThemeBorderRadius,
       ),
       borderSide: const BorderSide(
         color: NIMSColors.red05,
@@ -267,6 +271,123 @@ class NIMSTheme {
     constraints: const BoxConstraints(
       minHeight: NIMSThemeTokens.inputDecorationThemeConstraintMinHeight,
     ),
+    visualDensity: VisualDensity.standard,
+    data: null,
+    child: null,
+  );
+
+  static final secondaryInputDecorationTheme = InputDecorationTheme(
+    labelStyle: NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.grey05),
+    floatingLabelStyle: NIMSTextStyles.labelLarge.copyWith(
+      color: NIMSColors.green05,
+    ),
+    helperStyle: NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.grey06),
+    helperMaxLines: NIMSThemeTokens.inputDecorationThemeHelperMaxLines,
+    hintStyle: NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.grey05),
+    hintFadeDuration: const Duration(
+      milliseconds:
+      NIMSThemeTokens.inputDecorationThemeHintFadeDurationMilliseconds,
+    ),
+    hintMaxLines: NIMSThemeTokens.inputDecorationThemeHintMaxLines,
+    errorStyle: NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.red05),
+    errorMaxLines: NIMSThemeTokens.inputDecorationThemeErrorMaxLines,
+    floatingLabelBehavior: FloatingLabelBehavior.auto,
+    floatingLabelAlignment: FloatingLabelAlignment.start,
+    constraints: BoxConstraints.expand(height: 40),
+
+    // Often necessary to center the text when using constraints
+    contentPadding:  EdgeInsets.symmetric(horizontal: 16.0),
+    isDense: true,
+    isCollapsed: false,
+    iconColor: NIMSColors.green05,
+    prefixStyle: NIMSTextStyles.bodyMedium.copyWith(color: NIMSColors.grey07),
+    prefixIconColor: NIMSColors.grey07,
+    prefixIconConstraints: const BoxConstraints(
+      minHeight: NIMSThemeTokens
+          .inputDecorationThemeContentPrefixIconConstraintsMinHeight,
+      minWidth: NIMSThemeTokens
+          .inputDecorationThemeContentPrefixIconConstraintsMinWidth,
+    ),
+    suffixStyle: NIMSTextStyles.bodyMedium.copyWith(color: NIMSColors.grey07),
+    suffixIconColor: NIMSColors.grey06,
+    suffixIconConstraints: const BoxConstraints(
+      minHeight: NIMSThemeTokens
+          .inputDecorationThemeContentSuffixIconConstraintsMinHeight,
+      minWidth: NIMSThemeTokens
+          .inputDecorationThemeContentSuffixIconConstraintsMinWidth,
+    ),
+    counterStyle: NIMSTextStyles.bodySmall.copyWith(color: NIMSColors.grey07),
+    filled: true,
+    fillColor: NIMSColors.grey01,
+    activeIndicatorBorder: const BorderSide(
+      color: NIMSColors.green07,
+      width: NIMSThemeTokens.inputDecorationThemeBorderWidth,
+      strokeAlign: BorderSide.strokeAlignOutside,
+    ),
+    focusColor: NIMSColors.green07,
+    hoverColor: NIMSColors.grey02,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(
+        NIMSThemeTokens.secondaryInputDecorationThemeBorderRadius,
+      ),
+      borderSide: const BorderSide(
+        color: NIMSColors.grey03,
+        width: NIMSThemeTokens.inputDecorationThemeBorderWidth,
+        strokeAlign: BorderSide.strokeAlignOutside,
+      ),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(
+        NIMSThemeTokens.secondaryInputDecorationThemeBorderRadius,
+      ),
+      borderSide: const BorderSide(
+        color: NIMSColors.grey03,
+        width: NIMSThemeTokens.inputDecorationThemeBorderWidth,
+        strokeAlign: BorderSide.strokeAlignOutside,
+      ),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(
+        NIMSThemeTokens.secondaryInputDecorationThemeBorderRadius,
+      ),
+      borderSide: const BorderSide(
+        color: NIMSColors.green05,
+        width: NIMSThemeTokens.inputDecorationThemeBorderWidth,
+        strokeAlign: BorderSide.strokeAlignOutside,
+      ),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(
+        NIMSThemeTokens.secondaryInputDecorationThemeBorderRadius,
+      ),
+      borderSide:  BorderSide(
+        color: NIMSColors.grey02,
+        width: NIMSThemeTokens.inputDecorationThemeBorderWidth,
+      ),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(
+        NIMSThemeTokens.secondaryInputDecorationThemeBorderRadius,
+      ),
+      borderSide: const BorderSide(
+        color: NIMSColors.red03,
+        width: NIMSThemeTokens.inputDecorationThemeBorderWidth,
+      ),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(
+        NIMSThemeTokens.secondaryInputDecorationThemeBorderRadius,
+      ),
+      borderSide: const BorderSide(
+        color: NIMSColors.red05,
+        width: NIMSThemeTokens.inputDecorationThemeBorderWidth,
+      ),
+    ),
+    outlineBorder: const BorderSide(
+      color: NIMSColors.grey03,
+      width: NIMSThemeTokens.inputDecorationThemeBorderWidth,
+    ),
+    alignLabelWithHint: false,
     visualDensity: VisualDensity.standard,
     data: null,
     child: null,
@@ -299,7 +420,8 @@ class NIMSThemeTokens {
   static const inputDecorationThemeContentPrefixIconConstraintsMinWidth = 24.0;
   static const inputDecorationThemeContentSuffixIconConstraintsMinHeight = 24.0;
   static const inputDecorationThemeContentSuffixIconConstraintsMinWidth = 24.0;
-  static const inputDecorationThemeBorderRadius = 12.0;
+  static const primaryInputDecorationThemeBorderRadius = 12.0;
+  static const secondaryInputDecorationThemeBorderRadius = 8.0;
   static const inputDecorationThemeHintFadeDurationMilliseconds = 200;
 
   static const filledButtonThemeElevation = 0.0;

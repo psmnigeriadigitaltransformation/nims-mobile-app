@@ -6,12 +6,13 @@ import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 import '../../../../core/ui/widgets/nims_manifest_card.dart';
 import '../../../../core/ui/widgets/nims_primary_button.dart';
+import '../../../../core/ui/widgets/nims_shipment_card.dart';
 import '../../../dashboard/domain/mock.dart';
 
-class SpecimenPickUpScreen extends StatelessWidget {
+class ShipmentsScreen extends StatelessWidget {
   final RouteType routeType;
 
-  const SpecimenPickUpScreen({super.key, required this.routeType});
+  const ShipmentsScreen({super.key, required this.routeType});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class SpecimenPickUpScreen extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              "Specimen Pick Up",
+              "Shipments",
               style: TextTheme.of(context).titleSmall,
               textAlign: TextAlign.center,
             ),
@@ -57,29 +58,33 @@ class SpecimenPickUpScreen extends StatelessWidget {
               height: 16,
             ),
             SizedBox(width: 16),
-            Flexible(
-              child: DropdownMenu<String>(
-                trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
-                width: size.width - 80,
-                label: Text("PickUp Facility"),
-                dropdownMenuEntries: [
-                  ...Mock.facilities.map(
-                    (facility) => DropdownMenuEntry(
-                      value: facility,
-                      labelWidget: Center(
-                        child: Text(
-                          facility,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ),
-                      label: facility,
-                    ),
-                  ),
-                ],
-                onSelected: (value) {},
-              ),
+            Text(
+              "Gwagwalada General Hospital",
+              style: Theme.of(context).textTheme.bodySmall,
             ),
+            // Flexible(
+            //   child: DropdownMenu<String>(
+            //     trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
+            //     selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
+            //     width: size.width - 80,
+            //     label: Text("PickUp Facility"),
+            //     dropdownMenuEntries: [
+            //       ...Mock.facilities.map(
+            //         (facility) => DropdownMenuEntry(
+            //           value: facility,
+            //           labelWidget: Center(
+            //             child: Text(
+            //               facility,
+            //               style: Theme.of(context).textTheme.bodySmall,
+            //             ),
+            //           ),
+            //           label: facility,
+            //         ),
+            //       ),
+            //     ],
+            //     onSelected: (value) {},
+            //   ),
+            // ),
           ],
         ),
 
@@ -90,42 +95,18 @@ class SpecimenPickUpScreen extends StatelessWidget {
         /// -------------------------------
         Row(
           children: [
-            Text("Manifests", style: Theme.of(context).textTheme.titleSmall),
-            Spacer(),
-            Container(
-              padding: EdgeInsetsGeometry.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                color: Theme.of(context).colorScheme.primary,
-              ),
-
-              child: InkWell(
-                splashColor: Theme.of(context).splashColor,
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-                    child: Text(
-                      "Add Manifest",
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  context.pushNamed(addNewManifestScreen);
-                },
-              ),
+            Text(
+              "Shipments (3)",
+              style: Theme.of(context).textTheme.titleSmall,
             ),
+            Spacer(),
           ],
         ),
 
         const SizedBox(height: 16),
 
         SizedBox(
-          height: size.height * 0.482,
+          height: size.height * 0.600,
           child: Scrollbar(
             thumbVisibility: true,
             trackVisibility: true,
@@ -135,12 +116,14 @@ class SpecimenPickUpScreen extends StatelessWidget {
                 ...List.generate(
                   8,
                   (x) => Padding(
-                    padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-                    child: NIMSManifestCard(
+                    padding: EdgeInsetsGeometry.symmetric(vertical: 8),
+                    child: NIMSShipmentCard(
                       destinationName: "National Reference Lab",
                       manifestID: 'NG-83992882-JJSKKS',
-                      onTap: (){
-                        context.pushNamed(dispatchApprovalManifestDetailsScreen);
+                      onTap: () {
+                        context.pushNamed(
+                          manifestDetailsScreen,
+                        );
                       },
                     ),
                   ),
@@ -150,13 +133,13 @@ class SpecimenPickUpScreen extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 84),
+        const SizedBox(height: 20),
 
         /// ----------------------------------------
         /// DISPATCH SPECIMENS BUTTON
         /// ----------------------------------------
         NIMSPrimaryButton(
-          text: "Dispatch Specimens",
+          text: "Go To Approval",
           onPressed: () {
             context.pushNamed(specimenDispatchApprovalScreen);
           },

@@ -13,11 +13,9 @@ class NIMSRoundIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      splashColor: Theme.of(context).splashColor,
-      highlightColor: Theme.of(context).highlightColor,
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       customBorder: CircleBorder(),
-      onTap: () {},
+      onTap: onPressed,
       child: Container(
         padding: EdgeInsetsGeometry.all(12),
         decoration: BoxDecoration(
@@ -30,7 +28,7 @@ class NIMSRoundIconButton extends StatelessWidget {
             ),
           ),
         ),
-        child: Icon(Icons.arrow_back_ios_rounded, size: 16),
+        child: Icon(icon, size: 16),
       ),
     );
   }

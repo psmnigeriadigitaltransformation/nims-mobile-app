@@ -39,7 +39,7 @@ class ResultDispatchApprovalScreenState
             ),
             Spacer(),
             Text(
-              "Specimen Dispatch Approval",
+              "Shipments Approval",
               style: TextTheme.of(context).titleSmall,
               textAlign: TextAlign.center,
             ),
@@ -67,7 +67,7 @@ class ResultDispatchApprovalScreenState
         Align(
           alignment: AlignmentGeometry.centerLeft,
           child: Text(
-            "Selected Manifests (2)",
+            "Shipments (2)",
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
@@ -234,7 +234,7 @@ class ResultDispatchApprovalScreenState
         /// ----------------------------------------
         /// APPROVE BUTTON
         /// ----------------------------------------
-        NIMSPrimaryButton(text: "Approve", onPressed: () {}),
+        NIMSPrimaryButton(text: "Approve Shipments", onPressed: () {}),
         SizedBox(height: 24),
       ],
     );

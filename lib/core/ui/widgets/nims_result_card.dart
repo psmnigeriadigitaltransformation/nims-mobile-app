@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class NIMSResultCard extends StatelessWidget {
-  const NIMSResultCard({super.key});
+  final VoidCallback onTapAction;
+  final String actionLabel;
+
+  const NIMSResultCard({super.key, required this.onTapAction, required this.actionLabel});
 
   @override
   Widget build(BuildContext context) {
@@ -39,23 +42,27 @@ class NIMSResultCard extends StatelessWidget {
               const SizedBox(width: 24),
               Text("M", style: Theme.of(context).textTheme.bodySmall),
               const Spacer(),
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.errorContainer.withAlpha(150),
-                  borderRadius: BorderRadiusGeometry.all(Radius.circular(4)),
-                ),
-
-                child: Padding(
-                  padding: EdgeInsetsGeometry.symmetric(
-                    vertical: 2,
-                    horizontal: 8,
+              InkWell(
+                onTap: onTapAction,
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                child:  Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.errorContainer.withAlpha(150),
+                    borderRadius: BorderRadiusGeometry.all(Radius.circular(4)),
                   ),
-                  child: Text(
-                    "Reject",
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.error,
+
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.symmetric(
+                      vertical: 2,
+                      horizontal: 8,
+                    ),
+                    child: Text(
+                      actionLabel,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                     ),
                   ),
                 ),
