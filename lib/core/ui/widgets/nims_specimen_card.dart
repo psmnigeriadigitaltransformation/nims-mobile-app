@@ -15,12 +15,16 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      borderRadius: BorderRadius.all(Radius.circular(8)),
-      child: Column(
-        children: [
-          Container(
+    return Column(
+      children: [
+        InkWell(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          onTap: () {
+            setState(() {
+              isCommentRevealed = !isCommentRevealed;
+            });
+          },
+          child: Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               border: Border.all(
@@ -110,36 +114,36 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
               ],
             ),
           ),
-          if (isCommentRevealed)
-            Padding(
-              padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(4),
-                    bottomRight: Radius.circular(4),
-                  ),
-
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 0.5,
-                  ),
+        ),
+        if (isCommentRevealed)
+          Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(4),
+                  bottomRight: Radius.circular(4),
                 ),
-                child: Padding(
-                  padding: EdgeInsetsGeometry.all(8),
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    "This patient is in ICU and needs the test result ASAP!",
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.outline,
+                  width: 0.5,
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsetsGeometry.all(8),
+                child: Text(
+                  textAlign: TextAlign.center,
+                  "This patient is in ICU and needs the test result ASAP!",
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

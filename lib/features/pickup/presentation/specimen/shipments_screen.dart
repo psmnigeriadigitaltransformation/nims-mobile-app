@@ -32,7 +32,7 @@ class ShipmentsScreen extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              "Shipments",
+              "Shipment",
               style: TextTheme.of(context).titleSmall,
               textAlign: TextAlign.center,
             ),

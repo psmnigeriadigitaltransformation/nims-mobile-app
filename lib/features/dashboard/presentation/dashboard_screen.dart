@@ -136,7 +136,7 @@ class DashboardScreen extends StatelessWidget {
                 (x) => Padding(
                   padding: EdgeInsetsGeometry.symmetric(vertical: 4),
                   child: NIMSTransitCard(
-                    status: "Dispatched",
+                    status: "Delivered",
                     statusColor: NIMSColors.green05,
                     statusBackgroundColor: NIMSColors.green02.withAlpha(50),
                     sourceCode: "PHC",

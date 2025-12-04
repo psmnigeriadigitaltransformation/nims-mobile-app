@@ -10,8 +10,8 @@ import 'package:projects/features/pickup/presentation/specimen/shipments_screen.
 import 'package:projects/features/pickup/presentation/specimen/manifests_screen.dart';
 import '../features/delivery/presentation/result/result_delivery_approval_screen.dart';
 import '../features/delivery/presentation/specimen/specimen_delivery_approval_screen.dart';
-import '../features/pickup/presentation/result/result_dispatch_approval_screen.dart';
-import '../features/pickup/presentation/specimen/specimen_dispatch_approval_screen.dart';
+import '../features/pickup/presentation/result/result_shipment_approval_screen.dart';
+import '../features/pickup/presentation/specimen/specimen_shipment_approval_screen.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/pickup/presentation/specimen/manifest_details_screen.dart';
 
@@ -67,7 +67,7 @@ final router = GoRouter(
         if (kDebugMode) {
           print(routeType);
         }
-        return ResultDispatchApprovalScreen(routeType: routeType);
+        return ResultShipmentApprovalScreen(routeType: routeType);
       },
     ),
     GoRoute(
@@ -81,7 +81,7 @@ final router = GoRouter(
         if (kDebugMode) {
           print(routeType);
         }
-        return SpecimenDispatchApprovalScreen(routeType: routeType);
+        return SpecimenShipmentApprovalScreen(routeType: routeType);
       },
     ),
     GoRoute(

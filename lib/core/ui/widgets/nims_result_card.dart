@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 class NIMSResultCard extends StatelessWidget {
   final VoidCallback onTapAction;
   final String actionLabel;
+  final bool isSelected;
+  final ValueChanged? onTapCheckBox;
 
-  const NIMSResultCard({super.key, required this.onTapAction, required this.actionLabel});
+  const NIMSResultCard({
+    super.key,
+    required this.onTapAction,
+    required this.actionLabel,
+    this.isSelected = false,
+    this.onTapCheckBox,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +29,35 @@ class NIMSResultCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.check_box_outline_blank_rounded,
-                color: Theme.of(context).colorScheme.secondary,
-                size: 20,
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(4)),
-                  color: Theme.of(context).colorScheme.tertiaryContainer,
+              if (onTapCheckBox != null)
+                Padding(
+                  padding: EdgeInsetsGeometry.only(right: 4),
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: Checkbox(
+                      value: isSelected,
+                      onChanged: onTapCheckBox,
+                    ),
+                  ),
                 ),
-                child: Text(
-                  "PC-288939-29930",
-                  style: Theme.of(context).textTheme.labelSmall,
+              Flexible(
+                flex: 2,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 3,
+                    horizontal: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                    color: Theme.of(context).colorScheme.tertiaryContainer,
+                  ),
+                  child: Text(
+                    "PC-288939-29930",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
                 ),
               ),
               const SizedBox(width: 24),
@@ -45,7 +68,7 @@ class NIMSResultCard extends StatelessWidget {
               InkWell(
                 onTap: onTapAction,
                 borderRadius: BorderRadius.all(Radius.circular(4)),
-                child:  Container(
+                child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(
                       context,

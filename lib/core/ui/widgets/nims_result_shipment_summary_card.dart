@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:projects/app/route_name+path+params.dart';
 
-class NIMSSelectedManifestCard extends StatelessWidget {
-  const NIMSSelectedManifestCard({super.key});
+class NIMSResultShipmentSummaryCard extends StatelessWidget {
+  const NIMSResultShipmentSummaryCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +40,15 @@ class NIMSSelectedManifestCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 24),
-                Text(
-                  "20 Specimens",
-                  style: Theme.of(context).textTheme.bodySmall,
+                Expanded(
+                  child: Text(
+                    "20 Results",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 16),
                 Row(
                   children: [
                     Text(
@@ -61,13 +65,44 @@ class NIMSSelectedManifestCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Spacer(),
+                const SizedBox(width: 16),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 16,
                   color: Theme.of(context).colorScheme.tertiary.withAlpha(100),
                 ),
               ],
+            ),
+            SizedBox(height: 12),
+            Padding(
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 4),
+              child: Align(
+                alignment: AlignmentGeometry.centerLeft,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: Text(
+                        "National Reference Hospital",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        "Hub",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
-import 'package:projects/core/ui/widgets/nims_selected_manifest_card.dart';
+import 'package:projects/core/ui/widgets/nims_specimen_shipment_summary_card.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 import '../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
@@ -86,7 +86,7 @@ class ResultDeliveryApprovalScreenState
                   5,
                   (x) => Padding(
                     padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
-                    child: NIMSSelectedManifestCard(),
+                    child: NIMSSpecimenShipmentSummaryCard(),
                   ),
                 ),
               ],

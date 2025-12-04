@@ -4,7 +4,6 @@ import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
-import 'package:projects/features/pickup/presentation/specimen/specimen_deletion_confirmation_dialog.dart';
 
 import '../../../../core/ui/widgets/nims_manifest_card.dart';
 import '../../../../core/ui/widgets/nims_primary_button.dart';
@@ -108,21 +107,22 @@ class _ManifestsScreenState extends State<ManifestsScreen> {
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 SizedBox(width: 8),
-                Container(
-                  padding: EdgeInsetsGeometry.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
+                if (selectedManifests.isNotEmpty)
+                  Container(
+                    padding: EdgeInsetsGeometry.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      color: Theme.of(context).colorScheme.tertiaryContainer,
+                    ),
+                    child: Text(
+                      "${selectedManifests.length} Selected",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: Theme.of(context).colorScheme.tertiaryContainer,
-                  ),
-                  child: Text(
-                    "${selectedManifests.length} Selected",
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ),
               ],
             ),
             Spacer(),
@@ -198,9 +198,7 @@ class _ManifestsScreenState extends State<ManifestsScreen> {
                             destinationName: "National Reference Lab",
                             manifestID: 'NG-83992882-JJSKKS',
                             onTapManifest: () {
-                              context.pushNamed(
-                                manifestDetailsScreen,
-                              );
+                              context.pushNamed(manifestDetailsScreen);
                             },
                           ),
                         ),
