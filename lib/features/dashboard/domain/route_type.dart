@@ -5,7 +5,7 @@ enum RouteType {
   ),
   spokeToHubGeneXpert("Spoke -> Hub/GeneXpert", RouteTypeCategory.specimen),
   hubToPCRLab("Hub -> PCR Lab", RouteTypeCategory.specimen),
-  geneXpertToSpoke("GeneXxpert -> Spoke", RouteTypeCategory.result);
+  geneXpertToSpoke("GeneXpert -> Spoke", RouteTypeCategory.result);
 
   final String label;
   final RouteTypeCategory category;

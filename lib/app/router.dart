@@ -2,18 +2,21 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
-import 'package:projects/features/dashboard/presentation/dashboard_screen.dart';
-import 'package:projects/features/dashboard/presentation/route_details_screen.dart';
-import 'package:projects/features/pickup/presentation/specimen/add_new_manifest_screen.dart';
-import 'package:projects/features/pickup/presentation/result/result_pickup_screen.dart';
-import 'package:projects/features/pickup/presentation/specimen/shipments_screen.dart';
-import 'package:projects/features/pickup/presentation/specimen/manifests_screen.dart';
-import '../features/delivery/presentation/result/result_delivery_approval_screen.dart';
-import '../features/delivery/presentation/specimen/specimen_delivery_approval_screen.dart';
-import '../features/pickup/presentation/result/result_shipment_approval_screen.dart';
-import '../features/pickup/presentation/specimen/specimen_shipment_approval_screen.dart';
-import '../features/auth/presentation/login_screen.dart';
-import '../features/pickup/presentation/specimen/manifest_details_screen.dart';
+import 'package:projects/features/dashboard/presentation/ui/dashboard_screen.dart';
+import 'package:projects/features/dashboard/presentation/ui/route_details_screen.dart';
+import 'package:projects/features/facilities/presentation/ui/facilities_screen.dart';
+import 'package:projects/features/pickup/presentation/ui/result_pickup_screen.dart';
+import 'package:projects/features/pickup/presentation/ui/shipments_screen.dart';
+import 'package:projects/features/profile/presentation/ui/profile_screen.dart';
+import '../features/auth/presentation/ui/login/login_screen.dart';
+import '../features/delivery/presentation/ui/result_delivery_approval_screen.dart';
+import '../features/delivery/presentation/ui/specimen_delivery_approval_screen.dart';
+import '../core/ui/widgets/sticky_header_delegate.dart';
+import '../features/pickup/presentation/ui/add_new_manifest_screen.dart';
+import '../features/pickup/presentation/ui/manifests_screen.dart';
+import '../features/pickup/presentation/ui/result_shipment_approval_screen.dart';
+import '../features/pickup/presentation/ui/shipment_details_screen.dart';
+import '../features/pickup/presentation/ui/specimen_shipment_approval_screen.dart';
 
 final router = GoRouter(
   initialLocation: loginPath,
@@ -21,12 +24,22 @@ final router = GoRouter(
     GoRoute(
       name: loginScreen,
       path: loginPath,
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => LoginScreen(),
     ),
     GoRoute(
       name: dashboardScreen,
       path: dashboardPath,
       builder: (context, state) => const DashboardScreen(),
+    ),
+    GoRoute(
+      name: facilitiesScreen,
+      path: facilitiesPath,
+      builder: (context, state) => const FacilitiesScreen(),
+    ),
+    GoRoute(
+      name: profileScreen,
+      path: profilePath,
+      builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
       name: specimenPickUpScreen,
@@ -138,13 +151,13 @@ final router = GoRouter(
       path: manifestDetailsPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-              (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
           orElse: () => RouteType.spokeToPCRLabGeneXpert,
         );
         if (kDebugMode) {
           print(routeType);
         }
-        return ManifestDetailsScreen(routeType: routeType);
+        return ShipmentDetailsScreen(routeType: routeType);
       },
     ),
     GoRoute(
@@ -152,7 +165,7 @@ final router = GoRouter(
       path: shipmentsPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-              (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
           orElse: () => RouteType.spokeToPCRLabGeneXpert,
         );
         if (kDebugMode) {

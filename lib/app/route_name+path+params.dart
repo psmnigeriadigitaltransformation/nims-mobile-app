@@ -36,5 +36,11 @@ const manifestDetailsPath = '/manifest_details';
 const shipmentsScreen = 'shipments_screen';
 const shipmentsPath = '/shipments';
 
+const profileScreen = 'profile_screen';
+const profilePath = '/profile';
+
+const facilitiesScreen = 'facilities_screen';
+const facilitiesPath = '/facilities';
+
 // QUERY PARAMS
 const routeTypeQueryParam = "route_type";

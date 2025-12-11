@@ -31,7 +31,6 @@ class NIMSSecondaryButton extends StatelessWidget {
                   width: 22,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Theme.of(context).colorScheme.primary,
                   ),
                 )
               : Text(text),

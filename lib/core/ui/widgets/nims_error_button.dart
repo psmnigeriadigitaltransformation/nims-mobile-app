@@ -31,7 +31,7 @@ class NIMSErrorButton extends StatelessWidget {
                   width: 22,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.onError,
                   ),
                 )
               : Text(text),
