@@ -7,7 +7,7 @@ part of 'lsp.dart';
 // **************************************************************************
 
 _$LspImpl _$$LspImplFromJson(Map<String, dynamic> json) => _$LspImpl(
-  id: json['id'] as String?,
+  id: (json['id'] as num?)?.toInt(),
   userId: json['user_id'] as String?,
   pick: json['pick'] as String?,
   lspId: (json['lsp_id'] as num?)?.toInt(),

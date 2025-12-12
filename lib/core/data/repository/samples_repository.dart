@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 
 import 'package:projects/core/domain/mappers/response_to_domain_mapper.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 import 'package:projects/core/services/remote/models/facilities_response.dart';
 import 'package:projects/core/services/remote/models/sample_types_response.dart';
 import 'package:projects/core/utils/result.dart';
@@ -15,12 +16,13 @@ class SamplesRepository {
 
   SamplesRepository(this._apiService, this._localService);
 
-  Future<Result<SampleTypesResponse>> getSampleTypes() async {
+  Future<Result<List<DomainSampleType>>> getSampleTypes(bool refresh) async {
     try {
-      final user = await _localService.getCachedUser();
-      if (user != null) {
-        developer.log("user: $user", name: "SamplesRepository:getSampleTypes");
-        final result = await _apiService.getSampleTypes(riderId: user.userId!);
+      final cachedSampleTypes = await _localService.getCachedSampleTypes();
+      if (cachedSampleTypes.isNotEmpty && !refresh) {
+        return Success(cachedSampleTypes);
+      } else {
+        final result = await _apiService.getSampleTypes();
         developer.log(
           "result: $result",
           name: "SamplesRepository:getSampleTypes",
@@ -32,18 +34,21 @@ class SamplesRepository {
               name: "SamplesRepository:getSampleTypes",
             );
             final sampleTypes = result.payload.data;
-            if (sampleTypes != null) {
-              await _localService.updateCachedSampleTypes(
-                sampleTypes.map((sampleType) => sampleType.toDomain()).toList(),
-              );
+            if (sampleTypes == null || sampleTypes.isEmpty) {
+              return Error("No sample type available");
             }
-            break;
+            final domainSampleTypes = sampleTypes
+                .map((sampleType) => sampleType.toDomain())
+                .toList();
+            await _localService.updateCachedSampleTypes(domainSampleTypes);
+            return Success(domainSampleTypes);
           case Error<SampleTypesResponse>():
-            break;
+            developer.log(
+              "error: ${result.message}",
+              name: "SamplesRepository:getSampleTypes",
+            );
+            return Error(result.message);
         }
-        return result;
-      } else {
-        return Error<SampleTypesResponse>("Fetch failed! please try again");
       }
     } catch (e, s) {
       developer.log(
@@ -52,11 +57,7 @@ class SamplesRepository {
         stackTrace: s,
         name: "SamplesRepository:getSampleTypes",
       );
-      return Error<SampleTypesResponse>(
-        e.toString(),
-        exception: e as Exception,
-        stackTrace: s,
-      );
+      return Error(e.toString(), exception: e as Exception, stackTrace: s);
     }
   }
 }

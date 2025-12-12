@@ -13,6 +13,7 @@ _$MovementTypeImpl _$$MovementTypeImplFromJson(Map<String, dynamic> json) =>
       typeId: (json['type_id'] as num?)?.toInt(),
       movement: json['movement'] as String?,
       created: json['created'] as String?,
+      category: json['category'] as String?,
     );
 
 Map<String, dynamic> _$$MovementTypeImplToJson(_$MovementTypeImpl instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$MovementTypeImplToJson(_$MovementTypeImpl instance) =>
       'type_id': instance.typeId,
       'movement': instance.movement,
       'created': instance.created,
+      'category': instance.category,
     };

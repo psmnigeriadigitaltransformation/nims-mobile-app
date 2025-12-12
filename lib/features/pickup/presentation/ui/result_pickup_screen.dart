@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:projects/app/route_name+path+params.dart';
+import 'package:projects/core/domain/models/movement_type.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
@@ -13,9 +14,9 @@ import '../../../../core/ui/widgets/nims_secondary_button.dart';
 import '../../../dashboard/domain/mock.dart';
 
 class ResultPickUpScreen extends StatefulWidget {
-  final RouteType routeType;
+  final MovementType movementType;
 
-  const ResultPickUpScreen({super.key, required this.routeType});
+  const ResultPickUpScreen({super.key, required this.movementType});
 
   @override
   State<StatefulWidget> createState() => _ResultPickUpScreenState();
@@ -59,7 +60,10 @@ class _ResultPickUpScreenState extends State<ResultPickUpScreen> {
 
         SizedBox(height: 8),
 
-        Text(widget.routeType.label, style: TextTheme.of(context).bodySmall),
+        Text(
+          widget.movementType.movement ?? "",
+          style: TextTheme.of(context).bodySmall,
+        ),
 
         SizedBox(height: 50),
 
@@ -173,7 +177,6 @@ class _ResultPickUpScreenState extends State<ResultPickUpScreen> {
         SizedBox(
           height: size.height * 0.515,
           child: Scrollbar(
-            thumbVisibility: true,
             trackVisibility: true,
             child: ListView(
               padding: EdgeInsets.symmetric(vertical: 4),

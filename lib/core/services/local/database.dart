@@ -114,10 +114,10 @@ class NIMSDatabase {
             pick TEXT,
             type_id INTEGER,
             movement TEXT,
-            created TEXT
+            created TEXT,
+            category TEXT
           )
         ''');
-
       },
     );
   }

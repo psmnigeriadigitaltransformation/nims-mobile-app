@@ -21,7 +21,7 @@ Platform _$PlatformFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Platform {
-  String? get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'user_id')
   String? get userId => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
@@ -41,11 +41,7 @@ abstract class $PlatformCopyWith<$Res> {
   factory $PlatformCopyWith(Platform value, $Res Function(Platform) then) =
       _$PlatformCopyWithImpl<$Res, Platform>;
   @useResult
-  $Res call({
-    String? id,
-    @JsonKey(name: 'user_id') String? userId,
-    String? name,
-  });
+  $Res call({int? id, @JsonKey(name: 'user_id') String? userId, String? name});
 }
 
 /// @nodoc
@@ -72,7 +68,7 @@ class _$PlatformCopyWithImpl<$Res, $Val extends Platform>
             id: freezed == id
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
-                      as String?,
+                      as int?,
             userId: freezed == userId
                 ? _value.userId
                 : userId // ignore: cast_nullable_to_non_nullable
@@ -96,11 +92,7 @@ abstract class _$$PlatformImplCopyWith<$Res>
   ) = __$$PlatformImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String? id,
-    @JsonKey(name: 'user_id') String? userId,
-    String? name,
-  });
+  $Res call({int? id, @JsonKey(name: 'user_id') String? userId, String? name});
 }
 
 /// @nodoc
@@ -126,7 +118,7 @@ class __$$PlatformImplCopyWithImpl<$Res>
         id: freezed == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                  as int?,
         userId: freezed == userId
             ? _value.userId
             : userId // ignore: cast_nullable_to_non_nullable
@@ -153,7 +145,7 @@ class _$PlatformImpl implements _Platform {
       _$$PlatformImplFromJson(json);
 
   @override
-  final String? id;
+  final int? id;
   @override
   @JsonKey(name: 'user_id')
   final String? userId;
@@ -195,7 +187,7 @@ class _$PlatformImpl implements _Platform {
 
 abstract class _Platform implements Platform {
   const factory _Platform({
-    required final String? id,
+    required final int? id,
     @JsonKey(name: 'user_id') required final String? userId,
     required final String? name,
   }) = _$PlatformImpl;
@@ -204,7 +196,7 @@ abstract class _Platform implements Platform {
       _$PlatformImpl.fromJson;
 
   @override
-  String? get id;
+  int? get id;
   @override
   @JsonKey(name: 'user_id')
   String? get userId;

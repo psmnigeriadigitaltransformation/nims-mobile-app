@@ -7,7 +7,7 @@ part 'lsp.g.dart';
 @freezed
 class Lsp with _$Lsp {
   const factory Lsp({
-    required String? id,
+    required int? id,
     @JsonKey(name: 'user_id') required String? userId,
     String? pick,
     @JsonKey(name: 'lsp_id') int? lspId,

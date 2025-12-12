@@ -1,0 +1,1 @@
+enum MovementTypeCategory { specimen, result }

@@ -76,7 +76,6 @@ class ResultDispatchApprovalScreenState extends State<SpecimenShipmentApprovalSc
         SizedBox(
           height: size.height * 0.275,
           child: Scrollbar(
-            thumbVisibility: true,
             trackVisibility: true,
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),

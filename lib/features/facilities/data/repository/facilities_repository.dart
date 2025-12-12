@@ -1,9 +1,11 @@
 import 'dart:developer' as developer;
 
 import 'package:projects/core/domain/mappers/response_to_domain_mapper.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 import 'package:projects/core/services/remote/models/facilities_response.dart';
 import 'package:projects/core/utils/result.dart';
 import 'package:projects/core/services/remote/models/login_response.dart';
+import 'package:projects/features/facilities/data/model/facility_type.dart';
 
 import '../../../../core/services/remote/nims_api_service.dart';
 import '../../../../core/services/local/nims_local_service.dart';
@@ -14,54 +16,68 @@ class FacilitiesRepository {
 
   FacilitiesRepository(this._apiService, this._localService);
 
-  Future<Result<FacilitiesResponse>> getFacilities() async {
+  Future<Result<List<DomainFacility>>> getFacilities(bool refresh) async {
     try {
-      final user = await _localService.getCachedUser();
-      if (user != null) {
-        developer.log(
-          "user: $user",
-          name: "FacilitiesRepository:getFacilities",
-        );
-        final result = await _apiService.getFacilities(riderId: user.userId!);
+      final cachedFacilities = await _localService.getCachedFacilities();
+      if (cachedFacilities.isNotEmpty && !refresh) {
+        return Success(cachedFacilities);
+      } else {
+        final user = await _localService.getCachedUser();
+        if (user == null) {
+          return Error<List<DomainFacility>>(
+            "Request could not be completed! user not found",
+          );
+        }
+
+        final result = await _apiService.getFacilities(riderId: user!.userId!);
         developer.log(
           "result: $result",
           name: "FacilitiesRepository:getFacilities",
         );
+
         switch (result) {
           case Success<FacilitiesResponse>(payload: final data):
             developer.log(
               "data: $data",
               name: "FacilitiesRepository:getFacilities",
             );
-            final facilities = result.payload.data;
-            if (facilities != null) {
-              final domainSpokeFacilities = facilities.spokeList
-                  ?.map((e) => e.toDomain("spoke"))
-                  .toList();
-              final domainPcrFacilities = facilities.pcrList
-                  ?.map((e) => e.toDomain("pcr"))
-                  .toList();
-              final domainHubFacilities = facilities.hubList
-                  ?.map((e) => e.toDomain("hub"))
-                  .toList();
-              final domainGeneXpertFacilities = facilities.hubList
-                  ?.map((e) => e.toDomain("genexpert"))
-                  .toList();
 
-              await _localService.updateCachedFacilities([
-                ...?domainSpokeFacilities,
-                ...?domainPcrFacilities,
-                ...?domainHubFacilities,
-                ...?domainGeneXpertFacilities,
-              ]);
+            final facilityData = result.payload.data;
+            if (facilityData == null) {
+              return Error<List<DomainFacility>>("No facility available");
             }
-            break;
+
+            final domainSpokeFacilities = facilityData.spokeList
+                ?.map((e) => e.toDomain(FacilityType.spoke.name))
+                .toList();
+            final domainPcrFacilities = facilityData.pcrList
+                ?.map((e) => e.toDomain(FacilityType.pcr.name))
+                .toList();
+            final domainHubFacilities = facilityData.hubList
+                ?.map((e) => e.toDomain(FacilityType.hub.name))
+                .toList();
+            final domainGeneXpertFacilities = facilityData.hubList
+                ?.map((e) => e.toDomain(FacilityType.genexpert.name))
+                .toList();
+
+            final combinedDomainFacilities = [
+              ...?domainSpokeFacilities,
+              ...?domainPcrFacilities,
+              ...?domainHubFacilities,
+              ...?domainGeneXpertFacilities,
+            ];
+            await _localService.updateCachedFacilities(combinedDomainFacilities);
+            if (combinedDomainFacilities.isEmpty) {
+              Error<List<DomainFacility>>("No facility available");
+            }
+            return Success(combinedDomainFacilities);
           case Error<FacilitiesResponse>():
-            break;
+            developer.log(
+              "error: ${result.message}",
+              name: "FacilitiesRepository:getFacilities",
+            );
+            return Error(result.message);
         }
-        return result;
-      } else {
-        return Error<FacilitiesResponse>("Fetch failed! please try again");
       }
     } catch (e, s) {
       developer.log(
@@ -70,7 +86,7 @@ class FacilitiesRepository {
         stackTrace: s,
         name: "FacilitiesRepository:getFacilities",
       );
-      return Error<FacilitiesResponse>(
+      return Error<List<DomainFacility>>(
         e.toString(),
         exception: e as Exception,
         stackTrace: s,

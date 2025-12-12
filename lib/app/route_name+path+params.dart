@@ -43,4 +43,4 @@ const facilitiesScreen = 'facilities_screen';
 const facilitiesPath = '/facilities';
 
 // QUERY PARAMS
-const routeTypeQueryParam = "route_type";
+const movementTypeQueryParam = "movement_type";

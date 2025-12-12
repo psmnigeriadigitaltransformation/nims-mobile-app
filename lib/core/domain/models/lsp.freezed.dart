@@ -21,7 +21,7 @@ Lsp _$LspFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Lsp {
-  String? get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'user_id')
   String? get userId => throw _privateConstructorUsedError;
   String? get pick => throw _privateConstructorUsedError;
@@ -50,7 +50,7 @@ abstract class $LspCopyWith<$Res> {
       _$LspCopyWithImpl<$Res, Lsp>;
   @useResult
   $Res call({
-    String? id,
+    int? id,
     @JsonKey(name: 'user_id') String? userId,
     String? pick,
     @JsonKey(name: 'lsp_id') int? lspId,
@@ -89,7 +89,7 @@ class _$LspCopyWithImpl<$Res, $Val extends Lsp> implements $LspCopyWith<$Res> {
             id: freezed == id
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
-                      as String?,
+                      as int?,
             userId: freezed == userId
                 ? _value.userId
                 : userId // ignore: cast_nullable_to_non_nullable
@@ -131,7 +131,7 @@ abstract class _$$LspImplCopyWith<$Res> implements $LspCopyWith<$Res> {
   @override
   @useResult
   $Res call({
-    String? id,
+    int? id,
     @JsonKey(name: 'user_id') String? userId,
     String? pick,
     @JsonKey(name: 'lsp_id') int? lspId,
@@ -167,7 +167,7 @@ class __$$LspImplCopyWithImpl<$Res> extends _$LspCopyWithImpl<$Res, _$LspImpl>
         id: freezed == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                  as int?,
         userId: freezed == userId
             ? _value.userId
             : userId // ignore: cast_nullable_to_non_nullable
@@ -219,7 +219,7 @@ class _$LspImpl implements _Lsp {
       _$$LspImplFromJson(json);
 
   @override
-  final String? id;
+  final int? id;
   @override
   @JsonKey(name: 'user_id')
   final String? userId;
@@ -291,7 +291,7 @@ class _$LspImpl implements _Lsp {
 
 abstract class _Lsp implements Lsp {
   const factory _Lsp({
-    required final String? id,
+    required final int? id,
     @JsonKey(name: 'user_id') required final String? userId,
     final String? pick,
     @JsonKey(name: 'lsp_id') final int? lspId,
@@ -304,7 +304,7 @@ abstract class _Lsp implements Lsp {
   factory _Lsp.fromJson(Map<String, dynamic> json) = _$LspImpl.fromJson;
 
   @override
-  String? get id;
+  int? get id;
   @override
   @JsonKey(name: 'user_id')
   String? get userId;

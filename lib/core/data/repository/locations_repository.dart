@@ -1,10 +1,9 @@
 import 'dart:developer' as developer;
 
 import 'package:projects/core/domain/mappers/response_to_domain_mapper.dart';
-import 'package:projects/core/services/remote/models/facilities_response.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 import 'package:projects/core/services/remote/models/locations_response.dart';
 import 'package:projects/core/utils/result.dart';
-import 'package:projects/core/services/remote/models/login_response.dart';
 
 import '../../../../core/services/remote/nims_api_service.dart';
 import '../../../../core/services/local/nims_local_service.dart';
@@ -15,11 +14,12 @@ class LocationsRepository {
 
   LocationsRepository(this._apiService, this._localService);
 
-  Future<Result<LocationResponse>> getLocations() async {
+  Future<Result<List<DomainLocation>>> getLocations(bool refresh) async {
     try {
-      final user = await _localService.getCachedUser();
-      if (user != null) {
-        developer.log("user: $user", name: "LocationsRepository:getLocations");
+      final cachedLocations = await _localService.getCachedLocations();
+      if (cachedLocations.isNotEmpty && !refresh) {
+        return Success(cachedLocations);
+      } else {
         final result = await _apiService.getLocations();
         developer.log(
           "result: $result",
@@ -32,18 +32,21 @@ class LocationsRepository {
               name: "LocationsRepository:getLocations",
             );
             final locations = result.payload.data;
-            if (locations != null) {
-              await _localService.updateCachedLocations(
-                locations.map((location) => location.toDomain()).toList(),
-              );
+            if (locations == null || locations.isEmpty) {
+              return Error("No location available");
             }
-            break;
+            final domainLocations = locations
+                .map((location) => location.toDomain())
+                .toList();
+            await _localService.updateCachedLocations(domainLocations);
+            return Success(domainLocations);
           case Error<LocationResponse>():
-            break;
+            developer.log(
+              "error: ${result.message}",
+              name: "LocationsRepository:getLocations",
+            );
+            return Error(result.message);
         }
-        return result;
-      } else {
-        return Error<LocationResponse>("Fetch failed! please try again");
       }
     } catch (e, s) {
       developer.log(
@@ -52,11 +55,7 @@ class LocationsRepository {
         stackTrace: s,
         name: "LocationsRepository:getLocations",
       );
-      return Error<LocationResponse>(
-        e.toString(),
-        exception: e as Exception,
-        stackTrace: s,
-      );
+      return Error(e.toString(), exception: e as Exception, stackTrace: s);
     }
   }
 }

@@ -27,6 +27,7 @@ mixin _$MovementType {
   int? get typeId => throw _privateConstructorUsedError;
   String? get movement => throw _privateConstructorUsedError;
   String? get created => throw _privateConstructorUsedError;
+  String? get category => throw _privateConstructorUsedError;
 
   /// Serializes this MovementType to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -51,6 +52,7 @@ abstract class $MovementTypeCopyWith<$Res> {
     @JsonKey(name: "type_id") int? typeId,
     String? movement,
     String? created,
+    String? category,
   });
 }
 
@@ -74,6 +76,7 @@ class _$MovementTypeCopyWithImpl<$Res, $Val extends MovementType>
     Object? typeId = freezed,
     Object? movement = freezed,
     Object? created = freezed,
+    Object? category = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -97,6 +100,10 @@ class _$MovementTypeCopyWithImpl<$Res, $Val extends MovementType>
                 ? _value.created
                 : created // ignore: cast_nullable_to_non_nullable
                       as String?,
+            category: freezed == category
+                ? _value.category
+                : category // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -118,6 +125,7 @@ abstract class _$$MovementTypeImplCopyWith<$Res>
     @JsonKey(name: "type_id") int? typeId,
     String? movement,
     String? created,
+    String? category,
   });
 }
 
@@ -140,6 +148,7 @@ class __$$MovementTypeImplCopyWithImpl<$Res>
     Object? typeId = freezed,
     Object? movement = freezed,
     Object? created = freezed,
+    Object? category = freezed,
   }) {
     return _then(
       _$MovementTypeImpl(
@@ -163,6 +172,10 @@ class __$$MovementTypeImplCopyWithImpl<$Res>
             ? _value.created
             : created // ignore: cast_nullable_to_non_nullable
                   as String?,
+        category: freezed == category
+            ? _value.category
+            : category // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -177,6 +190,7 @@ class _$MovementTypeImpl implements _MovementType {
     @JsonKey(name: "type_id") required this.typeId,
     required this.movement,
     required this.created,
+    required this.category,
   });
 
   factory _$MovementTypeImpl.fromJson(Map<String, dynamic> json) =>
@@ -193,10 +207,12 @@ class _$MovementTypeImpl implements _MovementType {
   final String? movement;
   @override
   final String? created;
+  @override
+  final String? category;
 
   @override
   String toString() {
-    return 'MovementType(id: $id, pick: $pick, typeId: $typeId, movement: $movement, created: $created)';
+    return 'MovementType(id: $id, pick: $pick, typeId: $typeId, movement: $movement, created: $created, category: $category)';
   }
 
   @override
@@ -209,13 +225,15 @@ class _$MovementTypeImpl implements _MovementType {
             (identical(other.typeId, typeId) || other.typeId == typeId) &&
             (identical(other.movement, movement) ||
                 other.movement == movement) &&
-            (identical(other.created, created) || other.created == created));
+            (identical(other.created, created) || other.created == created) &&
+            (identical(other.category, category) ||
+                other.category == category));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, pick, typeId, movement, created);
+      Object.hash(runtimeType, id, pick, typeId, movement, created, category);
 
   /// Create a copy of MovementType
   /// with the given fields replaced by the non-null parameter values.
@@ -238,6 +256,7 @@ abstract class _MovementType implements MovementType {
     @JsonKey(name: "type_id") required final int? typeId,
     required final String? movement,
     required final String? created,
+    required final String? category,
   }) = _$MovementTypeImpl;
 
   factory _MovementType.fromJson(Map<String, dynamic> json) =
@@ -254,6 +273,8 @@ abstract class _MovementType implements MovementType {
   String? get movement;
   @override
   String? get created;
+  @override
+  String? get category;
 
   /// Create a copy of MovementType
   /// with the given fields replaced by the non-null parameter values.

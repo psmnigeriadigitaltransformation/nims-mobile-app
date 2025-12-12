@@ -17,11 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$FacilitiesScreenState {
-  List<FacilityItem> get hubFacilities => throw _privateConstructorUsedError;
-  List<FacilityItem> get spokeFacilities => throw _privateConstructorUsedError;
-  List<FacilityItem> get pcrFacilities => throw _privateConstructorUsedError;
-  List<FacilityItem> get geneXpertFacilities =>
-      throw _privateConstructorUsedError;
+  List<Facility> get hubFacilities => throw _privateConstructorUsedError;
+  List<Facility> get spokeFacilities => throw _privateConstructorUsedError;
+  List<Facility> get pcrFacilities => throw _privateConstructorUsedError;
+  List<Facility> get geneXpertFacilities => throw _privateConstructorUsedError;
 
   /// Create a copy of FacilitiesScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,10 +37,10 @@ abstract class $FacilitiesScreenStateCopyWith<$Res> {
   ) = _$FacilitiesScreenStateCopyWithImpl<$Res, FacilitiesScreenState>;
   @useResult
   $Res call({
-    List<FacilityItem> hubFacilities,
-    List<FacilityItem> spokeFacilities,
-    List<FacilityItem> pcrFacilities,
-    List<FacilityItem> geneXpertFacilities,
+    List<Facility> hubFacilities,
+    List<Facility> spokeFacilities,
+    List<Facility> pcrFacilities,
+    List<Facility> geneXpertFacilities,
   });
 }
 
@@ -73,19 +72,19 @@ class _$FacilitiesScreenStateCopyWithImpl<
             hubFacilities: null == hubFacilities
                 ? _value.hubFacilities
                 : hubFacilities // ignore: cast_nullable_to_non_nullable
-                      as List<FacilityItem>,
+                      as List<Facility>,
             spokeFacilities: null == spokeFacilities
                 ? _value.spokeFacilities
                 : spokeFacilities // ignore: cast_nullable_to_non_nullable
-                      as List<FacilityItem>,
+                      as List<Facility>,
             pcrFacilities: null == pcrFacilities
                 ? _value.pcrFacilities
                 : pcrFacilities // ignore: cast_nullable_to_non_nullable
-                      as List<FacilityItem>,
+                      as List<Facility>,
             geneXpertFacilities: null == geneXpertFacilities
                 ? _value.geneXpertFacilities
                 : geneXpertFacilities // ignore: cast_nullable_to_non_nullable
-                      as List<FacilityItem>,
+                      as List<Facility>,
           )
           as $Val,
     );
@@ -102,10 +101,10 @@ abstract class _$$FacilitiesScreenStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    List<FacilityItem> hubFacilities,
-    List<FacilityItem> spokeFacilities,
-    List<FacilityItem> pcrFacilities,
-    List<FacilityItem> geneXpertFacilities,
+    List<Facility> hubFacilities,
+    List<Facility> spokeFacilities,
+    List<Facility> pcrFacilities,
+    List<Facility> geneXpertFacilities,
   });
 }
 
@@ -134,19 +133,19 @@ class __$$FacilitiesScreenStateImplCopyWithImpl<$Res>
         hubFacilities: null == hubFacilities
             ? _value._hubFacilities
             : hubFacilities // ignore: cast_nullable_to_non_nullable
-                  as List<FacilityItem>,
+                  as List<Facility>,
         spokeFacilities: null == spokeFacilities
             ? _value._spokeFacilities
             : spokeFacilities // ignore: cast_nullable_to_non_nullable
-                  as List<FacilityItem>,
+                  as List<Facility>,
         pcrFacilities: null == pcrFacilities
             ? _value._pcrFacilities
             : pcrFacilities // ignore: cast_nullable_to_non_nullable
-                  as List<FacilityItem>,
+                  as List<Facility>,
         geneXpertFacilities: null == geneXpertFacilities
             ? _value._geneXpertFacilities
             : geneXpertFacilities // ignore: cast_nullable_to_non_nullable
-                  as List<FacilityItem>,
+                  as List<Facility>,
       ),
     );
   }
@@ -156,42 +155,42 @@ class __$$FacilitiesScreenStateImplCopyWithImpl<$Res>
 
 class _$FacilitiesScreenStateImpl implements _FacilitiesScreenState {
   const _$FacilitiesScreenStateImpl({
-    required final List<FacilityItem> hubFacilities,
-    required final List<FacilityItem> spokeFacilities,
-    required final List<FacilityItem> pcrFacilities,
-    required final List<FacilityItem> geneXpertFacilities,
+    required final List<Facility> hubFacilities,
+    required final List<Facility> spokeFacilities,
+    required final List<Facility> pcrFacilities,
+    required final List<Facility> geneXpertFacilities,
   }) : _hubFacilities = hubFacilities,
        _spokeFacilities = spokeFacilities,
        _pcrFacilities = pcrFacilities,
        _geneXpertFacilities = geneXpertFacilities;
 
-  final List<FacilityItem> _hubFacilities;
+  final List<Facility> _hubFacilities;
   @override
-  List<FacilityItem> get hubFacilities {
+  List<Facility> get hubFacilities {
     if (_hubFacilities is EqualUnmodifiableListView) return _hubFacilities;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_hubFacilities);
   }
 
-  final List<FacilityItem> _spokeFacilities;
+  final List<Facility> _spokeFacilities;
   @override
-  List<FacilityItem> get spokeFacilities {
+  List<Facility> get spokeFacilities {
     if (_spokeFacilities is EqualUnmodifiableListView) return _spokeFacilities;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_spokeFacilities);
   }
 
-  final List<FacilityItem> _pcrFacilities;
+  final List<Facility> _pcrFacilities;
   @override
-  List<FacilityItem> get pcrFacilities {
+  List<Facility> get pcrFacilities {
     if (_pcrFacilities is EqualUnmodifiableListView) return _pcrFacilities;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_pcrFacilities);
   }
 
-  final List<FacilityItem> _geneXpertFacilities;
+  final List<Facility> _geneXpertFacilities;
   @override
-  List<FacilityItem> get geneXpertFacilities {
+  List<Facility> get geneXpertFacilities {
     if (_geneXpertFacilities is EqualUnmodifiableListView)
       return _geneXpertFacilities;
     // ignore: implicit_dynamic_type
@@ -250,20 +249,20 @@ class _$FacilitiesScreenStateImpl implements _FacilitiesScreenState {
 
 abstract class _FacilitiesScreenState implements FacilitiesScreenState {
   const factory _FacilitiesScreenState({
-    required final List<FacilityItem> hubFacilities,
-    required final List<FacilityItem> spokeFacilities,
-    required final List<FacilityItem> pcrFacilities,
-    required final List<FacilityItem> geneXpertFacilities,
+    required final List<Facility> hubFacilities,
+    required final List<Facility> spokeFacilities,
+    required final List<Facility> pcrFacilities,
+    required final List<Facility> geneXpertFacilities,
   }) = _$FacilitiesScreenStateImpl;
 
   @override
-  List<FacilityItem> get hubFacilities;
+  List<Facility> get hubFacilities;
   @override
-  List<FacilityItem> get spokeFacilities;
+  List<Facility> get spokeFacilities;
   @override
-  List<FacilityItem> get pcrFacilities;
+  List<Facility> get pcrFacilities;
   @override
-  List<FacilityItem> get geneXpertFacilities;
+  List<Facility> get geneXpertFacilities;
 
   /// Create a copy of FacilitiesScreenState
   /// with the given fields replaced by the non-null parameter values.

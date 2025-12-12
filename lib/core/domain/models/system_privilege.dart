@@ -7,7 +7,7 @@ part 'system_privilege.g.dart';
 @freezed
 class SystemPrivilege with _$SystemPrivilege {
   const factory SystemPrivilege({
-    required String? id,
+    required int? id,
     @JsonKey(name: 'user_id') required String? userId,
     required String? name,
   }) = _SystemPrivilege;

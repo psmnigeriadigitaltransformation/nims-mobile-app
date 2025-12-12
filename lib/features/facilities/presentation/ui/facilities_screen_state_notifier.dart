@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/core/data/providers.dart';
+import 'package:projects/features/facilities/data/model/facility_type.dart';
 import 'package:projects/features/facilities/data/providers.dart';
 import 'package:projects/features/facilities/presentation/ui/model/facilities_screen_state.dart';
 
@@ -15,33 +15,15 @@ class FacilitiesScreenStateNotifier
   }
 
   Future<FacilitiesScreenState> _fetchData() async {
-    final fRepository = ref.read(facilitiesRepositoryProvider);
-    final sRepository = ref.read(samplesRepositoryProvider);
-    final lRepository = ref.read(locationsRepositoryProvider);
-    final mRepository = ref.read(movementTypesRepositoryProvider);
-
-    final result = await fRepository.getFacilities();
-    await sRepository.getSampleTypes();
-    await lRepository.getLocations();
-    await mRepository.getMovementTypes();
-
-    // Debugging
-    // final samplesRepo = ref.read(samplesRepositoryProvider);
-    // await samplesRepo.getSampleTypes();
-    //
-    // final locationsRepo = ref.read(locationsRepositoryProvider);
-    // await locationsRepo.getLocations();
-    //
-    // final movementsRepo = ref.read(movementTypesRepositoryProvider);
-    // await movementsRepo.getMovementTypes();
-
+    final facilitiesRepository = ref.read(facilitiesRepositoryProvider);
+    final result = await facilitiesRepository.getFacilities(false);
     switch (result) {
-      case Success(payload: final p):
+      case Success(payload: final payload):
         return FacilitiesScreenState(
-          geneXpertFacilities: p.data?.genexpertList ?? [],
-          hubFacilities: p.data?.hubList ?? [],
-          pcrFacilities: p.data?.pcrList ?? [],
-          spokeFacilities: p.data?.spokeList ?? [],
+          geneXpertFacilities: payload.where((facility) => facility.type == FacilityType.genexpert.name).toList(),
+          hubFacilities: payload.where((facility) => facility.type == FacilityType.hub.name).toList(),
+          pcrFacilities: payload.where((facility) => facility.type == FacilityType.pcr.name).toList(),
+          spokeFacilities: payload.where((facility) => facility.type == FacilityType.spoke.name).toList(),
         );
 
       case Error(message: final m):

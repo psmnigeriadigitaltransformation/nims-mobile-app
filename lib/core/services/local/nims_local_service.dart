@@ -1,18 +1,9 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:projects/core/domain/models/facility.dart';
-import 'package:projects/core/domain/models/location.dart';
-import 'package:projects/core/domain/models/movement_type.dart';
-import 'package:projects/core/domain/models/platform.dart';
 import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/services/remote/models/facilities_response.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../remote/models/locations_response.dart';
-import '../remote/models/login_response.dart';
-import '../remote/models/movement_types_response.dart';
-import '../remote/models/sample_types_response.dart';
 import 'database.dart';
 
 class NIMSLocalService {
@@ -154,6 +145,16 @@ class NIMSLocalService {
     await batch.commit(noResult: true);
   }
 
+  Future<List<DomainFacility>> getCachedFacilities() async {
+    final db = await NIMSDatabase().instance;
+    final result = await db.query('facilities');
+    developer.log(
+      "facilities: $result",
+      name: "NIMSLocalService:getCachedFacilities",
+    );
+    return result.map((facility) => DomainFacility.fromJson(facility)).toList();
+  }
+
   Future<void> updateCachedSampleTypes(
     List<DomainSampleType> sampleTypes,
   ) async {
@@ -175,6 +176,18 @@ class NIMSLocalService {
     await batch.commit(noResult: true);
   }
 
+  Future<List<DomainSampleType>> getCachedSampleTypes() async {
+    final db = await NIMSDatabase().instance;
+    final result = await db.query('sample_types');
+    developer.log(
+      "sample_types: $result",
+      name: "NIMSLocalService:getCachedSampleTypes",
+    );
+    return result
+        .map((sampleType) => DomainSampleType.fromJson(sampleType))
+        .toList();
+  }
+
   Future<void> updateCachedLocations(List<DomainLocation> locations) async {
     developer.log(
       "locations: $locations",
@@ -192,6 +205,16 @@ class NIMSLocalService {
       );
     }
     await batch.commit(noResult: true);
+  }
+
+  Future<List<DomainLocation>> getCachedLocations() async {
+    final db = await NIMSDatabase().instance;
+    final result = await db.query('locations');
+    developer.log(
+      "locations: $result",
+      name: "NIMSLocalService:getCachedLocations",
+    );
+    return result.map((location) => DomainLocation.fromJson(location)).toList();
   }
 
   Future<void> updateCachedMovementTypes(
@@ -215,15 +238,15 @@ class NIMSLocalService {
     await batch.commit(noResult: true);
   }
 
-  // to be refactored
-
-  Future<FacilitiesData?> getCachedFacilities() async {
+  Future<List<DomainMovementType>> getCachedMovementTypes() async {
     final db = await NIMSDatabase().instance;
-    final result = await db.query('facilities');
-
-    if (result.isNotEmpty) {
-      return FacilitiesData.fromJson(result.first);
-    }
-    return null;
+    final result = await db.query('movement_types');
+    developer.log(
+      "movement_types: $result",
+      name: "NIMSLocalService:getCachedMovementTypes",
+    );
+    return result
+        .map((location) => DomainMovementType.fromJson(location))
+        .toList();
   }
 }

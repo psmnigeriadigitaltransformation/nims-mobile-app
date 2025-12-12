@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:projects/core/data/providers.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:projects/core/domain/models/movement_category.dart';
+import 'package:projects/core/domain/models/movement_type.dart';
 import 'package:projects/core/ui/theme/colors.dart';
 
 import '../../domain/route_type.dart';
 
-class SelectMovementTypeBottomSheetDialog extends StatelessWidget {
-  final double height;
-  final Function(RouteType) onSelectMovementType;
+class SelectMovementTypeBottomSheetDialog extends ConsumerWidget {
+  final List<DomainMovementType> specimensMovementTypes;
+  final List<DomainMovementType> resultsMovementTypes;
+  final Function(DomainMovementType, MovementTypeCategory) onSelectMovementType;
 
   const SelectMovementTypeBottomSheetDialog({
     super.key,
-    required this.height,
+    required this.specimensMovementTypes,
+    required this.resultsMovementTypes,
     required this.onSelectMovementType,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      height: height,
+      height: size.height * 0.40,
       child: Center(
         child: ListView(
           children: [
@@ -37,15 +45,14 @@ class SelectMovementTypeBottomSheetDialog extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            ...RouteType.values
-                .where((type) => type.category == RouteTypeCategory.specimen)
+            ...specimensMovementTypes
                 .map(
-                  (routeType) => Column(
+                  (movementType) => Column(
                     children: [
                       InkWell(
                         onTap: () {
                           context.pop();
-                          onSelectMovementType(routeType);
+                          onSelectMovementType(movementType, MovementTypeCategory.specimen);
                         },
                         child: Container(
                           margin: EdgeInsetsGeometry.only(
@@ -64,7 +71,7 @@ class SelectMovementTypeBottomSheetDialog extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            routeType.label,
+                            movementType.movement ?? "",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),
@@ -81,15 +88,14 @@ class SelectMovementTypeBottomSheetDialog extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            ...RouteType.values
-                .where((type) => type.category == RouteTypeCategory.result)
+            ...resultsMovementTypes
                 .map(
-                  (routeType) => Column(
+                  (movementType) => Column(
                     children: [
                       InkWell(
                         onTap: () {
                           context.pop();
-                          onSelectMovementType(routeType);
+                          onSelectMovementType(movementType, MovementTypeCategory.result);
                         },
                         child: Container(
                           margin: EdgeInsetsGeometry.only(
@@ -108,7 +114,7 @@ class SelectMovementTypeBottomSheetDialog extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            routeType.label,
+                            movementType.movement ?? "",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),

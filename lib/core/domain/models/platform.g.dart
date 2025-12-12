@@ -8,7 +8,7 @@ part of 'platform.dart';
 
 _$PlatformImpl _$$PlatformImplFromJson(Map<String, dynamic> json) =>
     _$PlatformImpl(
-      id: json['id'] as String?,
+      id: (json['id'] as num?)?.toInt(),
       userId: json['user_id'] as String?,
       name: json['name'] as String?,
     );

@@ -9,7 +9,7 @@ part of 'system_privilege.dart';
 _$SystemPrivilegeImpl _$$SystemPrivilegeImplFromJson(
   Map<String, dynamic> json,
 ) => _$SystemPrivilegeImpl(
-  id: json['id'] as String?,
+  id: (json['id'] as num?)?.toInt(),
   userId: json['user_id'] as String?,
   name: json['name'] as String?,
 );

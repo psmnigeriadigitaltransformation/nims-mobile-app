@@ -77,7 +77,6 @@ class ResultDeliveryApprovalScreenState
         SizedBox(
           height: size.height * 0.25,
           child: Scrollbar(
-            thumbVisibility: true,
             trackVisibility: true,
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),

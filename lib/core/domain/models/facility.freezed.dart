@@ -21,7 +21,7 @@ Facility _$FacilityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Facility {
-  String? get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'facility_id')
   int? get facilityId => throw _privateConstructorUsedError;
   @JsonKey(name: 'facility_code')
@@ -50,7 +50,7 @@ abstract class $FacilityCopyWith<$Res> {
       _$FacilityCopyWithImpl<$Res, Facility>;
   @useResult
   $Res call({
-    String? id,
+    int? id,
     @JsonKey(name: 'facility_id') int? facilityId,
     @JsonKey(name: 'facility_code') String? facilityCode,
     @JsonKey(name: 'lab_code') String? labCode,
@@ -88,7 +88,7 @@ class _$FacilityCopyWithImpl<$Res, $Val extends Facility>
             id: freezed == id
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
-                      as String?,
+                      as int?,
             facilityId: freezed == facilityId
                 ? _value.facilityId
                 : facilityId // ignore: cast_nullable_to_non_nullable
@@ -129,7 +129,7 @@ abstract class _$$FacilityImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    String? id,
+    int? id,
     @JsonKey(name: 'facility_id') int? facilityId,
     @JsonKey(name: 'facility_code') String? facilityCode,
     @JsonKey(name: 'lab_code') String? labCode,
@@ -166,7 +166,7 @@ class __$$FacilityImplCopyWithImpl<$Res>
         id: freezed == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                  as int?,
         facilityId: freezed == facilityId
             ? _value.facilityId
             : facilityId // ignore: cast_nullable_to_non_nullable
@@ -213,7 +213,7 @@ class _$FacilityImpl implements _Facility {
       _$$FacilityImplFromJson(json);
 
   @override
-  final String? id;
+  final int? id;
   @override
   @JsonKey(name: 'facility_id')
   final int? facilityId;
@@ -284,7 +284,7 @@ class _$FacilityImpl implements _Facility {
 
 abstract class _Facility implements Facility {
   const factory _Facility({
-    required final String? id,
+    required final int? id,
     @JsonKey(name: 'facility_id') final int? facilityId,
     @JsonKey(name: 'facility_code') final String? facilityCode,
     @JsonKey(name: 'lab_code') final String? labCode,
@@ -297,7 +297,7 @@ abstract class _Facility implements Facility {
       _$FacilityImpl.fromJson;
 
   @override
-  String? get id;
+  int? get id;
   @override
   @JsonKey(name: 'facility_id')
   int? get facilityId;

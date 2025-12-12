@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:projects/core/services/remote/models/facilities_response.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 
 class NIMSFacilityCard extends StatelessWidget {
-  final FacilityItem facility;
+  final DomainFacility facility;
 
   const NIMSFacilityCard({super.key, required this.facility});
 

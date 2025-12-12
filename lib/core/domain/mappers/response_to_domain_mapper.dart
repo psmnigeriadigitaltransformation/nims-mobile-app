@@ -1,4 +1,5 @@
 import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:projects/core/domain/models/movement_category.dart';
 
 extension RemoteUserExtension on RemoteUser {
   DomainUser toDomain(String deviceSerialNo) {
@@ -97,13 +98,14 @@ extension RemoteLocationExtension on RemoteLocation {
 }
 
 extension RemoteMovementTypeExtension on RemoteMovementType {
-  DomainMovementType toDomain() {
+  DomainMovementType toDomain(MovementTypeCategory? category) {
     return DomainMovementType(
       id: null,
       typeId: typeId,
       pick: pick,
       movement: movement,
       created: created,
+      category: category?.name,
     );
   }
 }

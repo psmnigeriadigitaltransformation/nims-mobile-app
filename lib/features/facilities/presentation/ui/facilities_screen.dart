@@ -2,8 +2,8 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 import 'package:projects/core/ui/widgets/sticky_header_delegate.dart';
-import '../../../../core/services/remote/models/facilities_response.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
 import '../../../../core/ui/widgets/nims_alert_dialog.dart';
 import '../../../../core/ui/widgets/nims_facility_card.dart';
@@ -55,8 +55,8 @@ class FacilitiesScreen extends ConsumerWidget {
         ),
       ),
       body: asyncState.when(
-        loading: () => const Center(
-          heightFactor: 4,
+        loading: () => const Padding(
+          padding: EdgeInsets.all(40),
           child: SizedBox(
             width: 40,
             height: 40,
@@ -136,7 +136,7 @@ SliverPersistentHeader _buildHeader(String title, BuildContext context) {
   );
 }
 
-SliverList _buildList(List<FacilityItem> items) {
+SliverList _buildList(List<DomainFacility> items) {
   return SliverList(
     delegate: SliverChildBuilderDelegate((context, index) {
       return NIMSFacilityCard(facility: items[index]);

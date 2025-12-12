@@ -21,7 +21,7 @@ Privilege _$PrivilegeFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Privilege {
-  String? get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'system_privilege_id')
   int? get systemPrivilegeId => throw _privateConstructorUsedError;
   @JsonKey(name: 'rider')
@@ -43,7 +43,7 @@ abstract class $PrivilegeCopyWith<$Res> {
       _$PrivilegeCopyWithImpl<$Res, Privilege>;
   @useResult
   $Res call({
-    String? id,
+    int? id,
     @JsonKey(name: 'system_privilege_id') int? systemPrivilegeId,
     @JsonKey(name: 'rider') int? rider,
   });
@@ -73,7 +73,7 @@ class _$PrivilegeCopyWithImpl<$Res, $Val extends Privilege>
             id: freezed == id
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
-                      as String?,
+                      as int?,
             systemPrivilegeId: freezed == systemPrivilegeId
                 ? _value.systemPrivilegeId
                 : systemPrivilegeId // ignore: cast_nullable_to_non_nullable
@@ -98,7 +98,7 @@ abstract class _$$PrivilegeImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    String? id,
+    int? id,
     @JsonKey(name: 'system_privilege_id') int? systemPrivilegeId,
     @JsonKey(name: 'rider') int? rider,
   });
@@ -127,7 +127,7 @@ class __$$PrivilegeImplCopyWithImpl<$Res>
         id: freezed == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                  as int?,
         systemPrivilegeId: freezed == systemPrivilegeId
             ? _value.systemPrivilegeId
             : systemPrivilegeId // ignore: cast_nullable_to_non_nullable
@@ -154,7 +154,7 @@ class _$PrivilegeImpl implements _Privilege {
       _$$PrivilegeImplFromJson(json);
 
   @override
-  final String? id;
+  final int? id;
   @override
   @JsonKey(name: 'system_privilege_id')
   final int? systemPrivilegeId;
@@ -198,7 +198,7 @@ class _$PrivilegeImpl implements _Privilege {
 
 abstract class _Privilege implements Privilege {
   const factory _Privilege({
-    required final String? id,
+    required final int? id,
     @JsonKey(name: 'system_privilege_id') required final int? systemPrivilegeId,
     @JsonKey(name: 'rider') required final int? rider,
   }) = _$PrivilegeImpl;
@@ -207,7 +207,7 @@ abstract class _Privilege implements Privilege {
       _$PrivilegeImpl.fromJson;
 
   @override
-  String? get id;
+  int? get id;
   @override
   @JsonKey(name: 'system_privilege_id')
   int? get systemPrivilegeId;

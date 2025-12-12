@@ -10,14 +10,13 @@ import 'package:projects/features/auth/data/providers.dart';
 import '../../../../../core/ui/model/model/alert.dart';
 import '../../../../../core/utils/result.dart';
 import '../../../../../core/services/remote/models/login_response.dart';
+import '../../../domain/providers.dart';
 import '../../model/login_screen_state.dart';
 
 class LoginScreenStateNotifier extends Notifier<LoginScreenState> {
-  late AuthRepository authRepository;
-
   @override
   LoginScreenState build() {
-    authRepository = ref.watch(authRepositoryProvider);
+    ;
     return LoginScreenState(
       isLoginLoading: false,
       alert: Alert(show: false, message: ''),
@@ -30,13 +29,19 @@ class LoginScreenStateNotifier extends Notifier<LoginScreenState> {
     VoidCallback? onSuccess,
   }) async {
     state = state.copyWith(isLoginLoading: true);
-    final result = await authRepository.login(loginId, password);
+    final result = await ref
+        .read(authRepositoryProvider)
+        .login(loginId, password);
+
     switch (result) {
-      case Success<LoginResponse>():
+      case Success<LoginResponse>(payload: final payload):
         developer.log(
-          "success result: ${result.payload}",
+          "success result: $payload",
           name: "LoginScreenStateNotifier:login",
         );
+
+        await ref.read(downloadMasterDataUseCaseProvider).execute(false);
+
         onSuccess?.call();
       case Error<LoginResponse>():
         developer.log(

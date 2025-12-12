@@ -108,7 +108,6 @@ class ShipmentsScreen extends StatelessWidget {
         SizedBox(
           height: size.height * 0.600,
           child: Scrollbar(
-            thumbVisibility: true,
             trackVisibility: true,
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),

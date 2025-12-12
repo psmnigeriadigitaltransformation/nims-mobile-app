@@ -5,15 +5,16 @@ import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 
+import '../../../../core/domain/mappers/typedefs.dart';
 import '../../../../core/ui/widgets/nims_manifest_card.dart';
 import '../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../dashboard/domain/mock.dart';
 import 'manifest_deletion_confirmation_dialog.dart';
 
 class ManifestsScreen extends StatefulWidget {
-  final RouteType routeType;
+  final DomainMovementType movementType;
 
-  const ManifestsScreen({super.key, required this.routeType});
+  const ManifestsScreen({super.key, required this.movementType});
 
   @override
   State<ManifestsScreen> createState() => _ManifestsScreenState();
@@ -52,7 +53,7 @@ class _ManifestsScreenState extends State<ManifestsScreen> {
 
         SizedBox(height: 8),
 
-        Text(widget.routeType.label, style: TextTheme.of(context).bodySmall),
+        Text(widget.movementType.movement ?? "", style: TextTheme.of(context).bodySmall),
 
         SizedBox(height: 50),
 
@@ -160,7 +161,6 @@ class _ManifestsScreenState extends State<ManifestsScreen> {
         SizedBox(
           height: size.height * 0.480,
           child: Scrollbar(
-            thumbVisibility: true,
             trackVisibility: true,
             child: ListView.builder(
               itemCount: 8,

@@ -21,7 +21,7 @@ SystemPrivilege _$SystemPrivilegeFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SystemPrivilege {
-  String? get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'user_id')
   String? get userId => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
@@ -43,11 +43,7 @@ abstract class $SystemPrivilegeCopyWith<$Res> {
     $Res Function(SystemPrivilege) then,
   ) = _$SystemPrivilegeCopyWithImpl<$Res, SystemPrivilege>;
   @useResult
-  $Res call({
-    String? id,
-    @JsonKey(name: 'user_id') String? userId,
-    String? name,
-  });
+  $Res call({int? id, @JsonKey(name: 'user_id') String? userId, String? name});
 }
 
 /// @nodoc
@@ -74,7 +70,7 @@ class _$SystemPrivilegeCopyWithImpl<$Res, $Val extends SystemPrivilege>
             id: freezed == id
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
-                      as String?,
+                      as int?,
             userId: freezed == userId
                 ? _value.userId
                 : userId // ignore: cast_nullable_to_non_nullable
@@ -98,11 +94,7 @@ abstract class _$$SystemPrivilegeImplCopyWith<$Res>
   ) = __$$SystemPrivilegeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String? id,
-    @JsonKey(name: 'user_id') String? userId,
-    String? name,
-  });
+  $Res call({int? id, @JsonKey(name: 'user_id') String? userId, String? name});
 }
 
 /// @nodoc
@@ -128,7 +120,7 @@ class __$$SystemPrivilegeImplCopyWithImpl<$Res>
         id: freezed == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                  as int?,
         userId: freezed == userId
             ? _value.userId
             : userId // ignore: cast_nullable_to_non_nullable
@@ -155,7 +147,7 @@ class _$SystemPrivilegeImpl implements _SystemPrivilege {
       _$$SystemPrivilegeImplFromJson(json);
 
   @override
-  final String? id;
+  final int? id;
   @override
   @JsonKey(name: 'user_id')
   final String? userId;
@@ -200,7 +192,7 @@ class _$SystemPrivilegeImpl implements _SystemPrivilege {
 
 abstract class _SystemPrivilege implements SystemPrivilege {
   const factory _SystemPrivilege({
-    required final String? id,
+    required final int? id,
     @JsonKey(name: 'user_id') required final String? userId,
     required final String? name,
   }) = _$SystemPrivilegeImpl;
@@ -209,7 +201,7 @@ abstract class _SystemPrivilege implements SystemPrivilege {
       _$SystemPrivilegeImpl.fromJson;
 
   @override
-  String? get id;
+  int? get id;
   @override
   @JsonKey(name: 'user_id')
   String? get userId;

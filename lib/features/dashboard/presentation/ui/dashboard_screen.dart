@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,11 +12,15 @@ import 'package:projects/core/ui/widgets/nims_primary_button.dart';
 import 'package:projects/core/ui/widgets/nims_quick_action_card.dart';
 import 'package:projects/features/dashboard/domain/quick_action.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
+import 'package:projects/features/dashboard/presentation/ui/model/dashboard_screen_state.dart';
 import 'package:projects/features/dashboard/presentation/ui/select_movement_type_bottom_sheet_dialog.dart';
+import 'package:projects/features/dashboard/providers.dart';
 
 import '../../../../app/route_name+path+params.dart';
+import '../../../../core/domain/models/movement_category.dart';
 import '../../../../core/services/remote/models/login_response.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
+import '../../../../core/ui/widgets/nims_alert_dialog.dart';
 import '../../../../core/ui/widgets/nims_transit_card.dart';
 import '../../../profile/providers.dart';
 
@@ -23,8 +29,9 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final size = MediaQuery.of(context).size;
-    final AsyncValue<DomainUser?> userAsyncValue = ref.watch(userProvider);
+    final AsyncValue<DashboardScreenState?> stateAsyncValue = ref.watch(
+      dashboardScreenStateNotifierProvider,
+    );
 
     return NIMSBaseScreen(
       header: Padding(
@@ -65,21 +72,21 @@ class DashboardScreen extends ConsumerWidget {
                 /// -------------------------------
                 /// USER INFO
                 /// -------------------------------
-                userAsyncValue.when(
-                  data: (user) => Container(
+                stateAsyncValue.when(
+                  data: (state) => Container(
                     padding: EdgeInsets.only(left: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       spacing: 4,
                       children: [
                         Text(
-                          "${user?.firstName} ${user?.lastName}",
+                          state?.userFullName ?? "",
                           style: Theme.of(context).textTheme.titleSmall,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          "${user?.role} | ${user?.userId}",
+                          "${state?.userRole} | ${state?.userId}",
                           style: Theme.of(context).textTheme.labelLarge,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -87,7 +94,15 @@ class DashboardScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  error: (err, s) => SizedBox(),
+                  error: (err, s) => NIMSAlertDialog(
+                    message: err.toString(),
+                    onTapActionButton: () {
+                      ref
+                          .read(dashboardScreenStateNotifierProvider.notifier)
+                          .refreshState();
+                    },
+                    actionButtonLabel: 'Retry',
+                  ),
                   loading: () => CircularProgressIndicator(strokeWidth: 2),
                 ),
               ],
@@ -201,17 +216,24 @@ class DashboardScreen extends ConsumerWidget {
             backgroundColor: Theme.of(context).colorScheme.surface,
             context: context,
             builder: (builder) => SelectMovementTypeBottomSheetDialog(
-              height: size.height * 0.40,
-              onSelectMovementType: (routeType) => {
-                switch (routeType.category) {
-                  RouteTypeCategory.specimen => context.pushNamed(
+              specimensMovementTypes:
+                  stateAsyncValue.value?.specimensMovementTypes ?? [],
+              resultsMovementTypes:
+                  stateAsyncValue.value?.resultsMovementTypes ?? [],
+              onSelectMovementType: (movementType, movementTypeCategory) => {
+                switch (movementTypeCategory) {
+                  MovementTypeCategory.specimen => context.pushNamed(
                     specimenPickUpScreen,
-                    queryParameters: {routeTypeQueryParam: routeType.name},
+                    queryParameters: {
+                      movementTypeQueryParam: jsonEncode(movementType.toJson()),
+                    },
                   ),
 
-                  RouteTypeCategory.result => context.pushNamed(
+                  MovementTypeCategory.result => context.pushNamed(
                     resultPickUpScreen,
-                    queryParameters: {routeTypeQueryParam: routeType.name},
+                    queryParameters: {
+                      movementTypeQueryParam: jsonEncode(movementType.toJson()),
+                    },
                   ),
                 },
               },

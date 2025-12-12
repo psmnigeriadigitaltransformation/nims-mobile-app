@@ -8,7 +8,7 @@ part of 'facility.dart';
 
 _$FacilityImpl _$$FacilityImplFromJson(Map<String, dynamic> json) =>
     _$FacilityImpl(
-      id: json['id'] as String?,
+      id: (json['id'] as num?)?.toInt(),
       facilityId: (json['facility_id'] as num?)?.toInt(),
       facilityCode: json['facility_code'] as String?,
       labCode: json['lab_code'] as String?,

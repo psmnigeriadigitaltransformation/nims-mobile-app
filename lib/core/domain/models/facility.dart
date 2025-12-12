@@ -6,7 +6,7 @@ part 'facility.g.dart';
 @freezed
 class Facility with _$Facility {
   const factory Facility({
-    required String? id,
+    required int? id,
     @JsonKey(name: 'facility_id') int? facilityId,
     @JsonKey(name: 'facility_code') String? facilityCode,
     @JsonKey(name: 'lab_code') String? labCode,

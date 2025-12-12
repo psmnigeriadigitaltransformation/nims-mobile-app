@@ -10,6 +10,7 @@ class MovementType with _$MovementType {
     @JsonKey(name: "type_id") required int? typeId,
     required String? movement,
     required String? created,
+    required String? category,
   }) = _MovementType;
 
   factory MovementType.fromJson(Map<String, dynamic> json) =>

@@ -1,6 +1,12 @@
+import 'dart:convert';
+import 'dart:developer' as developer;
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:projects/app/route_name+path+params.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:projects/core/ui/widgets/nims_alert_dialog.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 import 'package:projects/features/dashboard/presentation/ui/dashboard_screen.dart';
 import 'package:projects/features/dashboard/presentation/ui/route_details_screen.dart';
@@ -45,28 +51,42 @@ final router = GoRouter(
       name: specimenPickUpScreen,
       path: specimenPickUpPath,
       builder: (context, state) {
-        final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
-          orElse: () => RouteType.spokeToPCRLabGeneXpert,
-        );
-        if (kDebugMode) {
-          print(routeType);
+        final movementTypeJson =
+            state.uri.queryParameters[movementTypeQueryParam];
+        if (movementTypeJson == null) {
+          return NIMSAlertDialog(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final movementType = DomainMovementType.fromJson(
+            jsonDecode(movementTypeJson),
+          );
+
+          return ManifestsScreen(movementType: movementType);
         }
-        return ManifestsScreen(routeType: routeType);
       },
     ),
     GoRoute(
       name: resultPickUpScreen,
       path: resultPickUpPath,
       builder: (context, state) {
-        final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
-          orElse: () => RouteType.geneXpertToSpoke,
-        );
-        if (kDebugMode) {
-          print(routeType);
+        final movementTypeJson =
+        state.uri.queryParameters[movementTypeQueryParam];
+        if (movementTypeJson == null) {
+          return NIMSAlertDialog(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final movementType = DomainMovementType.fromJson(
+            jsonDecode(movementTypeJson),
+          );
+          return ResultPickUpScreen(movementType: movementType);
         }
-        return ResultPickUpScreen(routeType: routeType);
+
       },
     ),
     GoRoute(
@@ -74,7 +94,8 @@ final router = GoRouter(
       path: resultDispatchApprovalPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) =>
+              type.name == state.uri.queryParameters[movementTypeQueryParam],
           orElse: () => RouteType.geneXpertToSpoke,
         );
         if (kDebugMode) {
@@ -88,7 +109,8 @@ final router = GoRouter(
       path: specimenDispatchApprovalPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) =>
+              type.name == state.uri.queryParameters[movementTypeQueryParam],
           orElse: () => RouteType.spokeToPCRLabGeneXpert,
         );
         if (kDebugMode) {
@@ -102,7 +124,8 @@ final router = GoRouter(
       path: specimenDeliveryApprovalPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) =>
+              type.name == state.uri.queryParameters[movementTypeQueryParam],
           orElse: () => RouteType.spokeToPCRLabGeneXpert,
         );
         if (kDebugMode) {
@@ -116,7 +139,8 @@ final router = GoRouter(
       path: resultDeliveryApprovalPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) =>
+              type.name == state.uri.queryParameters[movementTypeQueryParam],
           orElse: () => RouteType.spokeToPCRLabGeneXpert,
         );
         if (kDebugMode) {
@@ -137,7 +161,8 @@ final router = GoRouter(
       path: routeDetailsPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) =>
+              type.name == state.uri.queryParameters[movementTypeQueryParam],
           orElse: () => RouteType.spokeToPCRLabGeneXpert,
         );
         if (kDebugMode) {
@@ -151,7 +176,8 @@ final router = GoRouter(
       path: manifestDetailsPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) =>
+              type.name == state.uri.queryParameters[movementTypeQueryParam],
           orElse: () => RouteType.spokeToPCRLabGeneXpert,
         );
         if (kDebugMode) {
@@ -165,7 +191,8 @@ final router = GoRouter(
       path: shipmentsPath,
       builder: (context, state) {
         final routeType = RouteType.values.firstWhere(
-          (type) => type.name == state.uri.queryParameters[routeTypeQueryParam],
+          (type) =>
+              type.name == state.uri.queryParameters[movementTypeQueryParam],
           orElse: () => RouteType.spokeToPCRLabGeneXpert,
         );
         if (kDebugMode) {

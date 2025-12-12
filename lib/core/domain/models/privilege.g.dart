@@ -8,7 +8,7 @@ part of 'privilege.dart';
 
 _$PrivilegeImpl _$$PrivilegeImplFromJson(Map<String, dynamic> json) =>
     _$PrivilegeImpl(
-      id: json['id'] as String?,
+      id: (json['id'] as num?)?.toInt(),
       systemPrivilegeId: (json['system_privilege_id'] as num?)?.toInt(),
       rider: (json['rider'] as num?)?.toInt(),
     );

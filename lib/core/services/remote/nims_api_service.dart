@@ -80,9 +80,7 @@ class NIMSAPIService {
     }
   }
 
-  Future<Result<SampleTypesResponse>> getSampleTypes({
-    required String riderId,
-  }) async {
+  Future<Result<SampleTypesResponse>> getSampleTypes() async {
     try {
       final response = await dio.get("samples/types");
       developer.log(
