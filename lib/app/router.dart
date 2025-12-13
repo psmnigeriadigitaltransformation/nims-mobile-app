@@ -11,18 +11,18 @@ import 'package:projects/features/dashboard/domain/route_type.dart';
 import 'package:projects/features/dashboard/presentation/ui/dashboard_screen.dart';
 import 'package:projects/features/dashboard/presentation/ui/route_details_screen.dart';
 import 'package:projects/features/facilities/presentation/ui/facilities_screen.dart';
-import 'package:projects/features/pickup/presentation/ui/result_pickup_screen.dart';
-import 'package:projects/features/pickup/presentation/ui/shipments_screen.dart';
+import 'package:projects/features/pickup/presentation/ui/widgets/shipments_screen.dart';
 import 'package:projects/features/profile/presentation/ui/profile_screen.dart';
 import '../features/auth/presentation/ui/login/login_screen.dart';
 import '../features/delivery/presentation/ui/result_delivery_approval_screen.dart';
 import '../features/delivery/presentation/ui/specimen_delivery_approval_screen.dart';
 import '../core/ui/widgets/sticky_header_delegate.dart';
-import '../features/pickup/presentation/ui/add_new_manifest_screen.dart';
-import '../features/pickup/presentation/ui/manifests_screen.dart';
-import '../features/pickup/presentation/ui/result_shipment_approval_screen.dart';
-import '../features/pickup/presentation/ui/shipment_details_screen.dart';
-import '../features/pickup/presentation/ui/specimen_shipment_approval_screen.dart';
+import '../features/pickup/presentation/ui/widgets/add_new_manifest_screen.dart';
+import '../features/pickup/presentation/ui/widgets/manifests_screen.dart';
+import '../features/pickup/presentation/ui/widgets/result_pickup_screen.dart';
+import '../features/pickup/presentation/ui/widgets/result_shipment_approval_screen.dart';
+import '../features/pickup/presentation/ui/widgets/shipment_details_screen.dart';
+import '../features/pickup/presentation/ui/widgets/specimen_shipment_approval_screen.dart';
 
 final router = GoRouter(
   initialLocation: loginPath,
@@ -40,7 +40,7 @@ final router = GoRouter(
     GoRoute(
       name: facilitiesScreen,
       path: facilitiesPath,
-      builder: (context, state) => const FacilitiesScreen(),
+      builder: (context, state) => FacilitiesScreen(),
     ),
     GoRoute(
       name: profileScreen,
@@ -153,7 +153,21 @@ final router = GoRouter(
       name: addNewManifestScreen,
       path: addNewManifestPath,
       builder: (context, state) {
-        return AddNewManifestScreen();
+
+        final movementTypeJson =
+        state.uri.queryParameters[movementTypeQueryParam];
+        if (movementTypeJson == null) {
+          return NIMSAlertDialog(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final movementType = DomainMovementType.fromJson(
+            jsonDecode(movementTypeJson),
+          );
+          return AddNewManifestScreen(movementType: movementType);
+        }
       },
     ),
     GoRoute(
@@ -190,15 +204,20 @@ final router = GoRouter(
       name: shipmentsScreen,
       path: shipmentsPath,
       builder: (context, state) {
-        final routeType = RouteType.values.firstWhere(
-          (type) =>
-              type.name == state.uri.queryParameters[movementTypeQueryParam],
-          orElse: () => RouteType.spokeToPCRLabGeneXpert,
-        );
-        if (kDebugMode) {
-          print(routeType);
+        final movementTypeJson =
+        state.uri.queryParameters[movementTypeQueryParam];
+        if (movementTypeJson == null) {
+          return NIMSAlertDialog(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final movementType = DomainMovementType.fromJson(
+            jsonDecode(movementTypeJson),
+          );
+          return ShipmentsScreen(movementType: movementType);
         }
-        return ShipmentsScreen(routeType: routeType);
       },
     ),
   ],

@@ -1,26 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:projects/core/domain/models/location.dart';
 
 import '../../../features/dashboard/domain/mock.dart';
 import '../theme/theme.dart';
 
-class NIMSShipmentCard extends StatelessWidget {
+class NIMSShipmentCard extends StatefulWidget {
   final String manifestID;
   final String destinationName;
+  final List<DomainFacility> facilities;
+  final List<DomainLocation> locations;
   final VoidCallback onTap;
 
   const NIMSShipmentCard({
     super.key,
     required this.manifestID,
     required this.destinationName,
+    required this.facilities,
+    required this.locations,
     required this.onTap,
   });
 
   @override
+  State<NIMSShipmentCard> createState() => _NIMSShipmentCardState();
+}
+
+class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
+  final TextEditingController selectedLocationController =
+      TextEditingController();
+  final TextEditingController selectedFacilityController =
+      TextEditingController();
+  DomainLocation? selectedLocation;
+  DomainFacility? selectedFacility;
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: Container(
         decoration: BoxDecoration(
@@ -45,7 +62,7 @@ class NIMSShipmentCard extends StatelessWidget {
                     color: Theme.of(context).colorScheme.tertiaryContainer,
                   ),
                   child: Text(
-                    manifestID,
+                    widget.manifestID,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                 ),
@@ -91,22 +108,41 @@ class NIMSShipmentCard extends StatelessWidget {
               width: size.width - 80,
               label: Text("Destination Location Type"),
               hintText: "",
-
               dropdownMenuEntries: [
-                ...Mock.destinationLocationTypes.map(
-                  (facility) => DropdownMenuEntry(
-                    value: facility,
+                ...widget.locations.map(
+                  (location) => DropdownMenuEntry(
+                    value: location.location ?? "",
                     labelWidget: Center(
                       child: Text(
-                        facility,
+                        location.location ?? "",
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
-                    label: facility,
+                    label: location.location ?? "",
+                    style: ButtonStyle().copyWith(
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          side: BorderSide(
+                            width: 0.25,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
-              onSelected: (value) {},
+              onSelected: (value) {
+                setState(() {
+                  selectedLocationController.text = value ?? "";
+                  selectedLocation = widget.locations.firstWhere(
+                    (location) => location.location == value,
+                  );
+                  selectedFacility = null;
+                  selectedFacilityController.text = "";
+                });
+              },
+              controller: selectedLocationController,
             ),
             SizedBox(height: 12),
             DropdownMenu<String>(
@@ -117,20 +153,44 @@ class NIMSShipmentCard extends StatelessWidget {
               width: size.width - 80,
               label: Text("Destination Facility"),
               dropdownMenuEntries: [
-                ...Mock.facilities.map(
-                  (facility) => DropdownMenuEntry(
-                    value: facility,
-                    labelWidget: Center(
-                      child: Text(
-                        facility,
-                        style: Theme.of(context).textTheme.bodySmall,
+                ...widget.facilities
+                    .where(
+                      (facility) =>
+                          selectedLocation?.location?.toLowerCase().contains(
+                            facility.type?.toLowerCase() ?? "",
+                          ) ??
+                          false,
+                    )
+                    .map(
+                      (facility) => DropdownMenuEntry(
+                        value: facility.facilityName ?? "",
+                        labelWidget: Text(
+                          facility.facilityName ?? "",
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        label: facility.facilityName ?? "",
+                        style: ButtonStyle().copyWith(
+                          shape: WidgetStateProperty.all(
+                            RoundedRectangleBorder(
+                              side: BorderSide(
+                                width: 0.25,
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    label: facility,
-                  ),
-                ),
               ],
-              onSelected: (value) {},
+              onSelected: (value) {
+                setState(() {
+                  selectedFacilityController.text = value ?? "";
+                  selectedFacility = widget.facilities.firstWhere(
+                    (facility) => facility.facilityName == value,
+                  );
+                });
+              },
+              controller: selectedFacilityController,
             ),
           ],
         ),

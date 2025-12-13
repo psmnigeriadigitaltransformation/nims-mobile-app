@@ -3,21 +3,25 @@ import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/core/ui/widgets/nims_specimen_shipment_summary_card.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
-import '../../../../core/ui/widgets/nims_primary_button.dart';
-import '../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
-import '../../../../core/ui/widgets/nims_signature_pad.dart';
 
-class SpecimenShipmentApprovalScreen extends StatefulWidget {
+import '../../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
+import '../../../../../core/ui/widgets/nims_primary_button.dart';
+import '../../../../../core/ui/widgets/nims_result_shipment_summary_card.dart';
+import '../../../../../core/ui/widgets/nims_signature_pad.dart';
+
+
+class ResultShipmentApprovalScreen extends StatefulWidget {
   final RouteType routeType;
 
-  const SpecimenShipmentApprovalScreen({super.key, required this.routeType});
+  const ResultShipmentApprovalScreen({super.key, required this.routeType});
 
   @override
-  State<SpecimenShipmentApprovalScreen> createState() =>
-      ResultDispatchApprovalScreenState();
+  State<ResultShipmentApprovalScreen> createState() =>
+      ResultShipmentApprovalScreenState();
 }
 
-class ResultDispatchApprovalScreenState extends State<SpecimenShipmentApprovalScreen> {
+class ResultShipmentApprovalScreenState
+    extends State<ResultShipmentApprovalScreen> {
   final GlobalKey<NIMSSignaturePadState> signatureKey = GlobalKey();
 
   @override
@@ -38,7 +42,7 @@ class ResultDispatchApprovalScreenState extends State<SpecimenShipmentApprovalSc
             ),
             Spacer(),
             Text(
-              "Specimen Shipment Approval",
+              "Result Shipment Approval",
               style: TextTheme.of(context).titleSmall,
               textAlign: TextAlign.center,
             ),
@@ -61,12 +65,12 @@ class ResultDispatchApprovalScreenState extends State<SpecimenShipmentApprovalSc
         SizedBox(height: 40),
 
         /// -------------------------------
-        /// SELECTED MANIFESTS
+        /// SELECTED RESULTS
         /// -------------------------------
         Align(
           alignment: AlignmentGeometry.centerLeft,
           child: Text(
-            "Shipments (4)",
+            "Shipments (2)",
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
@@ -84,7 +88,7 @@ class ResultDispatchApprovalScreenState extends State<SpecimenShipmentApprovalSc
                   5,
                   (x) => Padding(
                     padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
-                    child: NIMSSpecimenShipmentSummaryCard(),
+                    child: NIMSResultShipmentSummaryCard(),
                   ),
                 ),
               ],
@@ -93,26 +97,6 @@ class ResultDispatchApprovalScreenState extends State<SpecimenShipmentApprovalSc
         ),
 
         const SizedBox(height: 24),
-
-        /// -------------------------------
-        /// PICK UP TEMPERATURE INPUT
-        /// -------------------------------
-        Padding(
-          padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-          child: TextField(
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-            decoration: const InputDecoration(
-              labelText: "Pick-up Temperature",
-              hintText: "Enter pick-up temperature",
-              helperText: "",
-              errorText: null,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 8),
 
         /// -------------------------------
         /// FULL NAME INPUT
@@ -232,8 +216,8 @@ class ResultDispatchApprovalScreenState extends State<SpecimenShipmentApprovalSc
         /// ----------------------------------------
         /// APPROVE BUTTON
         /// ----------------------------------------
-        NIMSPrimaryButton(text: "Approve Shipments", onPressed: () {}),
-        SizedBox(height: 24),
+        NIMSPrimaryButton(text: "Approve", onPressed: () {}),
+        SizedBox(height: 16),
       ],
     );
   }

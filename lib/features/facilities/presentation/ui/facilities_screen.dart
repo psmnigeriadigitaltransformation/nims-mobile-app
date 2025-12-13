@@ -11,7 +11,9 @@ import '../../../../core/ui/widgets/nims_round_icon_button.dart';
 import '../providers.dart';
 
 class FacilitiesScreen extends ConsumerWidget {
-  const FacilitiesScreen({super.key});
+  final TextEditingController searchBarController = TextEditingController();
+
+  FacilitiesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,6 +53,25 @@ class FacilitiesScreen extends ConsumerWidget {
             ),
 
             SizedBox(height: 16),
+
+            /// -------------------------------
+            /// SEARCH BAR
+            /// -------------------------------
+            Container(
+              padding: EdgeInsetsGeometry.symmetric(vertical: 16),
+              child: SearchBar(
+                hintText: "Search for facility",
+                controller: searchBarController,
+                onChanged: (value) => {
+                  searchBarController.text = value,
+                  ref
+                      .read(facilitiesScreenStateNotifierProvider.notifier)
+                      .filterFacilities(value),
+                },
+              ),
+            ),
+
+            // const SizedBox(height: 16),
           ],
         ),
       ),

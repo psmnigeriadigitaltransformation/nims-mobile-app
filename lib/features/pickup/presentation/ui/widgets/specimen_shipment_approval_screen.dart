@@ -3,24 +3,21 @@ import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/core/ui/widgets/nims_specimen_shipment_summary_card.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
-import '../../../../core/ui/widgets/nims_primary_button.dart';
-import '../../../../core/ui/widgets/nims_result_shipment_summary_card.dart';
-import '../../../../core/ui/widgets/nims_selected_result_card.dart';
-import '../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
-import '../../../../core/ui/widgets/nims_signature_pad.dart';
+import '../../../../../core/ui/widgets/nims_primary_button.dart';
+import '../../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
+import '../../../../../core/ui/widgets/nims_signature_pad.dart';
 
-class ResultShipmentApprovalScreen extends StatefulWidget {
+class SpecimenShipmentApprovalScreen extends StatefulWidget {
   final RouteType routeType;
 
-  const ResultShipmentApprovalScreen({super.key, required this.routeType});
+  const SpecimenShipmentApprovalScreen({super.key, required this.routeType});
 
   @override
-  State<ResultShipmentApprovalScreen> createState() =>
-      ResultShipmentApprovalScreenState();
+  State<SpecimenShipmentApprovalScreen> createState() =>
+      ResultDispatchApprovalScreenState();
 }
 
-class ResultShipmentApprovalScreenState
-    extends State<ResultShipmentApprovalScreen> {
+class ResultDispatchApprovalScreenState extends State<SpecimenShipmentApprovalScreen> {
   final GlobalKey<NIMSSignaturePadState> signatureKey = GlobalKey();
 
   @override
@@ -41,7 +38,7 @@ class ResultShipmentApprovalScreenState
             ),
             Spacer(),
             Text(
-              "Result Shipment Approval",
+              "Specimen Shipment Approval",
               style: TextTheme.of(context).titleSmall,
               textAlign: TextAlign.center,
             ),
@@ -64,12 +61,12 @@ class ResultShipmentApprovalScreenState
         SizedBox(height: 40),
 
         /// -------------------------------
-        /// SELECTED RESULTS
+        /// SELECTED MANIFESTS
         /// -------------------------------
         Align(
           alignment: AlignmentGeometry.centerLeft,
           child: Text(
-            "Shipments (2)",
+            "Shipments (4)",
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
@@ -87,7 +84,7 @@ class ResultShipmentApprovalScreenState
                   5,
                   (x) => Padding(
                     padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
-                    child: NIMSResultShipmentSummaryCard(),
+                    child: NIMSSpecimenShipmentSummaryCard(),
                   ),
                 ),
               ],
@@ -96,6 +93,26 @@ class ResultShipmentApprovalScreenState
         ),
 
         const SizedBox(height: 24),
+
+        /// -------------------------------
+        /// PICK UP TEMPERATURE INPUT
+        /// -------------------------------
+        Padding(
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+          child: TextField(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
+            decoration: const InputDecoration(
+              labelText: "Pick-up Temperature",
+              hintText: "Enter pick-up temperature",
+              helperText: "",
+              errorText: null,
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 8),
 
         /// -------------------------------
         /// FULL NAME INPUT
@@ -215,8 +232,8 @@ class ResultShipmentApprovalScreenState
         /// ----------------------------------------
         /// APPROVE BUTTON
         /// ----------------------------------------
-        NIMSPrimaryButton(text: "Approve", onPressed: () {}),
-        SizedBox(height: 16),
+        NIMSPrimaryButton(text: "Approve Shipments", onPressed: () {}),
+        SizedBox(height: 24),
       ],
     );
   }

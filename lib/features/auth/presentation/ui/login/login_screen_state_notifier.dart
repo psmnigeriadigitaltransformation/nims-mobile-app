@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/features/auth/data/repository/auth_repository.dart';
 import 'package:projects/features/auth/data/providers.dart';
 
 import '../../../../../core/ui/model/model/alert.dart';

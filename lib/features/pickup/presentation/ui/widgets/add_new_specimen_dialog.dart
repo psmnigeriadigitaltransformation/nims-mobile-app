@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:projects/core/ui/theme/theme.dart';
 
-import '../../../../core/ui/widgets/nims_primary_button.dart';
-import '../../../../core/ui/widgets/nims_round_icon_button.dart';
-import '../../../dashboard/domain/mock.dart';
+import '../../../../../core/ui/widgets/nims_primary_button.dart';
+import '../../../../../core/ui/widgets/nims_round_icon_button.dart';
+import '../../../../dashboard/domain/mock.dart';
+
 
 class AddNewSpecimenDialog extends StatelessWidget {
   const AddNewSpecimenDialog({super.key});
@@ -98,6 +99,18 @@ class AddNewSpecimenDialog extends StatelessWidget {
                                   ),
                                 ),
                                 label: facility,
+                                style: ButtonStyle().copyWith(
+                                  shape: WidgetStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 0.25,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.outline,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -128,6 +141,18 @@ class AddNewSpecimenDialog extends StatelessWidget {
                       ),
                     ),
                     label: facility,
+                    style: ButtonStyle().copyWith(
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          side: BorderSide(
+                            width: 0.25,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.outline,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/ui/widgets/nims_error_button.dart';
-import '../../../../core/ui/widgets/nims_round_icon_button.dart';
-import '../../../../core/ui/widgets/nims_secondary_button.dart';
+import '../../../../../core/ui/widgets/nims_error_button.dart';
+import '../../../../../core/ui/widgets/nims_round_icon_button.dart';
+import '../../../../../core/ui/widgets/nims_secondary_button.dart';
 
 class SpecimenDeletionConfirmationDialog extends StatelessWidget {
   const SpecimenDeletionConfirmationDialog({super.key});

@@ -11,19 +11,51 @@ class FacilitiesScreenStateNotifier
     extends AutoDisposeAsyncNotifier<FacilitiesScreenState> {
   @override
   Future<FacilitiesScreenState> build() async {
-    return _fetchData();
+    return _fetchData("");
   }
 
-  Future<FacilitiesScreenState> _fetchData() async {
+  Future<FacilitiesScreenState> _fetchData(String searchQuery) async {
     final facilitiesRepository = ref.read(facilitiesRepositoryProvider);
     final result = await facilitiesRepository.getFacilities(false);
     switch (result) {
       case Success(payload: final payload):
         return FacilitiesScreenState(
-          geneXpertFacilities: payload.where((facility) => facility.type == FacilityType.genexpert.name).toList(),
-          hubFacilities: payload.where((facility) => facility.type == FacilityType.hub.name).toList(),
-          pcrFacilities: payload.where((facility) => facility.type == FacilityType.pcr.name).toList(),
-          spokeFacilities: payload.where((facility) => facility.type == FacilityType.spoke.name).toList(),
+          geneXpertFacilities: payload
+              .where(
+                (facility) =>
+                    facility.type == FacilityType.genexpert.name &&
+                    facility.facilityName!.toLowerCase().contains(
+                      searchQuery.toLowerCase(),
+                    ),
+              )
+              .toList(),
+          hubFacilities: payload
+              .where(
+                (facility) =>
+                    facility.type == FacilityType.hub.name &&
+                    facility.facilityName!.toLowerCase().contains(
+                      searchQuery.toLowerCase(),
+                    ),
+              )
+              .toList(),
+          pcrFacilities: payload
+              .where(
+                (facility) =>
+                    facility.type == FacilityType.pcr.name &&
+                    facility.facilityName!.toLowerCase().contains(
+                      searchQuery.toLowerCase(),
+                    ),
+              )
+              .toList(),
+          spokeFacilities: payload
+              .where(
+                (facility) =>
+                    facility.type == FacilityType.spoke.name &&
+                    facility.facilityName!.toLowerCase().contains(
+                      searchQuery.toLowerCase(),
+                    ),
+              )
+              .toList(),
         );
 
       case Error(message: final m):
@@ -33,6 +65,14 @@ class FacilitiesScreenStateNotifier
 
   Future<void> refreshFacilities() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _fetchData());
+    state = await AsyncValue.guard(() => _fetchData(""));
+  }
+
+  Future<void> filterFacilities(String query) async {
+    state = const AsyncLoading<FacilitiesScreenState>().copyWithPrevious(state);
+
+    state = await AsyncValue.guard<FacilitiesScreenState>(
+      () => _fetchData(query),
+    );
   }
 }
