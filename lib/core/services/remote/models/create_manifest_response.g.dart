@@ -6,19 +6,19 @@ part of 'create_manifest_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ManifestSaveResponseImpl _$$ManifestSaveResponseImplFromJson(
+_$CreateManifestResponseImpl _$$CreateManifestResponseImplFromJson(
   Map<String, dynamic> json,
-) => _$ManifestSaveResponseImpl(
+) => _$CreateManifestResponseImpl(
   resultCode: (json['result_code'] as num?)?.toInt(),
   status: json['status'] as String?,
   message: json['message'] as String?,
-  data: (json['data'] as List<dynamic>?)
-      ?.map((e) => ManifestItem.fromJson(e as Map<String, dynamic>))
-      .toList(),
+  data: json['data'] == null
+      ? null
+      : CreateManifestData.fromJson(json['data'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$$ManifestSaveResponseImplToJson(
-  _$ManifestSaveResponseImpl instance,
+Map<String, dynamic> _$$CreateManifestResponseImplToJson(
+  _$CreateManifestResponseImpl instance,
 ) => <String, dynamic>{
   'result_code': instance.resultCode,
   'status': instance.status,
@@ -26,49 +26,42 @@ Map<String, dynamic> _$$ManifestSaveResponseImplToJson(
   'data': instance.data,
 };
 
-_$ManifestItemImpl _$$ManifestItemImplFromJson(Map<String, dynamic> json) =>
-    _$ManifestItemImpl(
-      manifestNo: json['manifest_no'] as String?,
-      originId: json['origin_id'] as String?,
-      destinationId: json['destination_id'] as String?,
-      sampleType: json['sample_type'] as String?,
-      sampleCount: (json['sample_count'] as num?)?.toInt(),
-      phlebotomyNo: json['phlebotomy_no'] as String?,
-      lspCode: json['lsp_code'] as String?,
-      temperature: json['temperature'] as String?,
-      userId: json['user_id'] as String?,
-      samples: (json['samples'] as List<dynamic>?)
-          ?.map((e) => ManifestSample.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+_$ManifestCreateDataImpl _$$ManifestCreateDataImplFromJson(
+  Map<String, dynamic> json,
+) => _$ManifestCreateDataImpl(
+  manifestsSaved: (json['manifests_saved'] as num?)?.toInt(),
+  samplesSaved: (json['samples_saved'] as num?)?.toInt(),
+  manifestsNoSaved: (json['manifests_no_saved'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+  manifestsNoFailed: (json['manifests_no_failed'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
+  errors: (json['errors'] as List<dynamic>?)
+      ?.map((e) => CreateManifestError.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
-Map<String, dynamic> _$$ManifestItemImplToJson(_$ManifestItemImpl instance) =>
-    <String, dynamic>{
-      'manifest_no': instance.manifestNo,
-      'origin_id': instance.originId,
-      'destination_id': instance.destinationId,
-      'sample_type': instance.sampleType,
-      'sample_count': instance.sampleCount,
-      'phlebotomy_no': instance.phlebotomyNo,
-      'lsp_code': instance.lspCode,
-      'temperature': instance.temperature,
-      'user_id': instance.userId,
-      'samples': instance.samples,
-    };
-
-_$ManifestSampleImpl _$$ManifestSampleImplFromJson(Map<String, dynamic> json) =>
-    _$ManifestSampleImpl(
-      sampleCode: json['sample_code'] as String?,
-      patientCode: json['patient_code'] as String?,
-      age: json['age'] as String?,
-      gender: json['gender'] as String?,
-    );
-
-Map<String, dynamic> _$$ManifestSampleImplToJson(
-  _$ManifestSampleImpl instance,
+Map<String, dynamic> _$$ManifestCreateDataImplToJson(
+  _$ManifestCreateDataImpl instance,
 ) => <String, dynamic>{
-  'sample_code': instance.sampleCode,
-  'patient_code': instance.patientCode,
-  'age': instance.age,
-  'gender': instance.gender,
+  'manifests_saved': instance.manifestsSaved,
+  'samples_saved': instance.samplesSaved,
+  'manifests_no_saved': instance.manifestsNoSaved,
+  'manifests_no_failed': instance.manifestsNoFailed,
+  'errors': instance.errors,
+};
+
+_$CreateManifestErrorImpl _$$CreateManifestErrorImplFromJson(
+  Map<String, dynamic> json,
+) => _$CreateManifestErrorImpl(
+  manifestNo: json['manifest_no'] as String?,
+  message: json['message'] as String?,
+);
+
+Map<String, dynamic> _$$CreateManifestErrorImplToJson(
+  _$CreateManifestErrorImpl instance,
+) => <String, dynamic>{
+  'manifest_no': instance.manifestNo,
+  'message': instance.message,
 };

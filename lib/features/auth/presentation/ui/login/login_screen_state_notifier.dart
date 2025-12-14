@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:projects/features/auth/data/providers.dart';
 
+import '../../../../../core/data/providers.dart';
 import '../../../../../core/ui/model/model/alert.dart';
 import '../../../../../core/utils/result.dart';
 import '../../../../../core/services/remote/models/login_response.dart';

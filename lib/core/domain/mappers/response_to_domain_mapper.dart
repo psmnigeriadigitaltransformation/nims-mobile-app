@@ -109,3 +109,9 @@ extension RemoteMovementTypeExtension on RemoteMovementType {
     );
   }
 }
+
+extension RemoteETokenDataExtension on RemoteETokenData {
+  DomainETokenData toDomain() {
+    return DomainETokenData(id: null, etokenId: etokenId, serialNo: serialNo);
+  }
+}

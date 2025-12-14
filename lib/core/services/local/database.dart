@@ -16,6 +16,7 @@ class NIMSDatabase {
       path,
       version: 1,
       onCreate: (db, version) async {
+        // Tables
         await db.execute('''
           CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -118,6 +119,114 @@ class NIMSDatabase {
             category TEXT
           )
         ''');
+
+        await db.execute('''
+          CREATE TABLE etoken_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            etoken_id TEXT,
+            serial_no TEXT
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE manifests (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            manifest_no TEXT NOT NULL UNIQUE,
+            origin_id TEXT NOT NULL,
+            destination_id TEXT NOT NULL,
+            sample_type TEXT NOT NULL,
+            sample_count INTEGER NOT NULL,
+            phlebotomy_no TEXT NOT NULL,
+            lsp_code TEXT NOT NULL,
+            temperature INTEGER,
+            user_id TEXT NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE samples (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            manifest_no TEXT NOT NULL,
+            sample_code TEXT NOT NULL UNIQUE,
+            patient_code TEXT NOT NULL,
+            age TEXT NOT NULL,
+            gender TEXT NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (manifest_no) REFERENCES manifests(manifest_no) ON DELETE CASCADE
+          )
+          ''');
+
+        await db.execute('''
+          CREATE TABLE routes (
+            id INTEGER PRIMARY KEY AUTO_INCREMENT,
+            route_no TEXT NOT NULL UNIQUE,
+            origin_facility_id TEXT NOT NULL,
+            destination_facility_id TEXT NOT NULL,
+            lsp_code TEXT NOT NULL,
+            rider_user_id TEXT NOT NULL,
+            latitude DECIMAL(10,6) NOT NULL,
+            longitude DECIMAL(10,6) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          )
+          ''');
+
+        await db.execute('''
+          CREATE TABLE shipments (
+            id INTEGER PRIMARY KEY AUTO_INCREMENT,
+            shipment_no TEXT NOT NULL UNIQUE,
+            route_no TEXT NOT NULL,
+            manifest_no TEXT NOT NULL,
+            origin_type TEXT NOT NULL,
+            destination_type TEXT NOT NULL,
+            pickup_latitude DECIMAL(10,6) NOT NULL,
+            pickup_longitude DECIMAL(10,6) NOT NULL,
+            sample_type TEXT NOT NULL,
+            sample_count INT NOT NULL,
+            pickup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (route_no) REFERENCES routes(route_no)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+        )
+          ''');
+
+        await db.execute('''
+          CREATE TABLE approvals (
+            id INTEGER PRIMARY KEY AUTO_INCREMENT,
+            approval_no TEXT NOT NULL UNIQUE,
+            route_no TEXT NOT NULL,
+            approval_type TEXT,
+            full_name TEXT,
+            phone TEXT,
+            designation TEXT,
+            signature TEXT,
+            approval_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (route_no) REFERENCES routes(route_no)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+        )
+        ''');
+
+        // Indexes
+        await db.execute('''
+          CREATE INDEX idx_facilities_type ON facilities(type)
+          ''');
+
+        await db.execute('''
+          CREATE INDEX idx_manifests_origin_id ON manifests(origin_id)
+          ''');
+
+        await db.execute('''
+          CREATE INDEX idx_samples_manifest_no ON samples(manifest_no)
+          ''');
+
+        await db.execute('''
+          CREATE INDEX idx_shipments_route_no ON shipments(route_no)
+          ''');
+
+        await db.execute('''
+          CREATE INDEX idx_approvals_route_no ON approvals(route_no)
+          ''');
       },
     );
   }

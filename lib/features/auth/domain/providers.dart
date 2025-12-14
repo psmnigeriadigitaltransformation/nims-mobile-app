@@ -12,5 +12,6 @@ final downloadMasterDataUseCaseProvider = Provider(
     sampleTypesRepository: ref.watch(samplesRepositoryProvider),
     locationsRepository: ref.watch(locationsRepositoryProvider),
     movementTypesRepository: ref.watch(movementTypesRepositoryProvider),
+    eTokenRepository: ref.watch(eTokenRepositoryProvider)
   ),
 );

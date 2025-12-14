@@ -12,7 +12,7 @@ part of 'create_manifest_request_body.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-model',
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
 ManifestRequestItem _$ManifestRequestItemFromJson(Map<String, dynamic> json) {
@@ -22,24 +22,23 @@ ManifestRequestItem _$ManifestRequestItemFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ManifestRequestItem {
   @JsonKey(name: "manifest_no")
-  String? get manifestNo => throw _privateConstructorUsedError;
+  String get manifestNo => throw _privateConstructorUsedError;
   @JsonKey(name: "origin_id")
-  String? get originId => throw _privateConstructorUsedError;
+  String get originId => throw _privateConstructorUsedError;
   @JsonKey(name: "destination_id")
-  String? get destinationId => throw _privateConstructorUsedError;
+  String get destinationId => throw _privateConstructorUsedError;
   @JsonKey(name: "sample_type")
-  String? get sampleType => throw _privateConstructorUsedError;
+  String get sampleType => throw _privateConstructorUsedError;
   @JsonKey(name: "sample_count")
-  int? get sampleCount => throw _privateConstructorUsedError;
+  int get sampleCount => throw _privateConstructorUsedError;
   @JsonKey(name: "phlebotomy_no")
-  String? get phlebotomyNo => throw _privateConstructorUsedError;
+  String get phlebotomyNo => throw _privateConstructorUsedError;
   @JsonKey(name: "lsp_code")
-  String? get lspCode => throw _privateConstructorUsedError;
-  String? get temperature => throw _privateConstructorUsedError;
+  String get lspCode => throw _privateConstructorUsedError;
+  String get temperature => throw _privateConstructorUsedError;
   @JsonKey(name: "user_id")
-  String? get userId => throw _privateConstructorUsedError;
-  List<ManifestSampleRequest>? get samples =>
-      throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
+  List<ManifestSampleRequest> get samples => throw _privateConstructorUsedError;
 
   /// Serializes this ManifestRequestItem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -59,16 +58,16 @@ abstract class $ManifestRequestItemCopyWith<$Res> {
   ) = _$ManifestRequestItemCopyWithImpl<$Res, ManifestRequestItem>;
   @useResult
   $Res call({
-    @JsonKey(name: "manifest_no") String? manifestNo,
-    @JsonKey(name: "origin_id") String? originId,
-    @JsonKey(name: "destination_id") String? destinationId,
-    @JsonKey(name: "sample_type") String? sampleType,
-    @JsonKey(name: "sample_count") int? sampleCount,
-    @JsonKey(name: "phlebotomy_no") String? phlebotomyNo,
-    @JsonKey(name: "lsp_code") String? lspCode,
-    String? temperature,
-    @JsonKey(name: "user_id") String? userId,
-    List<ManifestSampleRequest>? samples,
+    @JsonKey(name: "manifest_no") String manifestNo,
+    @JsonKey(name: "origin_id") String originId,
+    @JsonKey(name: "destination_id") String destinationId,
+    @JsonKey(name: "sample_type") String sampleType,
+    @JsonKey(name: "sample_count") int sampleCount,
+    @JsonKey(name: "phlebotomy_no") String phlebotomyNo,
+    @JsonKey(name: "lsp_code") String lspCode,
+    String temperature,
+    @JsonKey(name: "user_id") String userId,
+    List<ManifestSampleRequest> samples,
   });
 }
 
@@ -87,59 +86,59 @@ class _$ManifestRequestItemCopyWithImpl<$Res, $Val extends ManifestRequestItem>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? manifestNo = freezed,
-    Object? originId = freezed,
-    Object? destinationId = freezed,
-    Object? sampleType = freezed,
-    Object? sampleCount = freezed,
-    Object? phlebotomyNo = freezed,
-    Object? lspCode = freezed,
-    Object? temperature = freezed,
-    Object? userId = freezed,
-    Object? samples = freezed,
+    Object? manifestNo = null,
+    Object? originId = null,
+    Object? destinationId = null,
+    Object? sampleType = null,
+    Object? sampleCount = null,
+    Object? phlebotomyNo = null,
+    Object? lspCode = null,
+    Object? temperature = null,
+    Object? userId = null,
+    Object? samples = null,
   }) {
     return _then(
       _value.copyWith(
-            manifestNo: freezed == manifestNo
+            manifestNo: null == manifestNo
                 ? _value.manifestNo
                 : manifestNo // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            originId: freezed == originId
+                      as String,
+            originId: null == originId
                 ? _value.originId
                 : originId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            destinationId: freezed == destinationId
+                      as String,
+            destinationId: null == destinationId
                 ? _value.destinationId
                 : destinationId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            sampleType: freezed == sampleType
+                      as String,
+            sampleType: null == sampleType
                 ? _value.sampleType
                 : sampleType // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            sampleCount: freezed == sampleCount
+                      as String,
+            sampleCount: null == sampleCount
                 ? _value.sampleCount
                 : sampleCount // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            phlebotomyNo: freezed == phlebotomyNo
+                      as int,
+            phlebotomyNo: null == phlebotomyNo
                 ? _value.phlebotomyNo
                 : phlebotomyNo // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            lspCode: freezed == lspCode
+                      as String,
+            lspCode: null == lspCode
                 ? _value.lspCode
                 : lspCode // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            temperature: freezed == temperature
+                      as String,
+            temperature: null == temperature
                 ? _value.temperature
                 : temperature // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            userId: freezed == userId
+                      as String,
+            userId: null == userId
                 ? _value.userId
                 : userId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            samples: freezed == samples
+                      as String,
+            samples: null == samples
                 ? _value.samples
                 : samples // ignore: cast_nullable_to_non_nullable
-                      as List<ManifestSampleRequest>?,
+                      as List<ManifestSampleRequest>,
           )
           as $Val,
     );
@@ -156,16 +155,16 @@ abstract class _$$ManifestRequestItemImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: "manifest_no") String? manifestNo,
-    @JsonKey(name: "origin_id") String? originId,
-    @JsonKey(name: "destination_id") String? destinationId,
-    @JsonKey(name: "sample_type") String? sampleType,
-    @JsonKey(name: "sample_count") int? sampleCount,
-    @JsonKey(name: "phlebotomy_no") String? phlebotomyNo,
-    @JsonKey(name: "lsp_code") String? lspCode,
-    String? temperature,
-    @JsonKey(name: "user_id") String? userId,
-    List<ManifestSampleRequest>? samples,
+    @JsonKey(name: "manifest_no") String manifestNo,
+    @JsonKey(name: "origin_id") String originId,
+    @JsonKey(name: "destination_id") String destinationId,
+    @JsonKey(name: "sample_type") String sampleType,
+    @JsonKey(name: "sample_count") int sampleCount,
+    @JsonKey(name: "phlebotomy_no") String phlebotomyNo,
+    @JsonKey(name: "lsp_code") String lspCode,
+    String temperature,
+    @JsonKey(name: "user_id") String userId,
+    List<ManifestSampleRequest> samples,
   });
 }
 
@@ -183,59 +182,59 @@ class __$$ManifestRequestItemImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? manifestNo = freezed,
-    Object? originId = freezed,
-    Object? destinationId = freezed,
-    Object? sampleType = freezed,
-    Object? sampleCount = freezed,
-    Object? phlebotomyNo = freezed,
-    Object? lspCode = freezed,
-    Object? temperature = freezed,
-    Object? userId = freezed,
-    Object? samples = freezed,
+    Object? manifestNo = null,
+    Object? originId = null,
+    Object? destinationId = null,
+    Object? sampleType = null,
+    Object? sampleCount = null,
+    Object? phlebotomyNo = null,
+    Object? lspCode = null,
+    Object? temperature = null,
+    Object? userId = null,
+    Object? samples = null,
   }) {
     return _then(
       _$ManifestRequestItemImpl(
-        manifestNo: freezed == manifestNo
+        manifestNo: null == manifestNo
             ? _value.manifestNo
             : manifestNo // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        originId: freezed == originId
+                  as String,
+        originId: null == originId
             ? _value.originId
             : originId // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        destinationId: freezed == destinationId
+                  as String,
+        destinationId: null == destinationId
             ? _value.destinationId
             : destinationId // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        sampleType: freezed == sampleType
+                  as String,
+        sampleType: null == sampleType
             ? _value.sampleType
             : sampleType // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        sampleCount: freezed == sampleCount
+                  as String,
+        sampleCount: null == sampleCount
             ? _value.sampleCount
             : sampleCount // ignore: cast_nullable_to_non_nullable
-                  as int?,
-        phlebotomyNo: freezed == phlebotomyNo
+                  as int,
+        phlebotomyNo: null == phlebotomyNo
             ? _value.phlebotomyNo
             : phlebotomyNo // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        lspCode: freezed == lspCode
+                  as String,
+        lspCode: null == lspCode
             ? _value.lspCode
             : lspCode // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        temperature: freezed == temperature
+                  as String,
+        temperature: null == temperature
             ? _value.temperature
             : temperature // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        userId: freezed == userId
+                  as String,
+        userId: null == userId
             ? _value.userId
             : userId // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        samples: freezed == samples
+                  as String,
+        samples: null == samples
             ? _value._samples
             : samples // ignore: cast_nullable_to_non_nullable
-                  as List<ManifestSampleRequest>?,
+                  as List<ManifestSampleRequest>,
       ),
     );
   }
@@ -254,7 +253,7 @@ class _$ManifestRequestItemImpl implements _ManifestRequestItem {
     @JsonKey(name: "lsp_code") required this.lspCode,
     required this.temperature,
     @JsonKey(name: "user_id") required this.userId,
-    required final List<ManifestSampleRequest>? samples,
+    required final List<ManifestSampleRequest> samples,
   }) : _samples = samples;
 
   factory _$ManifestRequestItemImpl.fromJson(Map<String, dynamic> json) =>
@@ -262,38 +261,36 @@ class _$ManifestRequestItemImpl implements _ManifestRequestItem {
 
   @override
   @JsonKey(name: "manifest_no")
-  final String? manifestNo;
+  final String manifestNo;
   @override
   @JsonKey(name: "origin_id")
-  final String? originId;
+  final String originId;
   @override
   @JsonKey(name: "destination_id")
-  final String? destinationId;
+  final String destinationId;
   @override
   @JsonKey(name: "sample_type")
-  final String? sampleType;
+  final String sampleType;
   @override
   @JsonKey(name: "sample_count")
-  final int? sampleCount;
+  final int sampleCount;
   @override
   @JsonKey(name: "phlebotomy_no")
-  final String? phlebotomyNo;
+  final String phlebotomyNo;
   @override
   @JsonKey(name: "lsp_code")
-  final String? lspCode;
+  final String lspCode;
   @override
-  final String? temperature;
+  final String temperature;
   @override
   @JsonKey(name: "user_id")
-  final String? userId;
-  final List<ManifestSampleRequest>? _samples;
+  final String userId;
+  final List<ManifestSampleRequest> _samples;
   @override
-  List<ManifestSampleRequest>? get samples {
-    final value = _samples;
-    if (value == null) return null;
+  List<ManifestSampleRequest> get samples {
     if (_samples is EqualUnmodifiableListView) return _samples;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_samples);
   }
 
   @override
@@ -360,16 +357,16 @@ class _$ManifestRequestItemImpl implements _ManifestRequestItem {
 
 abstract class _ManifestRequestItem implements ManifestRequestItem {
   const factory _ManifestRequestItem({
-    @JsonKey(name: "manifest_no") required final String? manifestNo,
-    @JsonKey(name: "origin_id") required final String? originId,
-    @JsonKey(name: "destination_id") required final String? destinationId,
-    @JsonKey(name: "sample_type") required final String? sampleType,
-    @JsonKey(name: "sample_count") required final int? sampleCount,
-    @JsonKey(name: "phlebotomy_no") required final String? phlebotomyNo,
-    @JsonKey(name: "lsp_code") required final String? lspCode,
-    required final String? temperature,
-    @JsonKey(name: "user_id") required final String? userId,
-    required final List<ManifestSampleRequest>? samples,
+    @JsonKey(name: "manifest_no") required final String manifestNo,
+    @JsonKey(name: "origin_id") required final String originId,
+    @JsonKey(name: "destination_id") required final String destinationId,
+    @JsonKey(name: "sample_type") required final String sampleType,
+    @JsonKey(name: "sample_count") required final int sampleCount,
+    @JsonKey(name: "phlebotomy_no") required final String phlebotomyNo,
+    @JsonKey(name: "lsp_code") required final String lspCode,
+    required final String temperature,
+    @JsonKey(name: "user_id") required final String userId,
+    required final List<ManifestSampleRequest> samples,
   }) = _$ManifestRequestItemImpl;
 
   factory _ManifestRequestItem.fromJson(Map<String, dynamic> json) =
@@ -377,32 +374,32 @@ abstract class _ManifestRequestItem implements ManifestRequestItem {
 
   @override
   @JsonKey(name: "manifest_no")
-  String? get manifestNo;
+  String get manifestNo;
   @override
   @JsonKey(name: "origin_id")
-  String? get originId;
+  String get originId;
   @override
   @JsonKey(name: "destination_id")
-  String? get destinationId;
+  String get destinationId;
   @override
   @JsonKey(name: "sample_type")
-  String? get sampleType;
+  String get sampleType;
   @override
   @JsonKey(name: "sample_count")
-  int? get sampleCount;
+  int get sampleCount;
   @override
   @JsonKey(name: "phlebotomy_no")
-  String? get phlebotomyNo;
+  String get phlebotomyNo;
   @override
   @JsonKey(name: "lsp_code")
-  String? get lspCode;
+  String get lspCode;
   @override
-  String? get temperature;
+  String get temperature;
   @override
   @JsonKey(name: "user_id")
-  String? get userId;
+  String get userId;
   @override
-  List<ManifestSampleRequest>? get samples;
+  List<ManifestSampleRequest> get samples;
 
   /// Create a copy of ManifestRequestItem
   /// with the given fields replaced by the non-null parameter values.
@@ -421,11 +418,11 @@ ManifestSampleRequest _$ManifestSampleRequestFromJson(
 /// @nodoc
 mixin _$ManifestSampleRequest {
   @JsonKey(name: "sample_code")
-  String? get sampleCode => throw _privateConstructorUsedError;
+  String get sampleCode => throw _privateConstructorUsedError;
   @JsonKey(name: "patient_code")
-  String? get patientCode => throw _privateConstructorUsedError;
-  String? get age => throw _privateConstructorUsedError;
-  String? get gender => throw _privateConstructorUsedError;
+  String get patientCode => throw _privateConstructorUsedError;
+  String get age => throw _privateConstructorUsedError;
+  String get gender => throw _privateConstructorUsedError;
 
   /// Serializes this ManifestSampleRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -445,10 +442,10 @@ abstract class $ManifestSampleRequestCopyWith<$Res> {
   ) = _$ManifestSampleRequestCopyWithImpl<$Res, ManifestSampleRequest>;
   @useResult
   $Res call({
-    @JsonKey(name: "sample_code") String? sampleCode,
-    @JsonKey(name: "patient_code") String? patientCode,
-    String? age,
-    String? gender,
+    @JsonKey(name: "sample_code") String sampleCode,
+    @JsonKey(name: "patient_code") String patientCode,
+    String age,
+    String gender,
   });
 }
 
@@ -470,29 +467,29 @@ class _$ManifestSampleRequestCopyWithImpl<
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sampleCode = freezed,
-    Object? patientCode = freezed,
-    Object? age = freezed,
-    Object? gender = freezed,
+    Object? sampleCode = null,
+    Object? patientCode = null,
+    Object? age = null,
+    Object? gender = null,
   }) {
     return _then(
       _value.copyWith(
-            sampleCode: freezed == sampleCode
+            sampleCode: null == sampleCode
                 ? _value.sampleCode
                 : sampleCode // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            patientCode: freezed == patientCode
+                      as String,
+            patientCode: null == patientCode
                 ? _value.patientCode
                 : patientCode // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            age: freezed == age
+                      as String,
+            age: null == age
                 ? _value.age
                 : age // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            gender: freezed == gender
+                      as String,
+            gender: null == gender
                 ? _value.gender
                 : gender // ignore: cast_nullable_to_non_nullable
-                      as String?,
+                      as String,
           )
           as $Val,
     );
@@ -509,10 +506,10 @@ abstract class _$$ManifestSampleRequestImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    @JsonKey(name: "sample_code") String? sampleCode,
-    @JsonKey(name: "patient_code") String? patientCode,
-    String? age,
-    String? gender,
+    @JsonKey(name: "sample_code") String sampleCode,
+    @JsonKey(name: "patient_code") String patientCode,
+    String age,
+    String gender,
   });
 }
 
@@ -531,29 +528,29 @@ class __$$ManifestSampleRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sampleCode = freezed,
-    Object? patientCode = freezed,
-    Object? age = freezed,
-    Object? gender = freezed,
+    Object? sampleCode = null,
+    Object? patientCode = null,
+    Object? age = null,
+    Object? gender = null,
   }) {
     return _then(
       _$ManifestSampleRequestImpl(
-        sampleCode: freezed == sampleCode
+        sampleCode: null == sampleCode
             ? _value.sampleCode
             : sampleCode // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        patientCode: freezed == patientCode
+                  as String,
+        patientCode: null == patientCode
             ? _value.patientCode
             : patientCode // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        age: freezed == age
+                  as String,
+        age: null == age
             ? _value.age
             : age // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        gender: freezed == gender
+                  as String,
+        gender: null == gender
             ? _value.gender
             : gender // ignore: cast_nullable_to_non_nullable
-                  as String?,
+                  as String,
       ),
     );
   }
@@ -574,14 +571,14 @@ class _$ManifestSampleRequestImpl implements _ManifestSampleRequest {
 
   @override
   @JsonKey(name: "sample_code")
-  final String? sampleCode;
+  final String sampleCode;
   @override
   @JsonKey(name: "patient_code")
-  final String? patientCode;
+  final String patientCode;
   @override
-  final String? age;
+  final String age;
   @override
-  final String? gender;
+  final String gender;
 
   @override
   String toString() {
@@ -626,10 +623,10 @@ class _$ManifestSampleRequestImpl implements _ManifestSampleRequest {
 
 abstract class _ManifestSampleRequest implements ManifestSampleRequest {
   const factory _ManifestSampleRequest({
-    @JsonKey(name: "sample_code") required final String? sampleCode,
-    @JsonKey(name: "patient_code") required final String? patientCode,
-    required final String? age,
-    required final String? gender,
+    @JsonKey(name: "sample_code") required final String sampleCode,
+    @JsonKey(name: "patient_code") required final String patientCode,
+    required final String age,
+    required final String gender,
   }) = _$ManifestSampleRequestImpl;
 
   factory _ManifestSampleRequest.fromJson(Map<String, dynamic> json) =
@@ -637,14 +634,14 @@ abstract class _ManifestSampleRequest implements ManifestSampleRequest {
 
   @override
   @JsonKey(name: "sample_code")
-  String? get sampleCode;
+  String get sampleCode;
   @override
   @JsonKey(name: "patient_code")
-  String? get patientCode;
+  String get patientCode;
   @override
-  String? get age;
+  String get age;
   @override
-  String? get gender;
+  String get gender;
 
   /// Create a copy of ManifestSampleRequest
   /// with the given fields replaced by the non-null parameter values.

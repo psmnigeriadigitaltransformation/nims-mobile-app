@@ -249,4 +249,35 @@ class NIMSLocalService {
         .map((location) => DomainMovementType.fromJson(location))
         .toList();
   }
+
+  Future<void> updateCachedETokenData(
+    List<DomainETokenData> eTokenDataList,
+  ) async {
+    developer.log(
+      "etoken data list: $eTokenDataList",
+      name: "NIMSLocalService:cacheETokenData",
+    );
+    final db = await NIMSDatabase().instance;
+    final batch = db.batch();
+    for (final eTokenData in eTokenDataList) {
+      batch.insert(
+        "etoken_data",
+        eTokenData.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    await batch.commit(noResult: true);
+  }
+
+  Future<int> countETokenData() async {
+    developer.log(
+      "count eToken data called",
+      name: "NIMSLocalService:countETokenData",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM etoken_data',
+    );
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
 }

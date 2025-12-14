@@ -9,17 +9,17 @@ part of 'create_manifest_request_body.dart';
 _$ManifestRequestItemImpl _$$ManifestRequestItemImplFromJson(
   Map<String, dynamic> json,
 ) => _$ManifestRequestItemImpl(
-  manifestNo: json['manifest_no'] as String?,
-  originId: json['origin_id'] as String?,
-  destinationId: json['destination_id'] as String?,
-  sampleType: json['sample_type'] as String?,
-  sampleCount: (json['sample_count'] as num?)?.toInt(),
-  phlebotomyNo: json['phlebotomy_no'] as String?,
-  lspCode: json['lsp_code'] as String?,
-  temperature: json['temperature'] as String?,
-  userId: json['user_id'] as String?,
-  samples: (json['samples'] as List<dynamic>?)
-      ?.map((e) => ManifestSampleRequest.fromJson(e as Map<String, dynamic>))
+  manifestNo: json['manifest_no'] as String,
+  originId: json['origin_id'] as String,
+  destinationId: json['destination_id'] as String,
+  sampleType: json['sample_type'] as String,
+  sampleCount: (json['sample_count'] as num).toInt(),
+  phlebotomyNo: json['phlebotomy_no'] as String,
+  lspCode: json['lsp_code'] as String,
+  temperature: json['temperature'] as String,
+  userId: json['user_id'] as String,
+  samples: (json['samples'] as List<dynamic>)
+      .map((e) => ManifestSampleRequest.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
 
@@ -41,10 +41,10 @@ Map<String, dynamic> _$$ManifestRequestItemImplToJson(
 _$ManifestSampleRequestImpl _$$ManifestSampleRequestImplFromJson(
   Map<String, dynamic> json,
 ) => _$ManifestSampleRequestImpl(
-  sampleCode: json['sample_code'] as String?,
-  patientCode: json['patient_code'] as String?,
-  age: json['age'] as String?,
-  gender: json['gender'] as String?,
+  sampleCode: json['sample_code'] as String,
+  patientCode: json['patient_code'] as String,
+  age: json['age'] as String,
+  gender: json['gender'] as String,
 );
 
 Map<String, dynamic> _$$ManifestSampleRequestImplToJson(
