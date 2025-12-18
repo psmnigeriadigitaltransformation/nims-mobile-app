@@ -24,12 +24,16 @@ class ShipmentApprovalScreenState with _$ShipmentApprovalScreenState {
     @Default("") String phoneNumber,
     @Default("") String designation,
     @Default("") String signature,
+    @Default(false) bool isSavingShipmentRoute,
+    @Default(Alert(message: "", show: false)) Alert alert,
+    @Default(false) bool showSuccessDialog,
   }) = _ShipmentApprovalScreenState;
 
   bool get isApproveShipmentButtonEnabled =>
       pickUpTemperature.isNotEmpty &&
       fullName.isNotEmpty &&
       phoneNumber.isNotEmpty &&
-      designation.isNotEmpty &&
-      signature.isNotEmpty;
+      designation.isNotEmpty;
+      //     &&
+      // signature.isNotEmpty;
 }

@@ -20,7 +20,6 @@ _$ShipmentImpl _$$ShipmentImplFromJson(Map<String, dynamic> json) =>
       pickupLongitude: (json['pickup_longitude'] as num).toDouble(),
       sampleType: json['sample_type'] as String,
       sampleCount: (json['sample_count'] as num).toInt(),
-      pickupDate: json['pickup_date'] as String?,
     );
 
 Map<String, dynamic> _$$ShipmentImplToJson(_$ShipmentImpl instance) =>
@@ -37,5 +36,4 @@ Map<String, dynamic> _$$ShipmentImplToJson(_$ShipmentImpl instance) =>
       'pickup_longitude': instance.pickupLongitude,
       'sample_type': instance.sampleType,
       'sample_count': instance.sampleCount,
-      'pickup_date': instance.pickupDate,
     };

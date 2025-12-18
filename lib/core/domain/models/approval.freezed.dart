@@ -33,8 +33,6 @@ mixin _$Approval {
   String get phone => throw _privateConstructorUsedError;
   String get designation => throw _privateConstructorUsedError;
   String get signature => throw _privateConstructorUsedError;
-  @JsonKey(name: 'approval_date')
-  String? get approvalDate => throw _privateConstructorUsedError;
 
   /// Serializes this Approval to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -60,7 +58,6 @@ abstract class $ApprovalCopyWith<$Res> {
     String phone,
     String designation,
     String signature,
-    @JsonKey(name: 'approval_date') String? approvalDate,
   });
 }
 
@@ -87,7 +84,6 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
     Object? phone = null,
     Object? designation = null,
     Object? signature = null,
-    Object? approvalDate = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -123,10 +119,6 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
                 ? _value.signature
                 : signature // ignore: cast_nullable_to_non_nullable
                       as String,
-            approvalDate: freezed == approvalDate
-                ? _value.approvalDate
-                : approvalDate // ignore: cast_nullable_to_non_nullable
-                      as String?,
           )
           as $Val,
     );
@@ -151,7 +143,6 @@ abstract class _$$ApprovalImplCopyWith<$Res>
     String phone,
     String designation,
     String signature,
-    @JsonKey(name: 'approval_date') String? approvalDate,
   });
 }
 
@@ -177,7 +168,6 @@ class __$$ApprovalImplCopyWithImpl<$Res>
     Object? phone = null,
     Object? designation = null,
     Object? signature = null,
-    Object? approvalDate = freezed,
   }) {
     return _then(
       _$ApprovalImpl(
@@ -213,10 +203,6 @@ class __$$ApprovalImplCopyWithImpl<$Res>
             ? _value.signature
             : signature // ignore: cast_nullable_to_non_nullable
                   as String,
-        approvalDate: freezed == approvalDate
-            ? _value.approvalDate
-            : approvalDate // ignore: cast_nullable_to_non_nullable
-                  as String?,
       ),
     );
   }
@@ -234,7 +220,6 @@ class _$ApprovalImpl implements _Approval {
     required this.phone,
     required this.designation,
     required this.signature,
-    @JsonKey(name: 'approval_date') this.approvalDate,
   });
 
   factory _$ApprovalImpl.fromJson(Map<String, dynamic> json) =>
@@ -260,13 +245,10 @@ class _$ApprovalImpl implements _Approval {
   final String designation;
   @override
   final String signature;
-  @override
-  @JsonKey(name: 'approval_date')
-  final String? approvalDate;
 
   @override
   String toString() {
-    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature, approvalDate: $approvalDate)';
+    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature)';
   }
 
   @override
@@ -286,9 +268,7 @@ class _$ApprovalImpl implements _Approval {
             (identical(other.designation, designation) ||
                 other.designation == designation) &&
             (identical(other.signature, signature) ||
-                other.signature == signature) &&
-            (identical(other.approvalDate, approvalDate) ||
-                other.approvalDate == approvalDate));
+                other.signature == signature));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -303,7 +283,6 @@ class _$ApprovalImpl implements _Approval {
     phone,
     designation,
     signature,
-    approvalDate,
   );
 
   /// Create a copy of Approval
@@ -330,7 +309,6 @@ abstract class _Approval implements Approval {
     required final String phone,
     required final String designation,
     required final String signature,
-    @JsonKey(name: 'approval_date') final String? approvalDate,
   }) = _$ApprovalImpl;
 
   factory _Approval.fromJson(Map<String, dynamic> json) =
@@ -356,9 +334,6 @@ abstract class _Approval implements Approval {
   String get designation;
   @override
   String get signature;
-  @override
-  @JsonKey(name: 'approval_date')
-  String? get approvalDate;
 
   /// Create a copy of Approval
   /// with the given fields replaced by the non-null parameter values.

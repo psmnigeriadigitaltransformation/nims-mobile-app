@@ -41,8 +41,6 @@ mixin _$Manifest {
   String get userId => throw _privateConstructorUsedError;
   @JsonKey(name: 'originating_facility_name')
   String get originatingFacilityName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'created_at')
-  String? get createdAt => throw _privateConstructorUsedError;
 
   /// Serializes this Manifest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -71,7 +69,6 @@ abstract class $ManifestCopyWith<$Res> {
     String? temperature,
     @JsonKey(name: 'user_id') String userId,
     @JsonKey(name: 'originating_facility_name') String originatingFacilityName,
-    @JsonKey(name: 'created_at') String? createdAt,
   });
 }
 
@@ -101,7 +98,6 @@ class _$ManifestCopyWithImpl<$Res, $Val extends Manifest>
     Object? temperature = freezed,
     Object? userId = null,
     Object? originatingFacilityName = null,
-    Object? createdAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -149,10 +145,6 @@ class _$ManifestCopyWithImpl<$Res, $Val extends Manifest>
                 ? _value.originatingFacilityName
                 : originatingFacilityName // ignore: cast_nullable_to_non_nullable
                       as String,
-            createdAt: freezed == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as String?,
           )
           as $Val,
     );
@@ -180,7 +172,6 @@ abstract class _$$ManifestImplCopyWith<$Res>
     String? temperature,
     @JsonKey(name: 'user_id') String userId,
     @JsonKey(name: 'originating_facility_name') String originatingFacilityName,
-    @JsonKey(name: 'created_at') String? createdAt,
   });
 }
 
@@ -209,7 +200,6 @@ class __$$ManifestImplCopyWithImpl<$Res>
     Object? temperature = freezed,
     Object? userId = null,
     Object? originatingFacilityName = null,
-    Object? createdAt = freezed,
   }) {
     return _then(
       _$ManifestImpl(
@@ -257,10 +247,6 @@ class __$$ManifestImplCopyWithImpl<$Res>
             ? _value.originatingFacilityName
             : originatingFacilityName // ignore: cast_nullable_to_non_nullable
                   as String,
-        createdAt: freezed == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                  as String?,
       ),
     );
   }
@@ -282,7 +268,6 @@ class _$ManifestImpl implements _Manifest {
     @JsonKey(name: 'user_id') required this.userId,
     @JsonKey(name: 'originating_facility_name')
     required this.originatingFacilityName,
-    @JsonKey(name: 'created_at') this.createdAt,
   });
 
   factory _$ManifestImpl.fromJson(Map<String, dynamic> json) =>
@@ -319,13 +304,10 @@ class _$ManifestImpl implements _Manifest {
   @override
   @JsonKey(name: 'originating_facility_name')
   final String originatingFacilityName;
-  @override
-  @JsonKey(name: 'created_at')
-  final String? createdAt;
 
   @override
   String toString() {
-    return 'Manifest(id: $id, manifestNo: $manifestNo, originId: $originId, destinationId: $destinationId, sampleType: $sampleType, sampleCount: $sampleCount, phlebotomyNo: $phlebotomyNo, lspCode: $lspCode, temperature: $temperature, userId: $userId, originatingFacilityName: $originatingFacilityName, createdAt: $createdAt)';
+    return 'Manifest(id: $id, manifestNo: $manifestNo, originId: $originId, destinationId: $destinationId, sampleType: $sampleType, sampleCount: $sampleCount, phlebotomyNo: $phlebotomyNo, lspCode: $lspCode, temperature: $temperature, userId: $userId, originatingFacilityName: $originatingFacilityName)';
   }
 
   @override
@@ -354,9 +336,7 @@ class _$ManifestImpl implements _Manifest {
                   other.originatingFacilityName,
                   originatingFacilityName,
                 ) ||
-                other.originatingFacilityName == originatingFacilityName) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.originatingFacilityName == originatingFacilityName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -374,7 +354,6 @@ class _$ManifestImpl implements _Manifest {
     temperature,
     userId,
     originatingFacilityName,
-    createdAt,
   );
 
   /// Create a copy of Manifest
@@ -405,7 +384,6 @@ abstract class _Manifest implements Manifest {
     @JsonKey(name: 'user_id') required final String userId,
     @JsonKey(name: 'originating_facility_name')
     required final String originatingFacilityName,
-    @JsonKey(name: 'created_at') final String? createdAt,
   }) = _$ManifestImpl;
 
   factory _Manifest.fromJson(Map<String, dynamic> json) =
@@ -442,9 +420,6 @@ abstract class _Manifest implements Manifest {
   @override
   @JsonKey(name: 'originating_facility_name')
   String get originatingFacilityName;
-  @override
-  @JsonKey(name: 'created_at')
-  String? get createdAt;
 
   /// Create a copy of Manifest
   /// with the given fields replaced by the non-null parameter values.

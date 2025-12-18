@@ -16,7 +16,6 @@ _$ShipmentRouteImpl _$$ShipmentRouteImplFromJson(Map<String, dynamic> json) =>
       riderUserId: json['rider_user_id'] as String,
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
-      createdAt: json['created_at'] as String?,
     );
 
 Map<String, dynamic> _$$ShipmentRouteImplToJson(_$ShipmentRouteImpl instance) =>
@@ -29,5 +28,4 @@ Map<String, dynamic> _$$ShipmentRouteImplToJson(_$ShipmentRouteImpl instance) =>
       'rider_user_id': instance.riderUserId,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
-      'created_at': instance.createdAt,
     };

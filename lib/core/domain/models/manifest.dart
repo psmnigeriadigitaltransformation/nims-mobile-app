@@ -17,7 +17,7 @@ class Manifest with _$Manifest {
     String? temperature,
     @JsonKey(name: 'user_id') required String userId,
     @JsonKey(name: 'originating_facility_name') required String originatingFacilityName,
-    @JsonKey(name: 'created_at') String? createdAt,
+    // @JsonKey(name: 'created_at') String? createdAt,
   }) = _Manifest;
 
   factory Manifest.fromJson(Map<String, dynamic> json) =>

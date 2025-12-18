@@ -44,8 +44,6 @@ mixin _$Shipment {
   String get sampleType => throw _privateConstructorUsedError;
   @JsonKey(name: 'sample_count')
   int get sampleCount => throw _privateConstructorUsedError;
-  @JsonKey(name: 'pickup_date')
-  String? get pickupDate => throw _privateConstructorUsedError;
 
   /// Serializes this Shipment to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -75,7 +73,6 @@ abstract class $ShipmentCopyWith<$Res> {
     @JsonKey(name: 'pickup_longitude') double pickupLongitude,
     @JsonKey(name: 'sample_type') String sampleType,
     @JsonKey(name: 'sample_count') int sampleCount,
-    @JsonKey(name: 'pickup_date') String? pickupDate,
   });
 }
 
@@ -106,7 +103,6 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
     Object? pickupLongitude = null,
     Object? sampleType = null,
     Object? sampleCount = null,
-    Object? pickupDate = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -158,10 +154,6 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
                 ? _value.sampleCount
                 : sampleCount // ignore: cast_nullable_to_non_nullable
                       as int,
-            pickupDate: freezed == pickupDate
-                ? _value.pickupDate
-                : pickupDate // ignore: cast_nullable_to_non_nullable
-                      as String?,
           )
           as $Val,
     );
@@ -190,7 +182,6 @@ abstract class _$$ShipmentImplCopyWith<$Res>
     @JsonKey(name: 'pickup_longitude') double pickupLongitude,
     @JsonKey(name: 'sample_type') String sampleType,
     @JsonKey(name: 'sample_count') int sampleCount,
-    @JsonKey(name: 'pickup_date') String? pickupDate,
   });
 }
 
@@ -220,7 +211,6 @@ class __$$ShipmentImplCopyWithImpl<$Res>
     Object? pickupLongitude = null,
     Object? sampleType = null,
     Object? sampleCount = null,
-    Object? pickupDate = freezed,
   }) {
     return _then(
       _$ShipmentImpl(
@@ -272,10 +262,6 @@ class __$$ShipmentImplCopyWithImpl<$Res>
             ? _value.sampleCount
             : sampleCount // ignore: cast_nullable_to_non_nullable
                   as int,
-        pickupDate: freezed == pickupDate
-            ? _value.pickupDate
-            : pickupDate // ignore: cast_nullable_to_non_nullable
-                  as String?,
       ),
     );
   }
@@ -300,7 +286,6 @@ class _$ShipmentImpl implements _Shipment {
     @JsonKey(name: 'pickup_longitude') required this.pickupLongitude,
     @JsonKey(name: 'sample_type') required this.sampleType,
     @JsonKey(name: 'sample_count') required this.sampleCount,
-    @JsonKey(name: 'pickup_date') this.pickupDate,
   });
 
   factory _$ShipmentImpl.fromJson(Map<String, dynamic> json) =>
@@ -341,13 +326,10 @@ class _$ShipmentImpl implements _Shipment {
   @override
   @JsonKey(name: 'sample_count')
   final int sampleCount;
-  @override
-  @JsonKey(name: 'pickup_date')
-  final String? pickupDate;
 
   @override
   String toString() {
-    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originType: $originType, destinationLocationType: $destinationLocationType, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount, pickupDate: $pickupDate)';
+    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originType: $originType, destinationLocationType: $destinationLocationType, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount)';
   }
 
   @override
@@ -382,9 +364,7 @@ class _$ShipmentImpl implements _Shipment {
             (identical(other.sampleType, sampleType) ||
                 other.sampleType == sampleType) &&
             (identical(other.sampleCount, sampleCount) ||
-                other.sampleCount == sampleCount) &&
-            (identical(other.pickupDate, pickupDate) ||
-                other.pickupDate == pickupDate));
+                other.sampleCount == sampleCount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -403,7 +383,6 @@ class _$ShipmentImpl implements _Shipment {
     pickupLongitude,
     sampleType,
     sampleCount,
-    pickupDate,
   );
 
   /// Create a copy of Shipment
@@ -437,7 +416,6 @@ abstract class _Shipment implements Shipment {
     @JsonKey(name: 'pickup_longitude') required final double pickupLongitude,
     @JsonKey(name: 'sample_type') required final String sampleType,
     @JsonKey(name: 'sample_count') required final int sampleCount,
-    @JsonKey(name: 'pickup_date') final String? pickupDate,
   }) = _$ShipmentImpl;
 
   factory _Shipment.fromJson(Map<String, dynamic> json) =
@@ -478,9 +456,6 @@ abstract class _Shipment implements Shipment {
   @override
   @JsonKey(name: 'sample_count')
   int get sampleCount;
-  @override
-  @JsonKey(name: 'pickup_date')
-  String? get pickupDate;
 
   /// Create a copy of Shipment
   /// with the given fields replaced by the non-null parameter values.

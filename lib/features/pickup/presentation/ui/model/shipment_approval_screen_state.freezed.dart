@@ -26,6 +26,9 @@ mixin _$ShipmentApprovalScreenState {
   String get phoneNumber => throw _privateConstructorUsedError;
   String get designation => throw _privateConstructorUsedError;
   String get signature => throw _privateConstructorUsedError;
+  bool get isSavingShipmentRoute => throw _privateConstructorUsedError;
+  Alert get alert => throw _privateConstructorUsedError;
+  bool get showSuccessDialog => throw _privateConstructorUsedError;
 
   /// Create a copy of ShipmentApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -55,11 +58,15 @@ abstract class $ShipmentApprovalScreenStateCopyWith<$Res> {
     String phoneNumber,
     String designation,
     String signature,
+    bool isSavingShipmentRoute,
+    Alert alert,
+    bool showSuccessDialog,
   });
 
   $MovementTypeCopyWith<$Res> get movementType;
   $FacilityCopyWith<$Res> get pickUpFacility;
   $FacilityCopyWith<$Res> get destinationFacility;
+  $AlertCopyWith<$Res> get alert;
 }
 
 /// @nodoc
@@ -89,6 +96,9 @@ class _$ShipmentApprovalScreenStateCopyWithImpl<
     Object? phoneNumber = null,
     Object? designation = null,
     Object? signature = null,
+    Object? isSavingShipmentRoute = null,
+    Object? alert = null,
+    Object? showSuccessDialog = null,
   }) {
     return _then(
       _value.copyWith(
@@ -128,6 +138,18 @@ class _$ShipmentApprovalScreenStateCopyWithImpl<
                 ? _value.signature
                 : signature // ignore: cast_nullable_to_non_nullable
                       as String,
+            isSavingShipmentRoute: null == isSavingShipmentRoute
+                ? _value.isSavingShipmentRoute
+                : isSavingShipmentRoute // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            alert: null == alert
+                ? _value.alert
+                : alert // ignore: cast_nullable_to_non_nullable
+                      as Alert,
+            showSuccessDialog: null == showSuccessDialog
+                ? _value.showSuccessDialog
+                : showSuccessDialog // ignore: cast_nullable_to_non_nullable
+                      as bool,
           )
           as $Val,
     );
@@ -162,6 +184,16 @@ class _$ShipmentApprovalScreenStateCopyWithImpl<
       return _then(_value.copyWith(destinationFacility: value) as $Val);
     });
   }
+
+  /// Create a copy of ShipmentApprovalScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AlertCopyWith<$Res> get alert {
+    return $AlertCopyWith<$Res>(_value.alert, (value) {
+      return _then(_value.copyWith(alert: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -183,6 +215,9 @@ abstract class _$$ShipmentApprovalScreenStateImplCopyWith<$Res>
     String phoneNumber,
     String designation,
     String signature,
+    bool isSavingShipmentRoute,
+    Alert alert,
+    bool showSuccessDialog,
   });
 
   @override
@@ -191,6 +226,8 @@ abstract class _$$ShipmentApprovalScreenStateImplCopyWith<$Res>
   $FacilityCopyWith<$Res> get pickUpFacility;
   @override
   $FacilityCopyWith<$Res> get destinationFacility;
+  @override
+  $AlertCopyWith<$Res> get alert;
 }
 
 /// @nodoc
@@ -220,6 +257,9 @@ class __$$ShipmentApprovalScreenStateImplCopyWithImpl<$Res>
     Object? phoneNumber = null,
     Object? designation = null,
     Object? signature = null,
+    Object? isSavingShipmentRoute = null,
+    Object? alert = null,
+    Object? showSuccessDialog = null,
   }) {
     return _then(
       _$ShipmentApprovalScreenStateImpl(
@@ -259,6 +299,18 @@ class __$$ShipmentApprovalScreenStateImplCopyWithImpl<$Res>
             ? _value.signature
             : signature // ignore: cast_nullable_to_non_nullable
                   as String,
+        isSavingShipmentRoute: null == isSavingShipmentRoute
+            ? _value.isSavingShipmentRoute
+            : isSavingShipmentRoute // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        alert: null == alert
+            ? _value.alert
+            : alert // ignore: cast_nullable_to_non_nullable
+                  as Alert,
+        showSuccessDialog: null == showSuccessDialog
+            ? _value.showSuccessDialog
+            : showSuccessDialog // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }
@@ -277,6 +329,9 @@ class _$ShipmentApprovalScreenStateImpl extends _ShipmentApprovalScreenState {
     this.phoneNumber = "",
     this.designation = "",
     this.signature = "",
+    this.isSavingShipmentRoute = false,
+    this.alert = const Alert(message: "", show: false),
+    this.showSuccessDialog = false,
   }) : _shipments = shipments,
        super._();
 
@@ -309,10 +364,19 @@ class _$ShipmentApprovalScreenStateImpl extends _ShipmentApprovalScreenState {
   @override
   @JsonKey()
   final String signature;
+  @override
+  @JsonKey()
+  final bool isSavingShipmentRoute;
+  @override
+  @JsonKey()
+  final Alert alert;
+  @override
+  @JsonKey()
+  final bool showSuccessDialog;
 
   @override
   String toString() {
-    return 'ShipmentApprovalScreenState(movementType: $movementType, pickUpFacility: $pickUpFacility, destinationFacility: $destinationFacility, shipments: $shipments, pickUpTemperature: $pickUpTemperature, fullName: $fullName, phoneNumber: $phoneNumber, designation: $designation, signature: $signature)';
+    return 'ShipmentApprovalScreenState(movementType: $movementType, pickUpFacility: $pickUpFacility, destinationFacility: $destinationFacility, shipments: $shipments, pickUpTemperature: $pickUpTemperature, fullName: $fullName, phoneNumber: $phoneNumber, designation: $designation, signature: $signature, isSavingShipmentRoute: $isSavingShipmentRoute, alert: $alert, showSuccessDialog: $showSuccessDialog)';
   }
 
   @override
@@ -339,7 +403,12 @@ class _$ShipmentApprovalScreenStateImpl extends _ShipmentApprovalScreenState {
             (identical(other.designation, designation) ||
                 other.designation == designation) &&
             (identical(other.signature, signature) ||
-                other.signature == signature));
+                other.signature == signature) &&
+            (identical(other.isSavingShipmentRoute, isSavingShipmentRoute) ||
+                other.isSavingShipmentRoute == isSavingShipmentRoute) &&
+            (identical(other.alert, alert) || other.alert == alert) &&
+            (identical(other.showSuccessDialog, showSuccessDialog) ||
+                other.showSuccessDialog == showSuccessDialog));
   }
 
   @override
@@ -354,6 +423,9 @@ class _$ShipmentApprovalScreenStateImpl extends _ShipmentApprovalScreenState {
     phoneNumber,
     designation,
     signature,
+    isSavingShipmentRoute,
+    alert,
+    showSuccessDialog,
   );
 
   /// Create a copy of ShipmentApprovalScreenState
@@ -380,6 +452,9 @@ abstract class _ShipmentApprovalScreenState
     final String phoneNumber,
     final String designation,
     final String signature,
+    final bool isSavingShipmentRoute,
+    final Alert alert,
+    final bool showSuccessDialog,
   }) = _$ShipmentApprovalScreenStateImpl;
   const _ShipmentApprovalScreenState._() : super._();
 
@@ -401,6 +476,12 @@ abstract class _ShipmentApprovalScreenState
   String get designation;
   @override
   String get signature;
+  @override
+  bool get isSavingShipmentRoute;
+  @override
+  Alert get alert;
+  @override
+  bool get showSuccessDialog;
 
   /// Create a copy of ShipmentApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.

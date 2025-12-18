@@ -13,7 +13,7 @@ class Sample with _$Sample {
     required String age,
     required String gender,
     String? comment,
-    @JsonKey(name: 'created_at') String? createdAt,
+    // @JsonKey(name: 'created_at') String? createdAt,
   }) = _Sample;
 
   factory Sample.fromJson(Map<String, dynamic> json) =>

@@ -14,7 +14,6 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
   age: json['age'] as String,
   gender: json['gender'] as String,
   comment: json['comment'] as String?,
-  createdAt: json['created_at'] as String?,
 );
 
 Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
@@ -26,5 +25,4 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
       'age': instance.age,
       'gender': instance.gender,
       'comment': instance.comment,
-      'created_at': instance.createdAt,
     };

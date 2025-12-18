@@ -19,7 +19,7 @@ class Shipment with _$Shipment {
     @JsonKey(name: 'pickup_longitude') required double pickupLongitude,
     @JsonKey(name: 'sample_type') required String sampleType,
     @JsonKey(name: 'sample_count') required int sampleCount,
-    @JsonKey(name: 'pickup_date') String? pickupDate,
+    // @JsonKey(name: 'pickup_date') String? pickupDate,
   }) = _Shipment;
 
   factory Shipment.fromJson(Map<String, dynamic> json) =>

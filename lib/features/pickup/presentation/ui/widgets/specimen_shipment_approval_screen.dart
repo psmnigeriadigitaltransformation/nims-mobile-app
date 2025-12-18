@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/core/ui/screens/nims_base_screen.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
@@ -7,6 +9,7 @@ import 'package:projects/core/ui/widgets/nims_shipment_card.dart';
 import 'package:projects/core/ui/widgets/nims_specimen_shipment_summary_card.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 import '../../../../../core/domain/mappers/typedefs.dart';
+import '../../../../../core/ui/widgets/nims_alert_dialog_content.dart';
 import '../../../../../core/ui/widgets/nims_error_content.dart';
 import '../../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
@@ -44,6 +47,55 @@ class _SpecimenShipmentApprovalScreenState
       pickUpFacility: widget.pickUpFacility,
       destinationFacility: widget.destinationFacility,
       shipments: widget.shipments,
+    );
+    ref.listen(
+      shipmentApprovalScreenStateNotifierProvider(args).select((s) => s.alert),
+      (prev, next) {
+        final prevShow = prev?.show ?? false;
+        final nextShow = next.show;
+        if (!prevShow && nextShow) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (buildContext) => NIMSAlertDialogContent(
+              message: next.message,
+              onTapActionButton: () {
+                context.pop();
+                ref
+                    .read(
+                      shipmentApprovalScreenStateNotifierProvider(
+                        args,
+                      ).notifier,
+                    )
+                    .onDismissAlertDialog();
+              },
+              actionButtonLabel: 'Okay',
+            ),
+          );
+        }
+      },
+    );
+
+    ref.listen(
+      shipmentApprovalScreenStateNotifierProvider(
+        args,
+      ).select((s) => s.showSuccessDialog),
+      (prevShow, nextShow) {
+        if (prevShow == false && nextShow) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (buildContext) => NIMSAlertDialogContent(
+              message:
+                  "Shipment Approval Successful ✅👍 \nRouted has been created.",
+              onTapActionButton: () {
+                context.goNamed(dashboardScreen);
+              },
+              actionButtonLabel: 'Okay',
+            ),
+          );
+        }
+      },
     );
     final state = ref.watch(shipmentApprovalScreenStateNotifierProvider(args));
 
@@ -314,7 +366,17 @@ class _SpecimenShipmentApprovalScreenState
       ),
       bottom: Padding(
         padding: EdgeInsets.only(bottom: 16),
-        child: NIMSPrimaryButton(text: "Approve Shipments", onPressed: () {}),
+        child: NIMSPrimaryButton(
+          text: "Approve Shipments",
+          onPressed: () {
+            ref
+                .read(
+                  shipmentApprovalScreenStateNotifierProvider(args).notifier,
+                )
+                .onApproveShipment();
+          },
+          enabled: state.isApproveShipmentButtonEnabled,
+        ),
       ),
     );
   }

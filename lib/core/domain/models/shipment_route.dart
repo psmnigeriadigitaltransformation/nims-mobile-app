@@ -14,7 +14,7 @@ class ShipmentRoute with _$ShipmentRoute {
     @JsonKey(name: 'rider_user_id') required String riderUserId,
     double? latitude,
     double? longitude,
-    @JsonKey(name: 'created_at') String? createdAt,
+    // @JsonKey(name: 'created_at') String? createdAt,
   }) = _ShipmentRoute;
 
   factory ShipmentRoute.fromJson(Map<String, dynamic> json) =>

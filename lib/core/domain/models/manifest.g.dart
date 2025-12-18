@@ -19,7 +19,6 @@ _$ManifestImpl _$$ManifestImplFromJson(Map<String, dynamic> json) =>
       temperature: json['temperature'] as String?,
       userId: json['user_id'] as String,
       originatingFacilityName: json['originating_facility_name'] as String,
-      createdAt: json['created_at'] as String?,
     );
 
 Map<String, dynamic> _$$ManifestImplToJson(_$ManifestImpl instance) =>
@@ -35,5 +34,4 @@ Map<String, dynamic> _$$ManifestImplToJson(_$ManifestImpl instance) =>
       'temperature': instance.temperature,
       'user_id': instance.userId,
       'originating_facility_name': instance.originatingFacilityName,
-      'created_at': instance.createdAt,
     };

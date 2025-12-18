@@ -4,6 +4,7 @@ import 'package:projects/core/data/repository/locations_repository.dart';
 import 'package:projects/core/data/repository/manifest_repository.dart';
 import 'package:projects/core/data/repository/movement_types_repository.dart';
 import 'package:projects/core/data/repository/samples_repository.dart';
+import 'package:projects/core/data/repository/shipment_routes_repository.dart';
 import 'package:projects/features/facilities/data/repository/facilities_repository.dart';
 
 import '../../../core/services/providers.dart';
@@ -38,6 +39,13 @@ final eTokenRepositoryProvider = Provider(
 
 final manifestRepositoryProvider = Provider(
       (ref) => ManifestRepository(
+    ref.watch(nimsApiServiceProvider),
+    ref.watch(nimsLocalServiceProvider),
+  ),
+);
+
+final shipmentRouteRepositoryProvider = Provider(
+      (ref) => ShipmentRoutesRepository(
     ref.watch(nimsApiServiceProvider),
     ref.watch(nimsLocalServiceProvider),
   ),

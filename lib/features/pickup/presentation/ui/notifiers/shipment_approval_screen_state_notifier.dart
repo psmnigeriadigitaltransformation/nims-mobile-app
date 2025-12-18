@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'dart:ffi';
+import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:projects/core/data/providers.dart';
+import 'package:projects/core/ui/model/model/alert.dart';
+import 'package:projects/features/auth/data/providers.dart';
 import 'package:projects/features/facilities/data/providers.dart';
 import 'package:projects/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
 import 'package:uuid/uuid.dart';
@@ -23,40 +27,6 @@ class ShipmentApprovalScreenStateNotifier
             List<DomainShipment> shipments,
           })
         > {
-  // @override
-  // FutureOr<ShipmentApprovalScreenState> build(
-  //   ({
-  //     DomainFacility destinationFacility,
-  //     DomainMovementType movementType,
-  //     DomainFacility pickUpFacility,
-  //     List<DomainShipment> shipments,
-  //   })
-  //   param,
-  // ) {
-  //   developer.log(
-  //     "${param.movementType}",
-  //     name: "ShipmentApprovalScreenStateNotifier:movementType",
-  //   );
-  //   developer.log(
-  //     "${param.pickUpFacility}",
-  //     name: "ShipmentApprovalScreenStateNotifier:pickUpFacility",
-  //   );
-  //   developer.log(
-  //     "${param.destinationFacility}",
-  //     name: "ShipmentApprovalScreenStateNotifier:destinationFacility",
-  //   );
-  //   developer.log(
-  //     "${param.shipments}",
-  //     name: "ShipmentApprovalScreenStateNotifier:shipments",
-  //   );
-  //   return _loadData((
-  //     movementType: param.movementType,
-  //     pickUpFacility: param.pickUpFacility,
-  //     destinationFacility: param.destinationFacility,
-  //     shipments: param.shipments,
-  //   ));
-  // }
-
   @override
   ShipmentApprovalScreenState build(
     ({
@@ -109,5 +79,46 @@ class ShipmentApprovalScreenStateNotifier
 
   Future<void> refreshState() async {
     state = _loadData(arg);
+  }
+
+  onApproveShipment() async {
+    state = state.copyWith(isSavingShipmentRoute: true);
+    final user = await ref.read(authRepositoryProvider).getUser();
+    final routeNo = Uuid().v4();
+    final shipmentRoute = DomainShipmentRoute(
+      routeNo: routeNo,
+      originFacilityId: state.pickUpFacility.facilityId?.toString() ?? "",
+      destinationFacilityId:
+          state.destinationFacility.facilityId?.toString() ?? "",
+      lspCode: '',
+      riderUserId: user?.userId ?? "",
+    );
+
+    final approval = DomainApproval(
+      approvalNo: Uuid().v4(),
+      routeNo: routeNo,
+      approvalType: 'pickup',
+      fullname: state.fullName,
+      phone: state.phoneNumber,
+      designation: state.designation,
+      signature: state.signature,
+    );
+
+    final result = await ref
+        .read(shipmentRouteRepositoryProvider)
+        .saveShipmentRoute(shipmentRoute, state.shipments, approval);
+
+    switch (result) {
+      case Success<bool>():
+        state = state.copyWith(showSuccessDialog: true);
+      case Error<bool>():
+        state = state.copyWith(
+          alert: Alert(show: true, message: result.message),
+        );
+    }
+  }
+
+  onDismissAlertDialog() {
+    state = state.copyWith(alert: Alert(show: false, message: ""));
   }
 }

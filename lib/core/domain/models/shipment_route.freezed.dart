@@ -34,8 +34,6 @@ mixin _$ShipmentRoute {
   String get riderUserId => throw _privateConstructorUsedError;
   double? get latitude => throw _privateConstructorUsedError;
   double? get longitude => throw _privateConstructorUsedError;
-  @JsonKey(name: 'created_at')
-  String? get createdAt => throw _privateConstructorUsedError;
 
   /// Serializes this ShipmentRoute to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -63,7 +61,6 @@ abstract class $ShipmentRouteCopyWith<$Res> {
     @JsonKey(name: 'rider_user_id') String riderUserId,
     double? latitude,
     double? longitude,
-    @JsonKey(name: 'created_at') String? createdAt,
   });
 }
 
@@ -90,7 +87,6 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
     Object? riderUserId = null,
     Object? latitude = freezed,
     Object? longitude = freezed,
-    Object? createdAt = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -126,10 +122,6 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
                 ? _value.longitude
                 : longitude // ignore: cast_nullable_to_non_nullable
                       as double?,
-            createdAt: freezed == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as String?,
           )
           as $Val,
     );
@@ -154,7 +146,6 @@ abstract class _$$ShipmentRouteImplCopyWith<$Res>
     @JsonKey(name: 'rider_user_id') String riderUserId,
     double? latitude,
     double? longitude,
-    @JsonKey(name: 'created_at') String? createdAt,
   });
 }
 
@@ -180,7 +171,6 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
     Object? riderUserId = null,
     Object? latitude = freezed,
     Object? longitude = freezed,
-    Object? createdAt = freezed,
   }) {
     return _then(
       _$ShipmentRouteImpl(
@@ -216,10 +206,6 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
             ? _value.longitude
             : longitude // ignore: cast_nullable_to_non_nullable
                   as double?,
-        createdAt: freezed == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                  as String?,
       ),
     );
   }
@@ -238,7 +224,6 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
     @JsonKey(name: 'rider_user_id') required this.riderUserId,
     this.latitude,
     this.longitude,
-    @JsonKey(name: 'created_at') this.createdAt,
   });
 
   factory _$ShipmentRouteImpl.fromJson(Map<String, dynamic> json) =>
@@ -265,13 +250,10 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
   final double? latitude;
   @override
   final double? longitude;
-  @override
-  @JsonKey(name: 'created_at')
-  final String? createdAt;
 
   @override
   String toString() {
-    return 'ShipmentRoute(id: $id, routeNo: $routeNo, originFacilityId: $originFacilityId, destinationFacilityId: $destinationFacilityId, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude, createdAt: $createdAt)';
+    return 'ShipmentRoute(id: $id, routeNo: $routeNo, originFacilityId: $originFacilityId, destinationFacilityId: $destinationFacilityId, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -291,9 +273,7 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
-                other.longitude == longitude) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.longitude == longitude));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -308,7 +288,6 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
     riderUserId,
     latitude,
     longitude,
-    createdAt,
   );
 
   /// Create a copy of ShipmentRoute
@@ -336,7 +315,6 @@ abstract class _ShipmentRoute implements ShipmentRoute {
     @JsonKey(name: 'rider_user_id') required final String riderUserId,
     final double? latitude,
     final double? longitude,
-    @JsonKey(name: 'created_at') final String? createdAt,
   }) = _$ShipmentRouteImpl;
 
   factory _ShipmentRoute.fromJson(Map<String, dynamic> json) =
@@ -363,9 +341,6 @@ abstract class _ShipmentRoute implements ShipmentRoute {
   double? get latitude;
   @override
   double? get longitude;
-  @override
-  @JsonKey(name: 'created_at')
-  String? get createdAt;
 
   /// Create a copy of ShipmentRoute
   /// with the given fields replaced by the non-null parameter values.

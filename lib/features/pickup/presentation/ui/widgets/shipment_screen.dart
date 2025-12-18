@@ -45,7 +45,7 @@ class ShipmentScreen extends ConsumerWidget {
     return asyncValueState.when(
       data: (state) => NIMSBaseScreen(
         header: Padding(
-          padding: EdgeInsetsGeometry.all(16),
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 16, vertical: 8),
           child: Column(
             children: [
               /// ----------------------------------------

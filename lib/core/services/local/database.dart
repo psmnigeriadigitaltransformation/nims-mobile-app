@@ -171,8 +171,8 @@ class NIMSDatabase {
             destination_facility_id TEXT NOT NULL,
             lsp_code TEXT NOT NULL,
             rider_user_id TEXT NOT NULL,
-            latitude DECIMAL(10,6) NOT NULL,
-            longitude DECIMAL(10,6) NOT NULL,
+            latitude DECIMAL(10,6),
+            longitude DECIMAL(10,6),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
           )
           ''');
