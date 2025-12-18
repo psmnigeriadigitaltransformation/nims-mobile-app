@@ -34,7 +34,7 @@ class ETokenRepository {
           final domainETokenDataList = eTokenDataList
               .map((sampleType) => sampleType.toDomain())
               .toList();
-          await _localService.updateCachedETokenData(domainETokenDataList);
+          await _localService.cacheETokenData(domainETokenDataList);
           return Success(domainETokenDataList);
         case Error<ETokenResponse>():
           developer.log(

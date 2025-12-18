@@ -1,13 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 
 import '../../../../../core/ui/widgets/nims_error_button.dart';
 import '../../../../../core/ui/widgets/nims_round_icon_button.dart';
 import '../../../../../core/ui/widgets/nims_secondary_button.dart';
 
 class SpecimenDeletionConfirmationDialog extends StatelessWidget {
-  const SpecimenDeletionConfirmationDialog({super.key});
+  final DomainSample sample;
+  final Function(DomainSample) onDelete;
+
+  const SpecimenDeletionConfirmationDialog({
+    super.key,
+    required this.sample,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,28 +48,33 @@ class SpecimenDeletionConfirmationDialog extends StatelessWidget {
               ),
             ),
 
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 3,
+                horizontal: 6,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                color: Theme.of(context).colorScheme.tertiaryContainer,
+              ),
+              child: Text(
+                textAlign: TextAlign.center,
+                sample.sampleCode,
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
+            ),
+            SizedBox(height: 12),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 3,
-                    horizontal: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    color: Theme.of(context).colorScheme.tertiaryContainer,
-                  ),
-                  child: Text(
-                    "PC-288939-29930",
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
+                // Expanded(child:  ,),
+                const SizedBox(width: 20),
+                Text(sample.age, style: Theme.of(context).textTheme.bodySmall),
+                const SizedBox(width: 20),
+                Text(
+                  sample.gender,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
-                const SizedBox(width: 24),
-                Text("20 Y", style: Theme.of(context).textTheme.bodySmall),
-                const SizedBox(width: 24),
-                Text("M", style: Theme.of(context).textTheme.bodySmall),
-                const Spacer(),
               ],
             ),
 
@@ -75,7 +88,10 @@ class SpecimenDeletionConfirmationDialog extends StatelessWidget {
                 Expanded(
                   child: NIMSErrorButton(
                     text: "Confirm",
-                    onPressed: context.pop,
+                    onPressed: () {
+                      onDelete(sample);
+                      context.pop();
+                    },
                   ),
                 ),
                 SizedBox(height: 16),

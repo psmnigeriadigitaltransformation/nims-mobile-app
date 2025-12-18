@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/core/ui/theme/theme.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../../core/ui/widgets/nims_round_icon_button.dart';
 import '../../../../dashboard/domain/mock.dart';
 
+class AddNewSpecimenDialog extends StatefulWidget {
+  final Function(DomainSample) onSaveSpecimen;
+  final String manifestNo;
 
-class AddNewSpecimenDialog extends StatelessWidget {
-  const AddNewSpecimenDialog({super.key});
+  const AddNewSpecimenDialog({
+    super.key,
+    required this.onSaveSpecimen,
+    required this.manifestNo,
+  });
+
+  @override
+  State<StatefulWidget> createState() => _AddNewSpecimenDialogState();
+}
+
+class _AddNewSpecimenDialogState extends State<AddNewSpecimenDialog> {
+  final TextEditingController patientCodeController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController unitController = TextEditingController();
+  final TextEditingController sexController = TextEditingController();
+  final TextEditingController commentController = TextEditingController();
+  final String sampleCode = Uuid().v4();
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +69,13 @@ class AddNewSpecimenDialog extends StatelessWidget {
                 helperText: "",
                 errorText: null,
               ),
+              controller: patientCodeController,
+              onChanged: (value) {
+                setState(() {
+                  patientCodeController.text = value;
+                });
+              },
+              textCapitalization: TextCapitalization.characters,
             ),
 
             /// -------------------------------
@@ -74,6 +100,13 @@ class AddNewSpecimenDialog extends StatelessWidget {
                               helperText: "",
                               errorText: null,
                             ),
+                            controller: ageController,
+                            onChanged: (value) {
+                              setState(() {
+                                ageController.text = value;
+                              });
+                            },
+                            keyboardType: TextInputType.number,
                           ),
                         ),
                       ),
@@ -114,7 +147,12 @@ class AddNewSpecimenDialog extends StatelessWidget {
                               ),
                             ),
                           ],
-                          onSelected: (value) {},
+                          onSelected: (value) {
+                            setState(() {
+                              unitController.text = value ?? "";
+                            });
+                          },
+                          controller: unitController,
                         ),
                       ),
                     ],
@@ -146,9 +184,7 @@ class AddNewSpecimenDialog extends StatelessWidget {
                         RoundedRectangleBorder(
                           side: BorderSide(
                             width: 0.25,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.outline,
                           ),
                         ),
                       ),
@@ -156,7 +192,12 @@ class AddNewSpecimenDialog extends StatelessWidget {
                   ),
                 ),
               ],
-              onSelected: (value) {},
+              onSelected: (value) {
+                setState(() {
+                  sexController.text = value ?? "";
+                });
+              },
+              controller: sexController,
             ),
 
             SizedBox(height: 36),
@@ -176,6 +217,12 @@ class AddNewSpecimenDialog extends StatelessWidget {
               ),
               minLines: 2,
               maxLines: 2,
+              controller: commentController,
+              onChanged: (value) {
+                setState(() {
+                  commentController.text = value;
+                });
+              },
             ),
 
             SizedBox(height: 40),
@@ -183,7 +230,29 @@ class AddNewSpecimenDialog extends StatelessWidget {
             /// -------------------------------
             /// SAVE SPECIMEN BUTTON
             /// -------------------------------
-            NIMSPrimaryButton(text: "Save Specimen", onPressed: context.pop),
+            NIMSPrimaryButton(
+              text: "Save Specimen",
+              onPressed: () {
+                widget.onSaveSpecimen(
+                  DomainSample(
+                    manifestNo: widget.manifestNo,
+                    sampleCode: sampleCode,
+                    patientCode: patientCodeController.text
+                        .trim()
+                        .toUpperCase(),
+                    age: "${ageController.text.trim()} ${unitController.text[0]}",
+                    gender: sexController.text[0],
+                    comment: commentController.text.trim(),
+                  ),
+                );
+                context.pop();
+              },
+              enabled:
+                  patientCodeController.text.isNotEmpty &&
+                  ageController.text.isNotEmpty &&
+                  unitController.text.isNotEmpty &&
+                  sexController.text.isNotEmpty,
+            ),
             SizedBox(height: 16),
           ],
         ),

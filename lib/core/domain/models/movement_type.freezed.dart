@@ -12,7 +12,7 @@ part of 'movement_type.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-model',
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
 MovementType _$MovementTypeFromJson(Map<String, dynamic> json) {
@@ -26,6 +26,11 @@ mixin _$MovementType {
   @JsonKey(name: "type_id")
   int? get typeId => throw _privateConstructorUsedError;
   String? get movement => throw _privateConstructorUsedError;
+  String? get origin => throw _privateConstructorUsedError;
+  @JsonKey(name: "destination_primary")
+  String? get destinationPrimary => throw _privateConstructorUsedError;
+  @JsonKey(name: "destination_secondary")
+  String? get destinationSecondary => throw _privateConstructorUsedError;
   String? get created => throw _privateConstructorUsedError;
   String? get category => throw _privateConstructorUsedError;
 
@@ -51,6 +56,9 @@ abstract class $MovementTypeCopyWith<$Res> {
     String? pick,
     @JsonKey(name: "type_id") int? typeId,
     String? movement,
+    String? origin,
+    @JsonKey(name: "destination_primary") String? destinationPrimary,
+    @JsonKey(name: "destination_secondary") String? destinationSecondary,
     String? created,
     String? category,
   });
@@ -75,6 +83,9 @@ class _$MovementTypeCopyWithImpl<$Res, $Val extends MovementType>
     Object? pick = freezed,
     Object? typeId = freezed,
     Object? movement = freezed,
+    Object? origin = freezed,
+    Object? destinationPrimary = freezed,
+    Object? destinationSecondary = freezed,
     Object? created = freezed,
     Object? category = freezed,
   }) {
@@ -95,6 +106,18 @@ class _$MovementTypeCopyWithImpl<$Res, $Val extends MovementType>
             movement: freezed == movement
                 ? _value.movement
                 : movement // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            origin: freezed == origin
+                ? _value.origin
+                : origin // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            destinationPrimary: freezed == destinationPrimary
+                ? _value.destinationPrimary
+                : destinationPrimary // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            destinationSecondary: freezed == destinationSecondary
+                ? _value.destinationSecondary
+                : destinationSecondary // ignore: cast_nullable_to_non_nullable
                       as String?,
             created: freezed == created
                 ? _value.created
@@ -124,6 +147,9 @@ abstract class _$$MovementTypeImplCopyWith<$Res>
     String? pick,
     @JsonKey(name: "type_id") int? typeId,
     String? movement,
+    String? origin,
+    @JsonKey(name: "destination_primary") String? destinationPrimary,
+    @JsonKey(name: "destination_secondary") String? destinationSecondary,
     String? created,
     String? category,
   });
@@ -147,6 +173,9 @@ class __$$MovementTypeImplCopyWithImpl<$Res>
     Object? pick = freezed,
     Object? typeId = freezed,
     Object? movement = freezed,
+    Object? origin = freezed,
+    Object? destinationPrimary = freezed,
+    Object? destinationSecondary = freezed,
     Object? created = freezed,
     Object? category = freezed,
   }) {
@@ -167,6 +196,18 @@ class __$$MovementTypeImplCopyWithImpl<$Res>
         movement: freezed == movement
             ? _value.movement
             : movement // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        origin: freezed == origin
+            ? _value.origin
+            : origin // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        destinationPrimary: freezed == destinationPrimary
+            ? _value.destinationPrimary
+            : destinationPrimary // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        destinationSecondary: freezed == destinationSecondary
+            ? _value.destinationSecondary
+            : destinationSecondary // ignore: cast_nullable_to_non_nullable
                   as String?,
         created: freezed == created
             ? _value.created
@@ -189,6 +230,9 @@ class _$MovementTypeImpl implements _MovementType {
     required this.pick,
     @JsonKey(name: "type_id") required this.typeId,
     required this.movement,
+    required this.origin,
+    @JsonKey(name: "destination_primary") required this.destinationPrimary,
+    @JsonKey(name: "destination_secondary") required this.destinationSecondary,
     required this.created,
     required this.category,
   });
@@ -206,13 +250,21 @@ class _$MovementTypeImpl implements _MovementType {
   @override
   final String? movement;
   @override
+  final String? origin;
+  @override
+  @JsonKey(name: "destination_primary")
+  final String? destinationPrimary;
+  @override
+  @JsonKey(name: "destination_secondary")
+  final String? destinationSecondary;
+  @override
   final String? created;
   @override
   final String? category;
 
   @override
   String toString() {
-    return 'MovementType(id: $id, pick: $pick, typeId: $typeId, movement: $movement, created: $created, category: $category)';
+    return 'MovementType(id: $id, pick: $pick, typeId: $typeId, movement: $movement, origin: $origin, destinationPrimary: $destinationPrimary, destinationSecondary: $destinationSecondary, created: $created, category: $category)';
   }
 
   @override
@@ -225,6 +277,11 @@ class _$MovementTypeImpl implements _MovementType {
             (identical(other.typeId, typeId) || other.typeId == typeId) &&
             (identical(other.movement, movement) ||
                 other.movement == movement) &&
+            (identical(other.origin, origin) || other.origin == origin) &&
+            (identical(other.destinationPrimary, destinationPrimary) ||
+                other.destinationPrimary == destinationPrimary) &&
+            (identical(other.destinationSecondary, destinationSecondary) ||
+                other.destinationSecondary == destinationSecondary) &&
             (identical(other.created, created) || other.created == created) &&
             (identical(other.category, category) ||
                 other.category == category));
@@ -232,8 +289,18 @@ class _$MovementTypeImpl implements _MovementType {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, pick, typeId, movement, created, category);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    pick,
+    typeId,
+    movement,
+    origin,
+    destinationPrimary,
+    destinationSecondary,
+    created,
+    category,
+  );
 
   /// Create a copy of MovementType
   /// with the given fields replaced by the non-null parameter values.
@@ -255,6 +322,11 @@ abstract class _MovementType implements MovementType {
     required final String? pick,
     @JsonKey(name: "type_id") required final int? typeId,
     required final String? movement,
+    required final String? origin,
+    @JsonKey(name: "destination_primary")
+    required final String? destinationPrimary,
+    @JsonKey(name: "destination_secondary")
+    required final String? destinationSecondary,
     required final String? created,
     required final String? category,
   }) = _$MovementTypeImpl;
@@ -271,6 +343,14 @@ abstract class _MovementType implements MovementType {
   int? get typeId;
   @override
   String? get movement;
+  @override
+  String? get origin;
+  @override
+  @JsonKey(name: "destination_primary")
+  String? get destinationPrimary;
+  @override
+  @JsonKey(name: "destination_secondary")
+  String? get destinationSecondary;
   @override
   String? get created;
   @override

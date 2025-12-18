@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class NIMSBaseScreen extends StatelessWidget {
-  // final List<Widget> children;
-  // final double horizontalPadding;
 
   final Widget? header;
   final Widget? body;
@@ -10,8 +8,6 @@ class NIMSBaseScreen extends StatelessWidget {
 
   const NIMSBaseScreen({
     super.key,
-    // this.children = const <Widget>[],
-    // this.horizontalPadding = 20,
     this.header,
     this.body,
     this.bottom,
@@ -19,8 +15,6 @@ class NIMSBaseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       bottomNavigationBar: bottom == null
           ? null
@@ -41,19 +35,5 @@ class NIMSBaseScreen extends StatelessWidget {
         ),
       ),
     );
-
-    // return Scaffold(
-    //   backgroundColor: Theme.of(context).colorScheme.surface,
-    //   body: SafeArea(
-    //     child: SingleChildScrollView(
-    //       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-    //       child: Column(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         crossAxisAlignment: CrossAxisAlignment.center,
-    //         children: children,
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

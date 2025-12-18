@@ -32,29 +32,26 @@ class AuthRepository {
           );
           final user = response.data?.userData?.user;
           if (user != null) {
-            await _localService.updateCachedUser(user.toDomain(response.data?.deviceSerialNo ?? ""));
+            await _localService.cacheUser(user.toDomain(response.data?.deviceSerialNo ?? ""));
 
             final platforms = user.platform;
             if (platforms != null && platforms.isNotEmpty == true) {
-              await _localService.updateCachedPlatforms(platforms.map((platform) => platform.toDomain(user.userId ?? "")).toList());
+              await _localService.cachePlatforms(platforms.map((platform) => platform.toDomain(user.userId ?? "")).toList());
             }
 
             final systemPrivileges = user.systemPrivilege;
             if (systemPrivileges != null && systemPrivileges.isNotEmpty == true) {
-              final systemPrivilegeIds = await _localService.updateCachedSystemPrivileges(systemPrivileges.map((systemPrivilege) => systemPrivilege.toDomain(user.userId ?? "")).toList());
+              final systemPrivilegeIds = await _localService.cacheSystemPrivileges(systemPrivileges.map((systemPrivilege) => systemPrivilege.toDomain(user.userId ?? "")).toList());
               final privileges = systemPrivileges.indexed.map((indexedSystemPrivilege) => indexedSystemPrivilege.$2.privileges.toDomain(systemPrivilegeIds[indexedSystemPrivilege.$1])).toList();
-              await _localService.updateCachedPrivileges(privileges);
+              await _localService.cachePrivileges(privileges);
             }
             final lsps = user.lsp;
             if (lsps != null && lsps.isNotEmpty == true) {
-              await _localService.updateCachedLsps(lsps.map((lsp) => lsp.toDomain(user.userId ?? "")).toList());
+              await _localService.cacheLsps(lsps.map((lsp) => lsp.toDomain(user.userId ?? "")).toList());
             }
           }
-
-          break;
         case Error<LoginResponse>():
           developer.log("error", name: "AuthRepository:login:switch");
-          break;
       }
       return result;
     } catch (e, s) {

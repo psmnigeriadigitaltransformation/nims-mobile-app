@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:projects/app/route_name+path+params.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 
 class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
-  const NIMSSpecimenShipmentSummaryCard({super.key});
+  final DomainShipment shipment;
+
+  const NIMSSpecimenShipmentSummaryCard({super.key, required this.shipment});
 
   @override
   Widget build(BuildContext context) {
@@ -25,51 +28,55 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 3,
-                    horizontal: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    color: Theme.of(context).colorScheme.tertiaryContainer,
-                  ),
-                  child: Text(
-                    "PC-288939-29930",
-                    style: Theme.of(context).textTheme.labelMedium,
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 3,
+                      horizontal: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      color: Theme.of(context).colorScheme.tertiaryContainer,
+                    ),
+                    child: Text(
+                      shipment.shipmentNo,
+                      style: Theme.of(context).textTheme.labelMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 24),
+                const SizedBox(width: 20),
                 Expanded(
                   child: Text(
-                    "20 Specimens",
+                    "${shipment.sampleCount} Specimens",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
-                const SizedBox(width: 16),
-                Row(
-                  children: [
-                    Text(
-                      "Sputum",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    Image.asset(
-                      "lib/core/ui/icons/ic_test_tube.png",
-                      height: 16,
-                      width: 16,
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 16),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 16,
-                  color: Theme.of(context).colorScheme.tertiary.withAlpha(100),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          shipment.sampleType,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                      Image.asset(
+                        "lib/core/ui/icons/ic_test_tube.png",
+                        height: 16,
+                        width: 16,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -84,7 +91,7 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
                     Flexible(
                       flex: 2,
                       child: Text(
-                        "National Reference Hospital",
+                        shipment.destinationFacilityName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.start,
@@ -93,7 +100,7 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        "Hub",
+                        shipment.destinationLocationType,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,

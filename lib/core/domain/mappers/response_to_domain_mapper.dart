@@ -104,6 +104,9 @@ extension RemoteMovementTypeExtension on RemoteMovementType {
       typeId: typeId,
       pick: pick,
       movement: movement,
+      origin: origin,
+      destinationPrimary: destinationPrimary,
+      destinationSecondary: destinationSecondary,
       created: created,
       category: category?.name,
     );

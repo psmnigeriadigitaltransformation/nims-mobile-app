@@ -11,12 +11,9 @@ part 'result_pickup_screen_state.freezed.dart';
 @freezed
 class ResultPickUpScreenState with _$ResultPickUpScreenState {
   const factory ResultPickUpScreenState({
-    required List<DomainFacility> facilities,
-    required String movement
+    @Default([]) List<DomainFacility> facilities,
+    DomainMovementType? movementType
   }) = _ResultPickUpScreenStatee;
 
-  factory ResultPickUpScreenState.initial() => const ResultPickUpScreenState(
-    facilities: [],
-    movement: ""
-  );
+  // factory ResultPickUpScreenState.initial() => const ResultPickUpScreenState();
 }

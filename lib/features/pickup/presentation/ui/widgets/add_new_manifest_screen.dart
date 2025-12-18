@@ -1,70 +1,105 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/ui/screens/nims_screen.dart';
+import 'package:projects/core/ui/screens/nims_base_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
+import 'package:projects/features/pickup/presentation/ui/model/add_new_manifest_screen_state.dart';
 import 'package:projects/features/pickup/presentation/ui/widgets/specimen_deletion_confirmation_dialog.dart';
-import '../../../../../core/domain/models/movement_type.dart';
-import '../../../../../core/ui/widgets/nims_alert_dialog.dart';
+import '../../../../../core/ui/widgets/nims_alert_dialog_content.dart';
+import '../../../../../core/ui/widgets/nims_error_content.dart';
 import '../../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../../core/ui/widgets/nims_specimen_card.dart';
-import '../../../../dashboard/domain/mock.dart';
 import '../../../providers.dart';
 import 'add_new_specimen_dialog.dart';
 
 class AddNewManifestScreen extends ConsumerWidget {
   final DomainMovementType movementType;
+  final DomainFacility pickUpFacility;
 
-  const AddNewManifestScreen({super.key, required this.movementType});
+  const AddNewManifestScreen({
+    super.key,
+    required this.movementType,
+    required this.pickUpFacility,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
-    final asyncValueState = ref.watch(
-      addNewManifestScreenStateNotifierProvider(movementType.movement ?? ""),
+    final args = (movementType: movementType, pickUpFacility: pickUpFacility);
+
+    ref.listen<AsyncValue<AddNewManifestScreenState>>(
+      addNewManifestScreenStateNotifierProvider(args),
+      (previous, next) {
+        final prevShow = previous?.value?.alert.show ?? false;
+        final nextShow = next.value?.alert.show ?? false;
+
+        if (!prevShow && nextShow) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (buildContext) => NIMSAlertDialogContent(
+              message: next.value!.alert.message,
+              onTapActionButton: () {
+                context.pop();
+                ref
+                    .read(
+                      addNewManifestScreenStateNotifierProvider(args).notifier,
+                    )
+                    .onDismissAlertDialog();
+              },
+              actionButtonLabel: 'Okay',
+            ),
+          );
+        }
+      },
     );
 
-    return NIMSScreen(
-      children: [
-        SizedBox(height: 16),
+    final asyncValueState = ref.watch(
+      addNewManifestScreenStateNotifierProvider(args),
+    );
 
-        /// ----------------------------------------
-        /// TITLE + SUBTITLE
-        /// ----------------------------------------
-        Row(
-          children: [
-            NIMSRoundIconButton(
-              icon: Icons.arrow_back_ios_rounded,
-              onPressed: () => {},
-            ),
-            Spacer(),
-            Text(
-              "Add New Manifest",
-              style: TextTheme.of(context).titleSmall,
-              textAlign: TextAlign.center,
-            ),
-            Spacer(),
-            SizedBox(width: 40),
-          ],
-        ),
-
-        SizedBox(height: 8),
-
-        Text(
-          "Gwagwalada General Hospital",
-          style: TextTheme.of(context).bodySmall,
-        ),
-
-        SizedBox(height: 50),
-
-        /// ---------------------------------------------------------
-        /// ORIGINATING FACILITY + DESTINATION FACILITY DROPDOWN MENU
-        /// ---------------------------------------------------------
-        asyncValueState.when(
-          data: (state) => Column(
+    return asyncValueState.when(
+      data: (data) => NIMSBaseScreen(
+        header: Padding(
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+          child: Column(
             children: [
+              SizedBox(height: 16),
+
+              /// ----------------------------------------
+              /// TITLE + SUBTITLE
+              /// ----------------------------------------
+              Row(
+                children: [
+                  NIMSRoundIconButton(
+                    icon: Icons.arrow_back_ios_rounded,
+                    onPressed: () => {},
+                  ),
+                  Spacer(),
+                  Text(
+                    "New Manifest",
+                    style: TextTheme.of(context).titleSmall,
+                    textAlign: TextAlign.center,
+                  ),
+                  Spacer(),
+                  SizedBox(width: 40),
+                ],
+              ),
+
+              SizedBox(height: 8),
+
+              Text(
+                "Gwagwalada General Hospital",
+                style: TextTheme.of(context).bodySmall,
+              ),
+
+              SizedBox(height: 42),
+
               SizedBox(
-                height: 150,
+                height: 136,
                 child: Row(
                   children: [
                     Padding(
@@ -98,6 +133,10 @@ class AddNewManifestScreen extends ConsumerWidget {
                       ),
                     ),
                     SizedBox(width: 16),
+
+                    /// ---------------------------------------------------------
+                    /// ORIGINATING FACILITY + DESTINATION FACILITY DROPDOWN MENU
+                    /// ---------------------------------------------------------
                     Column(
                       spacing: 28,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,10 +150,10 @@ class AddNewManifestScreen extends ConsumerWidget {
                           selectedTrailingIcon: Icon(
                             Icons.keyboard_arrow_up_rounded,
                           ),
-                          width: size.width - 80,
+                          width: size.width - 76,
                           label: Text("Destination Facility"),
                           dropdownMenuEntries: [
-                            ...state.facilities.map(
+                            ...data.facilities.map(
                               (facility) => DropdownMenuEntry(
                                 value: facility.facilityName ?? "",
                                 labelWidget: Text(
@@ -137,7 +176,20 @@ class AddNewManifestScreen extends ConsumerWidget {
                               ),
                             ),
                           ],
-                          onSelected: (value) {},
+                          onSelected: (value) {
+                            ref
+                                .read(
+                                  addNewManifestScreenStateNotifierProvider(
+                                    args,
+                                  ).notifier,
+                                )
+                                .onSelectDestinationFacility(
+                                  data.facilities.firstWhere(
+                                    (facility) =>
+                                        facility.facilityName == value,
+                                  ),
+                                );
+                          },
                         ),
                       ],
                     ),
@@ -148,10 +200,10 @@ class AddNewManifestScreen extends ConsumerWidget {
               DropdownMenu<String>(
                 trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
                 selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
-                width: size.width - 48,
+                width: size.width - 46,
                 label: Text("Specimen Type"),
                 dropdownMenuEntries: [
-                  ...state.sampleTypes.map(
+                  ...data.sampleTypes.map(
                     (sample) => DropdownMenuEntry(
                       value: sample.fullName ?? "",
                       labelWidget: Text(
@@ -172,119 +224,196 @@ class AddNewManifestScreen extends ConsumerWidget {
                     ),
                   ),
                 ],
-                onSelected: (value) {},
-              ),
-
-              SizedBox(height: 40),
-
-              /// -------------------------------
-              /// SPECIMENS
-              /// -------------------------------
-              Row(
-                children: [
-                  Text(
-                    "Specimens (2)",
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  Spacer(),
-                  Container(
-                    padding: EdgeInsetsGeometry.all(8),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-
-                    child: InkWell(
-                      splashColor: Theme.of(context).splashColor,
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      child: Center(
-                        child: Padding(
-                          padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-                          child: Text(
-                            "Add Specimen",
-                            style: Theme.of(context).textTheme.labelSmall
-                                ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                ),
-                          ),
+                onSelected: (value) {
+                  ref
+                      .read(
+                        addNewManifestScreenStateNotifierProvider(
+                          args,
+                        ).notifier,
+                      )
+                      .onSelectSampleType(
+                        data.sampleTypes.firstWhere(
+                          (sampleType) => sampleType.fullName == value,
                         ),
-                      ),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (builder) => AddNewSpecimenDialog(),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                      );
+                },
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 30),
 
-              SizedBox(
-                height: size.height * 0.379,
-                child: Scrollbar(
-                  trackVisibility: true,
-                  child: ListView(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              if (data.isSpecimenCountTitleAndAddSpecimenButtonVisible)
+                Padding(
+                  padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+                  child: Row(
                     children: [
-                      ...List.generate(
-                        10,
-                        (x) => Padding(
-                          padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-                          child: NIMSSpecimenCard(
-                            onTapDelete: () {
-                              showDialog(
-                                context: context,
-                                builder: (builder) =>
-                                    SpecimenDeletionConfirmationDialog(),
-                              );
-                            },
-                            actionLabel: "Delete",
+                      Text(
+                        "Specimens (${data.samples.length})",
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      Spacer(),
+                      InkWell(
+                        splashColor: Theme.of(context).splashColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        child: Container(
+                          padding: EdgeInsetsGeometry.all(8),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsetsGeometry.symmetric(
+                                horizontal: 8,
+                              ),
+                              child: Text(
+                                "Add Specimen",
+                                style: Theme.of(context).textTheme.labelSmall
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onPrimary,
+                                    ),
+                              ),
+                            ),
                           ),
                         ),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (builder) => AddNewSpecimenDialog(
+                              manifestNo: data.manifestNo,
+                              onSaveSpecimen: (sample) {
+                                ref
+                                    .read(
+                                      addNewManifestScreenStateNotifierProvider(
+                                        args,
+                                      ).notifier,
+                                    )
+                                    .onSavedSpecimen(sample);
+                              },
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
                 ),
-              ),
-
-              SizedBox(height: 28),
-
-              // ----------------------------------------S
-              /// SAVE MANIFEST BUTTON
-              /// ----------------------------------------
-              NIMSPrimaryButton(text: "Save Manifest", onPressed: () {}),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
             ],
           ),
-          error: (e, s) => NIMSAlertDialog(
-            message: e.toString(),
-            onTapActionButton: () {
-              ref
-                  .read(
-                    addNewManifestScreenStateNotifierProvider(
-                      movementType.movement ?? "",
-                    ).notifier,
-                  )
-                  .refreshState();
-            },
-            actionButtonLabel: 'Retry',
-          ),
-          loading: () => const Padding(
-            padding: EdgeInsets.all(40),
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            ),
+        ),
+        body: Padding(
+          padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              /// -------------------------------
+              /// SPECIMENS
+              /// -------------------------------
+              if (data.isDestinationFacilitySelected)
+                Column(
+                  children: [
+                    // const SizedBox(height: 16),
+                    SizedBox(
+                      // height: size.height * 0.379,
+                      child: Scrollbar(
+                        // controller: ScrollController(),
+                        trackVisibility: true,
+                        child: ListView.builder(
+                          controller: ScrollController(),
+                          shrinkWrap: true,
+                          itemCount: data.samples.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: EdgeInsetsGeometry.symmetric(
+                                vertical: 4,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsetsGeometry.symmetric(
+                                        horizontal: 8,
+                                      ),
+                                      child: NIMSSpecimenCard(
+                                        sample: data.samples[index],
+                                        onTapDelete: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (builder) =>
+                                                SpecimenDeletionConfirmationDialog(
+                                                  sample: data.samples[index],
+                                                  onDelete: (sample) {
+                                                    ref
+                                                        .read(
+                                                          addNewManifestScreenStateNotifierProvider(
+                                                            args,
+                                                          ).notifier,
+                                                        )
+                                                        .onConfirmDeleteSpecimen(
+                                                          sample,
+                                                        );
+                                                  },
+                                                ),
+                                          );
+                                        },
+                                        actionLabel: "Delete",
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
           ),
         ),
-      ],
+
+        /// ----------------------------------------
+        /// SAVE MANIFEST BUTTON
+        /// ----------------------------------------
+        bottom: Padding(
+          padding: EdgeInsetsGeometry.only(bottom: 16),
+          child: NIMSPrimaryButton(
+            text: "Save Manifest",
+            onPressed: () {
+              ref
+                  .read(
+                    addNewManifestScreenStateNotifierProvider(args).notifier,
+                  )
+                  .onSaveManifest(() {
+                    context.pop();
+                  });
+            },
+            enabled: data.isSaveManifestButtonEnabled,
+          ),
+        ),
+      ),
+      error: (e, s) => NIMSErrorContent(
+        message: e.toString(),
+        onTapActionButton: () {
+          ref
+              .read(addNewManifestScreenStateNotifierProvider(args).notifier)
+              .refreshState();
+        },
+        actionButtonLabel: 'Retry',
+      ),
+      // todo: update to loadind icon
+      loading: () => Container(
+        color: Theme.of(context).colorScheme.surface,
+        child: Center(
+          child: const SizedBox(
+            width: 40,
+            height: 40,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+      ),
     );
   }
 }

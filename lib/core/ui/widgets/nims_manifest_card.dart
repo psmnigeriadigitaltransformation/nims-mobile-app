@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 
 class NIMSManifestCard extends StatelessWidget {
-  final String manifestID;
-  final String destinationName;
+  final DomainManifest manifest;
   final VoidCallback onTapManifest;
   final VoidCallback onTapDelete;
   final bool isSelected;
 
   const NIMSManifestCard({
     super.key,
-    required this.manifestID,
-    required this.destinationName,
+    required this.manifest,
     required this.onTapManifest,
     required this.isSelected,
     required this.onTapDelete,
@@ -46,7 +45,7 @@ class NIMSManifestCard extends StatelessWidget {
                     color: Theme.of(context).colorScheme.tertiaryContainer,
                   ),
                   child: Text(
-                    manifestID,
+                    manifest.manifestNo,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                 ),
@@ -63,13 +62,15 @@ class NIMSManifestCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
               child: Row(
                 children: [
-                  Text(
-                    destinationName,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
-                  ),
-                  Spacer(),
+                 Expanded(child:  Text(
+                   manifest.originatingFacilityName,
+                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                     color: Theme.of(context).colorScheme.tertiary,
+                   ),
+                   maxLines: 1,
+                   overflow: TextOverflow.ellipsis,
+                 ),),
+                  SizedBox(width: 24,),
                   InkWell(
                     onTap: onTapDelete,
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -108,7 +109,7 @@ class NIMSManifestCard extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 4),
                     child: Text(
-                      "200 Specimens",
+                      "${manifest.sampleCount} Specimens",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall,
@@ -119,7 +120,7 @@ class NIMSManifestCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "Viral Load",
+                      manifest.sampleType,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,

@@ -13,6 +13,7 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
   patientCode: json['patient_code'] as String,
   age: json['age'] as String,
   gender: json['gender'] as String,
+  comment: json['comment'] as String?,
   createdAt: json['created_at'] as String?,
 );
 
@@ -24,5 +25,6 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
       'patient_code': instance.patientCode,
       'age': instance.age,
       'gender': instance.gender,
+      'comment': instance.comment,
       'created_at': instance.createdAt,
     };

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projects/core/domain/models/sample.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
@@ -52,7 +53,9 @@ class ShipmentDetailsScreen extends StatelessWidget {
         /// -------------------------------------------
         Row(
           children: [
-            Expanded(child: NIMSOriginDestinationLinkView()),
+            Expanded(
+              child: NIMSOriginDestinationLinkView(origin: '', destination: ''),
+            ),
             NIMSStatusChip(
               status: "Delivered",
               statusColor: NIMSColors.green05,
@@ -107,7 +110,15 @@ class ShipmentDetailsScreen extends StatelessWidget {
                   10,
                   (x) => Padding(
                     padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-                    child: NIMSSpecimenCard(),
+                    child: NIMSSpecimenCard(
+                      sample: Sample(
+                        manifestNo: "82990-399-SM",
+                        sampleCode: "SMA-199002",
+                        patientCode: "BSNNS-1902",
+                        age: "27 Y",
+                        gender: "M",
+                      ),
+                    ),
                   ),
                 ),
               ],

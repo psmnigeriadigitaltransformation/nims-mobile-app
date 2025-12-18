@@ -39,6 +39,8 @@ mixin _$Manifest {
   String? get temperature => throw _privateConstructorUsedError;
   @JsonKey(name: 'user_id')
   String get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'originating_facility_name')
+  String get originatingFacilityName => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   String? get createdAt => throw _privateConstructorUsedError;
 
@@ -68,6 +70,7 @@ abstract class $ManifestCopyWith<$Res> {
     @JsonKey(name: 'lsp_code') String lspCode,
     String? temperature,
     @JsonKey(name: 'user_id') String userId,
+    @JsonKey(name: 'originating_facility_name') String originatingFacilityName,
     @JsonKey(name: 'created_at') String? createdAt,
   });
 }
@@ -97,6 +100,7 @@ class _$ManifestCopyWithImpl<$Res, $Val extends Manifest>
     Object? lspCode = null,
     Object? temperature = freezed,
     Object? userId = null,
+    Object? originatingFacilityName = null,
     Object? createdAt = freezed,
   }) {
     return _then(
@@ -141,6 +145,10 @@ class _$ManifestCopyWithImpl<$Res, $Val extends Manifest>
                 ? _value.userId
                 : userId // ignore: cast_nullable_to_non_nullable
                       as String,
+            originatingFacilityName: null == originatingFacilityName
+                ? _value.originatingFacilityName
+                : originatingFacilityName // ignore: cast_nullable_to_non_nullable
+                      as String,
             createdAt: freezed == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
@@ -171,6 +179,7 @@ abstract class _$$ManifestImplCopyWith<$Res>
     @JsonKey(name: 'lsp_code') String lspCode,
     String? temperature,
     @JsonKey(name: 'user_id') String userId,
+    @JsonKey(name: 'originating_facility_name') String originatingFacilityName,
     @JsonKey(name: 'created_at') String? createdAt,
   });
 }
@@ -199,6 +208,7 @@ class __$$ManifestImplCopyWithImpl<$Res>
     Object? lspCode = null,
     Object? temperature = freezed,
     Object? userId = null,
+    Object? originatingFacilityName = null,
     Object? createdAt = freezed,
   }) {
     return _then(
@@ -243,6 +253,10 @@ class __$$ManifestImplCopyWithImpl<$Res>
             ? _value.userId
             : userId // ignore: cast_nullable_to_non_nullable
                   as String,
+        originatingFacilityName: null == originatingFacilityName
+            ? _value.originatingFacilityName
+            : originatingFacilityName // ignore: cast_nullable_to_non_nullable
+                  as String,
         createdAt: freezed == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
@@ -266,6 +280,8 @@ class _$ManifestImpl implements _Manifest {
     @JsonKey(name: 'lsp_code') required this.lspCode,
     this.temperature,
     @JsonKey(name: 'user_id') required this.userId,
+    @JsonKey(name: 'originating_facility_name')
+    required this.originatingFacilityName,
     @JsonKey(name: 'created_at') this.createdAt,
   });
 
@@ -301,12 +317,15 @@ class _$ManifestImpl implements _Manifest {
   @JsonKey(name: 'user_id')
   final String userId;
   @override
+  @JsonKey(name: 'originating_facility_name')
+  final String originatingFacilityName;
+  @override
   @JsonKey(name: 'created_at')
   final String? createdAt;
 
   @override
   String toString() {
-    return 'Manifest(id: $id, manifestNo: $manifestNo, originId: $originId, destinationId: $destinationId, sampleType: $sampleType, sampleCount: $sampleCount, phlebotomyNo: $phlebotomyNo, lspCode: $lspCode, temperature: $temperature, userId: $userId, createdAt: $createdAt)';
+    return 'Manifest(id: $id, manifestNo: $manifestNo, originId: $originId, destinationId: $destinationId, sampleType: $sampleType, sampleCount: $sampleCount, phlebotomyNo: $phlebotomyNo, lspCode: $lspCode, temperature: $temperature, userId: $userId, originatingFacilityName: $originatingFacilityName, createdAt: $createdAt)';
   }
 
   @override
@@ -331,6 +350,11 @@ class _$ManifestImpl implements _Manifest {
             (identical(other.temperature, temperature) ||
                 other.temperature == temperature) &&
             (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(
+                  other.originatingFacilityName,
+                  originatingFacilityName,
+                ) ||
+                other.originatingFacilityName == originatingFacilityName) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
@@ -349,6 +373,7 @@ class _$ManifestImpl implements _Manifest {
     lspCode,
     temperature,
     userId,
+    originatingFacilityName,
     createdAt,
   );
 
@@ -378,6 +403,8 @@ abstract class _Manifest implements Manifest {
     @JsonKey(name: 'lsp_code') required final String lspCode,
     final String? temperature,
     @JsonKey(name: 'user_id') required final String userId,
+    @JsonKey(name: 'originating_facility_name')
+    required final String originatingFacilityName,
     @JsonKey(name: 'created_at') final String? createdAt,
   }) = _$ManifestImpl;
 
@@ -412,6 +439,9 @@ abstract class _Manifest implements Manifest {
   @override
   @JsonKey(name: 'user_id')
   String get userId;
+  @override
+  @JsonKey(name: 'originating_facility_name')
+  String get originatingFacilityName;
   @override
   @JsonKey(name: 'created_at')
   String? get createdAt;

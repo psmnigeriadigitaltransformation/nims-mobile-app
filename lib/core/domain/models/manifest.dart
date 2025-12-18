@@ -16,6 +16,7 @@ class Manifest with _$Manifest {
     @JsonKey(name: 'lsp_code') required String lspCode,
     String? temperature,
     @JsonKey(name: 'user_id') required String userId,
+    @JsonKey(name: 'originating_facility_name') required String originatingFacilityName,
     @JsonKey(name: 'created_at') String? createdAt,
   }) = _Manifest;
 

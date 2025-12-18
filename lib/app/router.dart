@@ -6,12 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/ui/widgets/nims_alert_dialog.dart';
+import 'package:projects/core/ui/widgets/nims_error_content.dart';
 import 'package:projects/features/dashboard/domain/route_type.dart';
 import 'package:projects/features/dashboard/presentation/ui/dashboard_screen.dart';
 import 'package:projects/features/dashboard/presentation/ui/route_details_screen.dart';
 import 'package:projects/features/facilities/presentation/ui/facilities_screen.dart';
-import 'package:projects/features/pickup/presentation/ui/widgets/shipments_screen.dart';
+import 'package:projects/features/pickup/presentation/ui/widgets/shipment_screen.dart';
 import 'package:projects/features/profile/presentation/ui/profile_screen.dart';
 import '../features/auth/presentation/ui/login/login_screen.dart';
 import '../features/delivery/presentation/ui/result_delivery_approval_screen.dart';
@@ -54,7 +54,7 @@ final router = GoRouter(
         final movementTypeJson =
             state.uri.queryParameters[movementTypeQueryParam];
         if (movementTypeJson == null) {
-          return NIMSAlertDialog(
+          return NIMSErrorContent(
             message: "Something went wrong",
             onTapActionButton: () => context.pop(),
             actionButtonLabel: "Go Back",
@@ -73,9 +73,9 @@ final router = GoRouter(
       path: resultPickUpPath,
       builder: (context, state) {
         final movementTypeJson =
-        state.uri.queryParameters[movementTypeQueryParam];
+            state.uri.queryParameters[movementTypeQueryParam];
         if (movementTypeJson == null) {
-          return NIMSAlertDialog(
+          return NIMSErrorContent(
             message: "Something went wrong",
             onTapActionButton: () => context.pop(),
             actionButtonLabel: "Go Back",
@@ -86,7 +86,6 @@ final router = GoRouter(
           );
           return ResultPickUpScreen(movementType: movementType);
         }
-
       },
     ),
     GoRoute(
@@ -108,30 +107,127 @@ final router = GoRouter(
       name: specimenDispatchApprovalScreen,
       path: specimenDispatchApprovalPath,
       builder: (context, state) {
-        final routeType = RouteType.values.firstWhere(
-          (type) =>
-              type.name == state.uri.queryParameters[movementTypeQueryParam],
-          orElse: () => RouteType.spokeToPCRLabGeneXpert,
+        final movementTypeJson =
+            state.uri.queryParameters[movementTypeQueryParam];
+        final shipmentsJson = state.uri.queryParameters[shipmentsQueryParam];
+        final pickupFacilityJson =
+            state.uri.queryParameters[pickupFacilityQueryParam];
+        final destinationFacilityJson =
+            state.uri.queryParameters[destinationFacilityQueryParam];
+
+        developer.log(
+          movementTypeJson.toString(),
+          name: "GoRoute:specimenDispatchApprovalScreen:movementTypeJson",
         );
-        if (kDebugMode) {
-          print(routeType);
+        developer.log(
+          shipmentsJson.toString(),
+          name: "GoRoute:specimenDispatchApprovalScreen:shipmentsJson",
+        );
+        developer.log(
+          pickupFacilityJson.toString(),
+          name: "GoRoute:specimenDispatchApprovalScreen:pickupFacilityJson",
+        );
+        developer.log(
+          destinationFacilityJson.toString(),
+          name:
+              "GoRoute:specimenDispatchApprovalScreen:destinationFacilityJson",
+        );
+
+        if (movementTypeJson == null ||
+            shipmentsJson == null ||
+            pickupFacilityJson == null ||
+            destinationFacilityJson == null) {
+          return NIMSErrorContent(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final movementType = DomainMovementType.fromJson(
+            jsonDecode(movementTypeJson),
+          );
+          final pickupFacility = DomainFacility.fromJson(
+            jsonDecode(pickupFacilityJson),
+          );
+          final destinationFacility = DomainFacility.fromJson(
+            jsonDecode(destinationFacilityJson),
+          );
+          final shipments = List<DomainShipment>.from(
+            jsonDecode(
+              shipmentsJson,
+            ).map((shipmentJson) => DomainShipment.fromJson(shipmentJson)),
+          );
+
+          return SpecimenShipmentApprovalScreen(
+            movementType: movementType,
+            pickUpFacility: pickupFacility,
+            shipments: shipments,
+            destinationFacility: destinationFacility,
+          );
         }
-        return SpecimenShipmentApprovalScreen(routeType: routeType);
       },
     ),
     GoRoute(
       name: specimenDeliveryApprovalScreen,
       path: specimenDeliveryApprovalPath,
       builder: (context, state) {
-        final routeType = RouteType.values.firstWhere(
-          (type) =>
-              type.name == state.uri.queryParameters[movementTypeQueryParam],
-          orElse: () => RouteType.spokeToPCRLabGeneXpert,
+        final movementTypeJson =
+            state.uri.queryParameters[movementTypeQueryParam];
+        final shipmentsJson = state.uri.queryParameters[shipmentsQueryParam];
+        final pickupFacilityJson =
+            state.uri.queryParameters[pickupFacilityQueryParam];
+        final destinationFacilityJson =
+            state.uri.queryParameters[pickupFacilityQueryParam];
+
+        developer.log(
+          movementTypeJson.toString(),
+          name: "GoRoute:specimenDispatchApprovalScreen:movementTypeJson",
         );
-        if (kDebugMode) {
-          print(routeType);
+        developer.log(
+          shipmentsJson.toString(),
+          name: "GoRoute:specimenDispatchApprovalScreen:shipmentsJson",
+        );
+        developer.log(
+          pickupFacilityJson.toString(),
+          name: "GoRoute:specimenDispatchApprovalScreen:pickupFacilityJson",
+        );
+        developer.log(
+          destinationFacilityJson.toString(),
+          name:
+              "GoRoute:specimenDispatchApprovalScreen:destinationFacilityJson",
+        );
+
+        if (movementTypeJson == null ||
+            shipmentsJson == null ||
+            pickupFacilityJson == null ||
+            destinationFacilityJson == null) {
+          return NIMSErrorContent(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final movementType = DomainMovementType.fromJson(
+            jsonDecode(movementTypeJson),
+          );
+          final pickupFacility = DomainFacility.fromJson(
+            jsonDecode(pickupFacilityJson),
+          );
+          final destinationFacility = DomainFacility.fromJson(
+            jsonDecode(destinationFacilityJson),
+          );
+          final shipments = List<DomainShipment>.from(
+            jsonDecode(
+              shipmentsJson,
+            ).map((shipmentJson) => DomainShipment.fromJson(shipmentJson)),
+          );
+
+          return SpecimenDeliveryApprovalScreen(
+            movementType: movementType,
+            pickUpFacility: pickupFacility,
+            shipments: shipments,
+          );
         }
-        return SpecimenDeliveryApprovalScreen(routeType: routeType);
       },
     ),
     GoRoute(
@@ -153,11 +249,12 @@ final router = GoRouter(
       name: addNewManifestScreen,
       path: addNewManifestPath,
       builder: (context, state) {
-
         final movementTypeJson =
-        state.uri.queryParameters[movementTypeQueryParam];
-        if (movementTypeJson == null) {
-          return NIMSAlertDialog(
+            state.uri.queryParameters[movementTypeQueryParam];
+        final pickUpFacilityJson =
+            state.uri.queryParameters[pickupFacilityQueryParam];
+        if (movementTypeJson == null || pickUpFacilityJson == null) {
+          return NIMSErrorContent(
             message: "Something went wrong",
             onTapActionButton: () => context.pop(),
             actionButtonLabel: "Go Back",
@@ -166,7 +263,13 @@ final router = GoRouter(
           final movementType = DomainMovementType.fromJson(
             jsonDecode(movementTypeJson),
           );
-          return AddNewManifestScreen(movementType: movementType);
+          final pickUpFacility = DomainFacility.fromJson(
+            jsonDecode(pickUpFacilityJson),
+          );
+          return AddNewManifestScreen(
+            movementType: movementType,
+            pickUpFacility: pickUpFacility,
+          );
         }
       },
     ),
@@ -205,9 +308,27 @@ final router = GoRouter(
       path: shipmentsPath,
       builder: (context, state) {
         final movementTypeJson =
-        state.uri.queryParameters[movementTypeQueryParam];
-        if (movementTypeJson == null) {
-          return NIMSAlertDialog(
+            state.uri.queryParameters[movementTypeQueryParam];
+        final selectedManifestsJson =
+            state.uri.queryParameters[manifestsQueryParam];
+        final facilityJson = state.uri.queryParameters[pickupFacilityQueryParam];
+
+        developer.log(
+          movementTypeJson.toString(),
+          name: "GoRoute:shipmentsScreen:movementTypeJson",
+        );
+        developer.log(
+          selectedManifestsJson.toString(),
+          name: "GoRoute:shipmentsScreen:selectedManifestsJson",
+        );
+        developer.log(
+          facilityJson.toString(),
+          name: "GoRoute:shipmentsScreen:facilityJson",
+        );
+        if (movementTypeJson == null ||
+            selectedManifestsJson == null ||
+            facilityJson == null) {
+          return NIMSErrorContent(
             message: "Something went wrong",
             onTapActionButton: () => context.pop(),
             actionButtonLabel: "Go Back",
@@ -216,7 +337,20 @@ final router = GoRouter(
           final movementType = DomainMovementType.fromJson(
             jsonDecode(movementTypeJson),
           );
-          return ShipmentsScreen(movementType: movementType);
+          final manifests = List<DomainManifest>.from(
+            jsonDecode(
+              selectedManifestsJson,
+            ).map((manifestJson) => DomainManifest.fromJson(manifestJson)),
+          );
+          developer.log(manifests.toString(), name: "manifests");
+          final facility = DomainFacility.fromJson(jsonDecode(facilityJson));
+          developer.log(manifests.toString(), name: "facility");
+
+          return ShipmentScreen(
+            movementType: movementType,
+            manifests: manifests,
+            pickUpFacility: facility,
+          );
         }
       },
     ),

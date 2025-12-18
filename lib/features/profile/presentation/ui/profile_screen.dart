@@ -27,7 +27,16 @@ class ProfileScreen extends ConsumerWidget {
     final AsyncValue<DomainUser?> userAsyncValue = ref.watch(userProvider);
 
     return userAsyncValue.when(
-      loading: () => const SizedBox(height: 40, width: 40,),
+      loading: () => Container(
+        color: Theme.of(context).colorScheme.surface,
+        child: Center(
+          child: const SizedBox(
+            width: 40,
+            height: 40,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        ),
+      ),
       error: (err, stack) => Text('Error: $err'),
       data: (user) {
         return NIMSBaseScreen(

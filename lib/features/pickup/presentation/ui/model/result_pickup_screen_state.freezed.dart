@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ResultPickUpScreenState {
   List<Facility> get facilities => throw _privateConstructorUsedError;
-  String get movement => throw _privateConstructorUsedError;
+  MovementType? get movementType => throw _privateConstructorUsedError;
 
   /// Create a copy of ResultPickUpScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -34,7 +34,9 @@ abstract class $ResultPickUpScreenStateCopyWith<$Res> {
     $Res Function(ResultPickUpScreenState) then,
   ) = _$ResultPickUpScreenStateCopyWithImpl<$Res, ResultPickUpScreenState>;
   @useResult
-  $Res call({List<Facility> facilities, String movement});
+  $Res call({List<Facility> facilities, MovementType? movementType});
+
+  $MovementTypeCopyWith<$Res>? get movementType;
 }
 
 /// @nodoc
@@ -54,20 +56,34 @@ class _$ResultPickUpScreenStateCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? facilities = null, Object? movement = null}) {
+  $Res call({Object? facilities = null, Object? movementType = freezed}) {
     return _then(
       _value.copyWith(
             facilities: null == facilities
                 ? _value.facilities
                 : facilities // ignore: cast_nullable_to_non_nullable
                       as List<Facility>,
-            movement: null == movement
-                ? _value.movement
-                : movement // ignore: cast_nullable_to_non_nullable
-                      as String,
+            movementType: freezed == movementType
+                ? _value.movementType
+                : movementType // ignore: cast_nullable_to_non_nullable
+                      as MovementType?,
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of ResultPickUpScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MovementTypeCopyWith<$Res>? get movementType {
+    if (_value.movementType == null) {
+      return null;
+    }
+
+    return $MovementTypeCopyWith<$Res>(_value.movementType!, (value) {
+      return _then(_value.copyWith(movementType: value) as $Val);
+    });
   }
 }
 
@@ -80,7 +96,10 @@ abstract class _$$ResultPickUpScreenStateeImplCopyWith<$Res>
   ) = __$$ResultPickUpScreenStateeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Facility> facilities, String movement});
+  $Res call({List<Facility> facilities, MovementType? movementType});
+
+  @override
+  $MovementTypeCopyWith<$Res>? get movementType;
 }
 
 /// @nodoc
@@ -100,17 +119,17 @@ class __$$ResultPickUpScreenStateeImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? facilities = null, Object? movement = null}) {
+  $Res call({Object? facilities = null, Object? movementType = freezed}) {
     return _then(
       _$ResultPickUpScreenStateeImpl(
         facilities: null == facilities
             ? _value._facilities
             : facilities // ignore: cast_nullable_to_non_nullable
                   as List<Facility>,
-        movement: null == movement
-            ? _value.movement
-            : movement // ignore: cast_nullable_to_non_nullable
-                  as String,
+        movementType: freezed == movementType
+            ? _value.movementType
+            : movementType // ignore: cast_nullable_to_non_nullable
+                  as MovementType?,
       ),
     );
   }
@@ -120,12 +139,13 @@ class __$$ResultPickUpScreenStateeImplCopyWithImpl<$Res>
 
 class _$ResultPickUpScreenStateeImpl implements _ResultPickUpScreenStatee {
   const _$ResultPickUpScreenStateeImpl({
-    required final List<Facility> facilities,
-    required this.movement,
+    final List<Facility> facilities = const [],
+    this.movementType,
   }) : _facilities = facilities;
 
   final List<Facility> _facilities;
   @override
+  @JsonKey()
   List<Facility> get facilities {
     if (_facilities is EqualUnmodifiableListView) return _facilities;
     // ignore: implicit_dynamic_type
@@ -133,11 +153,11 @@ class _$ResultPickUpScreenStateeImpl implements _ResultPickUpScreenStatee {
   }
 
   @override
-  final String movement;
+  final MovementType? movementType;
 
   @override
   String toString() {
-    return 'ResultPickUpScreenState(facilities: $facilities, movement: $movement)';
+    return 'ResultPickUpScreenState(facilities: $facilities, movementType: $movementType)';
   }
 
   @override
@@ -149,15 +169,15 @@ class _$ResultPickUpScreenStateeImpl implements _ResultPickUpScreenStatee {
               other._facilities,
               _facilities,
             ) &&
-            (identical(other.movement, movement) ||
-                other.movement == movement));
+            (identical(other.movementType, movementType) ||
+                other.movementType == movementType));
   }
 
   @override
   int get hashCode => Object.hash(
     runtimeType,
     const DeepCollectionEquality().hash(_facilities),
-    movement,
+    movementType,
   );
 
   /// Create a copy of ResultPickUpScreenState
@@ -174,14 +194,14 @@ class _$ResultPickUpScreenStateeImpl implements _ResultPickUpScreenStatee {
 
 abstract class _ResultPickUpScreenStatee implements ResultPickUpScreenState {
   const factory _ResultPickUpScreenStatee({
-    required final List<Facility> facilities,
-    required final String movement,
+    final List<Facility> facilities,
+    final MovementType? movementType,
   }) = _$ResultPickUpScreenStateeImpl;
 
   @override
   List<Facility> get facilities;
   @override
-  String get movement;
+  MovementType? get movementType;
 
   /// Create a copy of ResultPickUpScreenState
   /// with the given fields replaced by the non-null parameter values.

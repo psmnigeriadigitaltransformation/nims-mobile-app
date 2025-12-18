@@ -69,8 +69,6 @@ class FacilitiesScreenStateNotifier
   }
 
   Future<void> filterFacilities(String query) async {
-    state = const AsyncLoading<FacilitiesScreenState>().copyWithPrevious(state);
-
     state = await AsyncValue.guard<FacilitiesScreenState>(
       () => _fetchData(query),
     );

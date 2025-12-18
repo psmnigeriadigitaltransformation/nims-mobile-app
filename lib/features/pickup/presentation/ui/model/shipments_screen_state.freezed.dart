@@ -19,7 +19,10 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ShipmentsScreenState {
   List<Facility> get facilities => throw _privateConstructorUsedError;
   List<Location> get locations => throw _privateConstructorUsedError;
-  String get movement => throw _privateConstructorUsedError;
+  MovementType get movementType => throw _privateConstructorUsedError;
+  List<Shipment> get shipments => throw _privateConstructorUsedError;
+  Facility? get selectedDestinationFacility =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of ShipmentsScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,8 +41,13 @@ abstract class $ShipmentsScreenStateCopyWith<$Res> {
   $Res call({
     List<Facility> facilities,
     List<Location> locations,
-    String movement,
+    MovementType movementType,
+    List<Shipment> shipments,
+    Facility? selectedDestinationFacility,
   });
+
+  $MovementTypeCopyWith<$Res> get movementType;
+  $FacilityCopyWith<$Res>? get selectedDestinationFacility;
 }
 
 /// @nodoc
@@ -62,7 +70,9 @@ class _$ShipmentsScreenStateCopyWithImpl<
   $Res call({
     Object? facilities = null,
     Object? locations = null,
-    Object? movement = null,
+    Object? movementType = null,
+    Object? shipments = null,
+    Object? selectedDestinationFacility = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -74,13 +84,47 @@ class _$ShipmentsScreenStateCopyWithImpl<
                 ? _value.locations
                 : locations // ignore: cast_nullable_to_non_nullable
                       as List<Location>,
-            movement: null == movement
-                ? _value.movement
-                : movement // ignore: cast_nullable_to_non_nullable
-                      as String,
+            movementType: null == movementType
+                ? _value.movementType
+                : movementType // ignore: cast_nullable_to_non_nullable
+                      as MovementType,
+            shipments: null == shipments
+                ? _value.shipments
+                : shipments // ignore: cast_nullable_to_non_nullable
+                      as List<Shipment>,
+            selectedDestinationFacility: freezed == selectedDestinationFacility
+                ? _value.selectedDestinationFacility
+                : selectedDestinationFacility // ignore: cast_nullable_to_non_nullable
+                      as Facility?,
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of ShipmentsScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MovementTypeCopyWith<$Res> get movementType {
+    return $MovementTypeCopyWith<$Res>(_value.movementType, (value) {
+      return _then(_value.copyWith(movementType: value) as $Val);
+    });
+  }
+
+  /// Create a copy of ShipmentsScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $FacilityCopyWith<$Res>? get selectedDestinationFacility {
+    if (_value.selectedDestinationFacility == null) {
+      return null;
+    }
+
+    return $FacilityCopyWith<$Res>(_value.selectedDestinationFacility!, (
+      value,
+    ) {
+      return _then(_value.copyWith(selectedDestinationFacility: value) as $Val);
+    });
   }
 }
 
@@ -96,8 +140,15 @@ abstract class _$$ShipmentsScreenStateImplCopyWith<$Res>
   $Res call({
     List<Facility> facilities,
     List<Location> locations,
-    String movement,
+    MovementType movementType,
+    List<Shipment> shipments,
+    Facility? selectedDestinationFacility,
   });
+
+  @override
+  $MovementTypeCopyWith<$Res> get movementType;
+  @override
+  $FacilityCopyWith<$Res>? get selectedDestinationFacility;
 }
 
 /// @nodoc
@@ -116,7 +167,9 @@ class __$$ShipmentsScreenStateImplCopyWithImpl<$Res>
   $Res call({
     Object? facilities = null,
     Object? locations = null,
-    Object? movement = null,
+    Object? movementType = null,
+    Object? shipments = null,
+    Object? selectedDestinationFacility = freezed,
   }) {
     return _then(
       _$ShipmentsScreenStateImpl(
@@ -128,10 +181,18 @@ class __$$ShipmentsScreenStateImplCopyWithImpl<$Res>
             ? _value._locations
             : locations // ignore: cast_nullable_to_non_nullable
                   as List<Location>,
-        movement: null == movement
-            ? _value.movement
-            : movement // ignore: cast_nullable_to_non_nullable
-                  as String,
+        movementType: null == movementType
+            ? _value.movementType
+            : movementType // ignore: cast_nullable_to_non_nullable
+                  as MovementType,
+        shipments: null == shipments
+            ? _value._shipments
+            : shipments // ignore: cast_nullable_to_non_nullable
+                  as List<Shipment>,
+        selectedDestinationFacility: freezed == selectedDestinationFacility
+            ? _value.selectedDestinationFacility
+            : selectedDestinationFacility // ignore: cast_nullable_to_non_nullable
+                  as Facility?,
       ),
     );
   }
@@ -139,13 +200,17 @@ class __$$ShipmentsScreenStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ShipmentsScreenStateImpl implements _ShipmentsScreenState {
+class _$ShipmentsScreenStateImpl extends _ShipmentsScreenState {
   const _$ShipmentsScreenStateImpl({
     required final List<Facility> facilities,
     required final List<Location> locations,
-    required this.movement,
+    required this.movementType,
+    final List<Shipment> shipments = const [],
+    this.selectedDestinationFacility,
   }) : _facilities = facilities,
-       _locations = locations;
+       _locations = locations,
+       _shipments = shipments,
+       super._();
 
   final List<Facility> _facilities;
   @override
@@ -164,11 +229,22 @@ class _$ShipmentsScreenStateImpl implements _ShipmentsScreenState {
   }
 
   @override
-  final String movement;
+  final MovementType movementType;
+  final List<Shipment> _shipments;
+  @override
+  @JsonKey()
+  List<Shipment> get shipments {
+    if (_shipments is EqualUnmodifiableListView) return _shipments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_shipments);
+  }
+
+  @override
+  final Facility? selectedDestinationFacility;
 
   @override
   String toString() {
-    return 'ShipmentsScreenState(facilities: $facilities, locations: $locations, movement: $movement)';
+    return 'ShipmentsScreenState(facilities: $facilities, locations: $locations, movementType: $movementType, shipments: $shipments, selectedDestinationFacility: $selectedDestinationFacility)';
   }
 
   @override
@@ -184,8 +260,18 @@ class _$ShipmentsScreenStateImpl implements _ShipmentsScreenState {
               other._locations,
               _locations,
             ) &&
-            (identical(other.movement, movement) ||
-                other.movement == movement));
+            (identical(other.movementType, movementType) ||
+                other.movementType == movementType) &&
+            const DeepCollectionEquality().equals(
+              other._shipments,
+              _shipments,
+            ) &&
+            (identical(
+                  other.selectedDestinationFacility,
+                  selectedDestinationFacility,
+                ) ||
+                other.selectedDestinationFacility ==
+                    selectedDestinationFacility));
   }
 
   @override
@@ -193,7 +279,9 @@ class _$ShipmentsScreenStateImpl implements _ShipmentsScreenState {
     runtimeType,
     const DeepCollectionEquality().hash(_facilities),
     const DeepCollectionEquality().hash(_locations),
-    movement,
+    movementType,
+    const DeepCollectionEquality().hash(_shipments),
+    selectedDestinationFacility,
   );
 
   /// Create a copy of ShipmentsScreenState
@@ -209,19 +297,26 @@ class _$ShipmentsScreenStateImpl implements _ShipmentsScreenState {
       );
 }
 
-abstract class _ShipmentsScreenState implements ShipmentsScreenState {
+abstract class _ShipmentsScreenState extends ShipmentsScreenState {
   const factory _ShipmentsScreenState({
     required final List<Facility> facilities,
     required final List<Location> locations,
-    required final String movement,
+    required final MovementType movementType,
+    final List<Shipment> shipments,
+    final Facility? selectedDestinationFacility,
   }) = _$ShipmentsScreenStateImpl;
+  const _ShipmentsScreenState._() : super._();
 
   @override
   List<Facility> get facilities;
   @override
   List<Location> get locations;
   @override
-  String get movement;
+  MovementType get movementType;
+  @override
+  List<Shipment> get shipments;
+  @override
+  Facility? get selectedDestinationFacility;
 
   /// Create a copy of ShipmentsScreenState
   /// with the given fields replaced by the non-null parameter values.

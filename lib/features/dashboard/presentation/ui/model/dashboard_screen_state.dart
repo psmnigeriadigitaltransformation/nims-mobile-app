@@ -19,12 +19,12 @@ class DashboardScreenState with _$DashboardScreenState {
     required List<DomainMovementType> resultsMovementTypes,
   }) = _DashboardScreenStatee;
 
-  factory DashboardScreenState.initial() => const DashboardScreenState(
-    userFullName: "",
-    userRole: "",
-    userId: "",
-    deviceSerialNo: "",
-    specimensMovementTypes: [],
-    resultsMovementTypes: [],
-  );
+  // factory DashboardScreenState.initial() => const DashboardScreenState(
+  //   userFullName: "",
+  //   userRole: "",
+  //   userId: "",
+  //   deviceSerialNo: "",
+  //   specimensMovementTypes: [],
+  //   resultsMovementTypes: [],
+  // );
 }

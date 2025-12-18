@@ -48,7 +48,7 @@ class MovementTypesRepository {
                   : MovementTypeCategory.specimen;
               return movementType.toDomain(category);
             }).toList();
-            await _localService.updateCachedMovementTypes(domainMovementTypes);
+            await _localService.cacheMovementTypes(domainMovementTypes);
             return Success(domainMovementTypes);
           case Error<MovementTypesResponse>():
             developer.log(

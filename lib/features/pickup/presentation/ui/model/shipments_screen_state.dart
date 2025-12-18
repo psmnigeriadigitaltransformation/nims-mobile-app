@@ -6,20 +6,31 @@ import '../../../../../../core/domain/models/facility.dart';
 import '../../../../../../core/domain/models/movement_type.dart';
 import '../../../../../../core/ui/model/model/alert.dart';
 import '../../../../../core/domain/models/location.dart';
+import '../../../../../core/domain/models/shipment.dart';
 
 part 'shipments_screen_state.freezed.dart';
 
 @freezed
 class ShipmentsScreenState with _$ShipmentsScreenState {
+  const ShipmentsScreenState._();
+
   const factory ShipmentsScreenState({
     required List<DomainFacility> facilities,
     required List<DomainLocation> locations,
-    required String movement
+    required DomainMovementType movementType,
+    @Default([]) List<DomainShipment> shipments,
+    DomainFacility? selectedDestinationFacility,
   }) = _ShipmentsScreenState;
 
-  factory ShipmentsScreenState.initial() => const ShipmentsScreenState(
-    facilities: [],
-    locations: [],
-    movement: "",
-  );
+  // factory ShipmentsScreenState.initial() => const ShipmentsScreenState(
+  //   facilities: [],
+  //   locations: [],
+  //   movement: "",
+  // );
+  bool get isGoToApprovalButtonEnabled =>
+  selectedDestinationFacility != null &&
+      shipments.isNotEmpty &&
+      shipments.every(
+        (shipment) => shipment.destinationLocationType.isNotEmpty,
+      );
 }

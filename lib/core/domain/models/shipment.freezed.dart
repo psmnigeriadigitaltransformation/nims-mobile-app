@@ -30,8 +30,12 @@ mixin _$Shipment {
   String get manifestNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'origin_type')
   String get originType => throw _privateConstructorUsedError;
-  @JsonKey(name: 'destination_type')
-  String get destinationType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'destination_location_type')
+  String get destinationLocationType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'destination_facility_id')
+  String get destinationFacilityId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'destination_facility_name')
+  String get destinationFacilityName => throw _privateConstructorUsedError;
   @JsonKey(name: 'pickup_latitude')
   double get pickupLatitude => throw _privateConstructorUsedError;
   @JsonKey(name: 'pickup_longitude')
@@ -64,7 +68,9 @@ abstract class $ShipmentCopyWith<$Res> {
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
     @JsonKey(name: 'origin_type') String originType,
-    @JsonKey(name: 'destination_type') String destinationType,
+    @JsonKey(name: 'destination_location_type') String destinationLocationType,
+    @JsonKey(name: 'destination_facility_id') String destinationFacilityId,
+    @JsonKey(name: 'destination_facility_name') String destinationFacilityName,
     @JsonKey(name: 'pickup_latitude') double pickupLatitude,
     @JsonKey(name: 'pickup_longitude') double pickupLongitude,
     @JsonKey(name: 'sample_type') String sampleType,
@@ -93,7 +99,9 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
     Object? routeNo = null,
     Object? manifestNo = null,
     Object? originType = null,
-    Object? destinationType = null,
+    Object? destinationLocationType = null,
+    Object? destinationFacilityId = null,
+    Object? destinationFacilityName = null,
     Object? pickupLatitude = null,
     Object? pickupLongitude = null,
     Object? sampleType = null,
@@ -122,9 +130,17 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
                 ? _value.originType
                 : originType // ignore: cast_nullable_to_non_nullable
                       as String,
-            destinationType: null == destinationType
-                ? _value.destinationType
-                : destinationType // ignore: cast_nullable_to_non_nullable
+            destinationLocationType: null == destinationLocationType
+                ? _value.destinationLocationType
+                : destinationLocationType // ignore: cast_nullable_to_non_nullable
+                      as String,
+            destinationFacilityId: null == destinationFacilityId
+                ? _value.destinationFacilityId
+                : destinationFacilityId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            destinationFacilityName: null == destinationFacilityName
+                ? _value.destinationFacilityName
+                : destinationFacilityName // ignore: cast_nullable_to_non_nullable
                       as String,
             pickupLatitude: null == pickupLatitude
                 ? _value.pickupLatitude
@@ -167,7 +183,9 @@ abstract class _$$ShipmentImplCopyWith<$Res>
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
     @JsonKey(name: 'origin_type') String originType,
-    @JsonKey(name: 'destination_type') String destinationType,
+    @JsonKey(name: 'destination_location_type') String destinationLocationType,
+    @JsonKey(name: 'destination_facility_id') String destinationFacilityId,
+    @JsonKey(name: 'destination_facility_name') String destinationFacilityName,
     @JsonKey(name: 'pickup_latitude') double pickupLatitude,
     @JsonKey(name: 'pickup_longitude') double pickupLongitude,
     @JsonKey(name: 'sample_type') String sampleType,
@@ -195,7 +213,9 @@ class __$$ShipmentImplCopyWithImpl<$Res>
     Object? routeNo = null,
     Object? manifestNo = null,
     Object? originType = null,
-    Object? destinationType = null,
+    Object? destinationLocationType = null,
+    Object? destinationFacilityId = null,
+    Object? destinationFacilityName = null,
     Object? pickupLatitude = null,
     Object? pickupLongitude = null,
     Object? sampleType = null,
@@ -224,9 +244,17 @@ class __$$ShipmentImplCopyWithImpl<$Res>
             ? _value.originType
             : originType // ignore: cast_nullable_to_non_nullable
                   as String,
-        destinationType: null == destinationType
-            ? _value.destinationType
-            : destinationType // ignore: cast_nullable_to_non_nullable
+        destinationLocationType: null == destinationLocationType
+            ? _value.destinationLocationType
+            : destinationLocationType // ignore: cast_nullable_to_non_nullable
+                  as String,
+        destinationFacilityId: null == destinationFacilityId
+            ? _value.destinationFacilityId
+            : destinationFacilityId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        destinationFacilityName: null == destinationFacilityName
+            ? _value.destinationFacilityName
+            : destinationFacilityName // ignore: cast_nullable_to_non_nullable
                   as String,
         pickupLatitude: null == pickupLatitude
             ? _value.pickupLatitude
@@ -262,7 +290,12 @@ class _$ShipmentImpl implements _Shipment {
     @JsonKey(name: 'route_no') required this.routeNo,
     @JsonKey(name: 'manifest_no') required this.manifestNo,
     @JsonKey(name: 'origin_type') required this.originType,
-    @JsonKey(name: 'destination_type') required this.destinationType,
+    @JsonKey(name: 'destination_location_type')
+    required this.destinationLocationType,
+    @JsonKey(name: 'destination_facility_id')
+    required this.destinationFacilityId,
+    @JsonKey(name: 'destination_facility_name')
+    required this.destinationFacilityName,
     @JsonKey(name: 'pickup_latitude') required this.pickupLatitude,
     @JsonKey(name: 'pickup_longitude') required this.pickupLongitude,
     @JsonKey(name: 'sample_type') required this.sampleType,
@@ -288,8 +321,14 @@ class _$ShipmentImpl implements _Shipment {
   @JsonKey(name: 'origin_type')
   final String originType;
   @override
-  @JsonKey(name: 'destination_type')
-  final String destinationType;
+  @JsonKey(name: 'destination_location_type')
+  final String destinationLocationType;
+  @override
+  @JsonKey(name: 'destination_facility_id')
+  final String destinationFacilityId;
+  @override
+  @JsonKey(name: 'destination_facility_name')
+  final String destinationFacilityName;
   @override
   @JsonKey(name: 'pickup_latitude')
   final double pickupLatitude;
@@ -308,7 +347,7 @@ class _$ShipmentImpl implements _Shipment {
 
   @override
   String toString() {
-    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originType: $originType, destinationType: $destinationType, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount, pickupDate: $pickupDate)';
+    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originType: $originType, destinationLocationType: $destinationLocationType, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount, pickupDate: $pickupDate)';
   }
 
   @override
@@ -324,8 +363,18 @@ class _$ShipmentImpl implements _Shipment {
                 other.manifestNo == manifestNo) &&
             (identical(other.originType, originType) ||
                 other.originType == originType) &&
-            (identical(other.destinationType, destinationType) ||
-                other.destinationType == destinationType) &&
+            (identical(
+                  other.destinationLocationType,
+                  destinationLocationType,
+                ) ||
+                other.destinationLocationType == destinationLocationType) &&
+            (identical(other.destinationFacilityId, destinationFacilityId) ||
+                other.destinationFacilityId == destinationFacilityId) &&
+            (identical(
+                  other.destinationFacilityName,
+                  destinationFacilityName,
+                ) ||
+                other.destinationFacilityName == destinationFacilityName) &&
             (identical(other.pickupLatitude, pickupLatitude) ||
                 other.pickupLatitude == pickupLatitude) &&
             (identical(other.pickupLongitude, pickupLongitude) ||
@@ -347,7 +396,9 @@ class _$ShipmentImpl implements _Shipment {
     routeNo,
     manifestNo,
     originType,
-    destinationType,
+    destinationLocationType,
+    destinationFacilityId,
+    destinationFacilityName,
     pickupLatitude,
     pickupLongitude,
     sampleType,
@@ -376,7 +427,12 @@ abstract class _Shipment implements Shipment {
     @JsonKey(name: 'route_no') required final String routeNo,
     @JsonKey(name: 'manifest_no') required final String manifestNo,
     @JsonKey(name: 'origin_type') required final String originType,
-    @JsonKey(name: 'destination_type') required final String destinationType,
+    @JsonKey(name: 'destination_location_type')
+    required final String destinationLocationType,
+    @JsonKey(name: 'destination_facility_id')
+    required final String destinationFacilityId,
+    @JsonKey(name: 'destination_facility_name')
+    required final String destinationFacilityName,
     @JsonKey(name: 'pickup_latitude') required final double pickupLatitude,
     @JsonKey(name: 'pickup_longitude') required final double pickupLongitude,
     @JsonKey(name: 'sample_type') required final String sampleType,
@@ -402,8 +458,14 @@ abstract class _Shipment implements Shipment {
   @JsonKey(name: 'origin_type')
   String get originType;
   @override
-  @JsonKey(name: 'destination_type')
-  String get destinationType;
+  @JsonKey(name: 'destination_location_type')
+  String get destinationLocationType;
+  @override
+  @JsonKey(name: 'destination_facility_id')
+  String get destinationFacilityId;
+  @override
+  @JsonKey(name: 'destination_facility_name')
+  String get destinationFacilityName;
   @override
   @JsonKey(name: 'pickup_latitude')
   double get pickupLatitude;

@@ -9,6 +9,9 @@ class MovementType with _$MovementType {
     required String? pick,
     @JsonKey(name: "type_id") required int? typeId,
     required String? movement,
+    required String? origin,
+    @JsonKey(name: "destination_primary") required String? destinationPrimary,
+    @JsonKey(name: "destination_secondary") required String? destinationSecondary,
     required String? created,
     required String? category,
   }) = _MovementType;

@@ -2,19 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:projects/app/route_name+path+params.dart';
-import 'package:projects/core/domain/models/movement_type.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
-import 'package:projects/features/dashboard/domain/route_type.dart';
 import 'package:projects/features/pickup/presentation/ui/widgets/rejection_reason_dialog.dart';
 import '../../../../../core/domain/mappers/typedefs.dart';
-import '../../../../../core/ui/widgets/nims_alert_dialog.dart';
-import '../../../../../core/ui/widgets/nims_error_button.dart';
-import '../../../../../core/ui/widgets/nims_manifest_card.dart';
+import '../../../../../core/ui/widgets/nims_error_content.dart';
 import '../../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../../core/ui/widgets/nims_result_card.dart';
-import '../../../../../core/ui/widgets/nims_secondary_button.dart';
-import '../../../../dashboard/domain/mock.dart';
 import '../../../providers.dart';
 
 class ResultPickUpScreen extends ConsumerStatefulWidget {
@@ -40,7 +34,7 @@ class _ResultPickUpScreenState extends ConsumerState<ResultPickUpScreen> {
     final size = MediaQuery.of(context).size;
     final asyncValueState = ref.watch(
       resultPickUpScreenStateNotifierProvider(
-        widget.movementType.movement ?? "",
+        widget.movementType
       ),
     );
 
@@ -332,25 +326,27 @@ class _ResultPickUpScreenState extends ConsumerState<ResultPickUpScreen> {
               const SizedBox(height: 16),
             ],
           ),
-          error: (e, s) => NIMSAlertDialog(
+          error: (e, s) => NIMSErrorContent(
             message: e.toString(),
             onTapActionButton: () {
               ref
                   .read(
                     resultPickUpScreenStateNotifierProvider(
-                      widget.movementType.movement ?? "",
+                      widget.movementType,
                     ).notifier,
                   )
                   .refreshState();
             },
             actionButtonLabel: 'Retry',
           ),
-          loading: () => const Padding(
-            padding: EdgeInsets.all(40),
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: CircularProgressIndicator(strokeWidth: 2),
+          loading: () => Container(
+            color: Theme.of(context).colorScheme.surface,
+            child: Center(
+              child: const SizedBox(
+                width: 40,
+                height: 40,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
             ),
           ),
         ),

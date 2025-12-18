@@ -66,7 +66,7 @@ class FacilitiesRepository {
               ...?domainHubFacilities,
               ...?domainGeneXpertFacilities,
             ];
-            await _localService.updateCachedFacilities(combinedDomainFacilities);
+            await _localService.cacheFacilities(combinedDomainFacilities);
             if (combinedDomainFacilities.isEmpty) {
               Error<List<DomainFacility>>("No facility available");
             }

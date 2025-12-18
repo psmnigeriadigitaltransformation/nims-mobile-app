@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 
 class NIMSSpecimenCard extends StatefulWidget {
   final VoidCallback? onTapDelete;
   final String? actionLabel;
+  final DomainSample sample;
 
-  const NIMSSpecimenCard({super.key, this.onTapDelete, this.actionLabel});
+  const NIMSSpecimenCard({
+    super.key,
+    this.onTapDelete,
+    this.actionLabel,
+    required this.sample,
+  });
 
   @override
   State<StatefulWidget> createState() => NIMSSpecimenCardState();
@@ -21,7 +28,9 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
           borderRadius: BorderRadius.all(Radius.circular(8)),
           onTap: () {
             setState(() {
-              isCommentRevealed = !isCommentRevealed;
+              if (widget.sample.comment?.isNotEmpty == true) {
+                isCommentRevealed = !isCommentRevealed;
+              }
             });
           },
           child: Container(
@@ -37,27 +46,39 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
               children: [
                 Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3,
-                        horizontal: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(4),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 3,
+                          horizontal: 6,
                         ),
-                        color: Theme.of(context).colorScheme.tertiaryContainer,
-                      ),
-                      child: Text(
-                        "PC-288939-29930",
-                        style: Theme.of(context).textTheme.labelMedium,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(4),
+                          ),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.tertiaryContainer,
+                        ),
+                        child: Text(
+                          widget.sample.sampleCode,
+                          style: Theme.of(context).textTheme.labelMedium,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 24),
-                    Text("20 Y", style: Theme.of(context).textTheme.bodySmall),
-                    const SizedBox(width: 24),
-                    Text("M", style: Theme.of(context).textTheme.bodySmall),
-                    const Spacer(flex: 4),
+                    const SizedBox(width: 20),
+                    Text(
+                      widget.sample.age,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(width: 20),
+                    Text(
+                      widget.sample.gender,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(width: 20),
                     if (widget.onTapDelete != null)
                       InkWell(
                         onTap: widget.onTapDelete,
@@ -87,28 +108,34 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
                           ),
                         ),
                       ),
-                    const Spacer(),
-                    InkWell(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadiusGeometry.circular(4),
-                        ),
-                        child: Image.asset(
-                          isCommentRevealed
-                              ? "lib/core/ui/icons/ic_unfold_less.png"
-                              : "lib/core/ui/icons/ic_unfold_more.png",
-                          height: 24,
-                          width: 24,
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          isCommentRevealed = !isCommentRevealed;
-                        });
-                      },
-                    ),
+
+                    // if (widget.sample.comment?.isNotEmpty == true)
+                    //   Row(
+                    //     children: [
+                    //       const SizedBox(width: 20),
+                    //       InkWell(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         child: Container(
+                    //           decoration: BoxDecoration(
+                    //             borderRadius: BorderRadiusGeometry.circular(4),
+                    //           ),
+                    //           child: Image.asset(
+                    //             isCommentRevealed
+                    //                 ? "lib/core/ui/icons/ic_unfold_less.png"
+                    //                 : "lib/core/ui/icons/ic_unfold_more.png",
+                    //             height: 24,
+                    //             width: 24,
+                    //             color: Theme.of(context).colorScheme.secondary,
+                    //           ),
+                    //         ),
+                    //         onTap: () {
+                    //           setState(() {
+                    //             isCommentRevealed = !isCommentRevealed;
+                    //           });
+                    //         },
+                    //       ),
+                    //     ],
+                    //   )
                   ],
                 ),
               ],
@@ -117,13 +144,14 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
         ),
         if (isCommentRevealed)
           Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(4),
-                  bottomRight: Radius.circular(4),
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
                 ),
 
                 border: Border.all(
@@ -131,16 +159,13 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
                   width: 0.5,
                 ),
               ),
-              child: Padding(
-                padding: EdgeInsetsGeometry.all(8),
-                child: Text(
-                  textAlign: TextAlign.center,
-                  "This patient is in ICU and needs the test result ASAP!",
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
+              child: Text(
+                textAlign: TextAlign.center,
+                widget.sample.comment ?? "",
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
-              ),
+              )
             ),
           ),
       ],

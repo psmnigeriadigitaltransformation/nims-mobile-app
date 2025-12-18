@@ -16,10 +16,10 @@ class FacilitiesScreenState with _$FacilitiesScreenState {
     required List<DomainFacility> geneXpertFacilities,
   }) = _FacilitiesScreenState;
 
-  factory FacilitiesScreenState.initial() => const FacilitiesScreenState(
-    hubFacilities: [],
-    spokeFacilities: [],
-    pcrFacilities: [],
-    geneXpertFacilities: [],
-  );
+  // factory FacilitiesScreenState.initial() => const FacilitiesScreenState(
+  //   hubFacilities: [],
+  //   spokeFacilities: [],
+  //   pcrFacilities: [],
+  //   geneXpertFacilities: [],
+  // );
 }

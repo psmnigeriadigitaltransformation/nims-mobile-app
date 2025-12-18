@@ -5,18 +5,30 @@ import 'package:projects/core/services/remote/models/facilities_response.dart';
 import '../../../../../../core/domain/models/facility.dart';
 import '../../../../../../core/domain/models/movement_type.dart';
 import '../../../../../../core/ui/model/model/alert.dart';
+import '../../../../../core/domain/models/manifest.dart';
 
 part 'manifests_screen_state.freezed.dart';
 
 @freezed
 class ManifestsScreenState with _$ManifestsScreenState {
-  const factory ManifestsScreenState({
-    required List<DomainFacility> facilities,
-    required String movement
-  }) = _ManifestsScreenStatee;
+  const ManifestsScreenState._();
 
-  factory ManifestsScreenState.initial() => const ManifestsScreenState(
-    facilities: [],
-    movement: ""
-  );
+  const factory ManifestsScreenState({
+    @Default([]) List<DomainFacility> facilities,
+    DomainMovementType? movementType,
+    DomainFacility? selectedPickUpFacility,
+    // @Default([]) List<DomainManifest> manifests,
+    @Default([]) List<int> selectedManifestIndices,
+    @Default(false) bool isFetchingManifests,
+    @Default(Alert(show: false, message: "")) Alert alert,
+    @Default([]) List<DomainManifest> manifests,
+  }) = _ManifestsScreenState;
+
+  // factory ManifestsScreenState.initial() =>
+  //     const ManifestsScreenState();
+
+  bool get isFacilitySelected => selectedPickUpFacility != null;
+
+  List<DomainManifest> get selectedManifests =>
+      selectedManifestIndices.map((index) => manifests[index]).toList();
 }

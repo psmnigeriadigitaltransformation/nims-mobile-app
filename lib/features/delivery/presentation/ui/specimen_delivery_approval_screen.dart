@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 import 'package:projects/core/ui/screens/nims_screen.dart';
 import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:projects/core/ui/widgets/nims_specimen_shipment_summary_card.dart';
@@ -8,9 +9,16 @@ import '../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
 import '../../../../core/ui/widgets/nims_signature_pad.dart';
 
 class SpecimenDeliveryApprovalScreen extends StatefulWidget {
-  final RouteType routeType;
+  final DomainMovementType movementType;
+  final DomainFacility pickUpFacility;
+  final List<DomainShipment> shipments;
 
-  const SpecimenDeliveryApprovalScreen({super.key, required this.routeType});
+  const SpecimenDeliveryApprovalScreen({
+    super.key,
+    required this.movementType,
+    required this.pickUpFacility,
+    required this.shipments,
+  });
 
   @override
   State<SpecimenDeliveryApprovalScreen> createState() =>
@@ -50,14 +58,17 @@ class ResultDeliveryApprovalScreenState
 
         SizedBox(height: 8),
 
-        Text(widget.routeType.label, style: TextTheme.of(context).bodySmall),
+        Text(
+          widget.movementType.movement ?? "",
+          style: TextTheme.of(context).bodySmall,
+        ),
 
         SizedBox(height: 50),
 
         /// -------------------------------------------
         /// ORIGINATING FACILITY + DESTINATION FACILITY
         /// -------------------------------------------
-        NIMSOriginDestinationLinkView(),
+        NIMSOriginDestinationLinkView(origin: '', destination: '',),
 
         SizedBox(height: 40),
 
@@ -74,24 +85,24 @@ class ResultDeliveryApprovalScreenState
 
         const SizedBox(height: 8),
 
-        SizedBox(
-          height: size.height * 0.25,
-          child: Scrollbar(
-            trackVisibility: true,
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              children: [
-                ...List.generate(
-                  5,
-                  (x) => Padding(
-                    padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
-                    child: NIMSSpecimenShipmentSummaryCard(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // SizedBox(
+        //   height: size.height * 0.25,
+        //   child: Scrollbar(
+        //     trackVisibility: true,
+        //     child: ListView(
+        //       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        //       children: [
+        //         ...List.generate(
+        //           5,
+        //           (x) => Padding(
+        //             padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
+        //             child: NIMSSpecimenShipmentSummaryCard(),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
 
         const SizedBox(height: 24),
 

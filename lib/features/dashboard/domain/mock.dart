@@ -10,20 +10,11 @@ class Mock {
     "National Hospital, Abuja",
   ];
 
-  static final specimenTypes = ["Sputum", "EID", "Viral Load"];
-
   static final sex = ["Male", "Female"];
 
   static final reasonsForRejection = ["Nil"];
 
-  static final destinationLocationTypes = [
-    "Spoke",
-    "Hub",
-    "PCR Lab",
-    "GenXpert",
-  ];
-
-  static final timeIntervals = ["Day(s)", "Week(s)", "Month(s)", "Year(s)"];
+  static final timeIntervals = ["Month(s)", "Year(s)"];
 
   static final facilityItems = [
     FacilityItem(

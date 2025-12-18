@@ -9,7 +9,6 @@ import '../../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../../core/ui/widgets/nims_result_shipment_summary_card.dart';
 import '../../../../../core/ui/widgets/nims_signature_pad.dart';
 
-
 class ResultShipmentApprovalScreen extends StatefulWidget {
   final RouteType routeType;
 
@@ -60,7 +59,7 @@ class ResultShipmentApprovalScreenState
         /// -------------------------------------------
         /// ORIGINATING FACILITY + DESTINATION FACILITY
         /// -------------------------------------------
-        NIMSOriginDestinationLinkView(),
+        NIMSOriginDestinationLinkView(origin: '', destination: ''),
 
         SizedBox(height: 40),
 

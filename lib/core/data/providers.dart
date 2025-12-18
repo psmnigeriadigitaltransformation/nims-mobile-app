@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:projects/core/data/repository/etoken_repository.dart';
 import 'package:projects/core/data/repository/locations_repository.dart';
+import 'package:projects/core/data/repository/manifest_repository.dart';
 import 'package:projects/core/data/repository/movement_types_repository.dart';
 import 'package:projects/core/data/repository/samples_repository.dart';
 import 'package:projects/features/facilities/data/repository/facilities_repository.dart';
@@ -30,6 +31,13 @@ final movementTypesRepositoryProvider = Provider(
 
 final eTokenRepositoryProvider = Provider(
       (ref) => ETokenRepository(
+    ref.watch(nimsApiServiceProvider),
+    ref.watch(nimsLocalServiceProvider),
+  ),
+);
+
+final manifestRepositoryProvider = Provider(
+      (ref) => ManifestRepository(
     ref.watch(nimsApiServiceProvider),
     ref.watch(nimsLocalServiceProvider),
   ),

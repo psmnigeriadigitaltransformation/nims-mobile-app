@@ -20,7 +20,7 @@ import '../../../../app/route_name+path+params.dart';
 import '../../../../core/domain/models/movement_category.dart';
 import '../../../../core/services/remote/models/login_response.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
-import '../../../../core/ui/widgets/nims_alert_dialog.dart';
+import '../../../../core/ui/widgets/nims_error_content.dart';
 import '../../../../core/ui/widgets/nims_transit_card.dart';
 import '../../../profile/providers.dart';
 
@@ -94,7 +94,7 @@ class DashboardScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  error: (err, s) => NIMSAlertDialog(
+                  error: (err, s) => NIMSErrorContent(
                     message: err.toString(),
                     onTapActionButton: () {
                       ref
@@ -103,7 +103,16 @@ class DashboardScreen extends ConsumerWidget {
                     },
                     actionButtonLabel: 'Retry',
                   ),
-                  loading: () => CircularProgressIndicator(strokeWidth: 2),
+                  loading: () => Container(
+                    color: Theme.of(context).colorScheme.surface,
+                    child: Center(
+                      child: const SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

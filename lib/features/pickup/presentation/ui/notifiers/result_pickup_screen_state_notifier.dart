@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:projects/core/domain/mappers/typedefs.dart';
 import 'package:projects/features/facilities/data/providers.dart';
 import 'package:projects/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
 
 import '../../../../../core/utils/result.dart';
 
 class ResultPickUpScreenStateNotifier
-    extends AutoDisposeFamilyAsyncNotifier<ResultPickUpScreenState, String> {
-  Future<ResultPickUpScreenState> _fetchData(String movement) async {
+    extends AutoDisposeFamilyAsyncNotifier<ResultPickUpScreenState, DomainMovementType> {
+  Future<ResultPickUpScreenState> _fetchData(DomainMovementType movementType) async {
     final facilitiesRepository = ref.read(facilitiesRepositoryProvider);
     final facilitiesResult = await facilitiesRepository.getFacilities(false);
 
@@ -18,13 +19,13 @@ class ResultPickUpScreenStateNotifier
           facilities: payload
               .where(
                 (facility) =>
-                    facility.type?.toLowerCase().contains(
-                      movement.split("→").first.toLowerCase().trim(),
-                    ) ??
-                    false,
-              )
+            movementType.origin?.toLowerCase().contains(
+              facility.type?.toLowerCase() ?? "",
+            ) ??
+                false,
+          )
               .toList(),
-          movement: movement,
+          movementType: movementType,
         );
 
       case Error(message: final m):
@@ -40,7 +41,7 @@ class ResultPickUpScreenStateNotifier
   }
 
   @override
-  FutureOr<ResultPickUpScreenState> build(String arg) {
+  FutureOr<ResultPickUpScreenState> build(DomainMovementType arg) {
     return _fetchData(arg);
   }
 }

@@ -30,6 +30,7 @@ mixin _$Sample {
   String get patientCode => throw _privateConstructorUsedError;
   String get age => throw _privateConstructorUsedError;
   String get gender => throw _privateConstructorUsedError;
+  String? get comment => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   String? get createdAt => throw _privateConstructorUsedError;
 
@@ -54,6 +55,7 @@ abstract class $SampleCopyWith<$Res> {
     @JsonKey(name: 'patient_code') String patientCode,
     String age,
     String gender,
+    String? comment,
     @JsonKey(name: 'created_at') String? createdAt,
   });
 }
@@ -79,6 +81,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? patientCode = null,
     Object? age = null,
     Object? gender = null,
+    Object? comment = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(
@@ -107,6 +110,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
                 ? _value.gender
                 : gender // ignore: cast_nullable_to_non_nullable
                       as String,
+            comment: freezed == comment
+                ? _value.comment
+                : comment // ignore: cast_nullable_to_non_nullable
+                      as String?,
             createdAt: freezed == createdAt
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
@@ -132,6 +139,7 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
     @JsonKey(name: 'patient_code') String patientCode,
     String age,
     String gender,
+    String? comment,
     @JsonKey(name: 'created_at') String? createdAt,
   });
 }
@@ -156,6 +164,7 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? patientCode = null,
     Object? age = null,
     Object? gender = null,
+    Object? comment = freezed,
     Object? createdAt = freezed,
   }) {
     return _then(
@@ -184,6 +193,10 @@ class __$$SampleImplCopyWithImpl<$Res>
             ? _value.gender
             : gender // ignore: cast_nullable_to_non_nullable
                   as String,
+        comment: freezed == comment
+            ? _value.comment
+            : comment // ignore: cast_nullable_to_non_nullable
+                  as String?,
         createdAt: freezed == createdAt
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
@@ -203,6 +216,7 @@ class _$SampleImpl implements _Sample {
     @JsonKey(name: 'patient_code') required this.patientCode,
     required this.age,
     required this.gender,
+    this.comment,
     @JsonKey(name: 'created_at') this.createdAt,
   });
 
@@ -225,12 +239,14 @@ class _$SampleImpl implements _Sample {
   @override
   final String gender;
   @override
+  final String? comment;
+  @override
   @JsonKey(name: 'created_at')
   final String? createdAt;
 
   @override
   String toString() {
-    return 'Sample(id: $id, manifestNo: $manifestNo, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, createdAt: $createdAt)';
+    return 'Sample(id: $id, manifestNo: $manifestNo, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, comment: $comment, createdAt: $createdAt)';
   }
 
   @override
@@ -247,6 +263,7 @@ class _$SampleImpl implements _Sample {
                 other.patientCode == patientCode) &&
             (identical(other.age, age) || other.age == age) &&
             (identical(other.gender, gender) || other.gender == gender) &&
+            (identical(other.comment, comment) || other.comment == comment) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
@@ -261,6 +278,7 @@ class _$SampleImpl implements _Sample {
     patientCode,
     age,
     gender,
+    comment,
     createdAt,
   );
 
@@ -286,6 +304,7 @@ abstract class _Sample implements Sample {
     @JsonKey(name: 'patient_code') required final String patientCode,
     required final String age,
     required final String gender,
+    final String? comment,
     @JsonKey(name: 'created_at') final String? createdAt,
   }) = _$SampleImpl;
 
@@ -306,6 +325,8 @@ abstract class _Sample implements Sample {
   String get age;
   @override
   String get gender;
+  @override
+  String? get comment;
   @override
   @JsonKey(name: 'created_at')
   String? get createdAt;

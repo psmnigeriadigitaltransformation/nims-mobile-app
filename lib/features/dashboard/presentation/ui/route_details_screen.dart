@@ -50,7 +50,7 @@ class RouteDetailsScreen extends StatelessWidget {
         /// -------------------------------------------g
         Row(
           children: [
-            Expanded(child: NIMSOriginDestinationLinkView()),
+            Expanded(child: NIMSOriginDestinationLinkView(origin: '', destination: '',)),
             NIMSStatusChip(
               status: "Delivered",
               statusColor: NIMSColors.green05,
@@ -81,13 +81,13 @@ class RouteDetailsScreen extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               children: [
-                ...List.generate(
-                  8,
-                  (x) => Padding(
-                    padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-                    child: NIMSSpecimenShipmentSummaryCard(),
-                  ),
-                ),
+                // ...List.generate(
+                //   8,
+                //   (x) => Padding(
+                //     padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+                //     child: NIMSSpecimenShipmentSummaryCard(),
+                //   ),
+                // ),
               ],
             ),
           ),

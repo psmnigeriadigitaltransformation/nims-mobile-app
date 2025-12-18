@@ -44,3 +44,7 @@ const facilitiesPath = '/facilities';
 
 // QUERY PARAMS
 const movementTypeQueryParam = "movement_type";
+const pickupFacilityQueryParam = "pickup_facility";
+const destinationFacilityQueryParam = "destination_facility";
+const manifestsQueryParam = "manifests";
+const shipmentsQueryParam = "shipments";

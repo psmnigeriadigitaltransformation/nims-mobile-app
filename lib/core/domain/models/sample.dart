@@ -12,6 +12,7 @@ class Sample with _$Sample {
     @JsonKey(name: 'patient_code') required String patientCode,
     required String age,
     required String gender,
+    String? comment,
     @JsonKey(name: 'created_at') String? createdAt,
   }) = _Sample;
 

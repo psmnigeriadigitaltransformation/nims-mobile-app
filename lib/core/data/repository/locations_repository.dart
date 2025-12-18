@@ -38,7 +38,7 @@ class LocationsRepository {
             final domainLocations = locations
                 .map((location) => location.toDomain())
                 .toList();
-            await _localService.updateCachedLocations(domainLocations);
+            await _localService.cacheLocations(domainLocations);
             return Success(domainLocations);
           case Error<LocationResponse>():
             developer.log(

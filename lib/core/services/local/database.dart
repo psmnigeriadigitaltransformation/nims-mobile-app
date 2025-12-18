@@ -16,6 +16,7 @@ class NIMSDatabase {
       path,
       version: 1,
       onCreate: (db, version) async {
+
         // Tables
         await db.execute('''
           CREATE TABLE users (
@@ -115,6 +116,9 @@ class NIMSDatabase {
             pick TEXT,
             type_id INTEGER,
             movement TEXT,
+            origin TEXT,
+            destination_primary TEXT,
+            destination_secondary TEXT,
             created TEXT,
             category TEXT
           )
@@ -140,6 +144,7 @@ class NIMSDatabase {
             lsp_code TEXT NOT NULL,
             temperature INTEGER,
             user_id TEXT NOT NULL,
+            originating_facility_name TEXT NOT NULL,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
           )
         ''');
@@ -152,6 +157,7 @@ class NIMSDatabase {
             patient_code TEXT NOT NULL,
             age TEXT NOT NULL,
             gender TEXT NOT NULL,
+            comment TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (manifest_no) REFERENCES manifests(manifest_no) ON DELETE CASCADE
           )
@@ -159,7 +165,7 @@ class NIMSDatabase {
 
         await db.execute('''
           CREATE TABLE routes (
-            id INTEGER PRIMARY KEY AUTO_INCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             route_no TEXT NOT NULL UNIQUE,
             origin_facility_id TEXT NOT NULL,
             destination_facility_id TEXT NOT NULL,
@@ -167,18 +173,20 @@ class NIMSDatabase {
             rider_user_id TEXT NOT NULL,
             latitude DECIMAL(10,6) NOT NULL,
             longitude DECIMAL(10,6) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
           )
           ''');
 
         await db.execute('''
           CREATE TABLE shipments (
-            id INTEGER PRIMARY KEY AUTO_INCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             shipment_no TEXT NOT NULL UNIQUE,
             route_no TEXT NOT NULL,
             manifest_no TEXT NOT NULL,
             origin_type TEXT NOT NULL,
-            destination_type TEXT NOT NULL,
+            destination_location_type TEXT NOT NULL,
+            destination_facility_id TEXT NOT NULL,
+            destination_facility_name TEXT NOT NULL,
             pickup_latitude DECIMAL(10,6) NOT NULL,
             pickup_longitude DECIMAL(10,6) NOT NULL,
             sample_type TEXT NOT NULL,
@@ -192,7 +200,7 @@ class NIMSDatabase {
 
         await db.execute('''
           CREATE TABLE approvals (
-            id INTEGER PRIMARY KEY AUTO_INCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             approval_no TEXT NOT NULL UNIQUE,
             route_no TEXT NOT NULL,
             approval_type TEXT,

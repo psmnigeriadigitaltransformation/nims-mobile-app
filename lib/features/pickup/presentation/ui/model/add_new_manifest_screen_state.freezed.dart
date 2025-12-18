@@ -19,7 +19,15 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AddNewManifestScreenState {
   List<Facility> get facilities => throw _privateConstructorUsedError;
   List<SampleType> get sampleTypes => throw _privateConstructorUsedError;
-  String get movement => throw _privateConstructorUsedError;
+  List<Sample> get samples => throw _privateConstructorUsedError;
+  MovementType? get movementType => throw _privateConstructorUsedError;
+  Facility? get selectedDestinationFacility =>
+      throw _privateConstructorUsedError;
+  Facility? get pickUpFacility => throw _privateConstructorUsedError;
+  SampleType? get selectedSampleType => throw _privateConstructorUsedError;
+  String get manifestNo => throw _privateConstructorUsedError;
+  bool get isSavingManifest => throw _privateConstructorUsedError;
+  Alert get alert => throw _privateConstructorUsedError;
 
   /// Create a copy of AddNewManifestScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,8 +46,21 @@ abstract class $AddNewManifestScreenStateCopyWith<$Res> {
   $Res call({
     List<Facility> facilities,
     List<SampleType> sampleTypes,
-    String movement,
+    List<Sample> samples,
+    MovementType? movementType,
+    Facility? selectedDestinationFacility,
+    Facility? pickUpFacility,
+    SampleType? selectedSampleType,
+    String manifestNo,
+    bool isSavingManifest,
+    Alert alert,
   });
+
+  $MovementTypeCopyWith<$Res>? get movementType;
+  $FacilityCopyWith<$Res>? get selectedDestinationFacility;
+  $FacilityCopyWith<$Res>? get pickUpFacility;
+  $SampleTypeCopyWith<$Res>? get selectedSampleType;
+  $AlertCopyWith<$Res> get alert;
 }
 
 /// @nodoc
@@ -62,7 +83,14 @@ class _$AddNewManifestScreenStateCopyWithImpl<
   $Res call({
     Object? facilities = null,
     Object? sampleTypes = null,
-    Object? movement = null,
+    Object? samples = null,
+    Object? movementType = freezed,
+    Object? selectedDestinationFacility = freezed,
+    Object? pickUpFacility = freezed,
+    Object? selectedSampleType = freezed,
+    Object? manifestNo = null,
+    Object? isSavingManifest = null,
+    Object? alert = null,
   }) {
     return _then(
       _value.copyWith(
@@ -74,43 +102,157 @@ class _$AddNewManifestScreenStateCopyWithImpl<
                 ? _value.sampleTypes
                 : sampleTypes // ignore: cast_nullable_to_non_nullable
                       as List<SampleType>,
-            movement: null == movement
-                ? _value.movement
-                : movement // ignore: cast_nullable_to_non_nullable
+            samples: null == samples
+                ? _value.samples
+                : samples // ignore: cast_nullable_to_non_nullable
+                      as List<Sample>,
+            movementType: freezed == movementType
+                ? _value.movementType
+                : movementType // ignore: cast_nullable_to_non_nullable
+                      as MovementType?,
+            selectedDestinationFacility: freezed == selectedDestinationFacility
+                ? _value.selectedDestinationFacility
+                : selectedDestinationFacility // ignore: cast_nullable_to_non_nullable
+                      as Facility?,
+            pickUpFacility: freezed == pickUpFacility
+                ? _value.pickUpFacility
+                : pickUpFacility // ignore: cast_nullable_to_non_nullable
+                      as Facility?,
+            selectedSampleType: freezed == selectedSampleType
+                ? _value.selectedSampleType
+                : selectedSampleType // ignore: cast_nullable_to_non_nullable
+                      as SampleType?,
+            manifestNo: null == manifestNo
+                ? _value.manifestNo
+                : manifestNo // ignore: cast_nullable_to_non_nullable
                       as String,
+            isSavingManifest: null == isSavingManifest
+                ? _value.isSavingManifest
+                : isSavingManifest // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            alert: null == alert
+                ? _value.alert
+                : alert // ignore: cast_nullable_to_non_nullable
+                      as Alert,
           )
           as $Val,
     );
   }
+
+  /// Create a copy of AddNewManifestScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MovementTypeCopyWith<$Res>? get movementType {
+    if (_value.movementType == null) {
+      return null;
+    }
+
+    return $MovementTypeCopyWith<$Res>(_value.movementType!, (value) {
+      return _then(_value.copyWith(movementType: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AddNewManifestScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $FacilityCopyWith<$Res>? get selectedDestinationFacility {
+    if (_value.selectedDestinationFacility == null) {
+      return null;
+    }
+
+    return $FacilityCopyWith<$Res>(_value.selectedDestinationFacility!, (
+      value,
+    ) {
+      return _then(_value.copyWith(selectedDestinationFacility: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AddNewManifestScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $FacilityCopyWith<$Res>? get pickUpFacility {
+    if (_value.pickUpFacility == null) {
+      return null;
+    }
+
+    return $FacilityCopyWith<$Res>(_value.pickUpFacility!, (value) {
+      return _then(_value.copyWith(pickUpFacility: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AddNewManifestScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $SampleTypeCopyWith<$Res>? get selectedSampleType {
+    if (_value.selectedSampleType == null) {
+      return null;
+    }
+
+    return $SampleTypeCopyWith<$Res>(_value.selectedSampleType!, (value) {
+      return _then(_value.copyWith(selectedSampleType: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AddNewManifestScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AlertCopyWith<$Res> get alert {
+    return $AlertCopyWith<$Res>(_value.alert, (value) {
+      return _then(_value.copyWith(alert: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
-abstract class _$$SAddNewManifestScreenStateImplCopyWith<$Res>
+abstract class _$$AddNewManifestScreenStateImplCopyWith<$Res>
     implements $AddNewManifestScreenStateCopyWith<$Res> {
-  factory _$$SAddNewManifestScreenStateImplCopyWith(
-    _$SAddNewManifestScreenStateImpl value,
-    $Res Function(_$SAddNewManifestScreenStateImpl) then,
-  ) = __$$SAddNewManifestScreenStateImplCopyWithImpl<$Res>;
+  factory _$$AddNewManifestScreenStateImplCopyWith(
+    _$AddNewManifestScreenStateImpl value,
+    $Res Function(_$AddNewManifestScreenStateImpl) then,
+  ) = __$$AddNewManifestScreenStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
     List<Facility> facilities,
     List<SampleType> sampleTypes,
-    String movement,
+    List<Sample> samples,
+    MovementType? movementType,
+    Facility? selectedDestinationFacility,
+    Facility? pickUpFacility,
+    SampleType? selectedSampleType,
+    String manifestNo,
+    bool isSavingManifest,
+    Alert alert,
   });
+
+  @override
+  $MovementTypeCopyWith<$Res>? get movementType;
+  @override
+  $FacilityCopyWith<$Res>? get selectedDestinationFacility;
+  @override
+  $FacilityCopyWith<$Res>? get pickUpFacility;
+  @override
+  $SampleTypeCopyWith<$Res>? get selectedSampleType;
+  @override
+  $AlertCopyWith<$Res> get alert;
 }
 
 /// @nodoc
-class __$$SAddNewManifestScreenStateImplCopyWithImpl<$Res>
+class __$$AddNewManifestScreenStateImplCopyWithImpl<$Res>
     extends
         _$AddNewManifestScreenStateCopyWithImpl<
           $Res,
-          _$SAddNewManifestScreenStateImpl
+          _$AddNewManifestScreenStateImpl
         >
-    implements _$$SAddNewManifestScreenStateImplCopyWith<$Res> {
-  __$$SAddNewManifestScreenStateImplCopyWithImpl(
-    _$SAddNewManifestScreenStateImpl _value,
-    $Res Function(_$SAddNewManifestScreenStateImpl) _then,
+    implements _$$AddNewManifestScreenStateImplCopyWith<$Res> {
+  __$$AddNewManifestScreenStateImplCopyWithImpl(
+    _$AddNewManifestScreenStateImpl _value,
+    $Res Function(_$AddNewManifestScreenStateImpl) _then,
   ) : super(_value, _then);
 
   /// Create a copy of AddNewManifestScreenState
@@ -120,10 +262,17 @@ class __$$SAddNewManifestScreenStateImplCopyWithImpl<$Res>
   $Res call({
     Object? facilities = null,
     Object? sampleTypes = null,
-    Object? movement = null,
+    Object? samples = null,
+    Object? movementType = freezed,
+    Object? selectedDestinationFacility = freezed,
+    Object? pickUpFacility = freezed,
+    Object? selectedSampleType = freezed,
+    Object? manifestNo = null,
+    Object? isSavingManifest = null,
+    Object? alert = null,
   }) {
     return _then(
-      _$SAddNewManifestScreenStateImpl(
+      _$AddNewManifestScreenStateImpl(
         facilities: null == facilities
             ? _value._facilities
             : facilities // ignore: cast_nullable_to_non_nullable
@@ -132,10 +281,38 @@ class __$$SAddNewManifestScreenStateImplCopyWithImpl<$Res>
             ? _value._sampleTypes
             : sampleTypes // ignore: cast_nullable_to_non_nullable
                   as List<SampleType>,
-        movement: null == movement
-            ? _value.movement
-            : movement // ignore: cast_nullable_to_non_nullable
+        samples: null == samples
+            ? _value._samples
+            : samples // ignore: cast_nullable_to_non_nullable
+                  as List<Sample>,
+        movementType: freezed == movementType
+            ? _value.movementType
+            : movementType // ignore: cast_nullable_to_non_nullable
+                  as MovementType?,
+        selectedDestinationFacility: freezed == selectedDestinationFacility
+            ? _value.selectedDestinationFacility
+            : selectedDestinationFacility // ignore: cast_nullable_to_non_nullable
+                  as Facility?,
+        pickUpFacility: freezed == pickUpFacility
+            ? _value.pickUpFacility
+            : pickUpFacility // ignore: cast_nullable_to_non_nullable
+                  as Facility?,
+        selectedSampleType: freezed == selectedSampleType
+            ? _value.selectedSampleType
+            : selectedSampleType // ignore: cast_nullable_to_non_nullable
+                  as SampleType?,
+        manifestNo: null == manifestNo
+            ? _value.manifestNo
+            : manifestNo // ignore: cast_nullable_to_non_nullable
                   as String,
+        isSavingManifest: null == isSavingManifest
+            ? _value.isSavingManifest
+            : isSavingManifest // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        alert: null == alert
+            ? _value.alert
+            : alert // ignore: cast_nullable_to_non_nullable
+                  as Alert,
       ),
     );
   }
@@ -143,16 +320,26 @@ class __$$SAddNewManifestScreenStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SAddNewManifestScreenStateImpl implements _SAddNewManifestScreenState {
-  const _$SAddNewManifestScreenStateImpl({
-    required final List<Facility> facilities,
-    required final List<SampleType> sampleTypes,
-    required this.movement,
+class _$AddNewManifestScreenStateImpl extends _AddNewManifestScreenState {
+  const _$AddNewManifestScreenStateImpl({
+    final List<Facility> facilities = const [],
+    final List<SampleType> sampleTypes = const [],
+    final List<Sample> samples = const [],
+    this.movementType,
+    this.selectedDestinationFacility,
+    this.pickUpFacility,
+    this.selectedSampleType,
+    required this.manifestNo,
+    this.isSavingManifest = false,
+    this.alert = const Alert(show: false, message: ""),
   }) : _facilities = facilities,
-       _sampleTypes = sampleTypes;
+       _sampleTypes = sampleTypes,
+       _samples = samples,
+       super._();
 
   final List<Facility> _facilities;
   @override
+  @JsonKey()
   List<Facility> get facilities {
     if (_facilities is EqualUnmodifiableListView) return _facilities;
     // ignore: implicit_dynamic_type
@@ -161,25 +348,49 @@ class _$SAddNewManifestScreenStateImpl implements _SAddNewManifestScreenState {
 
   final List<SampleType> _sampleTypes;
   @override
+  @JsonKey()
   List<SampleType> get sampleTypes {
     if (_sampleTypes is EqualUnmodifiableListView) return _sampleTypes;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_sampleTypes);
   }
 
+  final List<Sample> _samples;
   @override
-  final String movement;
+  @JsonKey()
+  List<Sample> get samples {
+    if (_samples is EqualUnmodifiableListView) return _samples;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_samples);
+  }
+
+  @override
+  final MovementType? movementType;
+  @override
+  final Facility? selectedDestinationFacility;
+  @override
+  final Facility? pickUpFacility;
+  @override
+  final SampleType? selectedSampleType;
+  @override
+  final String manifestNo;
+  @override
+  @JsonKey()
+  final bool isSavingManifest;
+  @override
+  @JsonKey()
+  final Alert alert;
 
   @override
   String toString() {
-    return 'AddNewManifestScreenState(facilities: $facilities, sampleTypes: $sampleTypes, movement: $movement)';
+    return 'AddNewManifestScreenState(facilities: $facilities, sampleTypes: $sampleTypes, samples: $samples, movementType: $movementType, selectedDestinationFacility: $selectedDestinationFacility, pickUpFacility: $pickUpFacility, selectedSampleType: $selectedSampleType, manifestNo: $manifestNo, isSavingManifest: $isSavingManifest, alert: $alert)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SAddNewManifestScreenStateImpl &&
+            other is _$AddNewManifestScreenStateImpl &&
             const DeepCollectionEquality().equals(
               other._facilities,
               _facilities,
@@ -188,8 +399,24 @@ class _$SAddNewManifestScreenStateImpl implements _SAddNewManifestScreenState {
               other._sampleTypes,
               _sampleTypes,
             ) &&
-            (identical(other.movement, movement) ||
-                other.movement == movement));
+            const DeepCollectionEquality().equals(other._samples, _samples) &&
+            (identical(other.movementType, movementType) ||
+                other.movementType == movementType) &&
+            (identical(
+                  other.selectedDestinationFacility,
+                  selectedDestinationFacility,
+                ) ||
+                other.selectedDestinationFacility ==
+                    selectedDestinationFacility) &&
+            (identical(other.pickUpFacility, pickUpFacility) ||
+                other.pickUpFacility == pickUpFacility) &&
+            (identical(other.selectedSampleType, selectedSampleType) ||
+                other.selectedSampleType == selectedSampleType) &&
+            (identical(other.manifestNo, manifestNo) ||
+                other.manifestNo == manifestNo) &&
+            (identical(other.isSavingManifest, isSavingManifest) ||
+                other.isSavingManifest == isSavingManifest) &&
+            (identical(other.alert, alert) || other.alert == alert));
   }
 
   @override
@@ -197,7 +424,14 @@ class _$SAddNewManifestScreenStateImpl implements _SAddNewManifestScreenState {
     runtimeType,
     const DeepCollectionEquality().hash(_facilities),
     const DeepCollectionEquality().hash(_sampleTypes),
-    movement,
+    const DeepCollectionEquality().hash(_samples),
+    movementType,
+    selectedDestinationFacility,
+    pickUpFacility,
+    selectedSampleType,
+    manifestNo,
+    isSavingManifest,
+    alert,
   );
 
   /// Create a copy of AddNewManifestScreenState
@@ -205,32 +439,53 @@ class _$SAddNewManifestScreenStateImpl implements _SAddNewManifestScreenState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$SAddNewManifestScreenStateImplCopyWith<_$SAddNewManifestScreenStateImpl>
+  _$$AddNewManifestScreenStateImplCopyWith<_$AddNewManifestScreenStateImpl>
   get copyWith =>
-      __$$SAddNewManifestScreenStateImplCopyWithImpl<
-        _$SAddNewManifestScreenStateImpl
+      __$$AddNewManifestScreenStateImplCopyWithImpl<
+        _$AddNewManifestScreenStateImpl
       >(this, _$identity);
 }
 
-abstract class _SAddNewManifestScreenState
-    implements AddNewManifestScreenState {
-  const factory _SAddNewManifestScreenState({
-    required final List<Facility> facilities,
-    required final List<SampleType> sampleTypes,
-    required final String movement,
-  }) = _$SAddNewManifestScreenStateImpl;
+abstract class _AddNewManifestScreenState extends AddNewManifestScreenState {
+  const factory _AddNewManifestScreenState({
+    final List<Facility> facilities,
+    final List<SampleType> sampleTypes,
+    final List<Sample> samples,
+    final MovementType? movementType,
+    final Facility? selectedDestinationFacility,
+    final Facility? pickUpFacility,
+    final SampleType? selectedSampleType,
+    required final String manifestNo,
+    final bool isSavingManifest,
+    final Alert alert,
+  }) = _$AddNewManifestScreenStateImpl;
+  const _AddNewManifestScreenState._() : super._();
 
   @override
   List<Facility> get facilities;
   @override
   List<SampleType> get sampleTypes;
   @override
-  String get movement;
+  List<Sample> get samples;
+  @override
+  MovementType? get movementType;
+  @override
+  Facility? get selectedDestinationFacility;
+  @override
+  Facility? get pickUpFacility;
+  @override
+  SampleType? get selectedSampleType;
+  @override
+  String get manifestNo;
+  @override
+  bool get isSavingManifest;
+  @override
+  Alert get alert;
 
   /// Create a copy of AddNewManifestScreenState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SAddNewManifestScreenStateImplCopyWith<_$SAddNewManifestScreenStateImpl>
+  _$$AddNewManifestScreenStateImplCopyWith<_$AddNewManifestScreenStateImpl>
   get copyWith => throw _privateConstructorUsedError;
 }

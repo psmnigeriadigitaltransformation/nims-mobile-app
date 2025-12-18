@@ -57,7 +57,7 @@ class ResultDeliveryApprovalScreenState
         /// -------------------------------------------
         /// ORIGINATING FACILITY + DESTINATION FACILITY
         /// -------------------------------------------
-        NIMSOriginDestinationLinkView(),
+        NIMSOriginDestinationLinkView(origin: '', destination: '',),
 
         SizedBox(height: 40),
 

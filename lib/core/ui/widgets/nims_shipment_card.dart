@@ -6,19 +6,22 @@ import '../../../features/dashboard/domain/mock.dart';
 import '../theme/theme.dart';
 
 class NIMSShipmentCard extends StatefulWidget {
-  final String manifestID;
-  final String destinationName;
+  final DomainShipment shipment;
   final List<DomainFacility> facilities;
   final List<DomainLocation> locations;
   final VoidCallback onTap;
+  final Function(DomainLocation) onSelectDestinationLocationType;
 
-  const NIMSShipmentCard({
+  late final TextEditingController selectedLocationController =
+      TextEditingController(text: shipment.destinationLocationType);
+
+  NIMSShipmentCard({
     super.key,
-    required this.manifestID,
-    required this.destinationName,
+    required this.shipment,
     required this.facilities,
     required this.locations,
     required this.onTap,
+    required this.onSelectDestinationLocationType,
   });
 
   @override
@@ -26,13 +29,6 @@ class NIMSShipmentCard extends StatefulWidget {
 }
 
 class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
-  final TextEditingController selectedLocationController =
-      TextEditingController();
-  final TextEditingController selectedFacilityController =
-      TextEditingController();
-  DomainLocation? selectedLocation;
-  DomainFacility? selectedFacility;
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -62,7 +58,7 @@ class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
                     color: Theme.of(context).colorScheme.tertiaryContainer,
                   ),
                   child: Text(
-                    widget.manifestID,
+                    widget.shipment.shipmentNo,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                 ),
@@ -71,7 +67,7 @@ class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
                 Row(
                   children: [
                     Text(
-                      "Viral Load",
+                      widget.shipment.sampleType,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
@@ -92,7 +88,7 @@ class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
               child: Padding(
                 padding: EdgeInsetsGeometry.symmetric(horizontal: 4),
                 child: Text(
-                  "200 Specimens",
+                  "${widget.shipment.sampleCount} Specimens",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodySmall,
@@ -133,64 +129,12 @@ class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
                 ),
               ],
               onSelected: (value) {
-                setState(() {
-                  selectedLocationController.text = value ?? "";
-                  selectedLocation = widget.locations.firstWhere(
+                widget.onSelectDestinationLocationType(
+                  widget.locations.firstWhere(
                     (location) => location.location == value,
-                  );
-                  selectedFacility = null;
-                  selectedFacilityController.text = "";
-                });
+                  ),
+                );
               },
-              controller: selectedLocationController,
-            ),
-            SizedBox(height: 12),
-            DropdownMenu<String>(
-              textStyle: Theme.of(context).textTheme.bodySmall,
-              inputDecorationTheme: NIMSTheme.secondaryInputDecorationTheme,
-              trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
-              selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
-              width: size.width - 80,
-              label: Text("Destination Facility"),
-              dropdownMenuEntries: [
-                ...widget.facilities
-                    .where(
-                      (facility) =>
-                          selectedLocation?.location?.toLowerCase().contains(
-                            facility.type?.toLowerCase() ?? "",
-                          ) ??
-                          false,
-                    )
-                    .map(
-                      (facility) => DropdownMenuEntry(
-                        value: facility.facilityName ?? "",
-                        labelWidget: Text(
-                          facility.facilityName ?? "",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        label: facility.facilityName ?? "",
-                        style: ButtonStyle().copyWith(
-                          shape: WidgetStateProperty.all(
-                            RoundedRectangleBorder(
-                              side: BorderSide(
-                                width: 0.25,
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-              ],
-              onSelected: (value) {
-                setState(() {
-                  selectedFacilityController.text = value ?? "";
-                  selectedFacility = widget.facilities.firstWhere(
-                    (facility) => facility.facilityName == value,
-                  );
-                });
-              },
-              controller: selectedFacilityController,
             ),
           ],
         ),

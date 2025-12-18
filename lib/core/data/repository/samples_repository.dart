@@ -40,7 +40,7 @@ class SamplesRepository {
             final domainSampleTypes = sampleTypes
                 .map((sampleType) => sampleType.toDomain())
                 .toList();
-            await _localService.updateCachedSampleTypes(domainSampleTypes);
+            await _localService.cacheSampleTypes(domainSampleTypes);
             return Success(domainSampleTypes);
           case Error<SampleTypesResponse>():
             developer.log(

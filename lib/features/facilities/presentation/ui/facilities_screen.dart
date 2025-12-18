@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:projects/core/domain/mappers/typedefs.dart';
 import 'package:projects/core/ui/widgets/sticky_header_delegate.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
-import '../../../../core/ui/widgets/nims_alert_dialog.dart';
+import '../../../../core/ui/widgets/nims_error_content.dart';
 import '../../../../core/ui/widgets/nims_facility_card.dart';
 import '../../../../core/ui/widgets/nims_round_icon_button.dart';
 import '../providers.dart';
@@ -76,15 +76,17 @@ class FacilitiesScreen extends ConsumerWidget {
         ),
       ),
       body: asyncState.when(
-        loading: () => const Padding(
-          padding: EdgeInsets.all(40),
-          child: SizedBox(
-            width: 40,
-            height: 40,
-            child: CircularProgressIndicator(strokeWidth: 2),
+        loading: () => Container(
+          color: Theme.of(context).colorScheme.surface,
+          child: Center(
+            child: const SizedBox(
+              width: 40,
+              height: 40,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
           ),
         ),
-        error: (err, stack) => NIMSAlertDialog(
+        error: (err, stack) => NIMSErrorContent(
           message: err.toString(),
           onTapActionButton: () {
             ref

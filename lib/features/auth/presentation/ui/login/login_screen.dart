@@ -7,7 +7,8 @@ import 'package:projects/app/route_name+path+params.dart';
 import 'package:projects/core/ui/widgets/nims_primary_button.dart';
 
 import '../../../../../core/ui/screens/nims_base_screen.dart';
-import '../../../../../core/ui/widgets/nims_alert_dialog.dart';
+import '../../../../../core/ui/widgets/nims_alert_dialog_content.dart';
+import '../../../../../core/ui/widgets/nims_error_content.dart';
 import '../../providers.dart';
 
 class LoginScreen extends ConsumerWidget {
@@ -27,7 +28,7 @@ class LoginScreen extends ConsumerWidget {
         if (next.show) {
           showDialog(
             context: context,
-            builder: (buildContext) => NIMSAlertDialog(
+            builder: (buildContext) => NIMSAlertDialogContent(
               message: next.message,
               onTapActionButton: () {
                 context.pop();
