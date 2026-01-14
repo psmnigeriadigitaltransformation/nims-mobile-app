@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/ui/widgets/nims_primary_button.dart';

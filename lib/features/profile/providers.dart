@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 
 import '../auth/data/providers.dart';
 

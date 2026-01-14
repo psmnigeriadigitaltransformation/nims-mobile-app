@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 
 import '../../../../../core/ui/widgets/nims_error_button.dart';
 import '../../../../../core/ui/widgets/nims_round_icon_button.dart';

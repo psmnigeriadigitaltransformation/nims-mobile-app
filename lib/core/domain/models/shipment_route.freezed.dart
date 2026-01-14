@@ -26,8 +26,12 @@ mixin _$ShipmentRoute {
   String get routeNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'origin_facility_id')
   String get originFacilityId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'origin_facility_name')
+  String get originFacilityName => throw _privateConstructorUsedError;
   @JsonKey(name: 'destination_facility_id')
   String get destinationFacilityId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'destination_facility_name')
+  String get destinationFacilityName => throw _privateConstructorUsedError;
   @JsonKey(name: 'lsp_code')
   String get lspCode => throw _privateConstructorUsedError;
   @JsonKey(name: 'rider_user_id')
@@ -56,7 +60,9 @@ abstract class $ShipmentRouteCopyWith<$Res> {
     int? id,
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'origin_facility_id') String originFacilityId,
+    @JsonKey(name: 'origin_facility_name') String originFacilityName,
     @JsonKey(name: 'destination_facility_id') String destinationFacilityId,
+    @JsonKey(name: 'destination_facility_name') String destinationFacilityName,
     @JsonKey(name: 'lsp_code') String lspCode,
     @JsonKey(name: 'rider_user_id') String riderUserId,
     double? latitude,
@@ -82,7 +88,9 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
     Object? id = freezed,
     Object? routeNo = null,
     Object? originFacilityId = null,
+    Object? originFacilityName = null,
     Object? destinationFacilityId = null,
+    Object? destinationFacilityName = null,
     Object? lspCode = null,
     Object? riderUserId = null,
     Object? latitude = freezed,
@@ -102,9 +110,17 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
                 ? _value.originFacilityId
                 : originFacilityId // ignore: cast_nullable_to_non_nullable
                       as String,
+            originFacilityName: null == originFacilityName
+                ? _value.originFacilityName
+                : originFacilityName // ignore: cast_nullable_to_non_nullable
+                      as String,
             destinationFacilityId: null == destinationFacilityId
                 ? _value.destinationFacilityId
                 : destinationFacilityId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            destinationFacilityName: null == destinationFacilityName
+                ? _value.destinationFacilityName
+                : destinationFacilityName // ignore: cast_nullable_to_non_nullable
                       as String,
             lspCode: null == lspCode
                 ? _value.lspCode
@@ -141,7 +157,9 @@ abstract class _$$ShipmentRouteImplCopyWith<$Res>
     int? id,
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'origin_facility_id') String originFacilityId,
+    @JsonKey(name: 'origin_facility_name') String originFacilityName,
     @JsonKey(name: 'destination_facility_id') String destinationFacilityId,
+    @JsonKey(name: 'destination_facility_name') String destinationFacilityName,
     @JsonKey(name: 'lsp_code') String lspCode,
     @JsonKey(name: 'rider_user_id') String riderUserId,
     double? latitude,
@@ -166,7 +184,9 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? routeNo = null,
     Object? originFacilityId = null,
+    Object? originFacilityName = null,
     Object? destinationFacilityId = null,
+    Object? destinationFacilityName = null,
     Object? lspCode = null,
     Object? riderUserId = null,
     Object? latitude = freezed,
@@ -186,9 +206,17 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
             ? _value.originFacilityId
             : originFacilityId // ignore: cast_nullable_to_non_nullable
                   as String,
+        originFacilityName: null == originFacilityName
+            ? _value.originFacilityName
+            : originFacilityName // ignore: cast_nullable_to_non_nullable
+                  as String,
         destinationFacilityId: null == destinationFacilityId
             ? _value.destinationFacilityId
             : destinationFacilityId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        destinationFacilityName: null == destinationFacilityName
+            ? _value.destinationFacilityName
+            : destinationFacilityName // ignore: cast_nullable_to_non_nullable
                   as String,
         lspCode: null == lspCode
             ? _value.lspCode
@@ -218,8 +246,11 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
     this.id,
     @JsonKey(name: 'route_no') required this.routeNo,
     @JsonKey(name: 'origin_facility_id') required this.originFacilityId,
+    @JsonKey(name: 'origin_facility_name') required this.originFacilityName,
     @JsonKey(name: 'destination_facility_id')
     required this.destinationFacilityId,
+    @JsonKey(name: 'destination_facility_name')
+    required this.destinationFacilityName,
     @JsonKey(name: 'lsp_code') required this.lspCode,
     @JsonKey(name: 'rider_user_id') required this.riderUserId,
     this.latitude,
@@ -238,8 +269,14 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
   @JsonKey(name: 'origin_facility_id')
   final String originFacilityId;
   @override
+  @JsonKey(name: 'origin_facility_name')
+  final String originFacilityName;
+  @override
   @JsonKey(name: 'destination_facility_id')
   final String destinationFacilityId;
+  @override
+  @JsonKey(name: 'destination_facility_name')
+  final String destinationFacilityName;
   @override
   @JsonKey(name: 'lsp_code')
   final String lspCode;
@@ -253,7 +290,7 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
 
   @override
   String toString() {
-    return 'ShipmentRoute(id: $id, routeNo: $routeNo, originFacilityId: $originFacilityId, destinationFacilityId: $destinationFacilityId, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude)';
+    return 'ShipmentRoute(id: $id, routeNo: $routeNo, originFacilityId: $originFacilityId, originFacilityName: $originFacilityName, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -265,8 +302,15 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
             (identical(other.routeNo, routeNo) || other.routeNo == routeNo) &&
             (identical(other.originFacilityId, originFacilityId) ||
                 other.originFacilityId == originFacilityId) &&
+            (identical(other.originFacilityName, originFacilityName) ||
+                other.originFacilityName == originFacilityName) &&
             (identical(other.destinationFacilityId, destinationFacilityId) ||
                 other.destinationFacilityId == destinationFacilityId) &&
+            (identical(
+                  other.destinationFacilityName,
+                  destinationFacilityName,
+                ) ||
+                other.destinationFacilityName == destinationFacilityName) &&
             (identical(other.lspCode, lspCode) || other.lspCode == lspCode) &&
             (identical(other.riderUserId, riderUserId) ||
                 other.riderUserId == riderUserId) &&
@@ -283,7 +327,9 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
     id,
     routeNo,
     originFacilityId,
+    originFacilityName,
     destinationFacilityId,
+    destinationFacilityName,
     lspCode,
     riderUserId,
     latitude,
@@ -309,8 +355,12 @@ abstract class _ShipmentRoute implements ShipmentRoute {
     final int? id,
     @JsonKey(name: 'route_no') required final String routeNo,
     @JsonKey(name: 'origin_facility_id') required final String originFacilityId,
+    @JsonKey(name: 'origin_facility_name')
+    required final String originFacilityName,
     @JsonKey(name: 'destination_facility_id')
     required final String destinationFacilityId,
+    @JsonKey(name: 'destination_facility_name')
+    required final String destinationFacilityName,
     @JsonKey(name: 'lsp_code') required final String lspCode,
     @JsonKey(name: 'rider_user_id') required final String riderUserId,
     final double? latitude,
@@ -329,8 +379,14 @@ abstract class _ShipmentRoute implements ShipmentRoute {
   @JsonKey(name: 'origin_facility_id')
   String get originFacilityId;
   @override
+  @JsonKey(name: 'origin_facility_name')
+  String get originFacilityName;
+  @override
   @JsonKey(name: 'destination_facility_id')
   String get destinationFacilityId;
+  @override
+  @JsonKey(name: 'destination_facility_name')
+  String get destinationFacilityName;
   @override
   @JsonKey(name: 'lsp_code')
   String get lspCode;

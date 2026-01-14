@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/features/facilities/data/repository/facilities_repository.dart';
+import 'package:nims_mobile_app/features/facilities/data/repository/facilities_repository.dart';
 
 import '../../../core/services/providers.dart';
 

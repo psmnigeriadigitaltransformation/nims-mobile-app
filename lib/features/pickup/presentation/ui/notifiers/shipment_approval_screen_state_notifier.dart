@@ -4,15 +4,16 @@ import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/core/data/providers.dart';
-import 'package:projects/core/ui/model/model/alert.dart';
-import 'package:projects/features/auth/data/providers.dart';
-import 'package:projects/features/facilities/data/providers.dart';
-import 'package:projects/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
+import 'package:nims_mobile_app/core/data/providers.dart';
+import 'package:nims_mobile_app/core/ui/model/model/alert.dart';
+import 'package:nims_mobile_app/features/auth/data/providers.dart';
+import 'package:nims_mobile_app/features/facilities/data/providers.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/domain/mappers/typedefs.dart';
 import '../../../../../core/utils/result.dart';
+import '../../../../dashboard/providers.dart';
 import '../model/shipment_approval_screen_state.dart';
 import '../model/shipments_screen_state.dart';
 
@@ -92,6 +93,8 @@ class ShipmentApprovalScreenStateNotifier
           state.destinationFacility.facilityId?.toString() ?? "",
       lspCode: '',
       riderUserId: user?.userId ?? "",
+      originFacilityName: state.pickUpFacility.facilityName ?? "",
+      destinationFacilityName: state.destinationFacility.facilityName ?? "",
     );
 
     final approval = DomainApproval(
@@ -110,6 +113,7 @@ class ShipmentApprovalScreenStateNotifier
 
     switch (result) {
       case Success<bool>():
+        ref.invalidate(dashboardScreenStateNotifierProvider);
         state = state.copyWith(showSuccessDialog: true);
       case Error<bool>():
         state = state.copyWith(

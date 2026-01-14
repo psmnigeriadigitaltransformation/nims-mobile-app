@@ -1,23 +1,23 @@
 import 'dart:developer' as developer;
 
-import 'package:projects/core/network/dio.dart';
-import 'package:projects/core/services/remote/models/create_shipment_route_response.dart';
-import 'package:projects/core/services/remote/models/delete_manifest_response.dart';
-import 'package:projects/core/services/remote/models/delete_sample_response.dart';
-import 'package:projects/core/services/remote/models/etoken_response.dart';
-import 'package:projects/core/services/remote/models/locations_response.dart';
-import 'package:projects/core/services/remote/models/login_response.dart';
-import 'package:projects/core/services/remote/models/movement_types_response.dart';
-import 'package:projects/core/services/remote/models/reject_sample_response.dart';
-import 'package:projects/core/services/remote/models/request/create_shipment_route_request_body.dart';
-import 'package:projects/core/services/remote/models/request/delete_manifest_request_body.dart';
-import 'package:projects/core/services/remote/models/request/delete_sample_request_body.dart';
-import 'package:projects/core/services/remote/models/request/reject_sample_request_body.dart';
-import 'package:projects/core/services/remote/models/request/update_manifest_request_body.dart';
-import 'package:projects/core/services/remote/models/request/update_sample_request_body.dart';
-import 'package:projects/core/services/remote/models/sample_types_response.dart';
-import 'package:projects/core/services/remote/models/update_manifest_response.dart';
-import 'package:projects/core/services/remote/models/update_sample_response.dart';
+import 'package:nims_mobile_app/core/network/dio.dart';
+import 'package:nims_mobile_app/core/services/remote/models/create_shipment_route_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/delete_manifest_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/delete_sample_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/etoken_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/locations_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/login_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/movement_types_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/reject_sample_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/request/create_shipment_route_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/request/delete_manifest_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/request/delete_sample_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/request/reject_sample_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/request/update_manifest_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/request/update_sample_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/sample_types_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/update_manifest_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/update_sample_response.dart';
 
 import '../../../../../core/utils/result.dart';
 import '../local/shared_preferences_helper.dart';
@@ -48,6 +48,7 @@ class NIMSAPIService {
         "api login response: $response",
         name: "NIMSAPIService:login",
       );
+      if (response.statusCode != 200) throw response;
       final decodedResponse = LoginResponse.fromJson(response.data);
       await SharedPreferencesHelper.saveToken(decodedResponse.data?.jwt ?? "");
       if (decodedResponse.resultCode == 200) {
@@ -60,7 +61,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:login");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -87,7 +88,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:facilities");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -109,7 +110,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:getSampleTypes");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -131,7 +132,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:getLocations");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -153,7 +154,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:getMovementTypes");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -178,7 +179,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:generateETokens");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -205,7 +206,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:createManifests");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -232,7 +233,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:updateManifest");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -259,7 +260,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:deleteManifest");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -286,7 +287,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:updateSample");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -313,7 +314,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:deleteSample");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -340,7 +341,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:rejectSample");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 
@@ -367,7 +368,7 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:createShipmentRoute");
-      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
 }

@@ -1,36 +1,36 @@
-import 'package:projects/core/domain/models/user.dart' as domain_user;
-import 'package:projects/core/services/remote/models/login_response.dart'
+import 'package:nims_mobile_app/core/domain/models/user.dart' as domain_user;
+import 'package:nims_mobile_app/core/services/remote/models/login_response.dart'
     as login_response;
 
-import 'package:projects/core/domain/models/platform.dart' as domain_platform;
-import 'package:projects/core/domain/models/system_privilege.dart' as domain_system_privilege;
-import 'package:projects/core/domain/models/privilege.dart' as domain_privilege;
-import 'package:projects/core/domain/models/lsp.dart' as domain_lsp;
+import 'package:nims_mobile_app/core/domain/models/platform.dart' as domain_platform;
+import 'package:nims_mobile_app/core/domain/models/system_privilege.dart' as domain_system_privilege;
+import 'package:nims_mobile_app/core/domain/models/privilege.dart' as domain_privilege;
+import 'package:nims_mobile_app/core/domain/models/lsp.dart' as domain_lsp;
 
-import 'package:projects/core/services/remote/models/facilities_response.dart' as facilities_response;
-import 'package:projects/core/domain/models/facility.dart' as domain_facility;
+import 'package:nims_mobile_app/core/services/remote/models/facilities_response.dart' as facilities_response;
+import 'package:nims_mobile_app/core/domain/models/facility.dart' as domain_facility;
 
-import 'package:projects/core/services/remote/models/sample_types_response.dart' as sample_type_response;
-import 'package:projects/core/domain/models/sample_type.dart' as domain_sample_type;
+import 'package:nims_mobile_app/core/services/remote/models/sample_types_response.dart' as sample_type_response;
+import 'package:nims_mobile_app/core/domain/models/sample_type.dart' as domain_sample_type;
 
-import 'package:projects/core/services/remote/models/locations_response.dart' as location_response;
-import 'package:projects/core/domain/models/location.dart' as domain_location;
+import 'package:nims_mobile_app/core/services/remote/models/locations_response.dart' as location_response;
+import 'package:nims_mobile_app/core/domain/models/location.dart' as domain_location;
 
-import 'package:projects/core/services/remote/models/movement_types_response.dart' as movement_type_response;
-import 'package:projects/core/domain/models/movement_type.dart' as domain_movement_type;
+import 'package:nims_mobile_app/core/services/remote/models/movement_types_response.dart' as movement_type_response;
+import 'package:nims_mobile_app/core/domain/models/movement_type.dart' as domain_movement_type;
 
-import 'package:projects/core/services/remote/models/etoken_response.dart' as etoken_response;
-import 'package:projects/core/domain/models/etoken_data.dart' as domain_etoken_data;
+import 'package:nims_mobile_app/core/services/remote/models/etoken_response.dart' as etoken_response;
+import 'package:nims_mobile_app/core/domain/models/etoken_data.dart' as domain_etoken_data;
 
-import 'package:projects/core/services/remote/models/request/create_manifest_request_body.dart' as create_manifest_request_body;
-import 'package:projects/core/domain/models/manifest.dart' as domain_manifest;
-import 'package:projects/core/domain/models/sample.dart' as domain_sample;
+import 'package:nims_mobile_app/core/services/remote/models/request/create_manifest_request_body.dart' as create_manifest_request_body;
+import 'package:nims_mobile_app/core/domain/models/manifest.dart' as domain_manifest;
+import 'package:nims_mobile_app/core/domain/models/sample.dart' as domain_sample;
 
-import 'package:projects/core/services/remote/models/request/create_shipment_route_request_body.dart' as create_shipment_route_request_body;
-import 'package:projects/core/domain/models/shipment_route.dart' as domain_route;
+import 'package:nims_mobile_app/core/services/remote/models/request/create_shipment_route_request_body.dart' as create_shipment_route_request_body;
+import 'package:nims_mobile_app/core/domain/models/shipment_route.dart' as domain_route;
 
-import 'package:projects/core/domain/models/shipment.dart' as domain_shipment;
-import 'package:projects/core/domain/models/approval.dart' as domain_approval;
+import 'package:nims_mobile_app/core/domain/models/shipment.dart' as domain_shipment;
+import 'package:nims_mobile_app/core/domain/models/approval.dart' as domain_approval;
 
 typedef RemoteUser = login_response.User;
 typedef DomainUser = domain_user.User;

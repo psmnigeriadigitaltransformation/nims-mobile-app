@@ -25,6 +25,7 @@ mixin _$DashboardScreenState {
       throw _privateConstructorUsedError;
   List<MovementType> get resultsMovementTypes =>
       throw _privateConstructorUsedError;
+  List<ShipmentRoute> get shipmentRoutes => throw _privateConstructorUsedError;
 
   /// Create a copy of DashboardScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -47,6 +48,7 @@ abstract class $DashboardScreenStateCopyWith<$Res> {
     String deviceSerialNo,
     List<MovementType> specimensMovementTypes,
     List<MovementType> resultsMovementTypes,
+    List<ShipmentRoute> shipmentRoutes,
   });
 }
 
@@ -74,6 +76,7 @@ class _$DashboardScreenStateCopyWithImpl<
     Object? deviceSerialNo = null,
     Object? specimensMovementTypes = null,
     Object? resultsMovementTypes = null,
+    Object? shipmentRoutes = null,
   }) {
     return _then(
       _value.copyWith(
@@ -101,6 +104,10 @@ class _$DashboardScreenStateCopyWithImpl<
                 ? _value.resultsMovementTypes
                 : resultsMovementTypes // ignore: cast_nullable_to_non_nullable
                       as List<MovementType>,
+            shipmentRoutes: null == shipmentRoutes
+                ? _value.shipmentRoutes
+                : shipmentRoutes // ignore: cast_nullable_to_non_nullable
+                      as List<ShipmentRoute>,
           )
           as $Val,
     );
@@ -123,6 +130,7 @@ abstract class _$$DashboardScreenStateeImplCopyWith<$Res>
     String deviceSerialNo,
     List<MovementType> specimensMovementTypes,
     List<MovementType> resultsMovementTypes,
+    List<ShipmentRoute> shipmentRoutes,
   });
 }
 
@@ -147,6 +155,7 @@ class __$$DashboardScreenStateeImplCopyWithImpl<$Res>
     Object? deviceSerialNo = null,
     Object? specimensMovementTypes = null,
     Object? resultsMovementTypes = null,
+    Object? shipmentRoutes = null,
   }) {
     return _then(
       _$DashboardScreenStateeImpl(
@@ -174,6 +183,10 @@ class __$$DashboardScreenStateeImplCopyWithImpl<$Res>
             ? _value._resultsMovementTypes
             : resultsMovementTypes // ignore: cast_nullable_to_non_nullable
                   as List<MovementType>,
+        shipmentRoutes: null == shipmentRoutes
+            ? _value._shipmentRoutes
+            : shipmentRoutes // ignore: cast_nullable_to_non_nullable
+                  as List<ShipmentRoute>,
       ),
     );
   }
@@ -189,8 +202,10 @@ class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
     required this.deviceSerialNo,
     required final List<MovementType> specimensMovementTypes,
     required final List<MovementType> resultsMovementTypes,
+    final List<ShipmentRoute> shipmentRoutes = const [],
   }) : _specimensMovementTypes = specimensMovementTypes,
-       _resultsMovementTypes = resultsMovementTypes;
+       _resultsMovementTypes = resultsMovementTypes,
+       _shipmentRoutes = shipmentRoutes;
 
   @override
   final String userFullName;
@@ -218,9 +233,18 @@ class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
     return EqualUnmodifiableListView(_resultsMovementTypes);
   }
 
+  final List<ShipmentRoute> _shipmentRoutes;
+  @override
+  @JsonKey()
+  List<ShipmentRoute> get shipmentRoutes {
+    if (_shipmentRoutes is EqualUnmodifiableListView) return _shipmentRoutes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_shipmentRoutes);
+  }
+
   @override
   String toString() {
-    return 'DashboardScreenState(userFullName: $userFullName, userRole: $userRole, userId: $userId, deviceSerialNo: $deviceSerialNo, specimensMovementTypes: $specimensMovementTypes, resultsMovementTypes: $resultsMovementTypes)';
+    return 'DashboardScreenState(userFullName: $userFullName, userRole: $userRole, userId: $userId, deviceSerialNo: $deviceSerialNo, specimensMovementTypes: $specimensMovementTypes, resultsMovementTypes: $resultsMovementTypes, shipmentRoutes: $shipmentRoutes)';
   }
 
   @override
@@ -242,6 +266,10 @@ class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
             const DeepCollectionEquality().equals(
               other._resultsMovementTypes,
               _resultsMovementTypes,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._shipmentRoutes,
+              _shipmentRoutes,
             ));
   }
 
@@ -254,6 +282,7 @@ class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
     deviceSerialNo,
     const DeepCollectionEquality().hash(_specimensMovementTypes),
     const DeepCollectionEquality().hash(_resultsMovementTypes),
+    const DeepCollectionEquality().hash(_shipmentRoutes),
   );
 
   /// Create a copy of DashboardScreenState
@@ -277,6 +306,7 @@ abstract class _DashboardScreenStatee implements DashboardScreenState {
     required final String deviceSerialNo,
     required final List<MovementType> specimensMovementTypes,
     required final List<MovementType> resultsMovementTypes,
+    final List<ShipmentRoute> shipmentRoutes,
   }) = _$DashboardScreenStateeImpl;
 
   @override
@@ -291,6 +321,8 @@ abstract class _DashboardScreenStatee implements DashboardScreenState {
   List<MovementType> get specimensMovementTypes;
   @override
   List<MovementType> get resultsMovementTypes;
+  @override
+  List<ShipmentRoute> get shipmentRoutes;
 
   /// Create a copy of DashboardScreenState
   /// with the given fields replaced by the non-null parameter values.

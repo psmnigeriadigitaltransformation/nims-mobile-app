@@ -1,8 +1,8 @@
 import 'dart:developer' as developer;
 
-import 'package:projects/core/data/repository/etoken_repository.dart';
-import 'package:projects/core/utils/result.dart';
-import 'package:projects/features/facilities/data/repository/facilities_repository.dart';
+import 'package:nims_mobile_app/core/data/repository/etoken_repository.dart';
+import 'package:nims_mobile_app/core/utils/result.dart';
+import 'package:nims_mobile_app/features/facilities/data/repository/facilities_repository.dart';
 
 import '../../../../core/data/repository/locations_repository.dart';
 import '../../../../core/data/repository/movement_types_repository.dart';

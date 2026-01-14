@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 
-import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/shipment_route.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'database.dart';
@@ -351,5 +352,84 @@ class NIMSLocalService {
       batch.insert("approvals", approval.toJson());
       await batch.commit(noResult: true);
     });
+  }
+
+  Future<List<DomainManifest>> getCachedManifestsBySearchQuery(
+    String query,
+  ) async {
+    developer.log(
+      "query: $query",
+      name: "NIMSLocalService:getCachedManifestsBySearchQuery",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "manifests",
+      where: """
+        (manifest_no
+         || sample_type
+         || originating_facility_name
+         || phlebotomy_no) LIKE ?
+      """,
+      whereArgs: ["%$query%"],
+      orderBy: "created_at DESC",
+    );
+    developer.log(
+      "manifestsCC: $result",
+      name: "NIMSLocalService:getCachedManifestsBySearchQuery",
+    );
+    return result.map((manifest) => DomainManifest.fromJson(manifest)).toList();
+  }
+
+  Future<List<DomainShipment>> getCachedShipmentsBySearchQuery(
+    String query,
+  ) async {
+    developer.log(
+      "query: $query",
+      name: "NIMSLocalService:getCachedShipmentsBySearchQuery",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "shipments",
+      where: """
+        (shipment_no
+         || route_no
+         || manifest_no
+         || destination_location_type
+         || destination_facility_name
+         || sample_type) LIKE ?
+      """,
+      whereArgs: ["%$query%"],
+      orderBy: "pickup_date DESC",
+    );
+    developer.log(
+      "shipments: $result",
+      name: "NIMSLocalService:getCachedShipmentsBySearchQuery",
+    );
+    return result.map((shipment) => DomainShipment.fromJson(shipment)).toList();
+  }
+
+  Future<List<ShipmentRoute>> getCachedShipmentRoutesBySearchQuery(
+    String query,
+  ) async {
+    developer.log(
+      "query: $query",
+      name: "NIMSLocalService:getCachedShipmentRoutesBySearchQuery",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "routes",
+      where: """
+        (route_no
+         || origin_facility_name
+         || destination_facility_name) LIKE ?
+      """,
+      whereArgs: ["%$query%"],
+      orderBy: "created_at DESC",
+    );
+    developer.log(
+      "manifestsCC: $result",
+      name: "NIMSLocalService:getCachedShipmentRoutesBySearchQuery",
+    );
+    return result.map((route) => DomainShipmentRoute.fromJson(route)).toList();
   }
 }

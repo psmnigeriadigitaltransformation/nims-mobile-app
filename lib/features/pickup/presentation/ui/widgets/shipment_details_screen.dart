@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:projects/core/domain/models/sample.dart';
-import 'package:projects/core/ui/screens/nims_screen.dart';
-import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
-import 'package:projects/core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
-import 'package:projects/features/dashboard/domain/route_type.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nims_mobile_app/core/domain/models/sample.dart';
+import 'package:nims_mobile_app/core/ui/screens/nims_screen.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_round_icon_button.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
+import 'package:nims_mobile_app/features/dashboard/domain/route_type.dart';
 
 import '../../../../../core/ui/theme/colors.dart';
 import '../../../../../core/ui/widgets/nims_specimen_card.dart';
@@ -29,7 +30,7 @@ class ShipmentDetailsScreen extends StatelessWidget {
           children: [
             NIMSRoundIconButton(
               icon: Icons.arrow_back_ios_rounded,
-              onPressed: () => {},
+              onPressed: () => context.pop(),
             ),
             Spacer(),
             Text(

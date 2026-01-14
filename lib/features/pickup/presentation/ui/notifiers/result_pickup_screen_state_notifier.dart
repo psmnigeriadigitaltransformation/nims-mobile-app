@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/features/facilities/data/providers.dart';
-import 'package:projects/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/features/facilities/data/providers.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
 
 import '../../../../../core/utils/result.dart';
 

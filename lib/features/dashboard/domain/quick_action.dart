@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:projects/core/ui/theme/colors.dart';
+import 'package:nims_mobile_app/core/ui/theme/colors.dart';
 
 enum QuickAction {
   facilities("Facilities", "lib/core/ui/icons/ic_laboratory.png", NIMSColors.pink01),

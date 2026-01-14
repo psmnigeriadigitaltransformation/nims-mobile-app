@@ -33,8 +33,8 @@ const routeDetailsPath = '/route_details';
 const manifestDetailsScreen = 'manifest_details_screen';
 const manifestDetailsPath = '/manifest_details';
 
-const shipmentsScreen = 'shipments_screen';
-const shipmentsPath = '/shipments';
+const shipmentScreen = 'shipment_screen';
+const shipmentPath = '/shipment_screen';
 
 const profileScreen = 'profile_screen';
 const profilePath = '/profile';
@@ -42,9 +42,16 @@ const profilePath = '/profile';
 const facilitiesScreen = 'facilities_screen';
 const facilitiesPath = '/facilities';
 
+const manifestsScreen = 'manifests_screen';
+const manifestsPath = '/manifests';
+
+const shipmentsScreen = 'shipments_screen';
+const shipmentsPath = '/shipments';
+
 // QUERY PARAMS
 const movementTypeQueryParam = "movement_type";
 const pickupFacilityQueryParam = "pickup_facility";
 const destinationFacilityQueryParam = "destination_facility";
 const manifestsQueryParam = "manifests";
 const shipmentsQueryParam = "shipments";
+const routeQueryParam = "route";

@@ -1,9 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/services/remote/models/facilities_response.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/services/remote/models/facilities_response.dart';
 
 import '../../../../../core/domain/models/facility.dart';
 import '../../../../../core/domain/models/movement_type.dart';
+import '../../../../../core/domain/models/shipment_route.dart';
 import '../../../../../core/ui/model/model/alert.dart';
 
 part 'dashboard_screen_state.freezed.dart';
@@ -17,6 +18,7 @@ class DashboardScreenState with _$DashboardScreenState {
     required String deviceSerialNo,
     required List<DomainMovementType> specimensMovementTypes,
     required List<DomainMovementType> resultsMovementTypes,
+    @Default([]) List<DomainShipmentRoute> shipmentRoutes
   }) = _DashboardScreenStatee;
 
   // factory DashboardScreenState.initial() => const DashboardScreenState(

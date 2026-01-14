@@ -4,25 +4,29 @@ import 'dart:developer' as developer;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/app/route_name+path+params.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/ui/widgets/nims_error_content.dart';
-import 'package:projects/features/dashboard/domain/route_type.dart';
-import 'package:projects/features/dashboard/presentation/ui/dashboard_screen.dart';
-import 'package:projects/features/dashboard/presentation/ui/route_details_screen.dart';
-import 'package:projects/features/facilities/presentation/ui/facilities_screen.dart';
-import 'package:projects/features/pickup/presentation/ui/widgets/shipment_screen.dart';
-import 'package:projects/features/profile/presentation/ui/profile_screen.dart';
+import 'package:nims_mobile_app/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_error_content.dart';
+import 'package:nims_mobile_app/features/dashboard/domain/route_type.dart';
+import 'package:nims_mobile_app/features/dashboard/presentation/ui/dashboard_screen.dart';
+import 'package:nims_mobile_app/features/dashboard/presentation/ui/route_details_screen.dart';
+import 'package:nims_mobile_app/features/facilities/presentation/ui/facilities_screen.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/widgets/shipment_screen.dart';
+import 'package:nims_mobile_app/features/profile/presentation/ui/profile_screen.dart';
 import '../features/auth/presentation/ui/login/login_screen.dart';
 import '../features/delivery/presentation/ui/result_delivery_approval_screen.dart';
 import '../features/delivery/presentation/ui/specimen_delivery_approval_screen.dart';
-import '../core/ui/widgets/sticky_header_delegate.dart';
 import '../features/pickup/presentation/ui/widgets/add_new_manifest_screen.dart';
-import '../features/pickup/presentation/ui/widgets/manifests_screen.dart';
+import '../features/pickup/presentation/ui/widgets/manifest_details_screen.dart';
+import '../features/pickup/presentation/ui/widgets/manifests_screen.dart'
+    as pickup_manifests_screen;
+import '../features/manifests/presentation/ui/manifests_screen.dart'
+    as manifests_screen;
 import '../features/pickup/presentation/ui/widgets/result_pickup_screen.dart';
 import '../features/pickup/presentation/ui/widgets/result_shipment_approval_screen.dart';
 import '../features/pickup/presentation/ui/widgets/shipment_details_screen.dart';
 import '../features/pickup/presentation/ui/widgets/specimen_shipment_approval_screen.dart';
+import '../features/shipments/presentation/ui/shipments_screen.dart';
 
 final router = GoRouter(
   initialLocation: loginPath,
@@ -48,6 +52,13 @@ final router = GoRouter(
       builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
+      name: manifestsScreen,
+      path: manifestsPath,
+      builder: (context, state) {
+        return manifests_screen.ManifestsScreen();
+      },
+    ),
+    GoRoute(
       name: specimenPickUpScreen,
       path: specimenPickUpPath,
       builder: (context, state) {
@@ -64,7 +75,9 @@ final router = GoRouter(
             jsonDecode(movementTypeJson),
           );
 
-          return ManifestsScreen(movementType: movementType);
+          return pickup_manifests_screen.ManifestsScreen(
+            movementType: movementType,
+          );
         }
       },
     ),
@@ -292,26 +305,29 @@ final router = GoRouter(
       name: manifestDetailsScreen,
       path: manifestDetailsPath,
       builder: (context, state) {
-        final routeType = RouteType.values.firstWhere(
-          (type) =>
-              type.name == state.uri.queryParameters[movementTypeQueryParam],
-          orElse: () => RouteType.spokeToPCRLabGeneXpert,
-        );
-        if (kDebugMode) {
-          print(routeType);
+        final manifestJson = state.uri.queryParameters[manifestsQueryParam];
+        if (manifestJson == null) {
+          return NIMSErrorContent(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final manifest = DomainManifest.fromJson(jsonDecode(manifestJson));
+          return ManifestDetailsScreen(manifest: manifest);
         }
-        return ShipmentDetailsScreen(routeType: routeType);
       },
     ),
     GoRoute(
-      name: shipmentsScreen,
-      path: shipmentsPath,
+      name: shipmentScreen,
+      path: shipmentPath,
       builder: (context, state) {
         final movementTypeJson =
             state.uri.queryParameters[movementTypeQueryParam];
         final selectedManifestsJson =
             state.uri.queryParameters[manifestsQueryParam];
-        final facilityJson = state.uri.queryParameters[pickupFacilityQueryParam];
+        final facilityJson =
+            state.uri.queryParameters[pickupFacilityQueryParam];
 
         developer.log(
           movementTypeJson.toString(),
@@ -352,6 +368,13 @@ final router = GoRouter(
             pickUpFacility: facility,
           );
         }
+      },
+    ),
+    GoRoute(
+      name: shipmentsScreen,
+      path: shipmentsPath,
+      builder: (context, state) {
+        return ShipmentsScreen();
       },
     ),
   ],

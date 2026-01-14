@@ -1,5 +1,5 @@
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/domain/models/movement_category.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/movement_category.dart';
 
 extension RemoteUserExtension on RemoteUser {
   DomainUser toDomain(String deviceSerialNo) {

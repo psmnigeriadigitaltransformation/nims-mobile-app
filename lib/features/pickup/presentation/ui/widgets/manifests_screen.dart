@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/app/route_name+path+params.dart';
-import 'package:projects/core/ui/widgets/nims_error_content.dart';
-import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
+import 'package:nims_mobile_app/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_error_content.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_round_icon_button.dart';
 
 import '../../../../../core/domain/mappers/typedefs.dart';
 import '../../../../../core/ui/screens/nims_base_screen.dart';
@@ -49,7 +50,7 @@ class _ManifestsScreenState extends ConsumerState<ManifestsScreen> {
                 children: [
                   NIMSRoundIconButton(
                     icon: Icons.arrow_back_ios_rounded,
-                    onPressed: () => {},
+                    onPressed: () => context.pop(),
                   ),
                   Spacer(),
                   Text(
@@ -277,7 +278,18 @@ class _ManifestsScreenState extends ConsumerState<ManifestsScreen> {
                           isSelected: isSelected,
                           manifest: state.manifests[index],
                           onTapManifest: () {
-                            context.pushNamed(manifestDetailsScreen);
+                            developer.log(
+                              state.manifests[index].toJson().toString(),
+                              name: "ManifestsScreen:onTapManifest",
+                            );
+                            context.pushNamed(
+                              manifestDetailsScreen,
+                              queryParameters: {
+                                manifestsQueryParam: jsonEncode(
+                                  state.manifests[index].toJson(),
+                                ),
+                              },
+                            );
                           },
                         ),
                       ),
@@ -294,7 +306,7 @@ class _ManifestsScreenState extends ConsumerState<ManifestsScreen> {
             text: "Next",
             onPressed: () {
               context.pushNamed(
-                shipmentsScreen,
+                shipmentScreen,
                 queryParameters: {
                   movementTypeQueryParam: jsonEncode(
                     widget.movementType.toJson(),

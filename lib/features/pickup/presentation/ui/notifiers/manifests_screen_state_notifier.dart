@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/core/data/providers.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/features/facilities/data/providers.dart';
+import 'package:nims_mobile_app/core/data/providers.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/features/facilities/data/providers.dart';
 import '../../../../../core/ui/model/model/alert.dart';
 import '../../../../../core/utils/result.dart';
 import '../model/manifests_screen_state.dart';

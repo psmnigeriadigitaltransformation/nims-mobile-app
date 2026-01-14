@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/app/route_name+path+params.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 
 class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
   final DomainShipment shipment;

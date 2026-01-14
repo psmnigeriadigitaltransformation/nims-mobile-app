@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/features/facilities/data/model/facility_type.dart';
-import 'package:projects/features/facilities/data/providers.dart';
-import 'package:projects/features/facilities/presentation/ui/model/facilities_screen_state.dart';
+import 'package:nims_mobile_app/features/facilities/data/model/facility_type.dart';
+import 'package:nims_mobile_app/features/facilities/data/providers.dart';
+import 'package:nims_mobile_app/features/facilities/presentation/ui/model/facilities_screen_state.dart';
 
 import '../../../../core/utils/result.dart';
 

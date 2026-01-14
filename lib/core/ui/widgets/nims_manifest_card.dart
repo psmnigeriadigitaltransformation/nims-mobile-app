@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 
 class NIMSManifestCard extends StatelessWidget {
   final DomainManifest manifest;

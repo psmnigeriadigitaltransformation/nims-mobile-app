@@ -1,23 +1,27 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/ui/widgets/sticky_header_delegate.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_manifest_card.dart';
+import 'package:nims_mobile_app/core/ui/widgets/sticky_header_delegate.dart';
+import '../../../../app/route_name+path+params.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
 import '../../../../core/ui/widgets/nims_error_content.dart';
 import '../../../../core/ui/widgets/nims_facility_card.dart';
 import '../../../../core/ui/widgets/nims_round_icon_button.dart';
 import '../providers.dart';
 
-class FacilitiesScreen extends ConsumerWidget {
+class ManifestsScreen extends ConsumerWidget {
   final TextEditingController searchBarController = TextEditingController();
 
-  FacilitiesScreen({super.key});
+  ManifestsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncState = ref.watch(facilitiesScreenStateNotifierProvider);
+    final asyncState = ref.watch(manifestsScreenStateNotifierProvider);
     final size = MediaQuery.of(context).size;
 
     return NIMSBaseScreen(
@@ -32,11 +36,11 @@ class FacilitiesScreen extends ConsumerWidget {
               children: [
                 NIMSRoundIconButton(
                   icon: Icons.arrow_back_ios_rounded,
-                  onPressed: () => {},
+                  onPressed: () => context.pop(),
                 ),
                 Spacer(),
                 Text(
-                  "Facilities",
+                  "Manifests",
                   style: TextTheme.of(context).titleSmall,
                   textAlign: TextAlign.center,
                 ),
@@ -48,7 +52,7 @@ class FacilitiesScreen extends ConsumerWidget {
             SizedBox(height: 8),
 
             Text(
-              "These are the facilities available to you",
+              "These are the manifests you have created",
               style: TextTheme.of(context).bodySmall,
             ),
 
@@ -60,18 +64,16 @@ class FacilitiesScreen extends ConsumerWidget {
             Container(
               padding: EdgeInsetsGeometry.symmetric(vertical: 16),
               child: SearchBar(
-                hintText: "Search for facility",
+                hintText: "Search for manifest",
                 controller: searchBarController,
                 onChanged: (value) => {
                   searchBarController.text = value,
                   ref
-                      .read(facilitiesScreenStateNotifierProvider.notifier)
-                      .filterFacilities(value),
+                      .read(manifestsScreenStateNotifierProvider.notifier)
+                      .filterManifests(value),
                 },
               ),
             ),
-
-            // const SizedBox(height: 16),
           ],
         ),
       ),
@@ -90,8 +92,8 @@ class FacilitiesScreen extends ConsumerWidget {
           message: err.toString(),
           onTapActionButton: () {
             ref
-                .read(facilitiesScreenStateNotifierProvider.notifier)
-                .refreshFacilities();
+                .read(manifestsScreenStateNotifierProvider.notifier)
+                .refreshManifests();
           },
           actionButtonLabel: 'Retry',
         ),
@@ -100,40 +102,14 @@ class FacilitiesScreen extends ConsumerWidget {
           /// FACILITIES
           /// ----------------------------------------
           return SizedBox(
-            height: size.height * 0.82,
+            // height: size.height * 0.82,
             child: Padding(
-              padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
               child: CustomScrollView(
                 shrinkWrap: true,
                 controller: ScrollController(),
                 slivers: [
-                  if (state.hubFacilities.isNotEmpty)
-                    _buildHeader(
-                      "Hub (${state.hubFacilities.length})",
-                      context,
-                    ),
-                  _buildList(state.hubFacilities),
-
-                  if (state.pcrFacilities.isNotEmpty)
-                    _buildHeader(
-                      "PCR (${state.pcrFacilities.length})",
-                      context,
-                    ),
-                  _buildList(state.pcrFacilities),
-
-                  if (state.geneXpertFacilities.isNotEmpty)
-                    _buildHeader(
-                      "GeneXpert (${state.geneXpertFacilities.length})",
-                      context,
-                    ),
-                  _buildList(state.geneXpertFacilities),
-
-                  if (state.spokeFacilities.isNotEmpty)
-                    _buildHeader(
-                      "Spoke (${state.spokeFacilities.length})",
-                      context,
-                    ),
-                  _buildList(state.spokeFacilities),
+                  if (state.manifests.isNotEmpty) _buildList(state.manifests),
                 ],
               ),
             ),
@@ -159,10 +135,29 @@ SliverPersistentHeader _buildHeader(String title, BuildContext context) {
   );
 }
 
-SliverList _buildList(List<DomainFacility> items) {
+SliverList _buildList(List<DomainManifest> items) {
   return SliverList(
     delegate: SliverChildBuilderDelegate((context, index) {
-      return NIMSFacilityCard(facility: items[index]);
+      return Padding(
+        padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+        child: NIMSManifestCard(
+          manifest: items[index],
+          onTapManifest: () {
+            developer.log(
+              items[index].toJson().toString(),
+              name: "ManifestsScreen:onTapManifest",
+            );
+            context.pushNamed(
+              manifestDetailsScreen,
+              queryParameters: {
+                manifestsQueryParam: jsonEncode(items[index].toJson()),
+              },
+            );
+          },
+          isSelected: false,
+          onTapDelete: () {},
+        ),
+      );
     }, childCount: items.length),
   );
 }

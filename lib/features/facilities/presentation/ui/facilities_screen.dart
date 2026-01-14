@@ -2,8 +2,9 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/ui/widgets/sticky_header_delegate.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/ui/widgets/sticky_header_delegate.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
 import '../../../../core/ui/widgets/nims_error_content.dart';
 import '../../../../core/ui/widgets/nims_facility_card.dart';
@@ -32,7 +33,7 @@ class FacilitiesScreen extends ConsumerWidget {
               children: [
                 NIMSRoundIconButton(
                   icon: Icons.arrow_back_ios_rounded,
-                  onPressed: () => {},
+                  onPressed: () => context.pop(),
                 ),
                 Spacer(),
                 Text(

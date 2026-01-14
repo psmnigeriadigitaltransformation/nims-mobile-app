@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/app/router.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/ui/screens/nims_screen.dart';
-import 'package:projects/core/ui/theme/colors.dart';
-import 'package:projects/core/ui/theme/text_styles.dart';
-import 'package:projects/core/ui/widgets/nims_primary_button.dart';
-import 'package:projects/core/ui/widgets/nims_quick_action_card.dart';
-import 'package:projects/core/services/remote/models/login_response.dart';
-import 'package:projects/features/dashboard/domain/quick_action.dart';
-import 'package:projects/features/dashboard/domain/route_type.dart';
-import 'package:projects/features/dashboard/presentation/ui/select_movement_type_bottom_sheet_dialog.dart';
-import 'package:projects/features/profile/providers.dart';
+import 'package:nims_mobile_app/app/router.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/ui/screens/nims_screen.dart';
+import 'package:nims_mobile_app/core/ui/theme/colors.dart';
+import 'package:nims_mobile_app/core/ui/theme/text_styles.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_primary_button.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_quick_action_card.dart';
+import 'package:nims_mobile_app/core/services/remote/models/login_response.dart';
+import 'package:nims_mobile_app/features/dashboard/domain/quick_action.dart';
+import 'package:nims_mobile_app/features/dashboard/domain/route_type.dart';
+import 'package:nims_mobile_app/features/dashboard/presentation/ui/select_movement_type_bottom_sheet_dialog.dart';
+import 'package:nims_mobile_app/features/profile/providers.dart';
 
 import '../../../../app/route_name+path+params.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
@@ -67,7 +67,7 @@ class ProfileScreen extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                            child: Text("MD"),
+                            child: Text("${user?.firstName?.characters.first}${user?.lastName?.characters.first}"),
                           ),
                           SizedBox(height: 12),
                           Text(

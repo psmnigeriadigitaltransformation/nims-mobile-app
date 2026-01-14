@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/domain/models/location.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/location.dart';
 
 import '../../../features/dashboard/domain/mock.dart';
 import '../theme/theme.dart';

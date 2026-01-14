@@ -145,6 +145,7 @@ class NIMSDatabase {
             temperature INTEGER,
             user_id TEXT NOT NULL,
             originating_facility_name TEXT NOT NULL,
+            destination_facility_name TEXT NOT NULL,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
           )
         ''');
@@ -168,7 +169,9 @@ class NIMSDatabase {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             route_no TEXT NOT NULL UNIQUE,
             origin_facility_id TEXT NOT NULL,
+            origin_facility_name TEXT NOT NULL,
             destination_facility_id TEXT NOT NULL,
+            destination_facility_name TEXT NOT NULL,
             lsp_code TEXT NOT NULL,
             rider_user_id TEXT NOT NULL,
             latitude DECIMAL(10,6),

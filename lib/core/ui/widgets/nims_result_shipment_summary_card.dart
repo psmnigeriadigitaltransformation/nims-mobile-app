@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/app/route_name+path+params.dart';
 
 class NIMSResultShipmentSummaryCard extends StatelessWidget {
   const NIMSResultShipmentSummaryCard({super.key});

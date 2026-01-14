@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "533730190224",
+    "project_id": "nims-mobile-app",
+    "storage_bucket": "nims-mobile-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533730190224:android:0fdcdbbd515aaa7164c915",
+        "android_client_info": {
+          "package_name": "com.nims"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-GJVD7KD1pJpCLKVaXUSGVqhALSQMmA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

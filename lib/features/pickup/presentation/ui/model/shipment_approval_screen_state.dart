@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/services/remote/models/facilities_response.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/services/remote/models/facilities_response.dart';
 
 import '../../../../../../core/domain/models/facility.dart';
 import '../../../../../../core/domain/models/movement_type.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projects/core/ui/theme/colors.dart';
+import 'package:nims_mobile_app/core/ui/theme/colors.dart';
 
 class NIMSTextStyles {
   static const String _defaultFontFamily = 'Inter';

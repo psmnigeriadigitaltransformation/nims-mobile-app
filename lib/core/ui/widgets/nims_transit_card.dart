@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 
 import 'nims_status_chip.dart';
 
@@ -12,6 +13,7 @@ class NIMSTransitCard extends StatelessWidget {
   final String sourceName;
   final String destinationCode;
   final String destinationName;
+  final DomainShipmentRoute shipmentRoute;
 
   const NIMSTransitCard({
     super.key,
@@ -22,6 +24,7 @@ class NIMSTransitCard extends StatelessWidget {
     required this.sourceName,
     required this.destinationCode,
     required this.destinationName,
+    required this.shipmentRoute,
   });
 
   @override
@@ -29,7 +32,10 @@ class NIMSTransitCard extends StatelessWidget {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       onTap: () {
-        context.pushNamed(routeDetailsScreen);
+        context.pushNamed(
+          routeDetailsScreen,
+          queryParameters: {routeQueryParam: shipmentRoute},
+        );
       },
       child: Container(
         decoration: BoxDecoration(

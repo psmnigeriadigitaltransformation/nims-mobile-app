@@ -27,7 +27,14 @@ class NIMSOriginDestinationLinkView extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 16),
-              Text(origin, style: Theme.of(context).textTheme.bodySmall),
+              Expanded(
+                child: Text(
+                  origin,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
           Align(
@@ -49,7 +56,14 @@ class NIMSOriginDestinationLinkView extends StatelessWidget {
                 height: 18,
               ),
               SizedBox(width: 16),
-              Text(destination, style: Theme.of(context).textTheme.bodySmall),
+              Expanded(
+                child: Text(
+                  destination,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
         ],

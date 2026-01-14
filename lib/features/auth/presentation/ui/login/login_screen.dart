@@ -3,8 +3,8 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/app/route_name+path+params.dart';
-import 'package:projects/core/ui/widgets/nims_primary_button.dart';
+import 'package:nims_mobile_app/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_primary_button.dart';
 
 import '../../../../../core/ui/screens/nims_base_screen.dart';
 import '../../../../../core/ui/widgets/nims_alert_dialog_content.dart';

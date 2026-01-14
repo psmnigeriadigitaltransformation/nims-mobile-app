@@ -1,11 +1,11 @@
 import 'dart:developer' as developer;
 
-import 'package:projects/core/domain/mappers/response_to_domain_mapper.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/services/remote/models/facilities_response.dart';
-import 'package:projects/core/services/remote/models/sample_types_response.dart';
-import 'package:projects/core/utils/result.dart';
-import 'package:projects/core/services/remote/models/login_response.dart';
+import 'package:nims_mobile_app/core/domain/mappers/response_to_domain_mapper.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/services/remote/models/facilities_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/sample_types_response.dart';
+import 'package:nims_mobile_app/core/utils/result.dart';
+import 'package:nims_mobile_app/core/services/remote/models/login_response.dart';
 
 import '../../../../core/services/remote/nims_api_service.dart';
 import '../../../../core/services/local/nims_local_service.dart';
@@ -26,6 +26,21 @@ class ShipmentRoutesRepository {
         error: e,
         stackTrace: s,
         name: "ShipmentRoutesRepository:saveShipmentRoute",
+      );
+      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+    }
+  }
+
+  Future<Result<List<DomainShipmentRoute>>> searchShipmentRoutes(String query) async {
+    try {
+      final routes = await _localService.getCachedShipmentRoutesBySearchQuery(query);
+      return Success(routes);
+    } catch (e, s) {
+      developer.log(
+        e.toString(),
+        error: e,
+        stackTrace: s,
+        name: "ShipmentRoutesRepository:searchShipmentRoutes",
       );
       return Error(e.toString(), exception: e as Exception, stackTrace: s);
     }

@@ -3,12 +3,12 @@ import 'dart:developer' as developer;
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:projects/core/data/providers.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/domain/models/movement_type.dart';
-import 'package:projects/core/ui/model/model/alert.dart';
-import 'package:projects/features/auth/data/providers.dart';
-import 'package:projects/features/facilities/data/providers.dart';
+import 'package:nims_mobile_app/core/data/providers.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/movement_type.dart';
+import 'package:nims_mobile_app/core/ui/model/model/alert.dart';
+import 'package:nims_mobile_app/features/auth/data/providers.dart';
+import 'package:nims_mobile_app/features/facilities/data/providers.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/utils/result.dart';
@@ -133,6 +133,7 @@ class AddNewManifestScreenStateNotifier
           lspCode: '',
           userId: user?.userId ?? "",
           originatingFacilityName: data.pickUpFacility?.facilityName ?? "",
+          destinationFacilityName: data.selectedDestinationFacility?.facilityName ?? "",
         ),
         data.samples,
       );

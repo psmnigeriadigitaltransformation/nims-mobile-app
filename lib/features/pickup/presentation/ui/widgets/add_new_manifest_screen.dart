@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:projects/core/domain/mappers/typedefs.dart';
-import 'package:projects/core/ui/screens/nims_base_screen.dart';
-import 'package:projects/core/ui/widgets/nims_round_icon_button.dart';
-import 'package:projects/features/pickup/presentation/ui/model/add_new_manifest_screen_state.dart';
-import 'package:projects/features/pickup/presentation/ui/widgets/specimen_deletion_confirmation_dialog.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/ui/screens/nims_base_screen.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_round_icon_button.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/model/add_new_manifest_screen_state.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/widgets/specimen_deletion_confirmation_dialog.dart';
 import '../../../../../core/ui/widgets/nims_alert_dialog_content.dart';
 import '../../../../../core/ui/widgets/nims_error_content.dart';
 import '../../../../../core/ui/widgets/nims_primary_button.dart';
@@ -76,7 +76,7 @@ class AddNewManifestScreen extends ConsumerWidget {
                 children: [
                   NIMSRoundIconButton(
                     icon: Icons.arrow_back_ios_rounded,
-                    onPressed: () => {},
+                    onPressed: () => context.pop(),
                   ),
                   Spacer(),
                   Text(
