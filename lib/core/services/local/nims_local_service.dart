@@ -156,6 +156,27 @@ class NIMSLocalService {
     return result.map((facility) => DomainFacility.fromJson(facility)).toList();
   }
 
+  Future<List<DomainFacility>> getCachedFacilitiesBySearchQuery(
+    String query,
+  ) async {
+    developer.log(
+      "query: $query",
+      name: "NIMSLocalService:getCachedFacilitiesBySearchQuery",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "facilities",
+      where:
+          "facility_name LIKE ? OR facility_code LIKE ? OR lab_code LIKE ? OR type LIKE ?",
+      whereArgs: ["%$query%", "%$query%", "%$query%", "%$query%"],
+    );
+    developer.log(
+      "facilities: $result",
+      name: "NIMSLocalService:getCachedFacilitiesBySearchQuery",
+    );
+    return result.map((f) => DomainFacility.fromJson(f)).toList();
+  }
+
   Future<void> cacheSampleTypes(List<DomainSampleType> sampleTypes) async {
     developer.log(
       "sample_types: $sampleTypes",
@@ -364,13 +385,9 @@ class NIMSLocalService {
     final db = await NIMSDatabase().instance;
     final result = await db.query(
       "manifests",
-      where: """
-        (manifest_no
-         || sample_type
-         || originating_facility_name
-         || phlebotomy_no) LIKE ?
-      """,
-      whereArgs: ["%$query%"],
+      where:
+          "manifest_no LIKE ? OR sample_type LIKE ? OR originating_facility_name LIKE ? OR phlebotomy_no LIKE ?",
+      whereArgs: ["%$query%", "%$query%", "%$query%", "%$query%"],
       orderBy: "created_at DESC",
     );
     developer.log(
@@ -390,15 +407,16 @@ class NIMSLocalService {
     final db = await NIMSDatabase().instance;
     final result = await db.query(
       "shipments",
-      where: """
-        (shipment_no
-         || route_no
-         || manifest_no
-         || destination_location_type
-         || destination_facility_name
-         || sample_type) LIKE ?
-      """,
-      whereArgs: ["%$query%"],
+      where:
+          "shipment_no LIKE ? OR route_no LIKE ? OR manifest_no LIKE ? OR destination_location_type LIKE ? OR destination_facility_name LIKE ? OR sample_type LIKE ?",
+      whereArgs: [
+        "%$query%",
+        "%$query%",
+        "%$query%",
+        "%$query%",
+        "%$query%",
+        "%$query%",
+      ],
       orderBy: "pickup_date DESC",
     );
     developer.log(

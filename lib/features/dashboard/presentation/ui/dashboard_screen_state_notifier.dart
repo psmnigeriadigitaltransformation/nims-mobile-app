@@ -68,4 +68,46 @@ class DashboardScreenStateNotifier
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => _fetchData());
   }
+
+  Future<void> search(String query) async {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    if (query.isEmpty) {
+      // Clear search results, show normal dashboard
+      state = AsyncData(currentState.copyWith(
+        isSearching: false,
+        searchQuery: '',
+        searchedFacilities: [],
+        searchedManifests: [],
+        searchedShipments: [],
+      ));
+      return;
+    }
+
+    // Run searches in parallel
+    final results = await Future.wait([
+      ref.read(facilitiesRepositoryProvider).searchFacilities(query),
+      ref.read(manifestRepositoryProvider).searchManifests(query),
+      ref.read(shipmentsRepositoryProvider).searchShipments(query),
+    ]);
+
+    final facilitiesResult = results[0] as Result<List<DomainFacility>>;
+    final manifestsResult = results[1] as Result<List<DomainManifest>>;
+    final shipmentsResult = results[2] as Result<List<DomainShipment>>;
+
+    state = AsyncData(currentState.copyWith(
+      isSearching: true,
+      searchQuery: query,
+      searchedFacilities: facilitiesResult is Success<List<DomainFacility>>
+          ? facilitiesResult.payload
+          : [],
+      searchedManifests: manifestsResult is Success<List<DomainManifest>>
+          ? manifestsResult.payload
+          : [],
+      searchedShipments: shipmentsResult is Success<List<DomainShipment>>
+          ? shipmentsResult.payload
+          : [],
+    ));
+  }
 }

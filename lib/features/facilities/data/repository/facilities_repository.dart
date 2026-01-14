@@ -16,6 +16,11 @@ class FacilitiesRepository {
 
   FacilitiesRepository(this._apiService, this._localService);
 
+  Future<Result<List<DomainFacility>>> searchFacilities(String query) async {
+    final facilities = await _localService.getCachedFacilitiesBySearchQuery(query);
+    return Success(facilities);
+  }
+
   Future<Result<List<DomainFacility>>> getFacilities(bool refresh) async {
     try {
       final cachedFacilities = await _localService.getCachedFacilities();

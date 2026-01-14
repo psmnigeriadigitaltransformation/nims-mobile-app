@@ -25,7 +25,13 @@ mixin _$DashboardScreenState {
       throw _privateConstructorUsedError;
   List<MovementType> get resultsMovementTypes =>
       throw _privateConstructorUsedError;
-  List<ShipmentRoute> get shipmentRoutes => throw _privateConstructorUsedError;
+  List<ShipmentRoute> get shipmentRoutes =>
+      throw _privateConstructorUsedError; // Search state fields
+  bool get isSearching => throw _privateConstructorUsedError;
+  String get searchQuery => throw _privateConstructorUsedError;
+  List<Facility> get searchedFacilities => throw _privateConstructorUsedError;
+  List<Manifest> get searchedManifests => throw _privateConstructorUsedError;
+  List<Shipment> get searchedShipments => throw _privateConstructorUsedError;
 
   /// Create a copy of DashboardScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -49,6 +55,11 @@ abstract class $DashboardScreenStateCopyWith<$Res> {
     List<MovementType> specimensMovementTypes,
     List<MovementType> resultsMovementTypes,
     List<ShipmentRoute> shipmentRoutes,
+    bool isSearching,
+    String searchQuery,
+    List<Facility> searchedFacilities,
+    List<Manifest> searchedManifests,
+    List<Shipment> searchedShipments,
   });
 }
 
@@ -77,6 +88,11 @@ class _$DashboardScreenStateCopyWithImpl<
     Object? specimensMovementTypes = null,
     Object? resultsMovementTypes = null,
     Object? shipmentRoutes = null,
+    Object? isSearching = null,
+    Object? searchQuery = null,
+    Object? searchedFacilities = null,
+    Object? searchedManifests = null,
+    Object? searchedShipments = null,
   }) {
     return _then(
       _value.copyWith(
@@ -108,6 +124,26 @@ class _$DashboardScreenStateCopyWithImpl<
                 ? _value.shipmentRoutes
                 : shipmentRoutes // ignore: cast_nullable_to_non_nullable
                       as List<ShipmentRoute>,
+            isSearching: null == isSearching
+                ? _value.isSearching
+                : isSearching // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            searchQuery: null == searchQuery
+                ? _value.searchQuery
+                : searchQuery // ignore: cast_nullable_to_non_nullable
+                      as String,
+            searchedFacilities: null == searchedFacilities
+                ? _value.searchedFacilities
+                : searchedFacilities // ignore: cast_nullable_to_non_nullable
+                      as List<Facility>,
+            searchedManifests: null == searchedManifests
+                ? _value.searchedManifests
+                : searchedManifests // ignore: cast_nullable_to_non_nullable
+                      as List<Manifest>,
+            searchedShipments: null == searchedShipments
+                ? _value.searchedShipments
+                : searchedShipments // ignore: cast_nullable_to_non_nullable
+                      as List<Shipment>,
           )
           as $Val,
     );
@@ -115,12 +151,12 @@ class _$DashboardScreenStateCopyWithImpl<
 }
 
 /// @nodoc
-abstract class _$$DashboardScreenStateeImplCopyWith<$Res>
+abstract class _$$DashboardScreenStateImplCopyWith<$Res>
     implements $DashboardScreenStateCopyWith<$Res> {
-  factory _$$DashboardScreenStateeImplCopyWith(
-    _$DashboardScreenStateeImpl value,
-    $Res Function(_$DashboardScreenStateeImpl) then,
-  ) = __$$DashboardScreenStateeImplCopyWithImpl<$Res>;
+  factory _$$DashboardScreenStateImplCopyWith(
+    _$DashboardScreenStateImpl value,
+    $Res Function(_$DashboardScreenStateImpl) then,
+  ) = __$$DashboardScreenStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
@@ -131,17 +167,21 @@ abstract class _$$DashboardScreenStateeImplCopyWith<$Res>
     List<MovementType> specimensMovementTypes,
     List<MovementType> resultsMovementTypes,
     List<ShipmentRoute> shipmentRoutes,
+    bool isSearching,
+    String searchQuery,
+    List<Facility> searchedFacilities,
+    List<Manifest> searchedManifests,
+    List<Shipment> searchedShipments,
   });
 }
 
 /// @nodoc
-class __$$DashboardScreenStateeImplCopyWithImpl<$Res>
-    extends
-        _$DashboardScreenStateCopyWithImpl<$Res, _$DashboardScreenStateeImpl>
-    implements _$$DashboardScreenStateeImplCopyWith<$Res> {
-  __$$DashboardScreenStateeImplCopyWithImpl(
-    _$DashboardScreenStateeImpl _value,
-    $Res Function(_$DashboardScreenStateeImpl) _then,
+class __$$DashboardScreenStateImplCopyWithImpl<$Res>
+    extends _$DashboardScreenStateCopyWithImpl<$Res, _$DashboardScreenStateImpl>
+    implements _$$DashboardScreenStateImplCopyWith<$Res> {
+  __$$DashboardScreenStateImplCopyWithImpl(
+    _$DashboardScreenStateImpl _value,
+    $Res Function(_$DashboardScreenStateImpl) _then,
   ) : super(_value, _then);
 
   /// Create a copy of DashboardScreenState
@@ -156,9 +196,14 @@ class __$$DashboardScreenStateeImplCopyWithImpl<$Res>
     Object? specimensMovementTypes = null,
     Object? resultsMovementTypes = null,
     Object? shipmentRoutes = null,
+    Object? isSearching = null,
+    Object? searchQuery = null,
+    Object? searchedFacilities = null,
+    Object? searchedManifests = null,
+    Object? searchedShipments = null,
   }) {
     return _then(
-      _$DashboardScreenStateeImpl(
+      _$DashboardScreenStateImpl(
         userFullName: null == userFullName
             ? _value.userFullName
             : userFullName // ignore: cast_nullable_to_non_nullable
@@ -187,6 +232,26 @@ class __$$DashboardScreenStateeImplCopyWithImpl<$Res>
             ? _value._shipmentRoutes
             : shipmentRoutes // ignore: cast_nullable_to_non_nullable
                   as List<ShipmentRoute>,
+        isSearching: null == isSearching
+            ? _value.isSearching
+            : isSearching // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        searchQuery: null == searchQuery
+            ? _value.searchQuery
+            : searchQuery // ignore: cast_nullable_to_non_nullable
+                  as String,
+        searchedFacilities: null == searchedFacilities
+            ? _value._searchedFacilities
+            : searchedFacilities // ignore: cast_nullable_to_non_nullable
+                  as List<Facility>,
+        searchedManifests: null == searchedManifests
+            ? _value._searchedManifests
+            : searchedManifests // ignore: cast_nullable_to_non_nullable
+                  as List<Manifest>,
+        searchedShipments: null == searchedShipments
+            ? _value._searchedShipments
+            : searchedShipments // ignore: cast_nullable_to_non_nullable
+                  as List<Shipment>,
       ),
     );
   }
@@ -194,8 +259,8 @@ class __$$DashboardScreenStateeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
-  const _$DashboardScreenStateeImpl({
+class _$DashboardScreenStateImpl implements _DashboardScreenState {
+  const _$DashboardScreenStateImpl({
     required this.userFullName,
     required this.userRole,
     required this.userId,
@@ -203,9 +268,17 @@ class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
     required final List<MovementType> specimensMovementTypes,
     required final List<MovementType> resultsMovementTypes,
     final List<ShipmentRoute> shipmentRoutes = const [],
+    this.isSearching = false,
+    this.searchQuery = '',
+    final List<Facility> searchedFacilities = const [],
+    final List<Manifest> searchedManifests = const [],
+    final List<Shipment> searchedShipments = const [],
   }) : _specimensMovementTypes = specimensMovementTypes,
        _resultsMovementTypes = resultsMovementTypes,
-       _shipmentRoutes = shipmentRoutes;
+       _shipmentRoutes = shipmentRoutes,
+       _searchedFacilities = searchedFacilities,
+       _searchedManifests = searchedManifests,
+       _searchedShipments = searchedShipments;
 
   @override
   final String userFullName;
@@ -242,16 +315,53 @@ class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
     return EqualUnmodifiableListView(_shipmentRoutes);
   }
 
+  // Search state fields
+  @override
+  @JsonKey()
+  final bool isSearching;
+  @override
+  @JsonKey()
+  final String searchQuery;
+  final List<Facility> _searchedFacilities;
+  @override
+  @JsonKey()
+  List<Facility> get searchedFacilities {
+    if (_searchedFacilities is EqualUnmodifiableListView)
+      return _searchedFacilities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_searchedFacilities);
+  }
+
+  final List<Manifest> _searchedManifests;
+  @override
+  @JsonKey()
+  List<Manifest> get searchedManifests {
+    if (_searchedManifests is EqualUnmodifiableListView)
+      return _searchedManifests;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_searchedManifests);
+  }
+
+  final List<Shipment> _searchedShipments;
+  @override
+  @JsonKey()
+  List<Shipment> get searchedShipments {
+    if (_searchedShipments is EqualUnmodifiableListView)
+      return _searchedShipments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_searchedShipments);
+  }
+
   @override
   String toString() {
-    return 'DashboardScreenState(userFullName: $userFullName, userRole: $userRole, userId: $userId, deviceSerialNo: $deviceSerialNo, specimensMovementTypes: $specimensMovementTypes, resultsMovementTypes: $resultsMovementTypes, shipmentRoutes: $shipmentRoutes)';
+    return 'DashboardScreenState(userFullName: $userFullName, userRole: $userRole, userId: $userId, deviceSerialNo: $deviceSerialNo, specimensMovementTypes: $specimensMovementTypes, resultsMovementTypes: $resultsMovementTypes, shipmentRoutes: $shipmentRoutes, isSearching: $isSearching, searchQuery: $searchQuery, searchedFacilities: $searchedFacilities, searchedManifests: $searchedManifests, searchedShipments: $searchedShipments)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DashboardScreenStateeImpl &&
+            other is _$DashboardScreenStateImpl &&
             (identical(other.userFullName, userFullName) ||
                 other.userFullName == userFullName) &&
             (identical(other.userRole, userRole) ||
@@ -270,6 +380,22 @@ class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
             const DeepCollectionEquality().equals(
               other._shipmentRoutes,
               _shipmentRoutes,
+            ) &&
+            (identical(other.isSearching, isSearching) ||
+                other.isSearching == isSearching) &&
+            (identical(other.searchQuery, searchQuery) ||
+                other.searchQuery == searchQuery) &&
+            const DeepCollectionEquality().equals(
+              other._searchedFacilities,
+              _searchedFacilities,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._searchedManifests,
+              _searchedManifests,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._searchedShipments,
+              _searchedShipments,
             ));
   }
 
@@ -283,6 +409,11 @@ class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
     const DeepCollectionEquality().hash(_specimensMovementTypes),
     const DeepCollectionEquality().hash(_resultsMovementTypes),
     const DeepCollectionEquality().hash(_shipmentRoutes),
+    isSearching,
+    searchQuery,
+    const DeepCollectionEquality().hash(_searchedFacilities),
+    const DeepCollectionEquality().hash(_searchedManifests),
+    const DeepCollectionEquality().hash(_searchedShipments),
   );
 
   /// Create a copy of DashboardScreenState
@@ -290,16 +421,16 @@ class _$DashboardScreenStateeImpl implements _DashboardScreenStatee {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$DashboardScreenStateeImplCopyWith<_$DashboardScreenStateeImpl>
+  _$$DashboardScreenStateImplCopyWith<_$DashboardScreenStateImpl>
   get copyWith =>
-      __$$DashboardScreenStateeImplCopyWithImpl<_$DashboardScreenStateeImpl>(
+      __$$DashboardScreenStateImplCopyWithImpl<_$DashboardScreenStateImpl>(
         this,
         _$identity,
       );
 }
 
-abstract class _DashboardScreenStatee implements DashboardScreenState {
-  const factory _DashboardScreenStatee({
+abstract class _DashboardScreenState implements DashboardScreenState {
+  const factory _DashboardScreenState({
     required final String userFullName,
     required final String userRole,
     required final String userId,
@@ -307,7 +438,12 @@ abstract class _DashboardScreenStatee implements DashboardScreenState {
     required final List<MovementType> specimensMovementTypes,
     required final List<MovementType> resultsMovementTypes,
     final List<ShipmentRoute> shipmentRoutes,
-  }) = _$DashboardScreenStateeImpl;
+    final bool isSearching,
+    final String searchQuery,
+    final List<Facility> searchedFacilities,
+    final List<Manifest> searchedManifests,
+    final List<Shipment> searchedShipments,
+  }) = _$DashboardScreenStateImpl;
 
   @override
   String get userFullName;
@@ -322,12 +458,22 @@ abstract class _DashboardScreenStatee implements DashboardScreenState {
   @override
   List<MovementType> get resultsMovementTypes;
   @override
-  List<ShipmentRoute> get shipmentRoutes;
+  List<ShipmentRoute> get shipmentRoutes; // Search state fields
+  @override
+  bool get isSearching;
+  @override
+  String get searchQuery;
+  @override
+  List<Facility> get searchedFacilities;
+  @override
+  List<Manifest> get searchedManifests;
+  @override
+  List<Shipment> get searchedShipments;
 
   /// Create a copy of DashboardScreenState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DashboardScreenStateeImplCopyWith<_$DashboardScreenStateeImpl>
+  _$$DashboardScreenStateImplCopyWith<_$DashboardScreenStateImpl>
   get copyWith => throw _privateConstructorUsedError;
 }
