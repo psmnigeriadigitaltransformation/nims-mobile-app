@@ -67,4 +67,34 @@ class ManifestRepository {
       return Error(e.toString(), exception: e as Exception, stackTrace: s);
     }
   }
+
+  Future<Result<bool>> deleteManifest(String manifestNo) async {
+    try {
+      await _localService.deleteManifest(manifestNo);
+      return Success(true);
+    } catch (e, s) {
+      developer.log(
+        e.toString(),
+        error: e,
+        stackTrace: s,
+        name: "ManifestRepository:deleteManifest",
+      );
+      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+    }
+  }
+
+  Future<Result<Map<String, String>>> getShippedManifestStatuses() async {
+    try {
+      final statuses = await _localService.getShippedManifestStatuses();
+      return Success(statuses);
+    } catch (e, s) {
+      developer.log(
+        e.toString(),
+        error: e,
+        stackTrace: s,
+        name: "ManifestRepository:getShippedManifestStatuses",
+      );
+      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+    }
+  }
 }

@@ -27,13 +27,22 @@ class ShipmentApprovalScreenState with _$ShipmentApprovalScreenState {
     @Default(false) bool isSavingShipmentRoute,
     @Default(Alert(message: "", show: false)) Alert alert,
     @Default(false) bool showSuccessDialog,
+    @Default("") String createdRouteNo,
   }) = _ShipmentApprovalScreenState;
+
+  String? get phoneNumberError {
+    if (phoneNumber.isEmpty) return null;
+    if (phoneNumber.length != 11) return "Phone number must be 11 digits";
+    if (!RegExp(r'^[0-9]+$').hasMatch(phoneNumber)) return "Phone number must contain only digits";
+    return null;
+  }
+
+  bool get isPhoneNumberValid =>
+      phoneNumber.length == 11 && RegExp(r'^[0-9]+$').hasMatch(phoneNumber);
 
   bool get isApproveShipmentButtonEnabled =>
       pickUpTemperature.isNotEmpty &&
       fullName.isNotEmpty &&
-      phoneNumber.isNotEmpty &&
+      isPhoneNumberValid &&
       designation.isNotEmpty;
-      //     &&
-      // signature.isNotEmpty;
 }

@@ -1,20 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/app/route_name+path+params.dart';
 import 'package:nims_mobile_app/core/ui/screens/nims_base_screen.dart';
-import 'package:nims_mobile_app/core/ui/screens/nims_screen.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_round_icon_button.dart';
-import 'package:nims_mobile_app/core/ui/widgets/nims_shipment_card.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_specimen_shipment_summary_card.dart';
-import 'package:nims_mobile_app/features/dashboard/domain/route_type.dart';
 import '../../../../../core/domain/mappers/typedefs.dart';
 import '../../../../../core/ui/widgets/nims_alert_dialog_content.dart';
-import '../../../../../core/ui/widgets/nims_error_content.dart';
 import '../../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
-import '../../../../../core/ui/widgets/nims_signature_pad.dart';
 import '../../../providers.dart';
+import 'signature_dialog.dart';
 
 class SpecimenShipmentApprovalScreen extends ConsumerStatefulWidget {
   final DomainMovementType movementType;
@@ -37,8 +35,6 @@ class SpecimenShipmentApprovalScreen extends ConsumerStatefulWidget {
 
 class _SpecimenShipmentApprovalScreenState
     extends ConsumerState<SpecimenShipmentApprovalScreen> {
-  final GlobalKey<NIMSSignaturePadState> signatureKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -77,22 +73,19 @@ class _SpecimenShipmentApprovalScreenState
     );
 
     ref.listen(
-      shipmentApprovalScreenStateNotifierProvider(
-        args,
-      ).select((s) => s.showSuccessDialog),
-      (prevShow, nextShow) {
-        if (prevShow == false && nextShow) {
-          showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (buildContext) => NIMSAlertDialogContent(
-              message:
-                  "Shipment Approval Successful ✅👍 \nRouted has been created.",
-              onTapActionButton: () {
-                context.goNamed(dashboardScreen);
-              },
-              actionButtonLabel: 'Okay',
-            ),
+      shipmentApprovalScreenStateNotifierProvider(args),
+      (prev, next) {
+        if (prev?.showSuccessDialog == false && next.showSuccessDialog) {
+          context.goNamed(
+            shipmentSuccessScreen,
+            queryParameters: {
+              pickupFacilityQueryParam: jsonEncode(widget.pickUpFacility.toJson()),
+              destinationFacilityQueryParam: jsonEncode(widget.destinationFacility.toJson()),
+              shipmentsQueryParam: jsonEncode(
+                next.shipments.map((s) => s.toJson()).toList(),
+              ),
+              routeQueryParam: next.createdRouteNo,
+            },
           );
         }
       },
@@ -252,14 +245,16 @@ class _SpecimenShipmentApprovalScreenState
             Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
               child: TextField(
+                keyboardType: TextInputType.phone,
+                maxLength: 11,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: "Phone Number",
                   hintText: "Enter phone number",
-                  helperText: "",
-                  errorText: null,
+                  counterText: "",
+                  errorText: state.phoneNumberError,
                 ),
                 onChanged: (value) {
                   ref
@@ -273,7 +268,7 @@ class _SpecimenShipmentApprovalScreenState
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 28),
 
             /// -------------------------------
             /// DESIGNATION INPUT
@@ -302,64 +297,6 @@ class _SpecimenShipmentApprovalScreenState
               ),
             ),
 
-            const SizedBox(height: 8),
-
-            /// ----------------------------------------
-            /// SIGNATURE PAD
-            /// ----------------------------------------
-            SizedBox(
-              height: 150,
-              child: Padding(
-                padding: EdgeInsetsGeometry.symmetric(horizontal: 9),
-                child: NIMSSignaturePad(
-                  key: signatureKey,
-                  strokeColor: Colors.black,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            Align(
-              alignment: AlignmentGeometry.centerRight,
-              child: Padding(
-                padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-                child: InkWell(
-                  child: Container(
-                    padding: EdgeInsetsGeometry.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.errorContainer.withAlpha(150),
-                      borderRadius: BorderRadiusGeometry.all(
-                        Radius.circular(4),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.symmetric(
-                        vertical: 2,
-                        horizontal: 8,
-                      ),
-                      child: Text(
-                        "Clear",
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.error,
-                            ),
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    signatureKey.currentState?.clear();
-                  },
-                ),
-              ),
-            ),
-
             const SizedBox(height: 40),
           ],
         ),
@@ -369,11 +306,24 @@ class _SpecimenShipmentApprovalScreenState
         child: NIMSPrimaryButton(
           text: "Approve Shipments",
           onPressed: () {
-            ref
-                .read(
-                  shipmentApprovalScreenStateNotifierProvider(args).notifier,
-                )
-                .onApproveShipment();
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (buildContext) => SignatureDialog(
+                onFinish: (signatureBase64) {
+                  ref
+                      .read(
+                        shipmentApprovalScreenStateNotifierProvider(args).notifier,
+                      )
+                      .onUpdateSignature(signatureBase64);
+                  ref
+                      .read(
+                        shipmentApprovalScreenStateNotifierProvider(args).notifier,
+                      )
+                      .onApproveShipment();
+                },
+              ),
+            );
           },
           enabled: state.isApproveShipmentButtonEnabled,
         ),

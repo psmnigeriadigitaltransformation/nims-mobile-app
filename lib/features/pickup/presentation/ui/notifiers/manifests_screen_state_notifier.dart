@@ -28,6 +28,16 @@ class ManifestsScreenStateNotifier
         .read(facilitiesRepositoryProvider)
         .getFacilities(false);
 
+    // Fetch shipped manifest statuses
+    final shippedStatusesResult = await ref
+        .read(manifestRepositoryProvider)
+        .getShippedManifestStatuses();
+
+    Map<String, String> shippedStatuses = {};
+    if (shippedStatusesResult is Success<Map<String, String>>) {
+      shippedStatuses = shippedStatusesResult.payload;
+    }
+
     switch (facilitiesResult) {
       case Success(payload: final payload):
         return ManifestsScreenState(
@@ -42,6 +52,7 @@ class ManifestsScreenStateNotifier
               .toList(),
           movementType: param.movementType,
           manifests: [],
+          shippedManifestStatuses: shippedStatuses,
         );
 
       case Error(message: final m):
@@ -112,6 +123,26 @@ class ManifestsScreenStateNotifier
     final facility = state.valueOrNull?.selectedPickUpFacility;
     if (facility != null) {
       getFacilityManifests(facility);
+    }
+  }
+
+  Future<void> deleteManifest(String manifestNo) async {
+    final result = await ref
+        .read(manifestRepositoryProvider)
+        .deleteManifest(manifestNo);
+    switch (result) {
+      case Success():
+        // Refresh the manifests list after deletion
+        final facility = state.valueOrNull?.selectedPickUpFacility;
+        if (facility != null) {
+          getFacilityManifests(facility);
+        }
+      case Error(message: final m):
+        state = state.whenData(
+          (data) => data.copyWith(
+            alert: Alert(show: true, message: m),
+          ),
+        );
     }
   }
 }

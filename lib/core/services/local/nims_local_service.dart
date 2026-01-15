@@ -325,6 +325,28 @@ class NIMSLocalService {
     });
   }
 
+  Future<void> deleteManifest(String manifestNo) async {
+    developer.log(
+      "manifestNo: $manifestNo",
+      name: "NIMSLocalService:deleteManifest",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.transaction((txn) async {
+      // Delete samples linked to the manifest first
+      await txn.delete(
+        "samples",
+        where: "manifest_no = ?",
+        whereArgs: [manifestNo],
+      );
+      // Delete the manifest
+      await txn.delete(
+        "manifests",
+        where: "manifest_no = ?",
+        whereArgs: [manifestNo],
+      );
+    });
+  }
+
   Future<List<DomainManifest>> getCacheManifestsByOriginId(
     String originId,
   ) async {
@@ -344,6 +366,28 @@ class NIMSLocalService {
       name: "NIMSLocalService:getCacheManifestsByOriginId",
     );
     return result.map((manifest) => DomainManifest.fromJson(manifest)).toList();
+  }
+
+  /// Returns a map of manifest_no to shipment_status for all manifests that are in shipments
+  Future<Map<String, String>> getShippedManifestStatuses() async {
+    developer.log(
+      "Getting shipped manifest statuses",
+      name: "NIMSLocalService:getShippedManifestStatuses",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "shipments",
+      columns: ["manifest_no", "shipment_status"],
+    );
+    developer.log(
+      "shippedManifests: $result",
+      name: "NIMSLocalService:getShippedManifestStatuses",
+    );
+    final Map<String, String> statusMap = {};
+    for (final row in result) {
+      statusMap[row['manifest_no'] as String] = row['shipment_status'] as String;
+    }
+    return statusMap;
   }
 
   Future<void> cacheShipmentRoute(

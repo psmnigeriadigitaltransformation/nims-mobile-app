@@ -19,7 +19,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ShipmentsScreenState {
   List<Facility> get facilities => throw _privateConstructorUsedError;
   List<Location> get locations => throw _privateConstructorUsedError;
-  MovementType get movementType => throw _privateConstructorUsedError;
+  MovementType? get movementType => throw _privateConstructorUsedError;
   List<Shipment> get shipments => throw _privateConstructorUsedError;
   Facility? get selectedDestinationFacility =>
       throw _privateConstructorUsedError;
@@ -41,12 +41,12 @@ abstract class $ShipmentsScreenStateCopyWith<$Res> {
   $Res call({
     List<Facility> facilities,
     List<Location> locations,
-    MovementType movementType,
+    MovementType? movementType,
     List<Shipment> shipments,
     Facility? selectedDestinationFacility,
   });
 
-  $MovementTypeCopyWith<$Res> get movementType;
+  $MovementTypeCopyWith<$Res>? get movementType;
   $FacilityCopyWith<$Res>? get selectedDestinationFacility;
 }
 
@@ -70,7 +70,7 @@ class _$ShipmentsScreenStateCopyWithImpl<
   $Res call({
     Object? facilities = null,
     Object? locations = null,
-    Object? movementType = null,
+    Object? movementType = freezed,
     Object? shipments = null,
     Object? selectedDestinationFacility = freezed,
   }) {
@@ -84,10 +84,10 @@ class _$ShipmentsScreenStateCopyWithImpl<
                 ? _value.locations
                 : locations // ignore: cast_nullable_to_non_nullable
                       as List<Location>,
-            movementType: null == movementType
+            movementType: freezed == movementType
                 ? _value.movementType
                 : movementType // ignore: cast_nullable_to_non_nullable
-                      as MovementType,
+                      as MovementType?,
             shipments: null == shipments
                 ? _value.shipments
                 : shipments // ignore: cast_nullable_to_non_nullable
@@ -105,8 +105,12 @@ class _$ShipmentsScreenStateCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $MovementTypeCopyWith<$Res> get movementType {
-    return $MovementTypeCopyWith<$Res>(_value.movementType, (value) {
+  $MovementTypeCopyWith<$Res>? get movementType {
+    if (_value.movementType == null) {
+      return null;
+    }
+
+    return $MovementTypeCopyWith<$Res>(_value.movementType!, (value) {
       return _then(_value.copyWith(movementType: value) as $Val);
     });
   }
@@ -140,13 +144,13 @@ abstract class _$$ShipmentsScreenStateImplCopyWith<$Res>
   $Res call({
     List<Facility> facilities,
     List<Location> locations,
-    MovementType movementType,
+    MovementType? movementType,
     List<Shipment> shipments,
     Facility? selectedDestinationFacility,
   });
 
   @override
-  $MovementTypeCopyWith<$Res> get movementType;
+  $MovementTypeCopyWith<$Res>? get movementType;
   @override
   $FacilityCopyWith<$Res>? get selectedDestinationFacility;
 }
@@ -167,7 +171,7 @@ class __$$ShipmentsScreenStateImplCopyWithImpl<$Res>
   $Res call({
     Object? facilities = null,
     Object? locations = null,
-    Object? movementType = null,
+    Object? movementType = freezed,
     Object? shipments = null,
     Object? selectedDestinationFacility = freezed,
   }) {
@@ -181,10 +185,10 @@ class __$$ShipmentsScreenStateImplCopyWithImpl<$Res>
             ? _value._locations
             : locations // ignore: cast_nullable_to_non_nullable
                   as List<Location>,
-        movementType: null == movementType
+        movementType: freezed == movementType
             ? _value.movementType
             : movementType // ignore: cast_nullable_to_non_nullable
-                  as MovementType,
+                  as MovementType?,
         shipments: null == shipments
             ? _value._shipments
             : shipments // ignore: cast_nullable_to_non_nullable
@@ -204,7 +208,7 @@ class _$ShipmentsScreenStateImpl extends _ShipmentsScreenState {
   const _$ShipmentsScreenStateImpl({
     required final List<Facility> facilities,
     required final List<Location> locations,
-    required this.movementType,
+    this.movementType,
     final List<Shipment> shipments = const [],
     this.selectedDestinationFacility,
   }) : _facilities = facilities,
@@ -229,7 +233,7 @@ class _$ShipmentsScreenStateImpl extends _ShipmentsScreenState {
   }
 
   @override
-  final MovementType movementType;
+  final MovementType? movementType;
   final List<Shipment> _shipments;
   @override
   @JsonKey()
@@ -301,7 +305,7 @@ abstract class _ShipmentsScreenState extends ShipmentsScreenState {
   const factory _ShipmentsScreenState({
     required final List<Facility> facilities,
     required final List<Location> locations,
-    required final MovementType movementType,
+    final MovementType? movementType,
     final List<Shipment> shipments,
     final Facility? selectedDestinationFacility,
   }) = _$ShipmentsScreenStateImpl;
@@ -312,7 +316,7 @@ abstract class _ShipmentsScreenState extends ShipmentsScreenState {
   @override
   List<Location> get locations;
   @override
-  MovementType get movementType;
+  MovementType? get movementType;
   @override
   List<Shipment> get shipments;
   @override

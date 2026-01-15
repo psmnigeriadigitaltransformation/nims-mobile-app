@@ -114,7 +114,10 @@ class ShipmentApprovalScreenStateNotifier
     switch (result) {
       case Success<bool>():
         ref.invalidate(dashboardScreenStateNotifierProvider);
-        state = state.copyWith(showSuccessDialog: true);
+        state = state.copyWith(
+          showSuccessDialog: true,
+          createdRouteNo: routeNo,
+        );
       case Error<bool>():
         state = state.copyWith(
           alert: Alert(show: true, message: result.message),

@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
 
         // Tables
@@ -194,6 +194,7 @@ class NIMSDatabase {
             pickup_longitude DECIMAL(10,6) NOT NULL,
             sample_type TEXT NOT NULL,
             sample_count INT NOT NULL,
+            shipment_status TEXT NOT NULL DEFAULT 'in-transit',
             pickup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (route_no) REFERENCES routes(route_no)
                 ON DELETE CASCADE
@@ -238,6 +239,14 @@ class NIMSDatabase {
         await db.execute('''
           CREATE INDEX idx_approvals_route_no ON approvals(route_no)
           ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          // Add shipment_status column to shipments table
+          await db.execute('''
+            ALTER TABLE shipments ADD COLUMN shipment_status TEXT NOT NULL DEFAULT 'in-transit'
+          ''');
+        }
       },
     );
   }

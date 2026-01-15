@@ -48,30 +48,36 @@ class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
           children: [
             Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 3,
-                    horizontal: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    color: Theme.of(context).colorScheme.tertiaryContainer,
-                  ),
-                  child: Text(
-                    widget.shipment.shipmentNo,
-                    style: Theme.of(context).textTheme.labelMedium,
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 3,
+                      horizontal: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      color: Theme.of(context).colorScheme.tertiaryContainer,
+                    ),
+                    child: Text(
+                      widget.shipment.shipmentNo,
+                      style: Theme.of(context).textTheme.labelMedium,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
                   ),
                 ),
-                const Spacer(),
-                const Spacer(),
+                const SizedBox(width: 8),
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      widget.shipment.sampleType,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                      style: Theme.of(context).textTheme.bodySmall,
+                    Flexible(
+                      child: Text(
+                        widget.shipment.sampleType,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     ),
                     Image.asset(
                       "lib/core/ui/icons/ic_test_tube.png",

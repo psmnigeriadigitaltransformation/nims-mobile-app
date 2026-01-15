@@ -1,13 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 
 import '../../../../../core/ui/widgets/nims_error_button.dart';
 import '../../../../../core/ui/widgets/nims_round_icon_button.dart';
 import '../../../../../core/ui/widgets/nims_secondary_button.dart';
 
 class ManifestDeletionConfirmationDialog extends StatelessWidget {
-  const ManifestDeletionConfirmationDialog({super.key});
+  final DomainManifest manifest;
+  final VoidCallback onConfirmDelete;
+
+  const ManifestDeletionConfirmationDialog({
+    super.key,
+    required this.manifest,
+    required this.onConfirmDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,7 @@ class ManifestDeletionConfirmationDialog extends StatelessWidget {
               ),
               child: Text(
                 textAlign: TextAlign.center,
-                "PC-288939-2993218",
+                manifest.manifestNo,
                 style: Theme.of(context).textTheme.labelMedium,
               ),
             ),
@@ -57,40 +65,38 @@ class ManifestDeletionConfirmationDialog extends StatelessWidget {
 
             Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
-              child: Expanded(
-                child: Row(
-                  spacing: 8,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        "200 Specimens",
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
+              child: Row(
+                spacing: 8,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      "${manifest.sampleCount} Specimens",
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    SizedBox(height: 24),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "Viral Load",
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
+                  ),
+                  SizedBox(height: 24),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            manifest.sampleType,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodySmall,
                           ),
-                          Image.asset(
-                            "lib/core/ui/icons/ic_test_tube.png",
-                            height: 16,
-                            width: 16,
-                          ),
-                        ],
-                      ),
+                        ),
+                        Image.asset(
+                          "lib/core/ui/icons/ic_test_tube.png",
+                          height: 16,
+                          width: 16,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
 
@@ -104,10 +110,13 @@ class ManifestDeletionConfirmationDialog extends StatelessWidget {
                 Expanded(
                   child: NIMSErrorButton(
                     text: "Confirm",
-                    onPressed: context.pop,
+                    onPressed: () {
+                      context.pop();
+                      onConfirmDelete();
+                    },
                   ),
                 ),
-                SizedBox(height: 16),
+                SizedBox(width: 16),
                 Expanded(
                   child: NIMSSecondaryButton(
                     text: "Cancel",

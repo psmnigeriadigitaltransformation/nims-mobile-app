@@ -1,15 +1,21 @@
+import 'dart:convert';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class NIMSSignaturePad extends StatefulWidget {
   final double strokeWidth;
   final Color strokeColor;
   final Color backgroundColor;
+  final VoidCallback? onSignatureStart;
 
   const NIMSSignaturePad({
     super.key,
     this.strokeWidth = 1.5,
     this.strokeColor = Colors.black,
     this.backgroundColor = Colors.white,
+    this.onSignatureStart,
   });
 
   @override
@@ -17,39 +23,73 @@ class NIMSSignaturePad extends StatefulWidget {
 }
 
 class NIMSSignaturePadState extends State<NIMSSignaturePad> {
+  final GlobalKey _repaintBoundaryKey = GlobalKey();
   List<Offset?> _points = [];
+  bool _hasStarted = false;
+
+  bool get hasSignature => _points.isNotEmpty;
+
+  /// Exports the signature as a base64 encoded PNG string
+  Future<String?> toBase64() async {
+    if (_points.isEmpty) return null;
+
+    try {
+      final boundary = _repaintBoundaryKey.currentContext?.findRenderObject()
+          as RenderRepaintBoundary?;
+      if (boundary == null) return null;
+
+      final image = await boundary.toImage(pixelRatio: 2.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData == null) return null;
+
+      final bytes = byteData.buffer.asUint8List();
+      return base64Encode(bytes);
+    } catch (e) {
+      debugPrint('Error exporting signature: $e');
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadiusGeometry.all(Radius.circular(8)),
-            color: widget.backgroundColor,
-            border: Border.fromBorderSide(
-              BorderSide(
-                width: 1,
-                color: Theme.of(context).colorScheme.outline,
-                strokeAlign: BorderSide.strokeAlignOutside,
+        RepaintBoundary(
+          key: _repaintBoundaryKey,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadiusGeometry.all(Radius.circular(8)),
+              color: widget.backgroundColor,
+              border: Border.fromBorderSide(
+                BorderSide(
+                  width: 1,
+                  color: Theme.of(context).colorScheme.outline,
+                  strokeAlign: BorderSide.strokeAlignOutside,
+                ),
               ),
             ),
-          ),
-          child: ClipRect(
-            child: GestureDetector(
-              onPanUpdate: (details) {
-                RenderBox? box = context.findRenderObject() as RenderBox?;
-                Offset point = box!.globalToLocal(details.globalPosition);
-                setState(() => _points.add(point));
-              },
-              onPanEnd: (details) => setState(() => _points.add(null)),
-              child: CustomPaint(
-                painter: _SignaturePainter(
-                  points: _points,
-                  strokeColor: widget.strokeColor,
-                  strokeWidth: widget.strokeWidth,
+            child: ClipRect(
+              child: GestureDetector(
+                onPanStart: (details) {
+                  if (!_hasStarted) {
+                    _hasStarted = true;
+                    widget.onSignatureStart?.call();
+                  }
+                },
+                onPanUpdate: (details) {
+                  RenderBox? box = context.findRenderObject() as RenderBox?;
+                  Offset point = box!.globalToLocal(details.globalPosition);
+                  setState(() => _points.add(point));
+                },
+                onPanEnd: (details) => setState(() => _points.add(null)),
+                child: CustomPaint(
+                  painter: _SignaturePainter(
+                    points: _points,
+                    strokeColor: widget.strokeColor,
+                    strokeWidth: widget.strokeWidth,
+                  ),
+                  size: Size.infinite,
                 ),
-                size: Size.infinite,
               ),
             ),
           ),
@@ -68,7 +108,10 @@ class NIMSSignaturePadState extends State<NIMSSignaturePad> {
   }
 
   void clear() {
-    setState(() => _points = []);
+    setState(() {
+      _points = [];
+      _hasStarted = false;
+    });
   }
 }
 

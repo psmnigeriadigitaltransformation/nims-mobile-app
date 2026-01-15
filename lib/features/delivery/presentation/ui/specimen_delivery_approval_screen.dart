@@ -29,6 +29,14 @@ class SpecimenDeliveryApprovalScreen extends StatefulWidget {
 class ResultDeliveryApprovalScreenState
     extends State<SpecimenDeliveryApprovalScreen> {
   final GlobalKey<NIMSSignaturePadState> signatureKey = GlobalKey();
+  String? _phoneNumberError;
+
+  String? _validatePhoneNumber(String value) {
+    if (value.isEmpty) return null;
+    if (value.length != 11) return "Phone number must be 11 digits";
+    if (!RegExp(r'^[0-9]+$').hasMatch(value)) return "Phone number must contain only digits";
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,15 +161,22 @@ class ResultDeliveryApprovalScreenState
         Padding(
           padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
           child: TextField(
+            keyboardType: TextInputType.phone,
+            maxLength: 11,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.tertiary,
             ),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Phone Number",
               hintText: "Enter phone number",
-              helperText: "",
-              errorText: null,
+              counterText: "",
+              errorText: _phoneNumberError,
             ),
+            onChanged: (value) {
+              setState(() {
+                _phoneNumberError = _validatePhoneNumber(value);
+              });
+            },
           ),
         ),
 

@@ -26,6 +26,7 @@ import '../features/pickup/presentation/ui/widgets/result_pickup_screen.dart';
 import '../features/pickup/presentation/ui/widgets/result_shipment_approval_screen.dart';
 import '../features/pickup/presentation/ui/widgets/shipment_details_screen.dart';
 import '../features/pickup/presentation/ui/widgets/specimen_shipment_approval_screen.dart';
+import '../features/pickup/presentation/ui/widgets/shipment_success_screen.dart';
 import '../features/shipments/presentation/ui/shipments_screen.dart';
 
 final router = GoRouter(
@@ -375,6 +376,48 @@ final router = GoRouter(
       path: shipmentsPath,
       builder: (context, state) {
         return ShipmentsScreen();
+      },
+    ),
+    GoRoute(
+      name: shipmentSuccessScreen,
+      path: shipmentSuccessPath,
+      builder: (context, state) {
+        final shipmentsJson = state.uri.queryParameters[shipmentsQueryParam];
+        final pickupFacilityJson =
+            state.uri.queryParameters[pickupFacilityQueryParam];
+        final destinationFacilityJson =
+            state.uri.queryParameters[destinationFacilityQueryParam];
+        final routeNo = state.uri.queryParameters[routeQueryParam];
+
+        if (shipmentsJson == null ||
+            pickupFacilityJson == null ||
+            destinationFacilityJson == null ||
+            routeNo == null) {
+          return NIMSErrorContent(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final pickupFacility = DomainFacility.fromJson(
+            jsonDecode(pickupFacilityJson),
+          );
+          final destinationFacility = DomainFacility.fromJson(
+            jsonDecode(destinationFacilityJson),
+          );
+          final shipments = List<DomainShipment>.from(
+            jsonDecode(
+              shipmentsJson,
+            ).map((shipmentJson) => DomainShipment.fromJson(shipmentJson)),
+          );
+
+          return ShipmentSuccessScreen(
+            pickUpFacility: pickupFacility,
+            destinationFacility: destinationFacility,
+            shipments: shipments,
+            routeNo: routeNo,
+          );
+        }
       },
     ),
   ],

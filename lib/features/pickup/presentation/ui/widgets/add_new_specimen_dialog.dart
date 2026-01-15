@@ -29,6 +29,19 @@ class _AddNewSpecimenDialogState extends State<AddNewSpecimenDialog> {
   final TextEditingController commentController = TextEditingController();
   final String sampleCode = Uuid().v4();
 
+  String? ageError;
+  String? commentError;
+
+  bool get isAgeValid {
+    if (ageController.text.isEmpty) return true;
+    final age = int.tryParse(ageController.text);
+    return age != null && age >= 0 && age <= 150;
+  }
+
+  bool get isCommentValid {
+    return commentController.text.length <= 255;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -94,16 +107,25 @@ class _AddNewSpecimenDialogState extends State<AddNewSpecimenDialog> {
                                 ?.copyWith(
                                   color: Theme.of(context).colorScheme.tertiary,
                                 ),
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText: "Age",
                               hintText: "Age",
                               helperText: "",
-                              errorText: null,
+                              errorText: ageError,
                             ),
                             controller: ageController,
                             onChanged: (value) {
                               setState(() {
                                 ageController.text = value;
+                                final age = int.tryParse(value);
+                                if (value.isNotEmpty && age == null) {
+                                  ageError = "Enter a valid number";
+                                } else if (age != null &&
+                                    (age < 0 || age > 150)) {
+                                  ageError = "Age must be 0-150";
+                                } else {
+                                  ageError = null;
+                                }
                               });
                             },
                             keyboardType: TextInputType.number,
@@ -209,18 +231,26 @@ class _AddNewSpecimenDialogState extends State<AddNewSpecimenDialog> {
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.tertiary,
               ),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: "Comment",
                 hintText: "Comment",
-                helperText: "",
-                errorText: null,
+                helperText:
+                    "${commentController.text.length}/255 characters",
+                errorText: commentError,
+                counterText: "",
               ),
               minLines: 2,
               maxLines: 2,
+              maxLength: 255,
               controller: commentController,
               onChanged: (value) {
                 setState(() {
                   commentController.text = value;
+                  if (value.length > 255) {
+                    commentError = "Comment cannot exceed 255 characters";
+                  } else {
+                    commentError = null;
+                  }
                 });
               },
             ),
@@ -251,7 +281,9 @@ class _AddNewSpecimenDialogState extends State<AddNewSpecimenDialog> {
                   patientCodeController.text.isNotEmpty &&
                   ageController.text.isNotEmpty &&
                   unitController.text.isNotEmpty &&
-                  sexController.text.isNotEmpty,
+                  sexController.text.isNotEmpty &&
+                  isAgeValid &&
+                  isCommentValid,
             ),
             SizedBox(height: 16),
           ],

@@ -35,4 +35,17 @@ class ManifestsScreenStateNotifier
       () => _fetchData(query),
     );
   }
+
+  Future<void> deleteManifest(String manifestNo) async {
+    final result = await ref
+        .read(manifestRepositoryProvider)
+        .deleteManifest(manifestNo);
+    switch (result) {
+      case Success():
+        // Refresh the list after deletion
+        state = await AsyncValue.guard(() => _fetchData(""));
+      case Error(message: final m):
+        throw Exception(m);
+    }
+  }
 }

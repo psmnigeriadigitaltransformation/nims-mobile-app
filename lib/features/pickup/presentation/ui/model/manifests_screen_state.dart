@@ -22,6 +22,8 @@ class ManifestsScreenState with _$ManifestsScreenState {
     @Default(false) bool isFetchingManifests,
     @Default(Alert(show: false, message: "")) Alert alert,
     @Default([]) List<DomainManifest> manifests,
+    /// Map of manifest_no to shipment_status for manifests already in shipments
+    @Default({}) Map<String, String> shippedManifestStatuses,
   }) = _ManifestsScreenState;
 
   // factory ManifestsScreenState.initial() =>

@@ -29,6 +29,7 @@ mixin _$ShipmentApprovalScreenState {
   bool get isSavingShipmentRoute => throw _privateConstructorUsedError;
   Alert get alert => throw _privateConstructorUsedError;
   bool get showSuccessDialog => throw _privateConstructorUsedError;
+  String get createdRouteNo => throw _privateConstructorUsedError;
 
   /// Create a copy of ShipmentApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -61,6 +62,7 @@ abstract class $ShipmentApprovalScreenStateCopyWith<$Res> {
     bool isSavingShipmentRoute,
     Alert alert,
     bool showSuccessDialog,
+    String createdRouteNo,
   });
 
   $MovementTypeCopyWith<$Res> get movementType;
@@ -99,6 +101,7 @@ class _$ShipmentApprovalScreenStateCopyWithImpl<
     Object? isSavingShipmentRoute = null,
     Object? alert = null,
     Object? showSuccessDialog = null,
+    Object? createdRouteNo = null,
   }) {
     return _then(
       _value.copyWith(
@@ -150,6 +153,10 @@ class _$ShipmentApprovalScreenStateCopyWithImpl<
                 ? _value.showSuccessDialog
                 : showSuccessDialog // ignore: cast_nullable_to_non_nullable
                       as bool,
+            createdRouteNo: null == createdRouteNo
+                ? _value.createdRouteNo
+                : createdRouteNo // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -218,6 +225,7 @@ abstract class _$$ShipmentApprovalScreenStateImplCopyWith<$Res>
     bool isSavingShipmentRoute,
     Alert alert,
     bool showSuccessDialog,
+    String createdRouteNo,
   });
 
   @override
@@ -260,6 +268,7 @@ class __$$ShipmentApprovalScreenStateImplCopyWithImpl<$Res>
     Object? isSavingShipmentRoute = null,
     Object? alert = null,
     Object? showSuccessDialog = null,
+    Object? createdRouteNo = null,
   }) {
     return _then(
       _$ShipmentApprovalScreenStateImpl(
@@ -311,6 +320,10 @@ class __$$ShipmentApprovalScreenStateImplCopyWithImpl<$Res>
             ? _value.showSuccessDialog
             : showSuccessDialog // ignore: cast_nullable_to_non_nullable
                   as bool,
+        createdRouteNo: null == createdRouteNo
+            ? _value.createdRouteNo
+            : createdRouteNo // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -332,6 +345,7 @@ class _$ShipmentApprovalScreenStateImpl extends _ShipmentApprovalScreenState {
     this.isSavingShipmentRoute = false,
     this.alert = const Alert(message: "", show: false),
     this.showSuccessDialog = false,
+    this.createdRouteNo = "",
   }) : _shipments = shipments,
        super._();
 
@@ -373,10 +387,13 @@ class _$ShipmentApprovalScreenStateImpl extends _ShipmentApprovalScreenState {
   @override
   @JsonKey()
   final bool showSuccessDialog;
+  @override
+  @JsonKey()
+  final String createdRouteNo;
 
   @override
   String toString() {
-    return 'ShipmentApprovalScreenState(movementType: $movementType, pickUpFacility: $pickUpFacility, destinationFacility: $destinationFacility, shipments: $shipments, pickUpTemperature: $pickUpTemperature, fullName: $fullName, phoneNumber: $phoneNumber, designation: $designation, signature: $signature, isSavingShipmentRoute: $isSavingShipmentRoute, alert: $alert, showSuccessDialog: $showSuccessDialog)';
+    return 'ShipmentApprovalScreenState(movementType: $movementType, pickUpFacility: $pickUpFacility, destinationFacility: $destinationFacility, shipments: $shipments, pickUpTemperature: $pickUpTemperature, fullName: $fullName, phoneNumber: $phoneNumber, designation: $designation, signature: $signature, isSavingShipmentRoute: $isSavingShipmentRoute, alert: $alert, showSuccessDialog: $showSuccessDialog, createdRouteNo: $createdRouteNo)';
   }
 
   @override
@@ -408,7 +425,9 @@ class _$ShipmentApprovalScreenStateImpl extends _ShipmentApprovalScreenState {
                 other.isSavingShipmentRoute == isSavingShipmentRoute) &&
             (identical(other.alert, alert) || other.alert == alert) &&
             (identical(other.showSuccessDialog, showSuccessDialog) ||
-                other.showSuccessDialog == showSuccessDialog));
+                other.showSuccessDialog == showSuccessDialog) &&
+            (identical(other.createdRouteNo, createdRouteNo) ||
+                other.createdRouteNo == createdRouteNo));
   }
 
   @override
@@ -426,6 +445,7 @@ class _$ShipmentApprovalScreenStateImpl extends _ShipmentApprovalScreenState {
     isSavingShipmentRoute,
     alert,
     showSuccessDialog,
+    createdRouteNo,
   );
 
   /// Create a copy of ShipmentApprovalScreenState
@@ -455,6 +475,7 @@ abstract class _ShipmentApprovalScreenState
     final bool isSavingShipmentRoute,
     final Alert alert,
     final bool showSuccessDialog,
+    final String createdRouteNo,
   }) = _$ShipmentApprovalScreenStateImpl;
   const _ShipmentApprovalScreenState._() : super._();
 
@@ -482,6 +503,8 @@ abstract class _ShipmentApprovalScreenState
   Alert get alert;
   @override
   bool get showSuccessDialog;
+  @override
+  String get createdRouteNo;
 
   /// Create a copy of ShipmentApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.

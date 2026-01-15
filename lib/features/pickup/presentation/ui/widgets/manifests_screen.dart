@@ -158,7 +158,6 @@ class _ManifestsScreenState extends ConsumerState<ManifestsScreen> {
                                   Container(
                                     padding: EdgeInsetsGeometry.symmetric(
                                       horizontal: 8,
-                                      vertical: 4,
                                     ),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.rectangle,
@@ -246,22 +245,27 @@ class _ManifestsScreenState extends ConsumerState<ManifestsScreen> {
             shrinkWrap: true,
             itemCount: state.manifests.length,
             itemBuilder: (context, index) {
+              final manifest = state.manifests[index];
               final isSelected = state.selectedManifestIndices.contains(index);
+              final shipmentStatus = state.shippedManifestStatuses[manifest.manifestNo];
+              final isShipped = shipmentStatus != null;
+
               return Padding(
-                padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+                padding: EdgeInsetsGeometry.symmetric(vertical: 4, horizontal: 8),
                 child: Row(
                   children: [
+                    if (!isShipped)
                     Checkbox(
                       value: isSelected,
                       onChanged: (isChecked) {
-                        ref
-                            .read(
-                              manifestsScreenStateNotifierProvider((
-                                movementType: widget.movementType,
-                              )).notifier,
-                            )
-                            .onToggleManifest(index, isSelected);
-                      },
+                              ref
+                                  .read(
+                                    manifestsScreenStateNotifierProvider((
+                                      movementType: widget.movementType,
+                                    )).notifier,
+                                  )
+                                  .onToggleManifest(index, isSelected);
+                            },
                     ),
 
                     Expanded(
@@ -269,24 +273,39 @@ class _ManifestsScreenState extends ConsumerState<ManifestsScreen> {
                         padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
                         child: NIMSManifestCard(
                           onTapDelete: () {
-                            showDialog(
-                              context: context,
-                              builder: (buildContext) =>
-                                  ManifestDeletionConfirmationDialog(),
-                            );
-                          },
+                                  showDialog(
+                                    context: context,
+                                    builder: (buildContext) =>
+                                        ManifestDeletionConfirmationDialog(
+                                      manifest: manifest,
+                                      onConfirmDelete: () {
+                                        ref
+                                            .read(
+                                              manifestsScreenStateNotifierProvider((
+                                                movementType: widget.movementType,
+                                              )).notifier,
+                                            )
+                                            .deleteManifest(
+                                              manifest.manifestNo,
+                                            );
+                                      },
+                                    ),
+                                  );
+                                },
                           isSelected: isSelected,
-                          manifest: state.manifests[index],
+                          isShipped: isShipped,
+                          shipmentStatus: shipmentStatus,
+                          manifest: manifest,
                           onTapManifest: () {
                             developer.log(
-                              state.manifests[index].toJson().toString(),
+                              manifest.toJson().toString(),
                               name: "ManifestsScreen:onTapManifest",
                             );
                             context.pushNamed(
                               manifestDetailsScreen,
                               queryParameters: {
                                 manifestsQueryParam: jsonEncode(
-                                  state.manifests[index].toJson(),
+                                  manifest.toJson(),
                                 ),
                               },
                             );

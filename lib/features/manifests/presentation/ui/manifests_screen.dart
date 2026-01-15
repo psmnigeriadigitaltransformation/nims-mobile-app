@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_manifest_card.dart';
 import 'package:nims_mobile_app/core/ui/widgets/sticky_header_delegate.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/widgets/manifest_deletion_confirmation_dialog.dart';
 import '../../../../app/route_name+path+params.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
 import '../../../../core/ui/widgets/nims_error_content.dart';
@@ -99,17 +100,34 @@ class ManifestsScreen extends ConsumerWidget {
         ),
         data: (state) {
           /// ----------------------------------------
-          /// FACILITIES
+          /// MANIFESTS LIST
           /// ----------------------------------------
           return SizedBox(
-            // height: size.height * 0.82,
             child: Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
               child: CustomScrollView(
                 shrinkWrap: true,
                 controller: ScrollController(),
                 slivers: [
-                  if (state.manifests.isNotEmpty) _buildList(state.manifests),
+                  if (state.manifests.isNotEmpty)
+                    _buildList(
+                      state.manifests,
+                      onDeleteManifest: (manifest) {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) =>
+                              ManifestDeletionConfirmationDialog(
+                            manifest: manifest,
+                            onConfirmDelete: () {
+                              ref
+                                  .read(manifestsScreenStateNotifierProvider
+                                      .notifier)
+                                  .deleteManifest(manifest.manifestNo);
+                            },
+                          ),
+                        );
+                      },
+                    ),
                 ],
               ),
             ),
@@ -135,7 +153,10 @@ SliverPersistentHeader _buildHeader(String title, BuildContext context) {
   );
 }
 
-SliverList _buildList(List<DomainManifest> items) {
+SliverList _buildList(
+  List<DomainManifest> items, {
+  required Function(DomainManifest) onDeleteManifest,
+}) {
   return SliverList(
     delegate: SliverChildBuilderDelegate((context, index) {
       return Padding(
@@ -155,7 +176,7 @@ SliverList _buildList(List<DomainManifest> items) {
             );
           },
           isSelected: false,
-          onTapDelete: () {},
+          onTapDelete: () => onDeleteManifest(items[index]),
         ),
       );
     }, childCount: items.length),

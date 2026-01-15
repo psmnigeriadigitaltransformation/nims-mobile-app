@@ -27,16 +27,18 @@ final addNewManifestScreenStateNotifierProvider =
       ({DomainMovementType movementType, DomainFacility pickUpFacility})
     >(AddNewManifestScreenStateNotifier.new);
 
+/// Provider key uses stable string identifier to ensure state persists across navigation
 final shipmentsScreenStateNotifierProvider =
-    AutoDisposeAsyncNotifierProviderFamily<
+    AsyncNotifierProviderFamily<
       ShipmentScreenStateNotifier,
       ShipmentsScreenState,
-      ({
-        DomainMovementType movementType,
-        DomainFacility pickUpFacility,
-        List<DomainManifest> manifests,
-      })
+      String
     >(ShipmentScreenStateNotifier.new);
+
+/// Helper to generate a stable key for shipment screen state
+String shipmentsScreenKey(DomainMovementType movementType, DomainFacility facility) {
+  return '${movementType.id}_${facility.facilityId}';
+}
 
 final shipmentApprovalScreenStateNotifierProvider =
     AutoDisposeNotifierProviderFamily<

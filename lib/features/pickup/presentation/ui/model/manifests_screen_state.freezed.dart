@@ -26,6 +26,10 @@ mixin _$ManifestsScreenState {
   Alert get alert => throw _privateConstructorUsedError;
   List<Manifest> get manifests => throw _privateConstructorUsedError;
 
+  /// Map of manifest_no to shipment_status for manifests already in shipments
+  Map<String, String> get shippedManifestStatuses =>
+      throw _privateConstructorUsedError;
+
   /// Create a copy of ManifestsScreenState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,6 +52,7 @@ abstract class $ManifestsScreenStateCopyWith<$Res> {
     bool isFetchingManifests,
     Alert alert,
     List<Manifest> manifests,
+    Map<String, String> shippedManifestStatuses,
   });
 
   $MovementTypeCopyWith<$Res>? get movementType;
@@ -80,6 +85,7 @@ class _$ManifestsScreenStateCopyWithImpl<
     Object? isFetchingManifests = null,
     Object? alert = null,
     Object? manifests = null,
+    Object? shippedManifestStatuses = null,
   }) {
     return _then(
       _value.copyWith(
@@ -111,6 +117,10 @@ class _$ManifestsScreenStateCopyWithImpl<
                 ? _value.manifests
                 : manifests // ignore: cast_nullable_to_non_nullable
                       as List<Manifest>,
+            shippedManifestStatuses: null == shippedManifestStatuses
+                ? _value.shippedManifestStatuses
+                : shippedManifestStatuses // ignore: cast_nullable_to_non_nullable
+                      as Map<String, String>,
           )
           as $Val,
     );
@@ -172,6 +182,7 @@ abstract class _$$ManifestsScreenStateImplCopyWith<$Res>
     bool isFetchingManifests,
     Alert alert,
     List<Manifest> manifests,
+    Map<String, String> shippedManifestStatuses,
   });
 
   @override
@@ -203,6 +214,7 @@ class __$$ManifestsScreenStateImplCopyWithImpl<$Res>
     Object? isFetchingManifests = null,
     Object? alert = null,
     Object? manifests = null,
+    Object? shippedManifestStatuses = null,
   }) {
     return _then(
       _$ManifestsScreenStateImpl(
@@ -234,6 +246,10 @@ class __$$ManifestsScreenStateImplCopyWithImpl<$Res>
             ? _value._manifests
             : manifests // ignore: cast_nullable_to_non_nullable
                   as List<Manifest>,
+        shippedManifestStatuses: null == shippedManifestStatuses
+            ? _value._shippedManifestStatuses
+            : shippedManifestStatuses // ignore: cast_nullable_to_non_nullable
+                  as Map<String, String>,
       ),
     );
   }
@@ -250,9 +266,11 @@ class _$ManifestsScreenStateImpl extends _ManifestsScreenState {
     this.isFetchingManifests = false,
     this.alert = const Alert(show: false, message: ""),
     final List<Manifest> manifests = const [],
+    final Map<String, String> shippedManifestStatuses = const {},
   }) : _facilities = facilities,
        _selectedManifestIndices = selectedManifestIndices,
        _manifests = manifests,
+       _shippedManifestStatuses = shippedManifestStatuses,
        super._();
 
   final List<Facility> _facilities;
@@ -295,9 +313,22 @@ class _$ManifestsScreenStateImpl extends _ManifestsScreenState {
     return EqualUnmodifiableListView(_manifests);
   }
 
+  /// Map of manifest_no to shipment_status for manifests already in shipments
+  final Map<String, String> _shippedManifestStatuses;
+
+  /// Map of manifest_no to shipment_status for manifests already in shipments
+  @override
+  @JsonKey()
+  Map<String, String> get shippedManifestStatuses {
+    if (_shippedManifestStatuses is EqualUnmodifiableMapView)
+      return _shippedManifestStatuses;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_shippedManifestStatuses);
+  }
+
   @override
   String toString() {
-    return 'ManifestsScreenState(facilities: $facilities, movementType: $movementType, selectedPickUpFacility: $selectedPickUpFacility, selectedManifestIndices: $selectedManifestIndices, isFetchingManifests: $isFetchingManifests, alert: $alert, manifests: $manifests)';
+    return 'ManifestsScreenState(facilities: $facilities, movementType: $movementType, selectedPickUpFacility: $selectedPickUpFacility, selectedManifestIndices: $selectedManifestIndices, isFetchingManifests: $isFetchingManifests, alert: $alert, manifests: $manifests, shippedManifestStatuses: $shippedManifestStatuses)';
   }
 
   @override
@@ -323,6 +354,10 @@ class _$ManifestsScreenStateImpl extends _ManifestsScreenState {
             const DeepCollectionEquality().equals(
               other._manifests,
               _manifests,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._shippedManifestStatuses,
+              _shippedManifestStatuses,
             ));
   }
 
@@ -336,6 +371,7 @@ class _$ManifestsScreenStateImpl extends _ManifestsScreenState {
     isFetchingManifests,
     alert,
     const DeepCollectionEquality().hash(_manifests),
+    const DeepCollectionEquality().hash(_shippedManifestStatuses),
   );
 
   /// Create a copy of ManifestsScreenState
@@ -360,6 +396,7 @@ abstract class _ManifestsScreenState extends ManifestsScreenState {
     final bool isFetchingManifests,
     final Alert alert,
     final List<Manifest> manifests,
+    final Map<String, String> shippedManifestStatuses,
   }) = _$ManifestsScreenStateImpl;
   const _ManifestsScreenState._() : super._();
 
@@ -377,6 +414,10 @@ abstract class _ManifestsScreenState extends ManifestsScreenState {
   Alert get alert;
   @override
   List<Manifest> get manifests;
+
+  /// Map of manifest_no to shipment_status for manifests already in shipments
+  @override
+  Map<String, String> get shippedManifestStatuses;
 
   /// Create a copy of ManifestsScreenState
   /// with the given fields replaced by the non-null parameter values.

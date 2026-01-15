@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
+import 'package:nims_mobile_app/core/services/location/geo_location_service.dart';
 import 'package:nims_mobile_app/features/facilities/data/providers.dart';
 import 'package:nims_mobile_app/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
 import 'package:uuid/uuid.dart';
@@ -12,42 +13,56 @@ import '../../../../../core/utils/result.dart';
 import '../model/shipments_screen_state.dart';
 
 class ShipmentScreenStateNotifier
-    extends
-        AutoDisposeFamilyAsyncNotifier<
-          ShipmentsScreenState,
-          ({
-            DomainMovementType movementType,
-            DomainFacility pickUpFacility,
-            List<DomainManifest> manifests,
-          })
-        > {
+    extends FamilyAsyncNotifier<ShipmentsScreenState, String> {
+  // Cached data to avoid reloading on navigation back
+  ShipmentsScreenState? _cachedState;
+
   @override
-  FutureOr<ShipmentsScreenState> build(
-    ({
-      DomainMovementType movementType,
-      DomainFacility pickUpFacility,
-      List<DomainManifest> manifests,
-    })
-    arg,
-  ) {
-    return _loadData(arg);
+  FutureOr<ShipmentsScreenState> build(String arg) async {
+    // Return cached state if available (when navigating back)
+    if (_cachedState != null) {
+      return _cachedState!;
+    }
+    // Initial state will be set via initialize() method
+    return ShipmentsScreenState(
+      facilities: [],
+      locations: [],
+      movementType: null,
+      shipments: [],
+    );
+  }
+
+  /// Initialize the state with the required data - call this once when first navigating to the screen
+  Future<void> initialize({
+    required DomainMovementType movementType,
+    required DomainFacility pickUpFacility,
+    required List<DomainManifest> manifests,
+  }) async {
+    // Skip if already initialized with data
+    if (_cachedState != null && _cachedState!.shipments.isNotEmpty) {
+      return;
+    }
+
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => _loadData(
+      movementType: movementType,
+      pickUpFacility: pickUpFacility,
+      manifests: manifests,
+    ));
   }
 
   Future<void> refreshState() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _loadData(arg));
+    if (_cachedState == null) return;
+    state = AsyncData(_cachedState!);
   }
 
-  Future<ShipmentsScreenState> _loadData(
-    ({
-      DomainMovementType movementType,
-      DomainFacility pickUpFacility,
-      List<DomainManifest> manifests,
-    })
-    param,
-  ) async {
+  Future<ShipmentsScreenState> _loadData({
+    required DomainMovementType movementType,
+    required DomainFacility pickUpFacility,
+    required List<DomainManifest> manifests,
+  }) async {
     developer.log(
-      "${param.manifests}",
+      "$manifests",
       name: "ShipmentsScreenStateNotifier:_loadData",
     );
 
@@ -61,14 +76,14 @@ class ShipmentScreenStateNotifier
 
     if (facilitiesResult is Success && locationsResult is Success) {
       final routeNo = Uuid().v4();
-      return ShipmentsScreenState(
+      _cachedState = ShipmentsScreenState(
         facilities: (facilitiesResult as Success<List<DomainFacility>>).payload
             .where(
               (facility) =>
-                  param.movementType.destinationPrimary!.toLowerCase().contains(
+                  movementType.destinationPrimary!.toLowerCase().contains(
                     facility.type?.toLowerCase() ?? "",
                   ) ||
-                  param.movementType.destinationSecondary!
+                  movementType.destinationSecondary!
                       .toLowerCase()
                       .contains(facility.type?.toLowerCase() ?? ""),
             )
@@ -76,26 +91,26 @@ class ShipmentScreenStateNotifier
         locations: (locationsResult as Success<List<DomainLocation>>).payload
             .where(
               (location) =>
-                  param.movementType.destinationPrimary!.toLowerCase().contains(
+                  movementType.destinationPrimary!.toLowerCase().contains(
                     location.location?.toLowerCase() ?? "",
                   ) ||
-                  param.movementType.destinationSecondary!
+                  movementType.destinationSecondary!
                       .toLowerCase()
                       .contains(location.location?.toLowerCase() ?? ""),
             )
             .toList(),
-        movementType: param.movementType,
-        shipments: param.manifests
+        movementType: movementType,
+        shipments: manifests
             .map(
               (manifest) => DomainShipment(
                 shipmentNo: Uuid().v4(),
                 manifestNo: manifest.manifestNo,
-                originType: param.pickUpFacility.type ?? '',
+                originType: pickUpFacility.type ?? '',
                 destinationLocationType: '',
                 destinationFacilityId: '',
                 destinationFacilityName: '',
-                pickupLatitude: 6.123456,
-                pickupLongitude: 7.123456,
+                pickupLatitude: GeoLocationService().latitude,
+                pickupLongitude: GeoLocationService().longitude,
                 sampleType: manifest.sampleType,
                 sampleCount: manifest.sampleCount,
                 routeNo: routeNo,
@@ -103,6 +118,7 @@ class ShipmentScreenStateNotifier
             )
             .toList(),
       );
+      return _cachedState!;
     } else {
       throw Exception("Something went wrong or an error occurred");
     }
@@ -126,7 +142,9 @@ class ShipmentScreenStateNotifier
           return shp;
         }
       }).toList();
-      return data.copyWith(shipments: updatedShipments);
+      final newState = data.copyWith(shipments: updatedShipments);
+      _cachedState = newState;
+      return newState;
     });
   }
 
@@ -138,10 +156,12 @@ class ShipmentScreenStateNotifier
           destinationFacilityId: facility.facilityId?.toString() ?? "",
         );
       }).toList();
-      return data.copyWith(
+      final newState = data.copyWith(
         selectedDestinationFacility: facility,
         shipments: updatedShipments,
       );
+      _cachedState = newState;
+      return newState;
     });
   }
 }

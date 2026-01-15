@@ -17,7 +17,7 @@ class ShipmentsScreenState with _$ShipmentsScreenState {
   const factory ShipmentsScreenState({
     required List<DomainFacility> facilities,
     required List<DomainLocation> locations,
-    required DomainMovementType movementType,
+    DomainMovementType? movementType,
     @Default([]) List<DomainShipment> shipments,
     DomainFacility? selectedDestinationFacility,
   }) = _ShipmentsScreenState;

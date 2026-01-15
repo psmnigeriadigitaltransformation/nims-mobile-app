@@ -17,7 +17,7 @@ import '../../../../../core/ui/widgets/nims_shipment_card.dart';
 import '../../../../dashboard/domain/mock.dart';
 import '../../../providers.dart';
 
-class ShipmentScreen extends ConsumerWidget {
+class ShipmentScreen extends ConsumerStatefulWidget {
   final DomainMovementType movementType;
   final List<DomainManifest> manifests;
   final DomainFacility pickUpFacility;
@@ -30,16 +30,32 @@ class ShipmentScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ShipmentScreen> createState() => _ShipmentScreenState();
+}
+
+class _ShipmentScreenState extends ConsumerState<ShipmentScreen> {
+  late final String _providerKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _providerKey = shipmentsScreenKey(widget.movementType, widget.pickUpFacility);
+    // Initialize the state after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(shipmentsScreenStateNotifierProvider(_providerKey).notifier).initialize(
+        movementType: widget.movementType,
+        pickUpFacility: widget.pickUpFacility,
+        manifests: widget.manifests,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final args = (
-      movementType: movementType,
-      pickUpFacility: pickUpFacility,
-      manifests: manifests,
-    );
 
     final asyncValueState = ref.watch(
-      shipmentsScreenStateNotifierProvider(args),
+      shipmentsScreenStateNotifierProvider(_providerKey),
     );
 
     return asyncValueState.when(
@@ -71,7 +87,7 @@ class ShipmentScreen extends ConsumerWidget {
               SizedBox(height: 8),
 
               Text(
-                movementType.movement ?? "",
+                widget.movementType.movement ?? "",
                 style: TextTheme.of(context).bodySmall,
               ),
 
@@ -125,7 +141,7 @@ class ShipmentScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            pickUpFacility.facilityName ?? "",
+                            widget.pickUpFacility.facilityName ?? "",
                             style: Theme.of(context).textTheme.bodyMedium,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -169,7 +185,7 @@ class ShipmentScreen extends ConsumerWidget {
                               ref
                                   .read(
                                     shipmentsScreenStateNotifierProvider(
-                                      args,
+                                      _providerKey,
                                     ).notifier,
                                   )
                                   .updateDestinationFacility(
@@ -236,7 +252,7 @@ class ShipmentScreen extends ConsumerWidget {
                                       ref
                                           .read(
                                             shipmentsScreenStateNotifierProvider(
-                                              args,
+                                              _providerKey,
                                             ).notifier,
                                           )
                                           .updateDestinationLocationType(
@@ -269,8 +285,8 @@ class ShipmentScreen extends ConsumerWidget {
               context.pushNamed(
                 specimenDispatchApprovalScreen,
                 queryParameters: {
-                  movementTypeQueryParam: jsonEncode(movementType.toJson()),
-                  pickupFacilityQueryParam: jsonEncode(pickUpFacility.toJson()),
+                  movementTypeQueryParam: jsonEncode(widget.movementType.toJson()),
+                  pickupFacilityQueryParam: jsonEncode(widget.pickUpFacility.toJson()),
                   destinationFacilityQueryParam: jsonEncode(
                     state.selectedDestinationFacility?.toJson(),
                   ),
@@ -290,7 +306,7 @@ class ShipmentScreen extends ConsumerWidget {
         message: e.toString(),
         onTapActionButton: () {
           ref
-              .read(shipmentsScreenStateNotifierProvider(args).notifier)
+              .read(shipmentsScreenStateNotifierProvider(_providerKey).notifier)
               .refreshState();
         },
         actionButtonLabel: 'Retry',

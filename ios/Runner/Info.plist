@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>NIMS needs access to your location to record pickup coordinates for shipments.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>NIMS needs access to your location to record pickup coordinates for shipments.</string>
 </dict>
 </plist>
