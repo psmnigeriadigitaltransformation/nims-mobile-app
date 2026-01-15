@@ -5,7 +5,8 @@ import 'package:nims_mobile_app/core/ui/theme/colors.dart';
 enum QuickAction {
   facilities("Facilities", "lib/core/ui/icons/ic_laboratory.png", NIMSColors.pink01),
   manifests("Manifests", "lib/core/ui/icons/ic_shopping_list.png", NIMSColors.violet01),
-  shipments("Shipments", "lib/core/ui/icons/ic_delivery_bike.png", NIMSColors.green01);
+  shipments("Shipments", "lib/core/ui/icons/ic_delivery_bike.png", NIMSColors.green01),
+  routes("Routes", "lib/core/ui/icons/ic_fast_shipping.png", NIMSColors.blue01);
 
   final String label;
   final String asset;

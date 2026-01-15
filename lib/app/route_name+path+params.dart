@@ -48,6 +48,9 @@ const manifestsPath = '/manifests';
 const shipmentsScreen = 'shipments_screen';
 const shipmentsPath = '/shipments';
 
+const routesScreen = 'routes_screen';
+const routesPath = '/routes';
+
 const shipmentDetailsScreen = 'shipment_details_screen';
 const shipmentDetailsPath = '/shipment_details';
 

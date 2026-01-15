@@ -155,6 +155,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                 context.pushNamed(manifestsScreen);
                               case QuickAction.shipments:
                                 context.pushNamed(shipmentsScreen);
+                              case QuickAction.routes:
+                                context.pushNamed(routesScreen);
                             }
                           },
                         ),

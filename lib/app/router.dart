@@ -30,6 +30,7 @@ import '../features/pickup/presentation/ui/widgets/shipment_success_screen.dart'
 import '../features/shipments/presentation/ui/shipments_screen.dart';
 import '../features/shipments/presentation/ui/shipment_details_screen.dart'
     as shipment_details;
+import '../features/dashboard/presentation/ui/routes_screen.dart';
 
 final router = GoRouter(
   initialLocation: loginPath,
@@ -380,6 +381,13 @@ final router = GoRouter(
       path: shipmentsPath,
       builder: (context, state) {
         return ShipmentsScreen();
+      },
+    ),
+    GoRoute(
+      name: routesScreen,
+      path: routesPath,
+      builder: (context, state) {
+        return const RoutesScreen();
       },
     ),
     GoRoute(
