@@ -56,9 +56,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   /// -------------------------------
                   InkWell(
                     borderRadius: BorderRadius.circular(100),
-                    onTap: () {
-                      context.pushNamed(profileScreen);
-                    },
+                    onTap: () {},
                     child: Container(
                       padding: EdgeInsetsGeometry.all(16),
                       decoration: BoxDecoration(
@@ -157,8 +155,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                 context.pushNamed(manifestsScreen);
                               case QuickAction.shipments:
                                 context.pushNamed(shipmentsScreen);
-                              case QuickAction.approvals:
-                                break;
                             }
                           },
                         ),
@@ -291,7 +287,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   Widget _buildSearchResults(BuildContext context, DashboardScreenState state) {
-    final hasNoResults = state.searchedFacilities.isEmpty &&
+    final hasNoResults =
+        state.searchedFacilities.isEmpty &&
         state.searchedManifests.isEmpty &&
         state.searchedShipments.isEmpty;
 
@@ -316,8 +313,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               Text(
                 "Try searching with different keywords",
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               ),
             ],
           ),
@@ -341,9 +338,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) => NIMSFacilityCard(
-                facility: state.searchedFacilities[index],
-              ),
+              (context, index) =>
+                  NIMSFacilityCard(facility: state.searchedFacilities[index]),
               childCount: state.searchedFacilities.length,
             ),
           ),
@@ -430,10 +426,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
+          Text(title, style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(width: 8),
           Container(
             padding: EdgeInsetsGeometry.symmetric(horizontal: 8, vertical: 2),
@@ -444,8 +437,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             child: Text(
               count.toString(),
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
             ),
           ),
         ],

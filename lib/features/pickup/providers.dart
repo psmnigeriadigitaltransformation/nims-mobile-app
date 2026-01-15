@@ -1,10 +1,13 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/manifest.dart';
 import 'package:nims_mobile_app/core/domain/models/movement_type.dart';
 import 'package:nims_mobile_app/core/utils/result.dart';
 import 'package:nims_mobile_app/features/pickup/presentation/ui/model/add_new_manifest_screen_state.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/model/manifest_details_screen_state.dart';
 import 'package:nims_mobile_app/features/pickup/presentation/ui/model/shipment_approval_screen_state.dart';
 import 'package:nims_mobile_app/features/pickup/presentation/ui/notifiers/add_new_manifest_screen_state_notifier.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/notifiers/manifest_details_screen_state_notifier.dart';
 import 'package:nims_mobile_app/features/pickup/presentation/ui/notifiers/manifests_screen_state_notifier.dart';
 import 'package:nims_mobile_app/features/pickup/presentation/ui/model/manifests_screen_state.dart';
 import 'package:nims_mobile_app/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
@@ -58,3 +61,10 @@ final resultPickUpScreenStateNotifierProvider =
       ResultPickUpScreenState,
       DomainMovementType
     >(ResultPickUpScreenStateNotifier.new);
+
+final manifestDetailsScreenStateNotifierProvider =
+    AsyncNotifierProvider.family<
+      ManifestDetailsScreenStateNotifier,
+      ManifestDetailsScreenState,
+      Manifest
+    >(ManifestDetailsScreenStateNotifier.new);

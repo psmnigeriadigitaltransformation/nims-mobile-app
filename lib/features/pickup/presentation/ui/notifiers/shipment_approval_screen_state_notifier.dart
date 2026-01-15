@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
+import 'package:nims_mobile_app/core/services/location/geo_location_service.dart';
 import 'package:nims_mobile_app/core/ui/model/model/alert.dart';
 import 'package:nims_mobile_app/features/auth/data/providers.dart';
 import 'package:nims_mobile_app/features/facilities/data/providers.dart';
@@ -85,7 +86,7 @@ class ShipmentApprovalScreenStateNotifier
   onApproveShipment() async {
     state = state.copyWith(isSavingShipmentRoute: true);
     final user = await ref.read(authRepositoryProvider).getUser();
-    final routeNo = Uuid().v4();
+    final routeNo = state.shipments.first.routeNo;
     final shipmentRoute = DomainShipmentRoute(
       routeNo: routeNo,
       originFacilityId: state.pickUpFacility.facilityId?.toString() ?? "",
@@ -95,6 +96,8 @@ class ShipmentApprovalScreenStateNotifier
       riderUserId: user?.userId ?? "",
       originFacilityName: state.pickUpFacility.facilityName ?? "",
       destinationFacilityName: state.destinationFacility.facilityName ?? "",
+      latitude: GeoLocationService().latitude,
+      longitude: GeoLocationService().longitude,
     );
 
     final approval = DomainApproval(

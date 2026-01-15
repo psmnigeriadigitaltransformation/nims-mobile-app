@@ -245,7 +245,12 @@ class _ShipmentScreenState extends ConsumerState<ShipmentScreen> {
                                 facilities: state.facilities,
                                 locations: state.locations,
                                 onTap: () {
-                                  context.pushNamed(manifestDetailsScreen);
+                                  context.pushNamed(
+                                    shipmentDetailsScreen,
+                                    queryParameters: {
+                                      shipmentQueryParam: jsonEncode(shipment.toJson()),
+                                    },
+                                  );
                                 },
                                 onSelectDestinationLocationType:
                                     (DomainLocation location) {

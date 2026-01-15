@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/app/route_name+path+params.dart';
@@ -34,7 +36,9 @@ class NIMSTransitCard extends StatelessWidget {
       onTap: () {
         context.pushNamed(
           routeDetailsScreen,
-          queryParameters: {routeQueryParam: shipmentRoute},
+          queryParameters: {
+            routeQueryParam: jsonEncode(shipmentRoute.toJson()),
+          },
         );
       },
       child: Container(

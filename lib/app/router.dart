@@ -28,6 +28,8 @@ import '../features/pickup/presentation/ui/widgets/shipment_details_screen.dart'
 import '../features/pickup/presentation/ui/widgets/specimen_shipment_approval_screen.dart';
 import '../features/pickup/presentation/ui/widgets/shipment_success_screen.dart';
 import '../features/shipments/presentation/ui/shipments_screen.dart';
+import '../features/shipments/presentation/ui/shipment_details_screen.dart'
+    as shipment_details;
 
 final router = GoRouter(
   initialLocation: loginPath,
@@ -291,15 +293,17 @@ final router = GoRouter(
       name: routeDetailsScreen,
       path: routeDetailsPath,
       builder: (context, state) {
-        final routeType = RouteType.values.firstWhere(
-          (type) =>
-              type.name == state.uri.queryParameters[movementTypeQueryParam],
-          orElse: () => RouteType.spokeToPCRLabGeneXpert,
-        );
-        if (kDebugMode) {
-          print(routeType);
+        final routeJson = state.uri.queryParameters[routeQueryParam];
+        if (routeJson == null) {
+          return NIMSErrorContent(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final route = DomainShipmentRoute.fromJson(jsonDecode(routeJson));
+          return RouteDetailsScreen(route: route);
         }
-        return RouteDetailsScreen(routeType: routeType);
       },
     ),
     GoRoute(
@@ -376,6 +380,23 @@ final router = GoRouter(
       path: shipmentsPath,
       builder: (context, state) {
         return ShipmentsScreen();
+      },
+    ),
+    GoRoute(
+      name: shipmentDetailsScreen,
+      path: shipmentDetailsPath,
+      builder: (context, state) {
+        final shipmentJson = state.uri.queryParameters[shipmentQueryParam];
+        if (shipmentJson == null) {
+          return NIMSErrorContent(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final shipment = DomainShipment.fromJson(jsonDecode(shipmentJson));
+          return shipment_details.ShipmentDetailsScreen(shipment: shipment);
+        }
       },
     ),
     GoRoute(

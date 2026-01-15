@@ -494,4 +494,86 @@ class NIMSLocalService {
     );
     return result.map((route) => DomainShipmentRoute.fromJson(route)).toList();
   }
+
+  Future<List<DomainSample>> getCachedSamplesByManifestNo(
+    String manifestNo,
+  ) async {
+    developer.log(
+      "manifestNo: $manifestNo",
+      name: "NIMSLocalService:getCachedSamplesByManifestNo",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "samples",
+      where: "manifest_no = ?",
+      whereArgs: [manifestNo],
+    );
+    developer.log(
+      "samples: $result",
+      name: "NIMSLocalService:getCachedSamplesByManifestNo",
+    );
+    return result.map((sample) => DomainSample.fromJson(sample)).toList();
+  }
+
+  Future<DomainShipmentRoute?> getCachedRouteByRouteNo(String routeNo) async {
+    developer.log(
+      "routeNo: $routeNo",
+      name: "NIMSLocalService:getCachedRouteByRouteNo",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "routes",
+      where: "route_no = ?",
+      whereArgs: [routeNo],
+      limit: 1,
+    );
+    developer.log(
+      "route: $result",
+      name: "NIMSLocalService:getCachedRouteByRouteNo",
+    );
+    if (result.isNotEmpty) {
+      return DomainShipmentRoute.fromJson(result.first);
+    }
+    return null;
+  }
+
+  Future<List<DomainApproval>> getCachedApprovalsByRouteNo(
+    String routeNo,
+  ) async {
+    developer.log(
+      "routeNo: $routeNo",
+      name: "NIMSLocalService:getCachedApprovalsByRouteNo",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "approvals",
+      where: "route_no = ?",
+      whereArgs: [routeNo],
+    );
+    developer.log(
+      "approvals: $result",
+      name: "NIMSLocalService:getCachedApprovalsByRouteNo",
+    );
+    return result.map((approval) => DomainApproval.fromJson(approval)).toList();
+  }
+
+  Future<List<DomainShipment>> getCachedShipmentsByRouteNo(
+    String routeNo,
+  ) async {
+    developer.log(
+      "routeNo: $routeNo",
+      name: "NIMSLocalService:getCachedShipmentsByRouteNo",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "shipments",
+      where: "route_no = ?",
+      whereArgs: [routeNo],
+    );
+    developer.log(
+      "shipments: $result",
+      name: "NIMSLocalService:getCachedShipmentsByRouteNo",
+    );
+    return result.map((shipment) => DomainShipment.fromJson(shipment)).toList();
+  }
 }

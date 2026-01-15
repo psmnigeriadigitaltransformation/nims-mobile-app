@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/app/route_name+path+params.dart';
@@ -13,7 +15,12 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       onTap: () {
-        context.pushNamed(manifestDetailsScreen);
+        context.pushNamed(
+          shipmentDetailsScreen,
+          queryParameters: {
+            shipmentQueryParam: jsonEncode(shipment.toJson()),
+          },
+        );
       },
       child: Container(
         decoration: BoxDecoration(
