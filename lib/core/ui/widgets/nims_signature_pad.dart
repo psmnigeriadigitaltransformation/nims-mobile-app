@@ -29,7 +29,7 @@ class NIMSSignaturePadState extends State<NIMSSignaturePad> {
 
   bool get hasSignature => _points.isNotEmpty;
 
-  /// Exports the signature as a base64 encoded PNG string
+  /// Exports the signature as a base64 encoded PNG string with transparent background
   Future<String?> toBase64() async {
     if (_points.isEmpty) return null;
 
@@ -38,7 +38,36 @@ class NIMSSignaturePadState extends State<NIMSSignaturePad> {
           as RenderRepaintBoundary?;
       if (boundary == null) return null;
 
-      final image = await boundary.toImage(pixelRatio: 2.0);
+      // Get the size of the signature pad
+      final size = boundary.size;
+
+      // Create a picture recorder to draw the signature with transparent background
+      final recorder = ui.PictureRecorder();
+      final canvas = Canvas(recorder);
+
+      // Draw only the signature strokes (no background)
+      const double pixelRatio = 2.0;
+      final paint = Paint()
+        ..color = widget.strokeColor
+        ..strokeWidth = widget.strokeWidth * pixelRatio
+        ..strokeCap = StrokeCap.round;
+
+      for (int i = 0; i < _points.length - 1; i++) {
+        if (_points[i] != null && _points[i + 1] != null) {
+          // Scale points to match the pixel ratio
+          final p1 = _points[i]! * pixelRatio;
+          final p2 = _points[i + 1]! * pixelRatio;
+          canvas.drawLine(p1, p2, paint);
+        }
+      }
+
+      // End recording and create the image
+      final picture = recorder.endRecording();
+      final image = await picture.toImage(
+        (size.width * pixelRatio).toInt(),
+        (size.height * pixelRatio).toInt(),
+      );
+
       final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       if (byteData == null) return null;
 
