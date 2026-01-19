@@ -4,6 +4,8 @@ import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
 import 'package:nims_mobile_app/core/domain/models/movement_category.dart';
+import 'package:nims_mobile_app/core/services/providers.dart';
+import 'package:nims_mobile_app/core/ui/model/model/alert.dart';
 import 'package:nims_mobile_app/features/auth/data/providers.dart';
 import 'package:nims_mobile_app/features/dashboard/presentation/ui/model/dashboard_screen_state.dart';
 import 'package:nims_mobile_app/features/facilities/data/model/facility_type.dart';
@@ -23,6 +25,7 @@ class DashboardScreenStateNotifier
   Future<DashboardScreenState> _fetchData() async {
     final movementsRepository = ref.read(movementTypesRepositoryProvider);
     final authRepository = ref.read(authRepositoryProvider);
+    final localService = ref.read(nimsLocalServiceProvider);
 
     final shipmentRoutes = await ref
         .read(shipmentRouteRepositoryProvider)
@@ -32,10 +35,12 @@ class DashboardScreenStateNotifier
       false,
     );
     final user = await authRepository.getUser();
+    final pendingCount = await localService.getTotalPendingCount();
 
     developer.log("user: $user", name: "DashboardScreenStateNotifier:build");
     developer.log("movementTypesResult: $movementTypesResult", name: "DashboardScreenStateNotifier:build");
     developer.log("shipmentRoutes: $shipmentRoutes", name: "DashboardScreenStateNotifier:build");
+    developer.log("pendingCount: $pendingCount", name: "DashboardScreenStateNotifier:build");
 
     if (user != null &&
         movementTypesResult is Success<List<DomainMovementType>> &&
@@ -58,6 +63,7 @@ class DashboardScreenStateNotifier
             )
             .toList(),
         shipmentRoutes: shipmentRoutes.payload,
+        pendingSyncCount: pendingCount,
       );
     } else {
       throw Exception("Something went wrong or an error occurred!");
@@ -109,5 +115,70 @@ class DashboardScreenStateNotifier
           ? shipmentsResult.payload
           : [],
     ));
+  }
+
+  /// Trigger sync of pending records to the server
+  Future<void> syncPendingRecords() async {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    // Set syncing state
+    state = AsyncData(currentState.copyWith(isSyncing: true));
+
+    try {
+      final syncService = ref.read(syncServiceProvider);
+      await syncService.syncAll();
+
+      // After sync, update pending count and last sync time
+      final localService = ref.read(nimsLocalServiceProvider);
+      final newPendingCount = await localService.getTotalPendingCount();
+
+      final updatedState = state.value;
+      if (updatedState != null) {
+        state = AsyncData(updatedState.copyWith(
+          isSyncing: false,
+          pendingSyncCount: newPendingCount,
+          lastSyncTime: DateTime.now(),
+        ));
+      }
+    } catch (e, s) {
+      developer.log(
+        "Sync failed: $e",
+        name: "DashboardScreenStateNotifier:syncPendingRecords",
+        error: e,
+        stackTrace: s,
+      );
+      final updatedState = state.value;
+      if (updatedState != null) {
+        state = AsyncData(updatedState.copyWith(
+          isSyncing: false,
+          syncAlert: Alert(
+            show: true,
+            message: "Sync failed: ${e.toString()}",
+          ),
+        ));
+      }
+    }
+  }
+
+  /// Dismiss the sync error alert
+  void dismissSyncAlert() {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    state = AsyncData(currentState.copyWith(
+      syncAlert: const Alert(show: false, message: ''),
+    ));
+  }
+
+  /// Update only the pending count (useful when coming back to dashboard)
+  Future<void> updatePendingCount() async {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    final localService = ref.read(nimsLocalServiceProvider);
+    final pendingCount = await localService.getTotalPendingCount();
+
+    state = AsyncData(currentState.copyWith(pendingSyncCount: pendingCount));
   }
 }

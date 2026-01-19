@@ -56,9 +56,6 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
                           borderRadius: const BorderRadius.all(
                             Radius.circular(4),
                           ),
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.tertiaryContainer,
                         ),
                         child: Text(
                           widget.sample.sampleCode,

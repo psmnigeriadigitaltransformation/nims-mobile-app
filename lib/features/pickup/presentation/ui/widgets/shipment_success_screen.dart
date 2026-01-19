@@ -138,7 +138,7 @@ class ShipmentSuccessScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                routeNo.substring(0, 8).toUpperCase(),
+                                routeNo.toUpperCase(),
                                 style: Theme.of(context).textTheme.titleSmall
                                     ?.copyWith(fontWeight: FontWeight.w600),
                               ),

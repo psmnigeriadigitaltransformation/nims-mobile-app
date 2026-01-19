@@ -5,7 +5,7 @@ import '../../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../../core/ui/widgets/nims_signature_pad.dart';
 
 class SignatureDialog extends StatefulWidget {
-  final void Function(String signatureBase64) onFinish;
+  final Future<void> Function(String signatureBase64) onFinish;
 
   const SignatureDialog({
     super.key,
@@ -19,7 +19,7 @@ class SignatureDialog extends StatefulWidget {
 class _SignatureDialogState extends State<SignatureDialog> {
   final GlobalKey<NIMSSignaturePadState> signatureKey = GlobalKey();
   bool _hasSigned = false;
-  bool _isExporting = false;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -138,20 +138,23 @@ class _SignatureDialogState extends State<SignatureDialog> {
             SizedBox(
               width: double.infinity,
               child: NIMSPrimaryButton(
-                text: _isExporting ? "Saving..." : "Finish",
+                text: "Finish",
+                loading: _isLoading,
                 onPressed: () async {
-                  setState(() => _isExporting = true);
+                  setState(() => _isLoading = true);
 
                   final signatureBase64 = await signatureKey.currentState?.toBase64();
 
                   if (signatureBase64 != null && context.mounted) {
-                    context.pop();
-                    widget.onFinish(signatureBase64);
+                    await widget.onFinish(signatureBase64);
+                    if (context.mounted) {
+                      context.pop();
+                    }
                   } else {
-                    setState(() => _isExporting = false);
+                    setState(() => _isLoading = false);
                   }
                 },
-                enabled: _hasSigned && !_isExporting,
+                enabled: _hasSigned && !_isLoading,
               ),
             ),
           ],

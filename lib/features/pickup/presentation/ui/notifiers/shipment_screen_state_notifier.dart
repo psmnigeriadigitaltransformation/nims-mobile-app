@@ -4,9 +4,10 @@ import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
 import 'package:nims_mobile_app/core/services/location/geo_location_service.dart';
+import 'package:nims_mobile_app/core/services/providers.dart';
+import 'package:nims_mobile_app/core/utils/list_extensions.dart';
 import 'package:nims_mobile_app/features/facilities/data/providers.dart';
 import 'package:nims_mobile_app/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../../core/domain/mappers/typedefs.dart';
 import '../../../../../core/utils/result.dart';
@@ -74,8 +75,61 @@ class ShipmentScreenStateNotifier
         .read(locationsRepositoryProvider)
         .getLocations(false);
 
+    final localService = ref.read(nimsLocalServiceProvider);
+
+    // Get LSP for ID generation
+    final lsp = await localService.getFirstCachedLsp();
+    if (lsp == null) {
+      throw Exception("No LSP available. Please sync your data.");
+    }
+
+    // We need 1 etoken for the route + 1 etoken per shipment
+    final requiredETokenCount = 1 + manifests.length;
+    final usedETokens = <DomainETokenData>[];
+
+    // Get etoken for route
+    final routeEToken = await localService.getNextEToken();
+    if (routeEToken == null) {
+      throw Exception("No eTokens available. Please download more eTokens before creating shipments.");
+    }
+    usedETokens.add(routeEToken);
+
+    // Generate route number
+    final routeNo = '${lsp.display}-RO-${routeEToken.serialNo}';
+
+    // Get etokens for each shipment and delete the route etoken so we get new ones
+    await localService.deleteEToken(routeEToken.etokenId!);
+
+    final shipments = <DomainShipment>[];
+    for (final manifest in manifests) {
+      final shipmentEToken = await localService.getNextEToken();
+      if (shipmentEToken == null) {
+        throw Exception("Not enough eTokens available. Please download more eTokens before creating shipments. (Need ${requiredETokenCount - usedETokens.length} more)");
+      }
+      usedETokens.add(shipmentEToken);
+
+      final shipmentNo = '${lsp.display}-SH-${shipmentEToken.serialNo}';
+
+      shipments.add(DomainShipment(
+        shipmentNo: shipmentNo,
+        manifestNo: manifest.manifestNo,
+        originType: pickUpFacility.type ?? '',
+        originFacilityName: pickUpFacility.facilityName ?? '',
+        destinationLocationType: '',
+        destinationFacilityId: '',
+        destinationFacilityName: '',
+        pickupLatitude: GeoLocationService().latitude,
+        pickupLongitude: GeoLocationService().longitude,
+        sampleType: manifest.sampleType,
+        sampleCount: manifest.sampleCount,
+        routeNo: routeNo,
+      ));
+
+      // Delete the used shipment etoken so next iteration gets a new one
+      await localService.deleteEToken(shipmentEToken.etokenId!);
+    }
+
     if (facilitiesResult is Success && locationsResult is Success) {
-      final routeNo = Uuid().v4();
       _cachedState = ShipmentsScreenState(
         facilities: (facilitiesResult as Success<List<DomainFacility>>).payload
             .where(
@@ -87,7 +141,7 @@ class ShipmentScreenStateNotifier
                       .toLowerCase()
                       .contains(facility.type?.toLowerCase() ?? ""),
             )
-            .toList(),
+            .distinctBy((facility) => facility.facilityId),
         locations: (locationsResult as Success<List<DomainLocation>>).payload
             .where(
               (location) =>
@@ -100,23 +154,9 @@ class ShipmentScreenStateNotifier
             )
             .toList(),
         movementType: movementType,
-        shipments: manifests
-            .map(
-              (manifest) => DomainShipment(
-                shipmentNo: Uuid().v4(),
-                manifestNo: manifest.manifestNo,
-                originType: pickUpFacility.type ?? '',
-                destinationLocationType: '',
-                destinationFacilityId: '',
-                destinationFacilityName: '',
-                pickupLatitude: GeoLocationService().latitude,
-                pickupLongitude: GeoLocationService().longitude,
-                sampleType: manifest.sampleType,
-                sampleCount: manifest.sampleCount,
-                routeNo: routeNo,
-              ),
-            )
-            .toList(),
+        shipments: shipments,
+        usedETokens: usedETokens,
+        lsp: lsp,
       );
       return _cachedState!;
     } else {

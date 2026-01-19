@@ -310,13 +310,13 @@ class _SpecimenShipmentApprovalScreenState
               context: context,
               barrierDismissible: false,
               builder: (buildContext) => SignatureDialog(
-                onFinish: (signatureBase64) {
+                onFinish: (signatureBase64) async {
                   ref
                       .read(
                         shipmentApprovalScreenStateNotifierProvider(args).notifier,
                       )
                       .onUpdateSignature(signatureBase64);
-                  ref
+                  await ref
                       .read(
                         shipmentApprovalScreenStateNotifierProvider(args).notifier,
                       )

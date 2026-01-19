@@ -6,6 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/app/route_name+path+params.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/facility.dart';
+import 'package:nims_mobile_app/core/domain/models/shipment.dart';
+import 'package:nims_mobile_app/core/domain/models/shipment_route.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_error_content.dart';
 import 'package:nims_mobile_app/features/dashboard/domain/route_type.dart';
 import 'package:nims_mobile_app/features/dashboard/presentation/ui/dashboard_screen.dart';
@@ -27,6 +30,7 @@ import '../features/pickup/presentation/ui/widgets/result_shipment_approval_scre
 import '../features/pickup/presentation/ui/widgets/shipment_details_screen.dart';
 import '../features/pickup/presentation/ui/widgets/specimen_shipment_approval_screen.dart';
 import '../features/pickup/presentation/ui/widgets/shipment_success_screen.dart';
+import '../features/delivery/presentation/ui/delivery_success_screen.dart';
 import '../features/shipments/presentation/ui/shipments_screen.dart';
 import '../features/shipments/presentation/ui/shipment_details_screen.dart'
     as shipment_details;
@@ -191,33 +195,32 @@ final router = GoRouter(
         final movementTypeJson =
             state.uri.queryParameters[movementTypeQueryParam];
         final shipmentsJson = state.uri.queryParameters[shipmentsQueryParam];
-        final pickupFacilityJson =
-            state.uri.queryParameters[pickupFacilityQueryParam];
         final destinationFacilityJson =
-            state.uri.queryParameters[pickupFacilityQueryParam];
+            state.uri.queryParameters[destinationFacilityQueryParam];
+        final routeNo = state.uri.queryParameters[routeQueryParam];
 
         developer.log(
           movementTypeJson.toString(),
-          name: "GoRoute:specimenDispatchApprovalScreen:movementTypeJson",
+          name: "GoRoute:specimenDeliveryApprovalScreen:movementTypeJson",
         );
         developer.log(
           shipmentsJson.toString(),
-          name: "GoRoute:specimenDispatchApprovalScreen:shipmentsJson",
-        );
-        developer.log(
-          pickupFacilityJson.toString(),
-          name: "GoRoute:specimenDispatchApprovalScreen:pickupFacilityJson",
+          name: "GoRoute:specimenDeliveryApprovalScreen:shipmentsJson",
         );
         developer.log(
           destinationFacilityJson.toString(),
           name:
-              "GoRoute:specimenDispatchApprovalScreen:destinationFacilityJson",
+              "GoRoute:specimenDeliveryApprovalScreen:destinationFacilityJson",
+        );
+        developer.log(
+          routeNo.toString(),
+          name: "GoRoute:specimenDeliveryApprovalScreen:routeNo",
         );
 
         if (movementTypeJson == null ||
             shipmentsJson == null ||
-            pickupFacilityJson == null ||
-            destinationFacilityJson == null) {
+            destinationFacilityJson == null ||
+            routeNo == null) {
           return NIMSErrorContent(
             message: "Something went wrong",
             onTapActionButton: () => context.pop(),
@@ -226,9 +229,6 @@ final router = GoRouter(
         } else {
           final movementType = DomainMovementType.fromJson(
             jsonDecode(movementTypeJson),
-          );
-          final pickupFacility = DomainFacility.fromJson(
-            jsonDecode(pickupFacilityJson),
           );
           final destinationFacility = DomainFacility.fromJson(
             jsonDecode(destinationFacilityJson),
@@ -241,8 +241,9 @@ final router = GoRouter(
 
           return SpecimenDeliveryApprovalScreen(
             movementType: movementType,
-            pickUpFacility: pickupFacility,
+            destinationFacility: destinationFacility,
             shipments: shipments,
+            routeNo: routeNo,
           );
         }
       },
@@ -251,15 +252,35 @@ final router = GoRouter(
       name: resultDeliveryApprovalScreen,
       path: resultDeliveryApprovalPath,
       builder: (context, state) {
-        final routeType = RouteType.values.firstWhere(
-          (type) =>
-              type.name == state.uri.queryParameters[movementTypeQueryParam],
-          orElse: () => RouteType.spokeToPCRLabGeneXpert,
-        );
-        if (kDebugMode) {
-          print(routeType);
+        final routeJson = state.uri.queryParameters[routeQueryParam];
+        final shipmentsJson = state.uri.queryParameters[shipmentsQueryParam];
+        final destinationFacilityJson = state.uri.queryParameters[destinationFacilityQueryParam];
+        final sampleCodesJson = state.uri.queryParameters[sampleCodesQueryParam];
+
+        if (routeJson == null ||
+            shipmentsJson == null ||
+            destinationFacilityJson == null ||
+            sampleCodesJson == null) {
+          return NIMSErrorContent(
+            message: "Missing required parameters",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
         }
-        return ResultDeliveryApprovalScreen(routeType: routeType);
+
+        final route = ShipmentRoute.fromJson(jsonDecode(routeJson));
+        final shipments = (jsonDecode(shipmentsJson) as List)
+            .map((s) => Shipment.fromJson(s))
+            .toList();
+        final destinationFacility = Facility.fromJson(jsonDecode(destinationFacilityJson));
+        final sampleCodes = (jsonDecode(sampleCodesJson) as List).cast<String>();
+
+        return ResultDeliveryApprovalScreen(
+          route: route,
+          shipments: shipments,
+          destinationFacility: destinationFacility,
+          sampleCodes: sampleCodes,
+        );
       },
     ),
     GoRoute(
@@ -445,6 +466,37 @@ final router = GoRouter(
             destinationFacility: destinationFacility,
             shipments: shipments,
             routeNo: routeNo,
+          );
+        }
+      },
+    ),
+    GoRoute(
+      name: deliverySuccessScreen,
+      path: deliverySuccessPath,
+      builder: (context, state) {
+        final shipmentsJson = state.uri.queryParameters[shipmentsQueryParam];
+        final destinationFacilityJson =
+            state.uri.queryParameters[destinationFacilityQueryParam];
+
+        if (shipmentsJson == null || destinationFacilityJson == null) {
+          return NIMSErrorContent(
+            message: "Something went wrong",
+            onTapActionButton: () => context.pop(),
+            actionButtonLabel: "Go Back",
+          );
+        } else {
+          final destinationFacility = DomainFacility.fromJson(
+            jsonDecode(destinationFacilityJson),
+          );
+          final shipments = List<DomainShipment>.from(
+            jsonDecode(
+              shipmentsJson,
+            ).map((shipmentJson) => DomainShipment.fromJson(shipmentJson)),
+          );
+
+          return DeliverySuccessScreen(
+            destinationFacility: destinationFacility,
+            shipments: shipments,
           );
         }
       },

@@ -57,6 +57,9 @@ const shipmentDetailsPath = '/shipment_details';
 const shipmentSuccessScreen = 'shipment_success_screen';
 const shipmentSuccessPath = '/shipment_success';
 
+const deliverySuccessScreen = 'delivery_success_screen';
+const deliverySuccessPath = '/delivery_success';
+
 // QUERY PARAMS
 const movementTypeQueryParam = "movement_type";
 const pickupFacilityQueryParam = "pickup_facility";
@@ -65,3 +68,4 @@ const manifestsQueryParam = "manifests";
 const shipmentsQueryParam = "shipments";
 const shipmentQueryParam = "shipment";
 const routeQueryParam = "route";
+const sampleCodesQueryParam = "sample_codes";

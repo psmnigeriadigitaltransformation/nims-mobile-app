@@ -92,7 +92,7 @@ class AddNewManifestScreen extends ConsumerWidget {
               SizedBox(height: 8),
 
               Text(
-                "Gwagwalada General Hospital",
+                data.pickUpFacility?.facilityName ?? "",
                 style: TextTheme.of(context).bodySmall,
               ),
 
@@ -137,21 +137,23 @@ class AddNewManifestScreen extends ConsumerWidget {
                     /// ---------------------------------------------------------
                     /// ORIGINATING FACILITY + DESTINATION FACILITY DROPDOWN MENU
                     /// ---------------------------------------------------------
-                    Column(
-                      spacing: 28,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Gwagwalada General Hospital",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        DropdownMenu<String>(
-                          trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                          selectedTrailingIcon: Icon(
-                            Icons.keyboard_arrow_up_rounded,
+                    Expanded(
+                      child: Column(
+                        spacing: 28,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            data.pickUpFacility?.facilityName ?? "",
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          width: size.width - 76,
-                          label: Text("Destination Facility"),
+                          DropdownMenu<String>(
+                            trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
+                            selectedTrailingIcon: Icon(
+                              Icons.keyboard_arrow_up_rounded,
+                            ),
+                            width: size.width - 76,
+                            label: Text("Destination Facility"),
                           dropdownMenuEntries: [
                             ...data.facilities.map(
                               (facility) => DropdownMenuEntry(
@@ -192,6 +194,7 @@ class AddNewManifestScreen extends ConsumerWidget {
                           },
                         ),
                       ],
+                      ),
                     ),
                   ],
                 ),
@@ -283,6 +286,7 @@ class AddNewManifestScreen extends ConsumerWidget {
                             context: context,
                             builder: (builder) => AddNewSpecimenDialog(
                               manifestNo: data.manifestNo,
+                              currentSampleCount: data.samples.length,
                               onSaveSpecimen: (sample) {
                                 ref
                                     .read(
@@ -390,7 +394,8 @@ class AddNewManifestScreen extends ConsumerWidget {
                     context.pop();
                   });
             },
-            enabled: data.isSaveManifestButtonEnabled,
+            enabled: data.isSaveManifestButtonEnabled && !data.isSavingManifest,
+            loading: data.isSavingManifest,
           ),
         ),
       ),

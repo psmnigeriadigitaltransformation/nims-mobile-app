@@ -1,268 +1,323 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nims_mobile_app/app/route_name+path+params.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
-import 'package:nims_mobile_app/core/ui/screens/nims_screen.dart';
+import 'package:nims_mobile_app/core/ui/screens/nims_base_screen.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_specimen_shipment_summary_card.dart';
-import 'package:nims_mobile_app/features/dashboard/domain/route_type.dart';
+import '../../../../core/ui/widgets/nims_alert_dialog_content.dart';
 import '../../../../core/ui/widgets/nims_primary_button.dart';
 import '../../../../core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
-import '../../../../core/ui/widgets/nims_signature_pad.dart';
+import '../../../pickup/presentation/ui/widgets/signature_dialog.dart';
+import '../../providers.dart';
 
-class SpecimenDeliveryApprovalScreen extends StatefulWidget {
+class SpecimenDeliveryApprovalScreen extends ConsumerStatefulWidget {
   final DomainMovementType movementType;
-  final DomainFacility pickUpFacility;
+  final DomainFacility destinationFacility;
   final List<DomainShipment> shipments;
+  final String routeNo;
 
   const SpecimenDeliveryApprovalScreen({
     super.key,
     required this.movementType,
-    required this.pickUpFacility,
+    required this.destinationFacility,
     required this.shipments,
+    required this.routeNo,
   });
 
   @override
-  State<SpecimenDeliveryApprovalScreen> createState() =>
-      ResultDeliveryApprovalScreenState();
+  ConsumerState<SpecimenDeliveryApprovalScreen> createState() =>
+      _SpecimenDeliveryApprovalScreenState();
 }
 
-class ResultDeliveryApprovalScreenState
-    extends State<SpecimenDeliveryApprovalScreen> {
-  final GlobalKey<NIMSSignaturePadState> signatureKey = GlobalKey();
-  String? _phoneNumberError;
-
-  String? _validatePhoneNumber(String value) {
-    if (value.isEmpty) return null;
-    if (value.length != 11) return "Phone number must be 11 digits";
-    if (!RegExp(r'^[0-9]+$').hasMatch(value)) return "Phone number must contain only digits";
-    return null;
-  }
-
+class _SpecimenDeliveryApprovalScreenState
+    extends ConsumerState<SpecimenDeliveryApprovalScreen> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return NIMSScreen(
-      children: [
-        SizedBox(height: 16),
+    final args = (
+      movementType: widget.movementType,
+      destinationFacility: widget.destinationFacility,
+      shipments: widget.shipments,
+      routeNo: widget.routeNo,
+    );
 
-        /// ----------------------------------------
-        /// TITLE + SUBTITLE
-        /// ----------------------------------------
-        Row(
+    ref.listen(
+      deliveryApprovalScreenStateNotifierProvider(args).select((s) => s.alert),
+      (prev, next) {
+        final prevShow = prev?.show ?? false;
+        final nextShow = next.show;
+        if (!prevShow && nextShow) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (buildContext) => NIMSAlertDialogContent(
+              message: next.message,
+              onTapActionButton: () {
+                context.pop();
+                ref
+                    .read(
+                      deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                    )
+                    .onDismissAlertDialog();
+              },
+              actionButtonLabel: 'Okay',
+            ),
+          );
+        }
+      },
+    );
+
+    ref.listen(
+      deliveryApprovalScreenStateNotifierProvider(args),
+      (prev, next) {
+        if (prev?.showSuccessScreen == false && next.showSuccessScreen) {
+          context.goNamed(
+            deliverySuccessScreen,
+            queryParameters: {
+              destinationFacilityQueryParam: jsonEncode(widget.destinationFacility.toJson()),
+              shipmentsQueryParam: jsonEncode(
+                next.shipments.map((s) => s.toJson()).toList(),
+              ),
+            },
+          );
+        }
+      },
+    );
+
+    final state = ref.watch(deliveryApprovalScreenStateNotifierProvider(args));
+
+    return NIMSBaseScreen(
+      header: Padding(
+        padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+        child: Column(
           children: [
-            NIMSRoundIconButton(
-              icon: Icons.arrow_back_ios_rounded,
-              onPressed: () => context.pop(),
+            SizedBox(height: 16),
+
+            /// ----------------------------------------
+            /// TITLE + SUBTITLE
+            /// ----------------------------------------
+            Row(
+              children: [
+                NIMSRoundIconButton(
+                  icon: Icons.arrow_back_ios_rounded,
+                  onPressed: () => context.pop(),
+                ),
+                Spacer(),
+                Text(
+                  "Specimen Delivery Approval",
+                  style: TextTheme.of(context).titleSmall,
+                  textAlign: TextAlign.center,
+                ),
+                Spacer(),
+                SizedBox(width: 40),
+              ],
             ),
-            Spacer(),
+
+            SizedBox(height: 8),
+
             Text(
-              "Specimen Delivery Approval",
-              style: TextTheme.of(context).titleSmall,
-              textAlign: TextAlign.center,
+              widget.movementType.movement ?? "",
+              style: TextTheme.of(context).bodySmall,
             ),
-            Spacer(),
-            SizedBox(width: 40),
+            SizedBox(height: 24),
           ],
         ),
+      ),
+      body: Padding(
+        padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            SizedBox(height: 24),
 
-        SizedBox(height: 8),
-
-        Text(
-          widget.movementType.movement ?? "",
-          style: TextTheme.of(context).bodySmall,
-        ),
-
-        SizedBox(height: 50),
-
-        /// -------------------------------------------
-        /// ORIGINATING FACILITY + DESTINATION FACILITY
-        /// -------------------------------------------
-        NIMSOriginDestinationLinkView(origin: '', destination: '',),
-
-        SizedBox(height: 40),
-
-        /// -------------------------------
-        /// MANIFESTS
-        /// -------------------------------
-        Align(
-          alignment: AlignmentGeometry.centerLeft,
-          child: Text(
-            "Manifests (2)",
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        // SizedBox(
-        //   height: size.height * 0.25,
-        //   child: Scrollbar(
-        //     trackVisibility: true,
-        //     child: ListView(
-        //       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        //       children: [
-        //         ...List.generate(
-        //           5,
-        //           (x) => Padding(
-        //             padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
-        //             child: NIMSSpecimenShipmentSummaryCard(),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-
-        const SizedBox(height: 24),
-
-        /// -------------------------------
-        /// DELIVERY TEMPERATURE INPUT
-        /// -------------------------------
-        Padding(
-          padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-          child: TextField(
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.tertiary,
+            /// -------------------------------------------
+            /// ORIGIN + DESTINATION FACILITY
+            /// -------------------------------------------
+            NIMSOriginDestinationLinkView(
+              origin: widget.movementType.origin ?? "",
+              destination: widget.destinationFacility.facilityName ?? "",
             ),
-            decoration: const InputDecoration(
-              labelText: "Delivery Temperature",
-              hintText: "Enter delivery temperature",
-              helperText: "",
-              errorText: null,
+
+            SizedBox(height: 40),
+
+            /// -------------------------------
+            /// SHIPMENTS
+            /// -------------------------------
+            Align(
+              alignment: AlignmentGeometry.centerLeft,
+              child: Text(
+                "Shipments (${state.shipments.length})",
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
             ),
-          ),
-        ),
 
-        const SizedBox(height: 8),
+            const SizedBox(height: 8),
 
-        /// -------------------------------
-        /// FULL NAME INPUT
-        /// -------------------------------
-        Padding(
-          padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-          child: TextField(
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-            decoration: const InputDecoration(
-              labelText: "Full Name",
-              hintText: "Enter full name",
-              helperText: "",
-              errorText: null,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        /// -------------------------------
-        /// PHONE NUMBER INPUT
-        /// -------------------------------
-        Padding(
-          padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-          child: TextField(
-            keyboardType: TextInputType.phone,
-            maxLength: 11,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-            decoration: InputDecoration(
-              labelText: "Phone Number",
-              hintText: "Enter phone number",
-              counterText: "",
-              errorText: _phoneNumberError,
-            ),
-            onChanged: (value) {
-              setState(() {
-                _phoneNumberError = _validatePhoneNumber(value);
-              });
-            },
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        /// -------------------------------
-        /// DESIGNATION INPUT
-        /// -------------------------------
-        Padding(
-          padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-          child: TextField(
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-            decoration: const InputDecoration(
-              labelText: "Designation",
-              hintText: "Enter designation",
-              helperText: "",
-              errorText: null,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        /// ----------------------------------------
-        /// SIGNATURE PAD
-        /// ----------------------------------------
-        SizedBox(
-          height: 150,
-          child: Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 9),
-            child: NIMSSignaturePad(
-              key: signatureKey,
-              strokeColor: Colors.black,
-              backgroundColor: Theme.of(context).colorScheme.surface,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 12),
-
-        Align(
-          alignment: AlignmentGeometry.centerRight,
-          child: Padding(
-            padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-            child: InkWell(
-              child: Container(
-                padding: EdgeInsetsGeometry.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.errorContainer.withAlpha(150),
-                  borderRadius: BorderRadiusGeometry.all(Radius.circular(4)),
-                ),
-                child: Padding(
-                  padding: EdgeInsetsGeometry.symmetric(
-                    vertical: 2,
-                    horizontal: 8,
-                  ),
-                  child: Text(
-                    "Clear",
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                  ),
+            SizedBox(
+              child: Scrollbar(
+                trackVisibility: true,
+                child: ListView.builder(
+                  controller: ScrollController(),
+                  shrinkWrap: true,
+                  itemCount: state.shipments.length,
+                  itemBuilder: (context, index) {
+                    final shipment = state.shipments[index];
+                    return Padding(
+                      padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
+                      child: NIMSSpecimenShipmentSummaryCard(
+                        shipment: shipment,
+                      ),
+                    );
+                  },
                 ),
               ),
-              onTap: () {
-                signatureKey.currentState?.clear();
-              },
             ),
-          ),
+
+            const SizedBox(height: 40),
+
+            /// -------------------------------
+            /// DELIVERY TEMPERATURE INPUT
+            /// -------------------------------
+            Padding(
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+              child: TextField(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+                decoration: const InputDecoration(
+                  labelText: "Delivery Temperature",
+                  hintText: "Enter delivery temperature",
+                  helperText: "",
+                  errorText: null,
+                ),
+                onChanged: (value) {
+                  ref
+                      .read(
+                        deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                      )
+                      .onUpdateDeliveryTemperature(value);
+                },
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            /// -------------------------------
+            /// FULL NAME INPUT
+            /// -------------------------------
+            Padding(
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+              child: TextField(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+                decoration: const InputDecoration(
+                  labelText: "Full Name",
+                  hintText: "Enter full name",
+                  helperText: "",
+                  errorText: null,
+                ),
+                onChanged: (value) {
+                  ref
+                      .read(
+                        deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                      )
+                      .onUpdateFullName(value);
+                },
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            /// -------------------------------
+            /// PHONE NUMBER INPUT
+            /// -------------------------------
+            Padding(
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+              child: TextField(
+                keyboardType: TextInputType.phone,
+                maxLength: 11,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+                decoration: InputDecoration(
+                  labelText: "Phone Number",
+                  hintText: "Enter phone number",
+                  counterText: "",
+                  errorText: state.phoneNumberError,
+                ),
+                onChanged: (value) {
+                  ref
+                      .read(
+                        deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                      )
+                      .onUpdatePhoneNumber(value);
+                },
+              ),
+            ),
+
+            const SizedBox(height: 28),
+
+            /// -------------------------------
+            /// DESIGNATION INPUT
+            /// -------------------------------
+            Padding(
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+              child: TextField(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+                decoration: const InputDecoration(
+                  labelText: "Designation",
+                  hintText: "Enter designation",
+                  helperText: "",
+                  errorText: null,
+                ),
+                onChanged: (value) {
+                  ref
+                      .read(
+                        deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                      )
+                      .onUpdateDesignation(value);
+                },
+              ),
+            ),
+
+            const SizedBox(height: 40),
+          ],
         ),
-
-        const SizedBox(height: 40),
-
-        /// ----------------------------------------
-        /// APPROVE BUTTON
-        /// ----------------------------------------
-        NIMSPrimaryButton(text: "Approve", onPressed: () {}),
-        SizedBox(height: 16),
-      ],
+      ),
+      bottom: Padding(
+        padding: EdgeInsets.only(bottom: 16),
+        child: state.isSavingDelivery
+            ? Center(child: CircularProgressIndicator())
+            : NIMSPrimaryButton(
+                text: "Approve Delivery",
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (buildContext) => SignatureDialog(
+                      onFinish: (signatureBase64) async {
+                        ref
+                            .read(
+                              deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                            )
+                            .onUpdateSignature(signatureBase64);
+                        await ref
+                            .read(
+                              deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                            )
+                            .onApproveDelivery();
+                      },
+                    ),
+                  );
+                },
+                enabled: state.isApproveDeliveryButtonEnabled,
+              ),
+      ),
     );
   }
 }

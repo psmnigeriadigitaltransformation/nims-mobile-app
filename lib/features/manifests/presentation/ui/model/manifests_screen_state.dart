@@ -12,6 +12,10 @@ part 'manifests_screen_state.freezed.dart';
 class ManifestsScreenState with _$ManifestsScreenState {
   const factory ManifestsScreenState({
     required List<DomainManifest> manifests,
+    @Default('') String searchQuery,
+    Alert? alert,
+    @Default(false) bool isDeleting,
+    @Default({}) Map<String, String> shippedManifestStatuses,
   }) = _ManifestsScreenState;
 
 }

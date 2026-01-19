@@ -99,6 +99,30 @@ class ManifestsScreen extends ConsumerWidget {
           actionButtonLabel: 'Retry',
         ),
         data: (state) {
+          // Show alert dialog if there's an error
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (state.alert?.show == true) {
+              showDialog(
+                context: context,
+                builder: (dialogContext) => AlertDialog(
+                  title: const Text("Error"),
+                  content: Text(state.alert?.message ?? "An error occurred"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop();
+                        ref
+                            .read(manifestsScreenStateNotifierProvider.notifier)
+                            .dismissAlert();
+                      },
+                      child: const Text("OK"),
+                    ),
+                  ],
+                ),
+              );
+            }
+          });
+
           /// ----------------------------------------
           /// MANIFESTS LIST
           /// ----------------------------------------
@@ -112,6 +136,7 @@ class ManifestsScreen extends ConsumerWidget {
                   if (state.manifests.isNotEmpty)
                     _buildList(
                       state.manifests,
+                      shippedManifestStatuses: state.shippedManifestStatuses,
                       onDeleteManifest: (manifest) {
                         showDialog(
                           context: context,
@@ -156,27 +181,34 @@ SliverPersistentHeader _buildHeader(String title, BuildContext context) {
 SliverList _buildList(
   List<DomainManifest> items, {
   required Function(DomainManifest) onDeleteManifest,
+  required Map<String, String> shippedManifestStatuses,
 }) {
   return SliverList(
     delegate: SliverChildBuilderDelegate((context, index) {
+      final manifest = items[index];
+      final shipmentStatus = shippedManifestStatuses[manifest.manifestNo];
+      final isShipped = shipmentStatus != null;
+
       return Padding(
         padding: EdgeInsetsGeometry.symmetric(vertical: 4),
         child: NIMSManifestCard(
-          manifest: items[index],
+          manifest: manifest,
           onTapManifest: () {
             developer.log(
-              items[index].toJson().toString(),
+              manifest.toJson().toString(),
               name: "ManifestsScreen:onTapManifest",
             );
             context.pushNamed(
               manifestDetailsScreen,
               queryParameters: {
-                manifestsQueryParam: jsonEncode(items[index].toJson()),
+                manifestsQueryParam: jsonEncode(manifest.toJson()),
               },
             );
           },
           isSelected: false,
-          onTapDelete: () => onDeleteManifest(items[index]),
+          isShipped: isShipped,
+          shipmentStatus: shipmentStatus,
+          onTapDelete: () => onDeleteManifest(manifest),
         ),
       );
     }, childCount: items.length),

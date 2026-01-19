@@ -30,6 +30,8 @@ mixin _$Shipment {
   String get manifestNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'origin_type')
   String get originType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'origin_facility_name')
+  String get originFacilityName => throw _privateConstructorUsedError;
   @JsonKey(name: 'destination_location_type')
   String get destinationLocationType => throw _privateConstructorUsedError;
   @JsonKey(name: 'destination_facility_id')
@@ -46,6 +48,8 @@ mixin _$Shipment {
   int get sampleCount => throw _privateConstructorUsedError;
   @JsonKey(name: 'shipment_status')
   String get shipmentStatus => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sync_status')
+  String get syncStatus => throw _privateConstructorUsedError;
 
   /// Serializes this Shipment to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -68,6 +72,7 @@ abstract class $ShipmentCopyWith<$Res> {
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
     @JsonKey(name: 'origin_type') String originType,
+    @JsonKey(name: 'origin_facility_name') String originFacilityName,
     @JsonKey(name: 'destination_location_type') String destinationLocationType,
     @JsonKey(name: 'destination_facility_id') String destinationFacilityId,
     @JsonKey(name: 'destination_facility_name') String destinationFacilityName,
@@ -76,6 +81,7 @@ abstract class $ShipmentCopyWith<$Res> {
     @JsonKey(name: 'sample_type') String sampleType,
     @JsonKey(name: 'sample_count') int sampleCount,
     @JsonKey(name: 'shipment_status') String shipmentStatus,
+    @JsonKey(name: 'sync_status') String syncStatus,
   });
 }
 
@@ -99,6 +105,7 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
     Object? routeNo = null,
     Object? manifestNo = null,
     Object? originType = null,
+    Object? originFacilityName = null,
     Object? destinationLocationType = null,
     Object? destinationFacilityId = null,
     Object? destinationFacilityName = null,
@@ -107,6 +114,7 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
     Object? sampleType = null,
     Object? sampleCount = null,
     Object? shipmentStatus = null,
+    Object? syncStatus = null,
   }) {
     return _then(
       _value.copyWith(
@@ -129,6 +137,10 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
             originType: null == originType
                 ? _value.originType
                 : originType // ignore: cast_nullable_to_non_nullable
+                      as String,
+            originFacilityName: null == originFacilityName
+                ? _value.originFacilityName
+                : originFacilityName // ignore: cast_nullable_to_non_nullable
                       as String,
             destinationLocationType: null == destinationLocationType
                 ? _value.destinationLocationType
@@ -162,6 +174,10 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
                 ? _value.shipmentStatus
                 : shipmentStatus // ignore: cast_nullable_to_non_nullable
                       as String,
+            syncStatus: null == syncStatus
+                ? _value.syncStatus
+                : syncStatus // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -183,6 +199,7 @@ abstract class _$$ShipmentImplCopyWith<$Res>
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
     @JsonKey(name: 'origin_type') String originType,
+    @JsonKey(name: 'origin_facility_name') String originFacilityName,
     @JsonKey(name: 'destination_location_type') String destinationLocationType,
     @JsonKey(name: 'destination_facility_id') String destinationFacilityId,
     @JsonKey(name: 'destination_facility_name') String destinationFacilityName,
@@ -191,6 +208,7 @@ abstract class _$$ShipmentImplCopyWith<$Res>
     @JsonKey(name: 'sample_type') String sampleType,
     @JsonKey(name: 'sample_count') int sampleCount,
     @JsonKey(name: 'shipment_status') String shipmentStatus,
+    @JsonKey(name: 'sync_status') String syncStatus,
   });
 }
 
@@ -213,6 +231,7 @@ class __$$ShipmentImplCopyWithImpl<$Res>
     Object? routeNo = null,
     Object? manifestNo = null,
     Object? originType = null,
+    Object? originFacilityName = null,
     Object? destinationLocationType = null,
     Object? destinationFacilityId = null,
     Object? destinationFacilityName = null,
@@ -221,6 +240,7 @@ class __$$ShipmentImplCopyWithImpl<$Res>
     Object? sampleType = null,
     Object? sampleCount = null,
     Object? shipmentStatus = null,
+    Object? syncStatus = null,
   }) {
     return _then(
       _$ShipmentImpl(
@@ -243,6 +263,10 @@ class __$$ShipmentImplCopyWithImpl<$Res>
         originType: null == originType
             ? _value.originType
             : originType // ignore: cast_nullable_to_non_nullable
+                  as String,
+        originFacilityName: null == originFacilityName
+            ? _value.originFacilityName
+            : originFacilityName // ignore: cast_nullable_to_non_nullable
                   as String,
         destinationLocationType: null == destinationLocationType
             ? _value.destinationLocationType
@@ -276,6 +300,10 @@ class __$$ShipmentImplCopyWithImpl<$Res>
             ? _value.shipmentStatus
             : shipmentStatus // ignore: cast_nullable_to_non_nullable
                   as String,
+        syncStatus: null == syncStatus
+            ? _value.syncStatus
+            : syncStatus // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -290,6 +318,7 @@ class _$ShipmentImpl implements _Shipment {
     @JsonKey(name: 'route_no') required this.routeNo,
     @JsonKey(name: 'manifest_no') required this.manifestNo,
     @JsonKey(name: 'origin_type') required this.originType,
+    @JsonKey(name: 'origin_facility_name') this.originFacilityName = '',
     @JsonKey(name: 'destination_location_type')
     required this.destinationLocationType,
     @JsonKey(name: 'destination_facility_id')
@@ -300,7 +329,8 @@ class _$ShipmentImpl implements _Shipment {
     @JsonKey(name: 'pickup_longitude') required this.pickupLongitude,
     @JsonKey(name: 'sample_type') required this.sampleType,
     @JsonKey(name: 'sample_count') required this.sampleCount,
-    @JsonKey(name: 'shipment_status') this.shipmentStatus = 'in-transit',
+    @JsonKey(name: 'shipment_status') this.shipmentStatus = 'pending',
+    @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
   });
 
   factory _$ShipmentImpl.fromJson(Map<String, dynamic> json) =>
@@ -320,6 +350,9 @@ class _$ShipmentImpl implements _Shipment {
   @override
   @JsonKey(name: 'origin_type')
   final String originType;
+  @override
+  @JsonKey(name: 'origin_facility_name')
+  final String originFacilityName;
   @override
   @JsonKey(name: 'destination_location_type')
   final String destinationLocationType;
@@ -344,10 +377,13 @@ class _$ShipmentImpl implements _Shipment {
   @override
   @JsonKey(name: 'shipment_status')
   final String shipmentStatus;
+  @override
+  @JsonKey(name: 'sync_status')
+  final String syncStatus;
 
   @override
   String toString() {
-    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originType: $originType, destinationLocationType: $destinationLocationType, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount, shipmentStatus: $shipmentStatus)';
+    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originType: $originType, originFacilityName: $originFacilityName, destinationLocationType: $destinationLocationType, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount, shipmentStatus: $shipmentStatus, syncStatus: $syncStatus)';
   }
 
   @override
@@ -363,6 +399,8 @@ class _$ShipmentImpl implements _Shipment {
                 other.manifestNo == manifestNo) &&
             (identical(other.originType, originType) ||
                 other.originType == originType) &&
+            (identical(other.originFacilityName, originFacilityName) ||
+                other.originFacilityName == originFacilityName) &&
             (identical(
                   other.destinationLocationType,
                   destinationLocationType,
@@ -384,7 +422,9 @@ class _$ShipmentImpl implements _Shipment {
             (identical(other.sampleCount, sampleCount) ||
                 other.sampleCount == sampleCount) &&
             (identical(other.shipmentStatus, shipmentStatus) ||
-                other.shipmentStatus == shipmentStatus));
+                other.shipmentStatus == shipmentStatus) &&
+            (identical(other.syncStatus, syncStatus) ||
+                other.syncStatus == syncStatus));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -396,6 +436,7 @@ class _$ShipmentImpl implements _Shipment {
     routeNo,
     manifestNo,
     originType,
+    originFacilityName,
     destinationLocationType,
     destinationFacilityId,
     destinationFacilityName,
@@ -404,6 +445,7 @@ class _$ShipmentImpl implements _Shipment {
     sampleType,
     sampleCount,
     shipmentStatus,
+    syncStatus,
   );
 
   /// Create a copy of Shipment
@@ -427,6 +469,7 @@ abstract class _Shipment implements Shipment {
     @JsonKey(name: 'route_no') required final String routeNo,
     @JsonKey(name: 'manifest_no') required final String manifestNo,
     @JsonKey(name: 'origin_type') required final String originType,
+    @JsonKey(name: 'origin_facility_name') final String originFacilityName,
     @JsonKey(name: 'destination_location_type')
     required final String destinationLocationType,
     @JsonKey(name: 'destination_facility_id')
@@ -438,6 +481,7 @@ abstract class _Shipment implements Shipment {
     @JsonKey(name: 'sample_type') required final String sampleType,
     @JsonKey(name: 'sample_count') required final int sampleCount,
     @JsonKey(name: 'shipment_status') final String shipmentStatus,
+    @JsonKey(name: 'sync_status') final String syncStatus,
   }) = _$ShipmentImpl;
 
   factory _Shipment.fromJson(Map<String, dynamic> json) =
@@ -457,6 +501,9 @@ abstract class _Shipment implements Shipment {
   @override
   @JsonKey(name: 'origin_type')
   String get originType;
+  @override
+  @JsonKey(name: 'origin_facility_name')
+  String get originFacilityName;
   @override
   @JsonKey(name: 'destination_location_type')
   String get destinationLocationType;
@@ -481,6 +528,9 @@ abstract class _Shipment implements Shipment {
   @override
   @JsonKey(name: 'shipment_status')
   String get shipmentStatus;
+  @override
+  @JsonKey(name: 'sync_status')
+  String get syncStatus;
 
   /// Create a copy of Shipment
   /// with the given fields replaced by the non-null parameter values.

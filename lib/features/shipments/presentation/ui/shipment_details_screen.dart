@@ -78,8 +78,10 @@ class ShipmentDetailsScreen extends ConsumerWidget {
                           Expanded(
                             child: NIMSOriginDestinationLinkView(
                               origin:
-                                  state.route?.originFacilityName ??
-                                  state.shipment.originType,
+                                  state.shipment.originFacilityName.isNotEmpty
+                                      ? state.shipment.originFacilityName
+                                      : state.route?.originFacilityName ??
+                                          state.shipment.originType,
                               destination:
                                   state.shipment.destinationFacilityName,
                             ),

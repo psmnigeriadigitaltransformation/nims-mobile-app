@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'dart:developer' as developer;
-import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
 import 'package:nims_mobile_app/core/services/location/geo_location_service.dart';
+import 'package:nims_mobile_app/core/services/providers.dart';
 import 'package:nims_mobile_app/core/ui/model/model/alert.dart';
 import 'package:nims_mobile_app/features/auth/data/providers.dart';
-import 'package:nims_mobile_app/features/facilities/data/providers.dart';
 import 'package:nims_mobile_app/features/pickup/presentation/ui/model/result_pickup_screen_state.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../../core/domain/mappers/typedefs.dart';
 import '../../../../../core/utils/result.dart';
@@ -83,16 +81,30 @@ class ShipmentApprovalScreenStateNotifier
     state = _loadData(arg);
   }
 
-  onApproveShipment() async {
+  Future<void> onApproveShipment() async {
     state = state.copyWith(isSavingShipmentRoute: true);
+    final localService = ref.read(nimsLocalServiceProvider);
     final user = await ref.read(authRepositoryProvider).getUser();
+    final lsp = await localService.getFirstCachedLsp();
+
+    // Get etoken for approval number
+    final approvalEToken = await localService.getNextEToken();
+    if (approvalEToken == null) {
+      state = state.copyWith(
+        isSavingShipmentRoute: false,
+        alert: Alert(show: true, message: "No eTokens available. Please download more eTokens."),
+      );
+      return;
+    }
+
+    final approvalNo = '${lsp?.display ?? "UNKNOWN"}-AP-${approvalEToken.serialNo}';
     final routeNo = state.shipments.first.routeNo;
     final shipmentRoute = DomainShipmentRoute(
       routeNo: routeNo,
       originFacilityId: state.pickUpFacility.facilityId?.toString() ?? "",
       destinationFacilityId:
           state.destinationFacility.facilityId?.toString() ?? "",
-      lspCode: '',
+      lspCode: lsp?.lspCode ?? "",
       riderUserId: user?.userId ?? "",
       originFacilityName: state.pickUpFacility.facilityName ?? "",
       destinationFacilityName: state.destinationFacility.facilityName ?? "",
@@ -101,7 +113,7 @@ class ShipmentApprovalScreenStateNotifier
     );
 
     final approval = DomainApproval(
-      approvalNo: Uuid().v4(),
+      approvalNo: approvalNo,
       routeNo: routeNo,
       approvalType: 'pickup',
       fullname: state.fullName,
@@ -116,6 +128,8 @@ class ShipmentApprovalScreenStateNotifier
 
     switch (result) {
       case Success<bool>():
+        // Delete used etoken after successful save
+        await localService.deleteEToken(approvalEToken.etokenId!);
         ref.invalidate(dashboardScreenStateNotifierProvider);
         state = state.copyWith(
           showSuccessDialog: true,

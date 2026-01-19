@@ -23,6 +23,8 @@ mixin _$ShipmentsScreenState {
   List<Shipment> get shipments => throw _privateConstructorUsedError;
   Facility? get selectedDestinationFacility =>
       throw _privateConstructorUsedError;
+  List<ETokenData> get usedETokens => throw _privateConstructorUsedError;
+  Lsp? get lsp => throw _privateConstructorUsedError;
 
   /// Create a copy of ShipmentsScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -44,10 +46,13 @@ abstract class $ShipmentsScreenStateCopyWith<$Res> {
     MovementType? movementType,
     List<Shipment> shipments,
     Facility? selectedDestinationFacility,
+    List<ETokenData> usedETokens,
+    Lsp? lsp,
   });
 
   $MovementTypeCopyWith<$Res>? get movementType;
   $FacilityCopyWith<$Res>? get selectedDestinationFacility;
+  $LspCopyWith<$Res>? get lsp;
 }
 
 /// @nodoc
@@ -73,6 +78,8 @@ class _$ShipmentsScreenStateCopyWithImpl<
     Object? movementType = freezed,
     Object? shipments = null,
     Object? selectedDestinationFacility = freezed,
+    Object? usedETokens = null,
+    Object? lsp = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -96,6 +103,14 @@ class _$ShipmentsScreenStateCopyWithImpl<
                 ? _value.selectedDestinationFacility
                 : selectedDestinationFacility // ignore: cast_nullable_to_non_nullable
                       as Facility?,
+            usedETokens: null == usedETokens
+                ? _value.usedETokens
+                : usedETokens // ignore: cast_nullable_to_non_nullable
+                      as List<ETokenData>,
+            lsp: freezed == lsp
+                ? _value.lsp
+                : lsp // ignore: cast_nullable_to_non_nullable
+                      as Lsp?,
           )
           as $Val,
     );
@@ -130,6 +145,20 @@ class _$ShipmentsScreenStateCopyWithImpl<
       return _then(_value.copyWith(selectedDestinationFacility: value) as $Val);
     });
   }
+
+  /// Create a copy of ShipmentsScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LspCopyWith<$Res>? get lsp {
+    if (_value.lsp == null) {
+      return null;
+    }
+
+    return $LspCopyWith<$Res>(_value.lsp!, (value) {
+      return _then(_value.copyWith(lsp: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -147,12 +176,16 @@ abstract class _$$ShipmentsScreenStateImplCopyWith<$Res>
     MovementType? movementType,
     List<Shipment> shipments,
     Facility? selectedDestinationFacility,
+    List<ETokenData> usedETokens,
+    Lsp? lsp,
   });
 
   @override
   $MovementTypeCopyWith<$Res>? get movementType;
   @override
   $FacilityCopyWith<$Res>? get selectedDestinationFacility;
+  @override
+  $LspCopyWith<$Res>? get lsp;
 }
 
 /// @nodoc
@@ -174,6 +207,8 @@ class __$$ShipmentsScreenStateImplCopyWithImpl<$Res>
     Object? movementType = freezed,
     Object? shipments = null,
     Object? selectedDestinationFacility = freezed,
+    Object? usedETokens = null,
+    Object? lsp = freezed,
   }) {
     return _then(
       _$ShipmentsScreenStateImpl(
@@ -197,6 +232,14 @@ class __$$ShipmentsScreenStateImplCopyWithImpl<$Res>
             ? _value.selectedDestinationFacility
             : selectedDestinationFacility // ignore: cast_nullable_to_non_nullable
                   as Facility?,
+        usedETokens: null == usedETokens
+            ? _value._usedETokens
+            : usedETokens // ignore: cast_nullable_to_non_nullable
+                  as List<ETokenData>,
+        lsp: freezed == lsp
+            ? _value.lsp
+            : lsp // ignore: cast_nullable_to_non_nullable
+                  as Lsp?,
       ),
     );
   }
@@ -211,9 +254,12 @@ class _$ShipmentsScreenStateImpl extends _ShipmentsScreenState {
     this.movementType,
     final List<Shipment> shipments = const [],
     this.selectedDestinationFacility,
+    final List<ETokenData> usedETokens = const [],
+    this.lsp,
   }) : _facilities = facilities,
        _locations = locations,
        _shipments = shipments,
+       _usedETokens = usedETokens,
        super._();
 
   final List<Facility> _facilities;
@@ -245,10 +291,21 @@ class _$ShipmentsScreenStateImpl extends _ShipmentsScreenState {
 
   @override
   final Facility? selectedDestinationFacility;
+  final List<ETokenData> _usedETokens;
+  @override
+  @JsonKey()
+  List<ETokenData> get usedETokens {
+    if (_usedETokens is EqualUnmodifiableListView) return _usedETokens;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_usedETokens);
+  }
+
+  @override
+  final Lsp? lsp;
 
   @override
   String toString() {
-    return 'ShipmentsScreenState(facilities: $facilities, locations: $locations, movementType: $movementType, shipments: $shipments, selectedDestinationFacility: $selectedDestinationFacility)';
+    return 'ShipmentsScreenState(facilities: $facilities, locations: $locations, movementType: $movementType, shipments: $shipments, selectedDestinationFacility: $selectedDestinationFacility, usedETokens: $usedETokens, lsp: $lsp)';
   }
 
   @override
@@ -275,7 +332,12 @@ class _$ShipmentsScreenStateImpl extends _ShipmentsScreenState {
                   selectedDestinationFacility,
                 ) ||
                 other.selectedDestinationFacility ==
-                    selectedDestinationFacility));
+                    selectedDestinationFacility) &&
+            const DeepCollectionEquality().equals(
+              other._usedETokens,
+              _usedETokens,
+            ) &&
+            (identical(other.lsp, lsp) || other.lsp == lsp));
   }
 
   @override
@@ -286,6 +348,8 @@ class _$ShipmentsScreenStateImpl extends _ShipmentsScreenState {
     movementType,
     const DeepCollectionEquality().hash(_shipments),
     selectedDestinationFacility,
+    const DeepCollectionEquality().hash(_usedETokens),
+    lsp,
   );
 
   /// Create a copy of ShipmentsScreenState
@@ -308,6 +372,8 @@ abstract class _ShipmentsScreenState extends ShipmentsScreenState {
     final MovementType? movementType,
     final List<Shipment> shipments,
     final Facility? selectedDestinationFacility,
+    final List<ETokenData> usedETokens,
+    final Lsp? lsp,
   }) = _$ShipmentsScreenStateImpl;
   const _ShipmentsScreenState._() : super._();
 
@@ -321,6 +387,10 @@ abstract class _ShipmentsScreenState extends ShipmentsScreenState {
   List<Shipment> get shipments;
   @override
   Facility? get selectedDestinationFacility;
+  @override
+  List<ETokenData> get usedETokens;
+  @override
+  Lsp? get lsp;
 
   /// Create a copy of ShipmentsScreenState
   /// with the given fields replaced by the non-null parameter values.

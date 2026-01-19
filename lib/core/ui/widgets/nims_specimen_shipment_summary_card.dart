@@ -44,7 +44,7 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(4)),
-                      color: Theme.of(context).colorScheme.tertiaryContainer,
+                      // color: Theme.of(context).colorScheme.tertiaryContainer,
                     ),
                     child: Text(
                       shipment.shipmentNo,

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/core/ui/theme/colors.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_alert_dialog_content.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_facility_card.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_manifest_card.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_primary_button.dart';
@@ -41,6 +42,39 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Widget build(BuildContext context) {
     final AsyncValue<DashboardScreenState?> stateAsyncValue = ref.watch(
       dashboardScreenStateNotifierProvider,
+    );
+
+    // Listen for sync errors and show alert dialog
+    ref.listen(
+      dashboardScreenStateNotifierProvider.select((s) => s.value?.syncAlert),
+      (prev, next) {
+        final prevShow = prev?.show ?? false;
+        final nextShow = next?.show ?? false;
+        if (!prevShow && nextShow && next != null) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (buildContext) => _SyncErrorDialog(
+              message: next.message,
+              onRetry: () {
+                context.pop();
+                ref
+                    .read(dashboardScreenStateNotifierProvider.notifier)
+                    .dismissSyncAlert();
+                ref
+                    .read(dashboardScreenStateNotifierProvider.notifier)
+                    .syncPendingRecords();
+              },
+              onDismiss: () {
+                context.pop();
+                ref
+                    .read(dashboardScreenStateNotifierProvider.notifier)
+                    .dismissSyncAlert();
+              },
+            ),
+          );
+        }
+      },
     );
 
     return stateAsyncValue.when(
@@ -83,27 +117,34 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   /// -------------------------------
                   /// USER INFO
                   /// -------------------------------
-                  Container(
-                    padding: EdgeInsets.only(left: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 4,
-                      children: [
-                        Text(
-                          state?.userFullName ?? "",
-                          style: Theme.of(context).textTheme.titleSmall,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          "${state?.userRole} | ${state?.userId}",
-                          style: Theme.of(context).textTheme.labelLarge,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 4,
+                        children: [
+                          Text(
+                            state?.userFullName ?? "",
+                            style: Theme.of(context).textTheme.titleSmall,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "${state?.userRole} | ${state?.userId}",
+                            style: Theme.of(context).textTheme.labelLarge,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+
+                  /// -------------------------------
+                  /// SYNC BUTTON
+                  /// -------------------------------
+                  _buildSyncButton(context, ref, state),
                 ],
               ),
 
@@ -173,7 +214,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 Align(
                   alignment: AlignmentGeometry.centerLeft,
                   child: Text(
-                    "Transit List",
+                    "Routes",
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
@@ -455,5 +496,201 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         .where((word) => word.isNotEmpty)
         .map((word) => word[0].toUpperCase())
         .join();
+  }
+
+  String _formatTime(DateTime dateTime) {
+    final hour = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
+
+  Widget _buildSyncButton(
+    BuildContext context,
+    WidgetRef ref,
+    DashboardScreenState? state,
+  ) {
+    final isSyncing = state?.isSyncing ?? false;
+    final pendingCount = state?.pendingSyncCount ?? 0;
+    final lastSyncTime = state?.lastSyncTime;
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: isSyncing
+          ? null
+          : () {
+              ref
+                  .read(dashboardScreenStateNotifierProvider.notifier)
+                  .syncPendingRecords();
+            },
+      child: Container(
+        // width: 100,
+        padding: EdgeInsetsGeometry.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: pendingCount > 0
+              ? NIMSColors.orange02.withAlpha(50)
+              : NIMSColors.green02.withAlpha(50),
+          border: Border.all(
+            color: pendingCount > 0 ? NIMSColors.orange05 : NIMSColors.green05,
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isSyncing)
+              SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: NIMSColors.orange05,
+                ),
+              )
+            else
+              Icon(
+                pendingCount > 0 ? Icons.cloud_upload_outlined : Icons.cloud_done_outlined,
+                size: 18,
+                color: pendingCount > 0 ? NIMSColors.orange05 : NIMSColors.green05,
+              ),
+            // const SizedBox(width: 6),
+            // Expanded(
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       Text(
+            //         isSyncing
+            //             ? "Syncing..."
+            //             : pendingCount > 0
+            //                 ? "$pendingCount pending"
+            //                 : "Synced",
+            //         style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            //           fontWeight: FontWeight.w600,
+            //           color: pendingCount > 0 ? NIMSColors.orange05 : NIMSColors.green05,
+            //         ),
+            //         overflow: TextOverflow.ellipsis,
+            //       ),
+            //       if (lastSyncTime != null && !isSyncing && pendingCount == 0)
+            //         Text(
+            //           _formatTime(lastSyncTime),
+            //           style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            //             fontSize: 9,
+            //             color: NIMSColors.green05.withAlpha(180),
+            //           ),
+            //         ),
+            //     ],
+            //   ),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Dialog shown when sync fails with retry option
+class _SyncErrorDialog extends StatelessWidget {
+  final String message;
+  final VoidCallback onRetry;
+  final VoidCallback onDismiss;
+
+  const _SyncErrorDialog({
+    required this.message,
+    required this.onRetry,
+    required this.onDismiss,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: EdgeInsetsGeometry.all(24),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Theme.of(context).colorScheme.surface,
+          ),
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              /// Error Icon
+              Container(
+                padding: EdgeInsetsGeometry.all(12),
+                decoration: BoxDecoration(
+                  color: NIMSColors.red02.withAlpha(50),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.sync_problem_rounded,
+                  size: 32,
+                  color: NIMSColors.red05,
+                ),
+              ),
+
+              SizedBox(height: 16),
+
+              /// Title
+              Padding(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
+                child: Text(
+                  "Sync Failed",
+                  style: TextTheme.of(context).titleSmall,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+
+              SizedBox(height: 8),
+
+              /// Error Message
+              Padding(
+                padding: EdgeInsetsGeometry.symmetric(
+                  horizontal: 24,
+                  vertical: 8,
+                ),
+                child: Text(
+                  message,
+                  maxLines: 5,
+                  style: TextTheme.of(context).bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+
+              SizedBox(height: 24),
+
+              /// Retry Button
+              SizedBox(
+                width: double.infinity,
+                child: NIMSPrimaryButton(
+                  text: "Retry",
+                  onPressed: onRetry,
+                ),
+              ),
+
+              SizedBox(height: 8),
+
+              /// Close Button
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: onDismiss,
+                  child: Text(
+                    "Close",
+                    style: TextTheme.of(context).bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

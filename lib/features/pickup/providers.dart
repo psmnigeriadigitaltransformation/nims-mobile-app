@@ -59,7 +59,7 @@ final resultPickUpScreenStateNotifierProvider =
     AutoDisposeAsyncNotifierProviderFamily<
       ResultPickUpScreenStateNotifier,
       ResultPickUpScreenState,
-      DomainMovementType
+      MovementType
     >(ResultPickUpScreenStateNotifier.new);
 
 final manifestDetailsScreenStateNotifierProvider =

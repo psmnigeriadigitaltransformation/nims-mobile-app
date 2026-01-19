@@ -18,6 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ManifestsScreenState {
   List<Manifest> get manifests => throw _privateConstructorUsedError;
+  String get searchQuery => throw _privateConstructorUsedError;
+  Alert? get alert => throw _privateConstructorUsedError;
+  bool get isDeleting => throw _privateConstructorUsedError;
+  Map<String, String> get shippedManifestStatuses =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of ManifestsScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,7 +38,15 @@ abstract class $ManifestsScreenStateCopyWith<$Res> {
     $Res Function(ManifestsScreenState) then,
   ) = _$ManifestsScreenStateCopyWithImpl<$Res, ManifestsScreenState>;
   @useResult
-  $Res call({List<Manifest> manifests});
+  $Res call({
+    List<Manifest> manifests,
+    String searchQuery,
+    Alert? alert,
+    bool isDeleting,
+    Map<String, String> shippedManifestStatuses,
+  });
+
+  $AlertCopyWith<$Res>? get alert;
 }
 
 /// @nodoc
@@ -53,16 +66,52 @@ class _$ManifestsScreenStateCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? manifests = null}) {
+  $Res call({
+    Object? manifests = null,
+    Object? searchQuery = null,
+    Object? alert = freezed,
+    Object? isDeleting = null,
+    Object? shippedManifestStatuses = null,
+  }) {
     return _then(
       _value.copyWith(
             manifests: null == manifests
                 ? _value.manifests
                 : manifests // ignore: cast_nullable_to_non_nullable
                       as List<Manifest>,
+            searchQuery: null == searchQuery
+                ? _value.searchQuery
+                : searchQuery // ignore: cast_nullable_to_non_nullable
+                      as String,
+            alert: freezed == alert
+                ? _value.alert
+                : alert // ignore: cast_nullable_to_non_nullable
+                      as Alert?,
+            isDeleting: null == isDeleting
+                ? _value.isDeleting
+                : isDeleting // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            shippedManifestStatuses: null == shippedManifestStatuses
+                ? _value.shippedManifestStatuses
+                : shippedManifestStatuses // ignore: cast_nullable_to_non_nullable
+                      as Map<String, String>,
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of ManifestsScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AlertCopyWith<$Res>? get alert {
+    if (_value.alert == null) {
+      return null;
+    }
+
+    return $AlertCopyWith<$Res>(_value.alert!, (value) {
+      return _then(_value.copyWith(alert: value) as $Val);
+    });
   }
 }
 
@@ -75,7 +124,16 @@ abstract class _$$ManifestsScreenStateImplCopyWith<$Res>
   ) = __$$ManifestsScreenStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Manifest> manifests});
+  $Res call({
+    List<Manifest> manifests,
+    String searchQuery,
+    Alert? alert,
+    bool isDeleting,
+    Map<String, String> shippedManifestStatuses,
+  });
+
+  @override
+  $AlertCopyWith<$Res>? get alert;
 }
 
 /// @nodoc
@@ -91,13 +149,35 @@ class __$$ManifestsScreenStateImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? manifests = null}) {
+  $Res call({
+    Object? manifests = null,
+    Object? searchQuery = null,
+    Object? alert = freezed,
+    Object? isDeleting = null,
+    Object? shippedManifestStatuses = null,
+  }) {
     return _then(
       _$ManifestsScreenStateImpl(
         manifests: null == manifests
             ? _value._manifests
             : manifests // ignore: cast_nullable_to_non_nullable
                   as List<Manifest>,
+        searchQuery: null == searchQuery
+            ? _value.searchQuery
+            : searchQuery // ignore: cast_nullable_to_non_nullable
+                  as String,
+        alert: freezed == alert
+            ? _value.alert
+            : alert // ignore: cast_nullable_to_non_nullable
+                  as Alert?,
+        isDeleting: null == isDeleting
+            ? _value.isDeleting
+            : isDeleting // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        shippedManifestStatuses: null == shippedManifestStatuses
+            ? _value._shippedManifestStatuses
+            : shippedManifestStatuses // ignore: cast_nullable_to_non_nullable
+                  as Map<String, String>,
       ),
     );
   }
@@ -106,8 +186,14 @@ class __$$ManifestsScreenStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ManifestsScreenStateImpl implements _ManifestsScreenState {
-  const _$ManifestsScreenStateImpl({required final List<Manifest> manifests})
-    : _manifests = manifests;
+  const _$ManifestsScreenStateImpl({
+    required final List<Manifest> manifests,
+    this.searchQuery = '',
+    this.alert,
+    this.isDeleting = false,
+    final Map<String, String> shippedManifestStatuses = const {},
+  }) : _manifests = manifests,
+       _shippedManifestStatuses = shippedManifestStatuses;
 
   final List<Manifest> _manifests;
   @override
@@ -118,8 +204,26 @@ class _$ManifestsScreenStateImpl implements _ManifestsScreenState {
   }
 
   @override
+  @JsonKey()
+  final String searchQuery;
+  @override
+  final Alert? alert;
+  @override
+  @JsonKey()
+  final bool isDeleting;
+  final Map<String, String> _shippedManifestStatuses;
+  @override
+  @JsonKey()
+  Map<String, String> get shippedManifestStatuses {
+    if (_shippedManifestStatuses is EqualUnmodifiableMapView)
+      return _shippedManifestStatuses;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_shippedManifestStatuses);
+  }
+
+  @override
   String toString() {
-    return 'ManifestsScreenState(manifests: $manifests)';
+    return 'ManifestsScreenState(manifests: $manifests, searchQuery: $searchQuery, alert: $alert, isDeleting: $isDeleting, shippedManifestStatuses: $shippedManifestStatuses)';
   }
 
   @override
@@ -130,12 +234,27 @@ class _$ManifestsScreenStateImpl implements _ManifestsScreenState {
             const DeepCollectionEquality().equals(
               other._manifests,
               _manifests,
+            ) &&
+            (identical(other.searchQuery, searchQuery) ||
+                other.searchQuery == searchQuery) &&
+            (identical(other.alert, alert) || other.alert == alert) &&
+            (identical(other.isDeleting, isDeleting) ||
+                other.isDeleting == isDeleting) &&
+            const DeepCollectionEquality().equals(
+              other._shippedManifestStatuses,
+              _shippedManifestStatuses,
             ));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_manifests));
+  int get hashCode => Object.hash(
+    runtimeType,
+    const DeepCollectionEquality().hash(_manifests),
+    searchQuery,
+    alert,
+    isDeleting,
+    const DeepCollectionEquality().hash(_shippedManifestStatuses),
+  );
 
   /// Create a copy of ManifestsScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -153,10 +272,22 @@ class _$ManifestsScreenStateImpl implements _ManifestsScreenState {
 abstract class _ManifestsScreenState implements ManifestsScreenState {
   const factory _ManifestsScreenState({
     required final List<Manifest> manifests,
+    final String searchQuery,
+    final Alert? alert,
+    final bool isDeleting,
+    final Map<String, String> shippedManifestStatuses,
   }) = _$ManifestsScreenStateImpl;
 
   @override
   List<Manifest> get manifests;
+  @override
+  String get searchQuery;
+  @override
+  Alert? get alert;
+  @override
+  bool get isDeleting;
+  @override
+  Map<String, String> get shippedManifestStatuses;
 
   /// Create a copy of ManifestsScreenState
   /// with the given fields replaced by the non-null parameter values.

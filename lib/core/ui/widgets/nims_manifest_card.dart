@@ -65,6 +65,9 @@ class NIMSManifestCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  // Sync status indicator
+                  _buildSyncStatusIndicator(context, manifest.syncStatus),
                   if (shipmentStatus != null) ...[
                     const Spacer(),
                     Container(
@@ -74,19 +77,19 @@ class NIMSManifestCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(Radius.circular(4)),
-                        color: _getStatusColor(shipmentStatus!),
+                        color: _getShipmentStatusColor(shipmentStatus!),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            _getStatusIcon(shipmentStatus!),
+                            _getShipmentStatusIcon(shipmentStatus!),
                             size: 12,
                             color: Colors.white,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            _getStatusLabel(shipmentStatus!),
+                            _getShipmentStatusLabel(shipmentStatus!),
                             style: Theme.of(context).textTheme.labelSmall?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
@@ -190,7 +193,54 @@ class NIMSManifestCard extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(String status) {
+  Widget _buildSyncStatusIndicator(BuildContext context, String syncStatus) {
+    final Color color;
+    final IconData icon;
+    final String label;
+
+    switch (syncStatus.toLowerCase()) {
+      case 'synced':
+        color = NIMSColors.green05;
+        icon = Icons.cloud_done_outlined;
+        label = 'Synced';
+        break;
+      case 'failed':
+        color = Colors.red;
+        icon = Icons.cloud_off_outlined;
+        label = 'Failed';
+        break;
+      case 'pending':
+      default:
+        color = NIMSColors.orange05;
+        icon = Icons.cloud_upload_outlined;
+        label = 'Pending';
+        break;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(4)),
+        color: color.withAlpha(30),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: color),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: color,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color _getShipmentStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'in-transit':
         return NIMSColors.orange05;
@@ -203,7 +253,7 @@ class NIMSManifestCard extends StatelessWidget {
     }
   }
 
-  IconData _getStatusIcon(String status) {
+  IconData _getShipmentStatusIcon(String status) {
     switch (status.toLowerCase()) {
       case 'in-transit':
         return Icons.local_shipping_outlined;
@@ -216,7 +266,7 @@ class NIMSManifestCard extends StatelessWidget {
     }
   }
 
-  String _getStatusLabel(String status) {
+  String _getShipmentStatusLabel(String status) {
     switch (status.toLowerCase()) {
       case 'in-transit':
         return 'In Transit';

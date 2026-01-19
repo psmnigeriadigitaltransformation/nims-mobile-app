@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
+import 'package:nims_mobile_app/core/services/providers.dart';
+import 'package:nims_mobile_app/core/ui/model/model/alert.dart';
 import 'package:nims_mobile_app/features/manifests/presentation/ui/model/manifests_screen_state.dart';
 
 import '../../../../core/utils/result.dart';
@@ -17,9 +19,19 @@ class ManifestsScreenStateNotifier
     final result = await ref
         .read(manifestRepositoryProvider)
         .searchManifests(searchQuery);
+
+    // Fetch shipped manifest statuses
+    final shippedStatuses = await ref
+        .read(nimsLocalServiceProvider)
+        .getShippedManifestStatuses();
+
     switch (result) {
       case Success(payload: final payload):
-        return ManifestsScreenState(manifests: payload);
+        return ManifestsScreenState(
+          manifests: payload,
+          searchQuery: searchQuery,
+          shippedManifestStatuses: shippedStatuses,
+        );
       case Error(message: final m):
         throw Exception(m);
     }
@@ -37,15 +49,34 @@ class ManifestsScreenStateNotifier
   }
 
   Future<void> deleteManifest(String manifestNo) async {
+    // Set deleting state
+    state = state.whenData(
+      (data) => data.copyWith(isDeleting: true),
+    );
+
     final result = await ref
         .read(manifestRepositoryProvider)
         .deleteManifest(manifestNo);
+
     switch (result) {
       case Success():
         // Refresh the list after deletion
-        state = await AsyncValue.guard(() => _fetchData(""));
+        final currentQuery = state.valueOrNull?.searchQuery ?? "";
+        state = await AsyncValue.guard(() => _fetchData(currentQuery));
       case Error(message: final m):
-        throw Exception(m);
+        // Show error alert instead of throwing
+        state = state.whenData(
+          (data) => data.copyWith(
+            isDeleting: false,
+            alert: Alert(show: true, message: m),
+          ),
+        );
     }
+  }
+
+  void dismissAlert() {
+    state = state.whenData(
+      (data) => data.copyWith(alert: null),
+    );
   }
 }

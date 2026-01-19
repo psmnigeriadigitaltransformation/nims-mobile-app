@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 4,
       onCreate: (db, version) async {
 
         // Tables
@@ -146,7 +146,8 @@ class NIMSDatabase {
             user_id TEXT NOT NULL,
             originating_facility_name TEXT NOT NULL,
             destination_facility_name TEXT NOT NULL,
-            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            sync_status TEXT NOT NULL DEFAULT 'pending'
           )
         ''');
 
@@ -160,6 +161,7 @@ class NIMSDatabase {
             gender TEXT NOT NULL,
             comment TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            sync_status TEXT NOT NULL DEFAULT 'pending',
             FOREIGN KEY (manifest_no) REFERENCES manifests(manifest_no) ON DELETE CASCADE
           )
           ''');
@@ -176,7 +178,8 @@ class NIMSDatabase {
             rider_user_id TEXT NOT NULL,
             latitude DECIMAL(10,6),
             longitude DECIMAL(10,6),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            sync_status TEXT NOT NULL DEFAULT 'pending'
           )
           ''');
 
@@ -187,6 +190,7 @@ class NIMSDatabase {
             route_no TEXT NOT NULL,
             manifest_no TEXT NOT NULL,
             origin_type TEXT NOT NULL,
+            origin_facility_name TEXT NOT NULL DEFAULT '',
             destination_location_type TEXT NOT NULL,
             destination_facility_id TEXT NOT NULL,
             destination_facility_name TEXT NOT NULL,
@@ -194,8 +198,9 @@ class NIMSDatabase {
             pickup_longitude DECIMAL(10,6) NOT NULL,
             sample_type TEXT NOT NULL,
             sample_count INT NOT NULL,
-            shipment_status TEXT NOT NULL DEFAULT 'in-transit',
+            shipment_status TEXT NOT NULL DEFAULT 'pending',
             pickup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            sync_status TEXT NOT NULL DEFAULT 'pending',
             FOREIGN KEY (route_no) REFERENCES routes(route_no)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
@@ -213,6 +218,7 @@ class NIMSDatabase {
             designation TEXT,
             signature TEXT,
             approval_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            sync_status TEXT NOT NULL DEFAULT 'pending',
             FOREIGN KEY (route_no) REFERENCES routes(route_no)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
@@ -245,6 +251,30 @@ class NIMSDatabase {
           // Add shipment_status column to shipments table
           await db.execute('''
             ALTER TABLE shipments ADD COLUMN shipment_status TEXT NOT NULL DEFAULT 'in-transit'
+          ''');
+        }
+        if (oldVersion < 3) {
+          // Add sync_status column to manifests, samples, routes, shipments, and approvals tables
+          await db.execute('''
+            ALTER TABLE manifests ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'pending'
+          ''');
+          await db.execute('''
+            ALTER TABLE samples ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'pending'
+          ''');
+          await db.execute('''
+            ALTER TABLE routes ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'pending'
+          ''');
+          await db.execute('''
+            ALTER TABLE shipments ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'pending'
+          ''');
+          await db.execute('''
+            ALTER TABLE approvals ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'pending'
+          ''');
+        }
+        if (oldVersion < 4) {
+          // Add origin_facility_name column to shipments table
+          await db.execute('''
+            ALTER TABLE shipments ADD COLUMN origin_facility_name TEXT NOT NULL DEFAULT ''
           ''');
         }
       },

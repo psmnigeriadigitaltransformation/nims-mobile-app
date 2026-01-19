@@ -33,6 +33,8 @@ mixin _$Approval {
   String get phone => throw _privateConstructorUsedError;
   String get designation => throw _privateConstructorUsedError;
   String get signature => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sync_status')
+  String get syncStatus => throw _privateConstructorUsedError;
 
   /// Serializes this Approval to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -58,6 +60,7 @@ abstract class $ApprovalCopyWith<$Res> {
     String phone,
     String designation,
     String signature,
+    @JsonKey(name: 'sync_status') String syncStatus,
   });
 }
 
@@ -84,6 +87,7 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
     Object? phone = null,
     Object? designation = null,
     Object? signature = null,
+    Object? syncStatus = null,
   }) {
     return _then(
       _value.copyWith(
@@ -119,6 +123,10 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
                 ? _value.signature
                 : signature // ignore: cast_nullable_to_non_nullable
                       as String,
+            syncStatus: null == syncStatus
+                ? _value.syncStatus
+                : syncStatus // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -143,6 +151,7 @@ abstract class _$$ApprovalImplCopyWith<$Res>
     String phone,
     String designation,
     String signature,
+    @JsonKey(name: 'sync_status') String syncStatus,
   });
 }
 
@@ -168,6 +177,7 @@ class __$$ApprovalImplCopyWithImpl<$Res>
     Object? phone = null,
     Object? designation = null,
     Object? signature = null,
+    Object? syncStatus = null,
   }) {
     return _then(
       _$ApprovalImpl(
@@ -203,6 +213,10 @@ class __$$ApprovalImplCopyWithImpl<$Res>
             ? _value.signature
             : signature // ignore: cast_nullable_to_non_nullable
                   as String,
+        syncStatus: null == syncStatus
+            ? _value.syncStatus
+            : syncStatus // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -220,6 +234,7 @@ class _$ApprovalImpl implements _Approval {
     required this.phone,
     required this.designation,
     required this.signature,
+    @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
   });
 
   factory _$ApprovalImpl.fromJson(Map<String, dynamic> json) =>
@@ -245,10 +260,13 @@ class _$ApprovalImpl implements _Approval {
   final String designation;
   @override
   final String signature;
+  @override
+  @JsonKey(name: 'sync_status')
+  final String syncStatus;
 
   @override
   String toString() {
-    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature)';
+    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature, syncStatus: $syncStatus)';
   }
 
   @override
@@ -268,7 +286,9 @@ class _$ApprovalImpl implements _Approval {
             (identical(other.designation, designation) ||
                 other.designation == designation) &&
             (identical(other.signature, signature) ||
-                other.signature == signature));
+                other.signature == signature) &&
+            (identical(other.syncStatus, syncStatus) ||
+                other.syncStatus == syncStatus));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -283,6 +303,7 @@ class _$ApprovalImpl implements _Approval {
     phone,
     designation,
     signature,
+    syncStatus,
   );
 
   /// Create a copy of Approval
@@ -309,6 +330,7 @@ abstract class _Approval implements Approval {
     required final String phone,
     required final String designation,
     required final String signature,
+    @JsonKey(name: 'sync_status') final String syncStatus,
   }) = _$ApprovalImpl;
 
   factory _Approval.fromJson(Map<String, dynamic> json) =
@@ -334,6 +356,9 @@ abstract class _Approval implements Approval {
   String get designation;
   @override
   String get signature;
+  @override
+  @JsonKey(name: 'sync_status')
+  String get syncStatus;
 
   /// Create a copy of Approval
   /// with the given fields replaced by the non-null parameter values.

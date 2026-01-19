@@ -174,7 +174,15 @@ class NIMSLocalService {
       "facilities: $result",
       name: "NIMSLocalService:getCachedFacilitiesBySearchQuery",
     );
-    return result.map((f) => DomainFacility.fromJson(f)).toList();
+    final facilities = result.map((f) => DomainFacility.fromJson(f)).toList();
+    // Deduplicate by facilityId
+    final seenIds = <int>{};
+    return facilities.where((f) {
+      final id = f.facilityId;
+      if (id == null || seenIds.contains(id)) return false;
+      seenIds.add(id);
+      return true;
+    }).toList();
   }
 
   Future<void> cacheSampleTypes(List<DomainSampleType> sampleTypes) async {
@@ -557,6 +565,27 @@ class NIMSLocalService {
     return result.map((approval) => DomainApproval.fromJson(approval)).toList();
   }
 
+  /// Get cached pickup approvals by route number (approval_type = 'pickup')
+  Future<List<DomainApproval>> getCachedPickupApprovalsByRouteNo(
+    String routeNo,
+  ) async {
+    developer.log(
+      "routeNo: $routeNo",
+      name: "NIMSLocalService:getCachedPickupApprovalsByRouteNo",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "approvals",
+      where: "route_no = ? AND approval_type = ?",
+      whereArgs: [routeNo, 'pickup'],
+    );
+    developer.log(
+      "pickup approvals: $result",
+      name: "NIMSLocalService:getCachedPickupApprovalsByRouteNo",
+    );
+    return result.map((approval) => DomainApproval.fromJson(approval)).toList();
+  }
+
   Future<List<DomainShipment>> getCachedShipmentsByRouteNo(
     String routeNo,
   ) async {
@@ -575,5 +604,550 @@ class NIMSLocalService {
       name: "NIMSLocalService:getCachedShipmentsByRouteNo",
     );
     return result.map((shipment) => DomainShipment.fromJson(shipment)).toList();
+  }
+
+  // ==================== SYNC-RELATED METHODS ====================
+
+  /// Get all manifests with pending sync status
+  Future<List<DomainManifest>> getPendingManifests() async {
+    developer.log(
+      "Getting pending manifests",
+      name: "NIMSLocalService:getPendingManifests",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "manifests",
+      where: "sync_status = ? OR sync_status = ?",
+      whereArgs: ['pending', 'failed'],
+      orderBy: "created_at ASC",
+    );
+    developer.log(
+      "pending manifests: $result",
+      name: "NIMSLocalService:getPendingManifests",
+    );
+    return result.map((m) => DomainManifest.fromJson(m)).toList();
+  }
+
+  /// Get all samples with pending sync status
+  Future<List<DomainSample>> getPendingSamples() async {
+    developer.log(
+      "Getting pending samples",
+      name: "NIMSLocalService:getPendingSamples",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "samples",
+      where: "sync_status = ? OR sync_status = ?",
+      whereArgs: ['pending', 'failed'],
+    );
+    return result.map((s) => DomainSample.fromJson(s)).toList();
+  }
+
+  /// Get all routes with pending sync status
+  Future<List<DomainShipmentRoute>> getPendingRoutes() async {
+    developer.log(
+      "Getting pending routes",
+      name: "NIMSLocalService:getPendingRoutes",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "routes",
+      where: "sync_status = ? OR sync_status = ?",
+      whereArgs: ['pending', 'failed'],
+      orderBy: "created_at ASC",
+    );
+    developer.log(
+      "pending routes: $result",
+      name: "NIMSLocalService:getPendingRoutes",
+    );
+    return result.map((r) => DomainShipmentRoute.fromJson(r)).toList();
+  }
+
+  /// Get all shipments with pending sync status
+  Future<List<DomainShipment>> getPendingShipments() async {
+    developer.log(
+      "Getting pending shipments",
+      name: "NIMSLocalService:getPendingShipments",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "shipments",
+      where: "sync_status = ? OR sync_status = ?",
+      whereArgs: ['pending', 'failed'],
+    );
+    return result.map((s) => DomainShipment.fromJson(s)).toList();
+  }
+
+  /// Get all approvals with pending sync status
+  Future<List<DomainApproval>> getPendingApprovals() async {
+    developer.log(
+      "Getting pending approvals",
+      name: "NIMSLocalService:getPendingApprovals",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "approvals",
+      where: "sync_status = ? OR sync_status = ?",
+      whereArgs: ['pending', 'failed'],
+    );
+    return result.map((a) => DomainApproval.fromJson(a)).toList();
+  }
+
+  /// Update sync status for a record in any table
+  Future<void> updateSyncStatus(
+    String table,
+    String idColumn,
+    String idValue,
+    String status,
+  ) async {
+    developer.log(
+      "Updating sync status: $table.$idColumn=$idValue to $status",
+      name: "NIMSLocalService:updateSyncStatus",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.update(
+      table,
+      {'sync_status': status},
+      where: "$idColumn = ?",
+      whereArgs: [idValue],
+    );
+  }
+
+  /// Get a manifest by its manifest number
+  Future<DomainManifest?> getManifestByNo(String manifestNo) async {
+    developer.log(
+      "manifestNo: $manifestNo",
+      name: "NIMSLocalService:getManifestByNo",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "manifests",
+      where: "manifest_no = ?",
+      whereArgs: [manifestNo],
+      limit: 1,
+    );
+    developer.log(
+      "manifest: $result",
+      name: "NIMSLocalService:getManifestByNo",
+    );
+    if (result.isNotEmpty) {
+      return DomainManifest.fromJson(result.first);
+    }
+    return null;
+  }
+
+  /// Update a manifest locally
+  Future<void> updateManifestLocally(DomainManifest manifest) async {
+    developer.log(
+      "Updating manifest: ${manifest.manifestNo}",
+      name: "NIMSLocalService:updateManifestLocally",
+    );
+    final db = await NIMSDatabase().instance;
+    final data = manifest.toJson();
+    data.remove('id'); // Don't update the id
+    await db.update(
+      "manifests",
+      data,
+      where: "manifest_no = ?",
+      whereArgs: [manifest.manifestNo],
+    );
+  }
+
+  /// Delete a manifest locally (with its samples)
+  Future<void> deleteManifestLocally(String manifestNo) async {
+    developer.log(
+      "Deleting manifest locally: $manifestNo",
+      name: "NIMSLocalService:deleteManifestLocally",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.transaction((txn) async {
+      // Delete samples first (due to foreign key constraint)
+      await txn.delete(
+        "samples",
+        where: "manifest_no = ?",
+        whereArgs: [manifestNo],
+      );
+      // Delete the manifest
+      await txn.delete(
+        "manifests",
+        where: "manifest_no = ?",
+        whereArgs: [manifestNo],
+      );
+    });
+  }
+
+  /// Get a sample by its sample code
+  Future<DomainSample?> getSampleByCode(String sampleCode) async {
+    developer.log(
+      "sampleCode: $sampleCode",
+      name: "NIMSLocalService:getSampleByCode",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "samples",
+      where: "sample_code = ?",
+      whereArgs: [sampleCode],
+      limit: 1,
+    );
+    developer.log(
+      "sample: $result",
+      name: "NIMSLocalService:getSampleByCode",
+    );
+    if (result.isNotEmpty) {
+      return DomainSample.fromJson(result.first);
+    }
+    return null;
+  }
+
+  /// Update a sample locally
+  Future<void> updateSampleLocally(DomainSample sample) async {
+    developer.log(
+      "Updating sample: ${sample.sampleCode}",
+      name: "NIMSLocalService:updateSampleLocally",
+    );
+    final db = await NIMSDatabase().instance;
+    final data = sample.toJson();
+    data.remove('id'); // Don't update the id
+    await db.update(
+      "samples",
+      data,
+      where: "sample_code = ?",
+      whereArgs: [sample.sampleCode],
+    );
+  }
+
+  /// Delete a sample locally
+  Future<void> deleteSampleLocally(String sampleCode) async {
+    developer.log(
+      "Deleting sample locally: $sampleCode",
+      name: "NIMSLocalService:deleteSampleLocally",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.delete(
+      "samples",
+      where: "sample_code = ?",
+      whereArgs: [sampleCode],
+    );
+  }
+
+  /// Get all cached manifests
+  Future<List<DomainManifest>> getAllCachedManifests() async {
+    developer.log(
+      "Getting all cached manifests",
+      name: "NIMSLocalService:getAllCachedManifests",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "manifests",
+      orderBy: "created_at DESC",
+    );
+    return result.map((m) => DomainManifest.fromJson(m)).toList();
+  }
+
+  /// Get all cached shipments
+  Future<List<DomainShipment>> getAllCachedShipments() async {
+    developer.log(
+      "Getting all cached shipments",
+      name: "NIMSLocalService:getAllCachedShipments",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "shipments",
+      orderBy: "pickup_date DESC",
+    );
+    return result.map((s) => DomainShipment.fromJson(s)).toList();
+  }
+
+  /// Get all cached routes
+  Future<List<DomainShipmentRoute>> getAllCachedRoutes() async {
+    developer.log(
+      "Getting all cached routes",
+      name: "NIMSLocalService:getAllCachedRoutes",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "routes",
+      orderBy: "created_at DESC",
+    );
+    return result.map((r) => DomainShipmentRoute.fromJson(r)).toList();
+  }
+
+  /// Update manifest sample count after sample deletion
+  Future<void> updateManifestSampleCount(String manifestNo, int newCount) async {
+    developer.log(
+      "Updating manifest $manifestNo sample count to $newCount",
+      name: "NIMSLocalService:updateManifestSampleCount",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.update(
+      "manifests",
+      {'sample_count': newCount},
+      where: "manifest_no = ?",
+      whereArgs: [manifestNo],
+    );
+  }
+
+  /// Update shipment status to delivered and save delivery approval
+  Future<void> saveDeliveryApproval(
+    List<String> shipmentNos,
+    DomainApproval deliveryApproval,
+  ) async {
+    developer.log(
+      "Saving delivery approval for shipments: $shipmentNos",
+      name: "NIMSLocalService:saveDeliveryApproval",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.transaction((txn) async {
+      // Update shipment status to 'delivered' for each shipment
+      for (final shipmentNo in shipmentNos) {
+        await txn.update(
+          "shipments",
+          {'shipment_status': 'delivered'},
+          where: "shipment_no = ?",
+          whereArgs: [shipmentNo],
+        );
+      }
+      // Save the delivery approval
+      await txn.insert(
+        "approvals",
+        deliveryApproval.toJson(),
+      );
+    });
+  }
+
+  /// Get pending specimen delivery approvals (approvals with type='delivery' and pending/failed sync status)
+  Future<List<DomainApproval>> getPendingSpecimenDeliveries() async {
+    developer.log(
+      "Getting pending specimen deliveries",
+      name: "NIMSLocalService:getPendingSpecimenDeliveries",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "approvals",
+      where: "approval_type = ? AND (sync_status = ? OR sync_status = ?)",
+      whereArgs: ['delivery', 'pending', 'failed'],
+      orderBy: "rowid ASC",
+    );
+    developer.log(
+      "pending specimen deliveries: $result",
+      name: "NIMSLocalService:getPendingSpecimenDeliveries",
+    );
+    return result.map((a) => DomainApproval.fromJson(a)).toList();
+  }
+
+  /// Get shipments by route number that have been delivered
+  Future<List<DomainShipment>> getDeliveredShipmentsByRouteNo(
+    String routeNo,
+  ) async {
+    developer.log(
+      "routeNo: $routeNo",
+      name: "NIMSLocalService:getDeliveredShipmentsByRouteNo",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "shipments",
+      where: "route_no = ? AND shipment_status = ?",
+      whereArgs: [routeNo, 'delivered'],
+    );
+    developer.log(
+      "delivered shipments: $result",
+      name: "NIMSLocalService:getDeliveredShipmentsByRouteNo",
+    );
+    return result.map((s) => DomainShipment.fromJson(s)).toList();
+  }
+
+  /// Cache result pickup (route, shipment, approval)
+  Future<void> cacheResultPickup(
+    DomainShipmentRoute route,
+    DomainShipment shipment,
+    DomainApproval approval,
+  ) async {
+    developer.log(
+      "Caching result pickup: route=${route.routeNo}",
+      name: "NIMSLocalService:cacheResultPickup",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.transaction((txn) async {
+      final batch = txn.batch();
+      batch.insert("routes", route.toJson());
+      batch.insert("shipments", shipment.toJson());
+      batch.insert("approvals", approval.toJson());
+      await batch.commit(noResult: true);
+    });
+  }
+
+  /// Get pending result pickup approvals
+  Future<List<DomainApproval>> getPendingResultPickups() async {
+    developer.log(
+      "Getting pending result pickups",
+      name: "NIMSLocalService:getPendingResultPickups",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "approvals",
+      where: "approval_type = ? AND (sync_status = ? OR sync_status = ?)",
+      whereArgs: ['result_pickup', 'pending', 'failed'],
+      orderBy: "rowid ASC",
+    );
+    developer.log(
+      "pending result pickups: $result",
+      name: "NIMSLocalService:getPendingResultPickups",
+    );
+    return result.map((a) => DomainApproval.fromJson(a)).toList();
+  }
+
+  /// Get pending result delivery approvals
+  Future<List<DomainApproval>> getPendingResultDeliveries() async {
+    developer.log(
+      "Getting pending result deliveries",
+      name: "NIMSLocalService:getPendingResultDeliveries",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query(
+      "approvals",
+      where: "approval_type = ? AND (sync_status = ? OR sync_status = ?)",
+      whereArgs: ['result_delivery', 'pending', 'failed'],
+      orderBy: "rowid ASC",
+    );
+    developer.log(
+      "pending result deliveries: $result",
+      name: "NIMSLocalService:getPendingResultDeliveries",
+    );
+    return result.map((a) => DomainApproval.fromJson(a)).toList();
+  }
+
+  /// Save result delivery approval
+  Future<void> saveResultDeliveryApproval(
+    String routeNo,
+    List<String> shipmentNos,
+    DomainApproval approval,
+  ) async {
+    developer.log(
+      "Saving result delivery approval for route: $routeNo, shipments: $shipmentNos",
+      name: "NIMSLocalService:saveResultDeliveryApproval",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.transaction((txn) async {
+      // Update shipment status to 'delivered' for each shipment
+      for (final shipmentNo in shipmentNos) {
+        await txn.update(
+          "shipments",
+          {'shipment_status': 'delivered'},
+          where: "shipment_no = ?",
+          whereArgs: [shipmentNo],
+        );
+      }
+      // Save the delivery approval
+      await txn.insert(
+        "approvals",
+        approval.toJson(),
+      );
+    });
+  }
+
+  /// Get total count of pending records across all tables
+  Future<int> getTotalPendingCount() async {
+    developer.log(
+      "Getting total pending count",
+      name: "NIMSLocalService:getTotalPendingCount",
+    );
+    final db = await NIMSDatabase().instance;
+
+    int totalCount = 0;
+
+    // Count pending manifests
+    final manifestsResult = await db.rawQuery(
+      "SELECT COUNT(*) as count FROM manifests WHERE sync_status = 'pending' OR sync_status = 'failed'",
+    );
+    totalCount += Sqflite.firstIntValue(manifestsResult) ?? 0;
+
+    // Count pending routes
+    final routesResult = await db.rawQuery(
+      "SELECT COUNT(*) as count FROM routes WHERE sync_status = 'pending' OR sync_status = 'failed'",
+    );
+    totalCount += Sqflite.firstIntValue(routesResult) ?? 0;
+
+    developer.log(
+      "Total pending count: $totalCount",
+      name: "NIMSLocalService:getTotalPendingCount",
+    );
+    return totalCount;
+  }
+
+  // ==================== LSP AND ETOKEN METHODS ====================
+
+  /// Get the first available LSP for the current user
+  Future<DomainLsp?> getFirstCachedLsp() async {
+    developer.log(
+      "Getting first cached LSP",
+      name: "NIMSLocalService:getFirstCachedLsp",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query('lsps', limit: 1);
+    developer.log(
+      "lsp: $result",
+      name: "NIMSLocalService:getFirstCachedLsp",
+    );
+    if (result.isNotEmpty) {
+      return DomainLsp.fromJson(result.first);
+    }
+    return null;
+  }
+
+  /// Get the next available etoken and return it
+  Future<DomainETokenData?> getNextEToken() async {
+    developer.log(
+      "Getting next etoken",
+      name: "NIMSLocalService:getNextEToken",
+    );
+    final db = await NIMSDatabase().instance;
+    final result = await db.query('etoken_data', limit: 1);
+    developer.log(
+      "etoken: $result",
+      name: "NIMSLocalService:getNextEToken",
+    );
+    if (result.isNotEmpty) {
+      return DomainETokenData.fromJson(result.first);
+    }
+    return null;
+  }
+
+  /// Delete a used etoken by its ID
+  Future<void> deleteEToken(String etokenId) async {
+    developer.log(
+      "Deleting etoken: $etokenId",
+      name: "NIMSLocalService:deleteEToken",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.delete('etoken_data', where: 'etoken_id = ?', whereArgs: [etokenId]);
+  }
+
+  /// Delete multiple etokens by their IDs
+  Future<void> deleteETokens(List<String> etokenIds) async {
+    developer.log(
+      "Deleting etokens: $etokenIds",
+      name: "NIMSLocalService:deleteETokens",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.transaction((txn) async {
+      for (final etokenId in etokenIds) {
+        await txn.delete('etoken_data', where: 'etoken_id = ?', whereArgs: [etokenId]);
+      }
+    });
+  }
+
+  /// Update shipment status (e.g., from 'pending' to 'in-transit' after sync)
+  Future<void> updateShipmentStatus(String shipmentNo, String status) async {
+    developer.log(
+      "Updating shipment $shipmentNo status to $status",
+      name: "NIMSLocalService:updateShipmentStatus",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.update(
+      'shipments',
+      {'shipment_status': status},
+      where: 'shipment_no = ?',
+      whereArgs: [shipmentNo],
+    );
   }
 }

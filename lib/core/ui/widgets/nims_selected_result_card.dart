@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class NIMSSelectedResultCard extends StatelessWidget {
-  const NIMSSelectedResultCard({super.key});
+  final String? sampleCode;
+
+  const NIMSSelectedResultCard({super.key, this.sampleCode});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class NIMSSelectedResultCard extends StatelessWidget {
                   color: Theme.of(context).colorScheme.tertiaryContainer,
                 ),
                 child: Text(
-                  "PC-288939-29930",
+                  sampleCode ?? "PC-288939-29930",
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),

@@ -12,6 +12,7 @@ class Shipment with _$Shipment {
     @JsonKey(name: 'route_no') required String routeNo,
     @JsonKey(name: 'manifest_no') required String manifestNo,
     @JsonKey(name: 'origin_type') required String originType,
+    @JsonKey(name: 'origin_facility_name') @Default('') String originFacilityName,
     @JsonKey(name: 'destination_location_type') required String destinationLocationType,
     @JsonKey(name: 'destination_facility_id') required String destinationFacilityId,
     @JsonKey(name: 'destination_facility_name') required String destinationFacilityName,
@@ -19,7 +20,8 @@ class Shipment with _$Shipment {
     @JsonKey(name: 'pickup_longitude') required double pickupLongitude,
     @JsonKey(name: 'sample_type') required String sampleType,
     @JsonKey(name: 'sample_count') required int sampleCount,
-    @JsonKey(name: 'shipment_status') @Default('in-transit') String shipmentStatus,
+    @JsonKey(name: 'shipment_status') @Default('pending') String shipmentStatus,
+    @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
     // @JsonKey(name: 'pickup_date') String? pickupDate,
   }) = _Shipment;
 

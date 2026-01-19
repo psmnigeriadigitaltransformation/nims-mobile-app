@@ -31,6 +31,8 @@ mixin _$Sample {
   String get age => throw _privateConstructorUsedError;
   String get gender => throw _privateConstructorUsedError;
   String? get comment => throw _privateConstructorUsedError;
+  @JsonKey(name: 'sync_status')
+  String get syncStatus => throw _privateConstructorUsedError;
 
   /// Serializes this Sample to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -54,6 +56,7 @@ abstract class $SampleCopyWith<$Res> {
     String age,
     String gender,
     String? comment,
+    @JsonKey(name: 'sync_status') String syncStatus,
   });
 }
 
@@ -79,6 +82,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? age = null,
     Object? gender = null,
     Object? comment = freezed,
+    Object? syncStatus = null,
   }) {
     return _then(
       _value.copyWith(
@@ -110,6 +114,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
                 ? _value.comment
                 : comment // ignore: cast_nullable_to_non_nullable
                       as String?,
+            syncStatus: null == syncStatus
+                ? _value.syncStatus
+                : syncStatus // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -132,6 +140,7 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
     String age,
     String gender,
     String? comment,
+    @JsonKey(name: 'sync_status') String syncStatus,
   });
 }
 
@@ -156,6 +165,7 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? age = null,
     Object? gender = null,
     Object? comment = freezed,
+    Object? syncStatus = null,
   }) {
     return _then(
       _$SampleImpl(
@@ -187,6 +197,10 @@ class __$$SampleImplCopyWithImpl<$Res>
             ? _value.comment
             : comment // ignore: cast_nullable_to_non_nullable
                   as String?,
+        syncStatus: null == syncStatus
+            ? _value.syncStatus
+            : syncStatus // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -203,6 +217,7 @@ class _$SampleImpl implements _Sample {
     required this.age,
     required this.gender,
     this.comment,
+    @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
   });
 
   factory _$SampleImpl.fromJson(Map<String, dynamic> json) =>
@@ -225,10 +240,13 @@ class _$SampleImpl implements _Sample {
   final String gender;
   @override
   final String? comment;
+  @override
+  @JsonKey(name: 'sync_status')
+  final String syncStatus;
 
   @override
   String toString() {
-    return 'Sample(id: $id, manifestNo: $manifestNo, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, comment: $comment)';
+    return 'Sample(id: $id, manifestNo: $manifestNo, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, comment: $comment, syncStatus: $syncStatus)';
   }
 
   @override
@@ -245,7 +263,9 @@ class _$SampleImpl implements _Sample {
                 other.patientCode == patientCode) &&
             (identical(other.age, age) || other.age == age) &&
             (identical(other.gender, gender) || other.gender == gender) &&
-            (identical(other.comment, comment) || other.comment == comment));
+            (identical(other.comment, comment) || other.comment == comment) &&
+            (identical(other.syncStatus, syncStatus) ||
+                other.syncStatus == syncStatus));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -259,6 +279,7 @@ class _$SampleImpl implements _Sample {
     age,
     gender,
     comment,
+    syncStatus,
   );
 
   /// Create a copy of Sample
@@ -284,6 +305,7 @@ abstract class _Sample implements Sample {
     required final String age,
     required final String gender,
     final String? comment,
+    @JsonKey(name: 'sync_status') final String syncStatus,
   }) = _$SampleImpl;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$SampleImpl.fromJson;
@@ -305,6 +327,9 @@ abstract class _Sample implements Sample {
   String get gender;
   @override
   String? get comment;
+  @override
+  @JsonKey(name: 'sync_status')
+  String get syncStatus;
 
   /// Create a copy of Sample
   /// with the given fields replaced by the non-null parameter values.

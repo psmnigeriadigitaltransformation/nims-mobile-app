@@ -16,6 +16,7 @@ class ShipmentRoute with _$ShipmentRoute {
     @JsonKey(name: 'rider_user_id') required String riderUserId,
     double? latitude,
     double? longitude,
+    @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
     // @JsonKey(name: 'created_at') String? createdAt,
   }) = _ShipmentRoute;
 

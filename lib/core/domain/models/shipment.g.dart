@@ -13,6 +13,7 @@ _$ShipmentImpl _$$ShipmentImplFromJson(Map<String, dynamic> json) =>
       routeNo: json['route_no'] as String,
       manifestNo: json['manifest_no'] as String,
       originType: json['origin_type'] as String,
+      originFacilityName: json['origin_facility_name'] as String? ?? '',
       destinationLocationType: json['destination_location_type'] as String,
       destinationFacilityId: json['destination_facility_id'] as String,
       destinationFacilityName: json['destination_facility_name'] as String,
@@ -20,7 +21,8 @@ _$ShipmentImpl _$$ShipmentImplFromJson(Map<String, dynamic> json) =>
       pickupLongitude: (json['pickup_longitude'] as num).toDouble(),
       sampleType: json['sample_type'] as String,
       sampleCount: (json['sample_count'] as num).toInt(),
-      shipmentStatus: json['shipment_status'] as String? ?? 'in-transit',
+      shipmentStatus: json['shipment_status'] as String? ?? 'pending',
+      syncStatus: json['sync_status'] as String? ?? 'pending',
     );
 
 Map<String, dynamic> _$$ShipmentImplToJson(_$ShipmentImpl instance) =>
@@ -30,6 +32,7 @@ Map<String, dynamic> _$$ShipmentImplToJson(_$ShipmentImpl instance) =>
       'route_no': instance.routeNo,
       'manifest_no': instance.manifestNo,
       'origin_type': instance.originType,
+      'origin_facility_name': instance.originFacilityName,
       'destination_location_type': instance.destinationLocationType,
       'destination_facility_id': instance.destinationFacilityId,
       'destination_facility_name': instance.destinationFacilityName,
@@ -38,4 +41,5 @@ Map<String, dynamic> _$$ShipmentImplToJson(_$ShipmentImpl instance) =>
       'sample_type': instance.sampleType,
       'sample_count': instance.sampleCount,
       'shipment_status': instance.shipmentStatus,
+      'sync_status': instance.syncStatus,
     };

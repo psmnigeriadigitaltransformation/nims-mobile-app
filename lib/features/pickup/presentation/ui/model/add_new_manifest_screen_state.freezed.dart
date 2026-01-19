@@ -28,6 +28,8 @@ mixin _$AddNewManifestScreenState {
   String get manifestNo => throw _privateConstructorUsedError;
   bool get isSavingManifest => throw _privateConstructorUsedError;
   Alert get alert => throw _privateConstructorUsedError;
+  ETokenData? get usedEToken => throw _privateConstructorUsedError;
+  Lsp? get lsp => throw _privateConstructorUsedError;
 
   /// Create a copy of AddNewManifestScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -54,6 +56,8 @@ abstract class $AddNewManifestScreenStateCopyWith<$Res> {
     String manifestNo,
     bool isSavingManifest,
     Alert alert,
+    ETokenData? usedEToken,
+    Lsp? lsp,
   });
 
   $MovementTypeCopyWith<$Res>? get movementType;
@@ -61,6 +65,8 @@ abstract class $AddNewManifestScreenStateCopyWith<$Res> {
   $FacilityCopyWith<$Res>? get pickUpFacility;
   $SampleTypeCopyWith<$Res>? get selectedSampleType;
   $AlertCopyWith<$Res> get alert;
+  $ETokenDataCopyWith<$Res>? get usedEToken;
+  $LspCopyWith<$Res>? get lsp;
 }
 
 /// @nodoc
@@ -91,6 +97,8 @@ class _$AddNewManifestScreenStateCopyWithImpl<
     Object? manifestNo = null,
     Object? isSavingManifest = null,
     Object? alert = null,
+    Object? usedEToken = freezed,
+    Object? lsp = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -134,6 +142,14 @@ class _$AddNewManifestScreenStateCopyWithImpl<
                 ? _value.alert
                 : alert // ignore: cast_nullable_to_non_nullable
                       as Alert,
+            usedEToken: freezed == usedEToken
+                ? _value.usedEToken
+                : usedEToken // ignore: cast_nullable_to_non_nullable
+                      as ETokenData?,
+            lsp: freezed == lsp
+                ? _value.lsp
+                : lsp // ignore: cast_nullable_to_non_nullable
+                      as Lsp?,
           )
           as $Val,
     );
@@ -206,6 +222,34 @@ class _$AddNewManifestScreenStateCopyWithImpl<
       return _then(_value.copyWith(alert: value) as $Val);
     });
   }
+
+  /// Create a copy of AddNewManifestScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ETokenDataCopyWith<$Res>? get usedEToken {
+    if (_value.usedEToken == null) {
+      return null;
+    }
+
+    return $ETokenDataCopyWith<$Res>(_value.usedEToken!, (value) {
+      return _then(_value.copyWith(usedEToken: value) as $Val);
+    });
+  }
+
+  /// Create a copy of AddNewManifestScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LspCopyWith<$Res>? get lsp {
+    if (_value.lsp == null) {
+      return null;
+    }
+
+    return $LspCopyWith<$Res>(_value.lsp!, (value) {
+      return _then(_value.copyWith(lsp: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -228,6 +272,8 @@ abstract class _$$AddNewManifestScreenStateImplCopyWith<$Res>
     String manifestNo,
     bool isSavingManifest,
     Alert alert,
+    ETokenData? usedEToken,
+    Lsp? lsp,
   });
 
   @override
@@ -240,6 +286,10 @@ abstract class _$$AddNewManifestScreenStateImplCopyWith<$Res>
   $SampleTypeCopyWith<$Res>? get selectedSampleType;
   @override
   $AlertCopyWith<$Res> get alert;
+  @override
+  $ETokenDataCopyWith<$Res>? get usedEToken;
+  @override
+  $LspCopyWith<$Res>? get lsp;
 }
 
 /// @nodoc
@@ -270,6 +320,8 @@ class __$$AddNewManifestScreenStateImplCopyWithImpl<$Res>
     Object? manifestNo = null,
     Object? isSavingManifest = null,
     Object? alert = null,
+    Object? usedEToken = freezed,
+    Object? lsp = freezed,
   }) {
     return _then(
       _$AddNewManifestScreenStateImpl(
@@ -313,6 +365,14 @@ class __$$AddNewManifestScreenStateImplCopyWithImpl<$Res>
             ? _value.alert
             : alert // ignore: cast_nullable_to_non_nullable
                   as Alert,
+        usedEToken: freezed == usedEToken
+            ? _value.usedEToken
+            : usedEToken // ignore: cast_nullable_to_non_nullable
+                  as ETokenData?,
+        lsp: freezed == lsp
+            ? _value.lsp
+            : lsp // ignore: cast_nullable_to_non_nullable
+                  as Lsp?,
       ),
     );
   }
@@ -332,6 +392,8 @@ class _$AddNewManifestScreenStateImpl extends _AddNewManifestScreenState {
     required this.manifestNo,
     this.isSavingManifest = false,
     this.alert = const Alert(show: false, message: ""),
+    this.usedEToken,
+    this.lsp,
   }) : _facilities = facilities,
        _sampleTypes = sampleTypes,
        _samples = samples,
@@ -380,10 +442,14 @@ class _$AddNewManifestScreenStateImpl extends _AddNewManifestScreenState {
   @override
   @JsonKey()
   final Alert alert;
+  @override
+  final ETokenData? usedEToken;
+  @override
+  final Lsp? lsp;
 
   @override
   String toString() {
-    return 'AddNewManifestScreenState(facilities: $facilities, sampleTypes: $sampleTypes, samples: $samples, movementType: $movementType, selectedDestinationFacility: $selectedDestinationFacility, pickUpFacility: $pickUpFacility, selectedSampleType: $selectedSampleType, manifestNo: $manifestNo, isSavingManifest: $isSavingManifest, alert: $alert)';
+    return 'AddNewManifestScreenState(facilities: $facilities, sampleTypes: $sampleTypes, samples: $samples, movementType: $movementType, selectedDestinationFacility: $selectedDestinationFacility, pickUpFacility: $pickUpFacility, selectedSampleType: $selectedSampleType, manifestNo: $manifestNo, isSavingManifest: $isSavingManifest, alert: $alert, usedEToken: $usedEToken, lsp: $lsp)';
   }
 
   @override
@@ -416,7 +482,10 @@ class _$AddNewManifestScreenStateImpl extends _AddNewManifestScreenState {
                 other.manifestNo == manifestNo) &&
             (identical(other.isSavingManifest, isSavingManifest) ||
                 other.isSavingManifest == isSavingManifest) &&
-            (identical(other.alert, alert) || other.alert == alert));
+            (identical(other.alert, alert) || other.alert == alert) &&
+            (identical(other.usedEToken, usedEToken) ||
+                other.usedEToken == usedEToken) &&
+            (identical(other.lsp, lsp) || other.lsp == lsp));
   }
 
   @override
@@ -432,6 +501,8 @@ class _$AddNewManifestScreenStateImpl extends _AddNewManifestScreenState {
     manifestNo,
     isSavingManifest,
     alert,
+    usedEToken,
+    lsp,
   );
 
   /// Create a copy of AddNewManifestScreenState
@@ -458,6 +529,8 @@ abstract class _AddNewManifestScreenState extends AddNewManifestScreenState {
     required final String manifestNo,
     final bool isSavingManifest,
     final Alert alert,
+    final ETokenData? usedEToken,
+    final Lsp? lsp,
   }) = _$AddNewManifestScreenStateImpl;
   const _AddNewManifestScreenState._() : super._();
 
@@ -481,6 +554,10 @@ abstract class _AddNewManifestScreenState extends AddNewManifestScreenState {
   bool get isSavingManifest;
   @override
   Alert get alert;
+  @override
+  ETokenData? get usedEToken;
+  @override
+  Lsp? get lsp;
 
   /// Create a copy of AddNewManifestScreenState
   /// with the given fields replaced by the non-null parameter values.

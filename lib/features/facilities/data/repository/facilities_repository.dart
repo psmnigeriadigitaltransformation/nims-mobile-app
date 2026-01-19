@@ -61,16 +61,27 @@ class FacilitiesRepository {
             final domainHubFacilities = facilityData.hubList
                 ?.map((e) => e.toDomain(FacilityType.hub.name))
                 .toList();
-            final domainGeneXpertFacilities = facilityData.hubList
+            final domainGeneXpertFacilities = facilityData.genexpertList
                 ?.map((e) => e.toDomain(FacilityType.genexpert.name))
                 .toList();
 
-            final combinedDomainFacilities = [
+            final allFacilities = [
               ...?domainSpokeFacilities,
               ...?domainPcrFacilities,
               ...?domainHubFacilities,
               ...?domainGeneXpertFacilities,
             ];
+
+            // Deduplicate facilities by facilityId
+            final seenIds = <int>{};
+            final combinedDomainFacilities = allFacilities.where((facility) {
+              final id = facility.facilityId;
+              if (id == null || seenIds.contains(id)) {
+                return false;
+              }
+              seenIds.add(id);
+              return true;
+            }).toList();
             await _localService.cacheFacilities(combinedDomainFacilities);
             if (combinedDomainFacilities.isEmpty) {
               Error<List<DomainFacility>>("No facility available");

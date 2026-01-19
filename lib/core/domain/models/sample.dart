@@ -13,6 +13,7 @@ class Sample with _$Sample {
     required String age,
     required String gender,
     String? comment,
+    @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
     // @JsonKey(name: 'created_at') String? createdAt,
   }) = _Sample;
 

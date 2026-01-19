@@ -6,11 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/core/domain/models/movement_type.dart';
+import 'package:nims_mobile_app/core/services/providers.dart';
 import 'package:nims_mobile_app/core/ui/model/model/alert.dart';
 import 'package:nims_mobile_app/features/auth/data/providers.dart';
 import 'package:nims_mobile_app/features/facilities/data/providers.dart';
-import 'package:uuid/uuid.dart';
 
+import '../../../../../core/utils/list_extensions.dart';
 import '../../../../../core/utils/result.dart';
 import '../../../providers.dart';
 import '../model/add_new_manifest_screen_state.dart';
@@ -34,9 +35,25 @@ class AddNewManifestScreenStateNotifier
   ) async {
     final facilitiesRepository = ref.read(facilitiesRepositoryProvider);
     final sampleTypesRepository = ref.read(samplesRepositoryProvider);
+    final localService = ref.read(nimsLocalServiceProvider);
 
     final facilitiesResult = await facilitiesRepository.getFacilities(false);
     final sampleTypesResult = await sampleTypesRepository.getSampleTypes(false);
+
+    // Get LSP and EToken for manifest number generation
+    final lsp = await localService.getFirstCachedLsp();
+    final etoken = await localService.getNextEToken();
+
+    if (lsp == null) {
+      throw Exception("No LSP available. Please sync your data.");
+    }
+
+    if (etoken == null) {
+      throw Exception("No eTokens available. Please download more eTokens before creating manifests.");
+    }
+
+    // Generate manifest number using LSP display and EToken serial number
+    final manifestNo = '${lsp.display}-${etoken.serialNo}';
 
     if (facilitiesResult is Success && sampleTypesResult is Success) {
       return AddNewManifestScreenState(
@@ -50,12 +67,14 @@ class AddNewManifestScreenStateNotifier
                       .toLowerCase()
                       .contains(facility.type?.toLowerCase() ?? ""),
             )
-            .toList(),
+            .distinctBy((facility) => facility.facilityId),
         sampleTypes:
             (sampleTypesResult as Success<List<DomainSampleType>>).payload,
         movementType: param.movementType,
         pickUpFacility: param.pickUpFacility,
-        manifestNo: Uuid().v4(),
+        manifestNo: manifestNo,
+        usedEToken: etoken,
+        lsp: lsp,
       );
     } else {
       throw Exception("Something went wrong or an error occurred");
@@ -110,6 +129,7 @@ class AddNewManifestScreenStateNotifier
     if (data == null) {
       state = state.whenData(
         (data) => data.copyWith(
+          isSavingManifest: false,
           alert: Alert(
             show: true,
             message: "Something went wrong or an error occurred",
@@ -119,6 +139,7 @@ class AddNewManifestScreenStateNotifier
     } else {
       final manifestRepository = ref.read(manifestRepositoryProvider);
       final authRepository = ref.read(authRepositoryProvider);
+      final localService = ref.read(nimsLocalServiceProvider);
       final user = await authRepository.getUser();
 
       final result = await manifestRepository.saveManifest(
@@ -130,7 +151,7 @@ class AddNewManifestScreenStateNotifier
           sampleType: data.selectedSampleType?.fullName ?? "",
           sampleCount: data.samples.length,
           phlebotomyNo: '',
-          lspCode: '',
+          lspCode: data.lsp?.lspCode ?? "",
           userId: user?.userId ?? "",
           originatingFacilityName: data.pickUpFacility?.facilityName ?? "",
           destinationFacilityName: data.selectedDestinationFacility?.facilityName ?? "",
@@ -140,6 +161,15 @@ class AddNewManifestScreenStateNotifier
 
       switch (result) {
         case Success<bool>():
+          // Delete the used etoken after successful save
+          if (data.usedEToken?.etokenId != null) {
+            await localService.deleteEToken(data.usedEToken!.etokenId!);
+            developer.log(
+              "Deleted used etoken: ${data.usedEToken!.etokenId}",
+              name: "AddNewManifestScreenStateNotifier:onSaveManifest",
+            );
+          }
+          state = state.whenData((data) => data.copyWith(isSavingManifest: false));
           if (state.requireValue.movementType != null) {
             ref.read(
               manifestsScreenStateNotifierProvider((movementType: state.requireValue.movementType!)).notifier,
@@ -149,6 +179,7 @@ class AddNewManifestScreenStateNotifier
         case Error<bool>():
           state = state.whenData(
             (data) => data.copyWith(
+              isSavingManifest: false,
               alert: Alert(show: true, message: result.message),
             ),
           );

@@ -27,5 +27,10 @@ class DashboardScreenState with _$DashboardScreenState {
     @Default([]) List<DomainFacility> searchedFacilities,
     @Default([]) List<DomainManifest> searchedManifests,
     @Default([]) List<DomainShipment> searchedShipments,
+    // Sync state fields
+    @Default(0) int pendingSyncCount,
+    @Default(false) bool isSyncing,
+    DateTime? lastSyncTime,
+    @Default(Alert(show: false, message: '')) Alert syncAlert,
   }) = _DashboardScreenState;
 }

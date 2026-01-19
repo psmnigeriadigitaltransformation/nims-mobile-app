@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/etoken_data.dart';
+import 'package:nims_mobile_app/core/domain/models/lsp.dart';
 import 'package:nims_mobile_app/core/services/remote/models/facilities_response.dart';
 
 import '../../../../../../core/domain/models/facility.dart';
@@ -25,7 +27,9 @@ class AddNewManifestScreenState with _$AddNewManifestScreenState {
     DomainSampleType? selectedSampleType,
     required String manifestNo,
     @Default(false) bool isSavingManifest,
-    @Default(Alert(show: false, message: "")) Alert alert
+    @Default(Alert(show: false, message: "")) Alert alert,
+    DomainETokenData? usedEToken,
+    DomainLsp? lsp,
   }) = _AddNewManifestScreenState;
 
   // factory AddNewManifestScreenState.initial() =>

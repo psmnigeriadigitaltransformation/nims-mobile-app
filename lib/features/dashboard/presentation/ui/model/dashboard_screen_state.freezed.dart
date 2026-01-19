@@ -31,7 +31,12 @@ mixin _$DashboardScreenState {
   String get searchQuery => throw _privateConstructorUsedError;
   List<Facility> get searchedFacilities => throw _privateConstructorUsedError;
   List<Manifest> get searchedManifests => throw _privateConstructorUsedError;
-  List<Shipment> get searchedShipments => throw _privateConstructorUsedError;
+  List<Shipment> get searchedShipments =>
+      throw _privateConstructorUsedError; // Sync state fields
+  int get pendingSyncCount => throw _privateConstructorUsedError;
+  bool get isSyncing => throw _privateConstructorUsedError;
+  DateTime? get lastSyncTime => throw _privateConstructorUsedError;
+  Alert get syncAlert => throw _privateConstructorUsedError;
 
   /// Create a copy of DashboardScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -60,7 +65,13 @@ abstract class $DashboardScreenStateCopyWith<$Res> {
     List<Facility> searchedFacilities,
     List<Manifest> searchedManifests,
     List<Shipment> searchedShipments,
+    int pendingSyncCount,
+    bool isSyncing,
+    DateTime? lastSyncTime,
+    Alert syncAlert,
   });
+
+  $AlertCopyWith<$Res> get syncAlert;
 }
 
 /// @nodoc
@@ -93,6 +104,10 @@ class _$DashboardScreenStateCopyWithImpl<
     Object? searchedFacilities = null,
     Object? searchedManifests = null,
     Object? searchedShipments = null,
+    Object? pendingSyncCount = null,
+    Object? isSyncing = null,
+    Object? lastSyncTime = freezed,
+    Object? syncAlert = null,
   }) {
     return _then(
       _value.copyWith(
@@ -144,9 +159,35 @@ class _$DashboardScreenStateCopyWithImpl<
                 ? _value.searchedShipments
                 : searchedShipments // ignore: cast_nullable_to_non_nullable
                       as List<Shipment>,
+            pendingSyncCount: null == pendingSyncCount
+                ? _value.pendingSyncCount
+                : pendingSyncCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            isSyncing: null == isSyncing
+                ? _value.isSyncing
+                : isSyncing // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            lastSyncTime: freezed == lastSyncTime
+                ? _value.lastSyncTime
+                : lastSyncTime // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            syncAlert: null == syncAlert
+                ? _value.syncAlert
+                : syncAlert // ignore: cast_nullable_to_non_nullable
+                      as Alert,
           )
           as $Val,
     );
+  }
+
+  /// Create a copy of DashboardScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AlertCopyWith<$Res> get syncAlert {
+    return $AlertCopyWith<$Res>(_value.syncAlert, (value) {
+      return _then(_value.copyWith(syncAlert: value) as $Val);
+    });
   }
 }
 
@@ -172,7 +213,14 @@ abstract class _$$DashboardScreenStateImplCopyWith<$Res>
     List<Facility> searchedFacilities,
     List<Manifest> searchedManifests,
     List<Shipment> searchedShipments,
+    int pendingSyncCount,
+    bool isSyncing,
+    DateTime? lastSyncTime,
+    Alert syncAlert,
   });
+
+  @override
+  $AlertCopyWith<$Res> get syncAlert;
 }
 
 /// @nodoc
@@ -201,6 +249,10 @@ class __$$DashboardScreenStateImplCopyWithImpl<$Res>
     Object? searchedFacilities = null,
     Object? searchedManifests = null,
     Object? searchedShipments = null,
+    Object? pendingSyncCount = null,
+    Object? isSyncing = null,
+    Object? lastSyncTime = freezed,
+    Object? syncAlert = null,
   }) {
     return _then(
       _$DashboardScreenStateImpl(
@@ -252,6 +304,22 @@ class __$$DashboardScreenStateImplCopyWithImpl<$Res>
             ? _value._searchedShipments
             : searchedShipments // ignore: cast_nullable_to_non_nullable
                   as List<Shipment>,
+        pendingSyncCount: null == pendingSyncCount
+            ? _value.pendingSyncCount
+            : pendingSyncCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        isSyncing: null == isSyncing
+            ? _value.isSyncing
+            : isSyncing // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        lastSyncTime: freezed == lastSyncTime
+            ? _value.lastSyncTime
+            : lastSyncTime // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        syncAlert: null == syncAlert
+            ? _value.syncAlert
+            : syncAlert // ignore: cast_nullable_to_non_nullable
+                  as Alert,
       ),
     );
   }
@@ -273,6 +341,10 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
     final List<Facility> searchedFacilities = const [],
     final List<Manifest> searchedManifests = const [],
     final List<Shipment> searchedShipments = const [],
+    this.pendingSyncCount = 0,
+    this.isSyncing = false,
+    this.lastSyncTime,
+    this.syncAlert = const Alert(show: false, message: ''),
   }) : _specimensMovementTypes = specimensMovementTypes,
        _resultsMovementTypes = resultsMovementTypes,
        _shipmentRoutes = shipmentRoutes,
@@ -352,9 +424,22 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
     return EqualUnmodifiableListView(_searchedShipments);
   }
 
+  // Sync state fields
+  @override
+  @JsonKey()
+  final int pendingSyncCount;
+  @override
+  @JsonKey()
+  final bool isSyncing;
+  @override
+  final DateTime? lastSyncTime;
+  @override
+  @JsonKey()
+  final Alert syncAlert;
+
   @override
   String toString() {
-    return 'DashboardScreenState(userFullName: $userFullName, userRole: $userRole, userId: $userId, deviceSerialNo: $deviceSerialNo, specimensMovementTypes: $specimensMovementTypes, resultsMovementTypes: $resultsMovementTypes, shipmentRoutes: $shipmentRoutes, isSearching: $isSearching, searchQuery: $searchQuery, searchedFacilities: $searchedFacilities, searchedManifests: $searchedManifests, searchedShipments: $searchedShipments)';
+    return 'DashboardScreenState(userFullName: $userFullName, userRole: $userRole, userId: $userId, deviceSerialNo: $deviceSerialNo, specimensMovementTypes: $specimensMovementTypes, resultsMovementTypes: $resultsMovementTypes, shipmentRoutes: $shipmentRoutes, isSearching: $isSearching, searchQuery: $searchQuery, searchedFacilities: $searchedFacilities, searchedManifests: $searchedManifests, searchedShipments: $searchedShipments, pendingSyncCount: $pendingSyncCount, isSyncing: $isSyncing, lastSyncTime: $lastSyncTime, syncAlert: $syncAlert)';
   }
 
   @override
@@ -396,7 +481,15 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
             const DeepCollectionEquality().equals(
               other._searchedShipments,
               _searchedShipments,
-            ));
+            ) &&
+            (identical(other.pendingSyncCount, pendingSyncCount) ||
+                other.pendingSyncCount == pendingSyncCount) &&
+            (identical(other.isSyncing, isSyncing) ||
+                other.isSyncing == isSyncing) &&
+            (identical(other.lastSyncTime, lastSyncTime) ||
+                other.lastSyncTime == lastSyncTime) &&
+            (identical(other.syncAlert, syncAlert) ||
+                other.syncAlert == syncAlert));
   }
 
   @override
@@ -414,6 +507,10 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
     const DeepCollectionEquality().hash(_searchedFacilities),
     const DeepCollectionEquality().hash(_searchedManifests),
     const DeepCollectionEquality().hash(_searchedShipments),
+    pendingSyncCount,
+    isSyncing,
+    lastSyncTime,
+    syncAlert,
   );
 
   /// Create a copy of DashboardScreenState
@@ -443,6 +540,10 @@ abstract class _DashboardScreenState implements DashboardScreenState {
     final List<Facility> searchedFacilities,
     final List<Manifest> searchedManifests,
     final List<Shipment> searchedShipments,
+    final int pendingSyncCount,
+    final bool isSyncing,
+    final DateTime? lastSyncTime,
+    final Alert syncAlert,
   }) = _$DashboardScreenStateImpl;
 
   @override
@@ -468,7 +569,15 @@ abstract class _DashboardScreenState implements DashboardScreenState {
   @override
   List<Manifest> get searchedManifests;
   @override
-  List<Shipment> get searchedShipments;
+  List<Shipment> get searchedShipments; // Sync state fields
+  @override
+  int get pendingSyncCount;
+  @override
+  bool get isSyncing;
+  @override
+  DateTime? get lastSyncTime;
+  @override
+  Alert get syncAlert;
 
   /// Create a copy of DashboardScreenState
   /// with the given fields replaced by the non-null parameter values.

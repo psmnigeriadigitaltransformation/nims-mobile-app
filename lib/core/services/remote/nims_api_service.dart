@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
+import 'dart:io';
 
 import 'package:nims_mobile_app/core/network/dio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:nims_mobile_app/core/services/remote/models/create_shipment_route_response.dart';
 import 'package:nims_mobile_app/core/services/remote/models/delete_manifest_response.dart';
 import 'package:nims_mobile_app/core/services/remote/models/delete_sample_response.dart';
@@ -13,9 +16,15 @@ import 'package:nims_mobile_app/core/services/remote/models/request/create_shipm
 import 'package:nims_mobile_app/core/services/remote/models/request/delete_manifest_request_body.dart';
 import 'package:nims_mobile_app/core/services/remote/models/request/delete_sample_request_body.dart';
 import 'package:nims_mobile_app/core/services/remote/models/request/reject_sample_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/request/result_delivery_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/request/result_pickup_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/request/specimen_delivery_request_body.dart';
 import 'package:nims_mobile_app/core/services/remote/models/request/update_manifest_request_body.dart';
 import 'package:nims_mobile_app/core/services/remote/models/request/update_sample_request_body.dart';
+import 'package:nims_mobile_app/core/services/remote/models/result_delivery_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/result_pickup_response.dart';
 import 'package:nims_mobile_app/core/services/remote/models/sample_types_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/specimen_delivery_response.dart';
 import 'package:nims_mobile_app/core/services/remote/models/update_manifest_response.dart';
 import 'package:nims_mobile_app/core/services/remote/models/update_sample_response.dart';
 
@@ -26,6 +35,28 @@ import 'models/facilities_response.dart';
 import 'models/request/create_manifest_request_body.dart';
 
 class NIMSAPIService {
+  /// Save data to a JSON file in the app's documents directory for debugging
+  Future<void> _saveToJsonFile(String filename, dynamic data) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
+      final file = File('${directory.path}/${filename}_$timestamp.json');
+      final jsonString = const JsonEncoder.withIndent('  ').convert(data);
+      await file.writeAsString(jsonString);
+      developer.log(
+        "Data saved to: ${file.path}",
+        name: "NIMSAPIService:_saveToJsonFile",
+      );
+    } catch (e, s) {
+      developer.log(
+        "Failed to save JSON file: $e",
+        name: "NIMSAPIService:_saveToJsonFile",
+        error: e,
+        stackTrace: s,
+      );
+    }
+  }
+
   Future<Result<LoginResponse>> login({
     required String loginId,
     required String password,
@@ -138,7 +169,7 @@ class NIMSAPIService {
 
   Future<Result<MovementTypesResponse>> getMovementTypes() async {
     try {
-      final response = await dio.get("movements/types/lists");
+      final response = await dio.get("movements/lists/types");
       developer.log(
         "api get movement types response: $response",
         name: "NIMSAPIService:getMovementTypes",
@@ -188,7 +219,7 @@ class NIMSAPIService {
   }) async {
     try {
       final response = await dio.post(
-        "create/manifests",
+        "manifests/create",
         data: manifests.map((manifest) => manifest.toJson()).toList(),
       );
       developer.log(
@@ -215,7 +246,7 @@ class NIMSAPIService {
   }) async {
     try {
       final response = await dio.post(
-        "update/manifests",
+        "manifests/update",
         data: manifest.toJson(),
       );
       developer.log(
@@ -242,7 +273,7 @@ class NIMSAPIService {
   }) async {
     try {
       final response = await dio.post(
-        "delete/manifests",
+        "manifests/delete",
         data: manifest.toJson(),
       );
       developer.log(
@@ -269,7 +300,7 @@ class NIMSAPIService {
   }) async {
     try {
       final response = await dio.post(
-        "update/sample",
+        "sample/update",
         data: sample.toJson(),
       );
       developer.log(
@@ -296,7 +327,7 @@ class NIMSAPIService {
   }) async {
     try {
       final response = await dio.post(
-        "delete/sample",
+        "sample/delete",
         data: sample.toJson(),
       );
       developer.log(
@@ -323,7 +354,7 @@ class NIMSAPIService {
   }) async {
     try {
       final response = await dio.post(
-        "reject/sample",
+        "sample/reject",
         data: sample.toJson(),
       );
       developer.log(
@@ -349,10 +380,20 @@ class NIMSAPIService {
     required CreateShipmentRouteRequest shipmentRoute,
   }) async {
     try {
+      // API expects the route data wrapped in a 'route' array
       final response = await dio.post(
-        "create/shipment",
-        data: shipmentRoute.toJson(),
+        "shipment/sample/pickup",
+        data: [shipmentRoute.toJson()],
       );
+      final data = [shipmentRoute.toJson()];
+      // Save shipment route data to JSON file for debugging
+      await _saveToJsonFile('shipment_route_request', data);
+
+      developer.log(
+        "api create shipment data: $data",
+        name: "NIMSAPIService:createShipmentRoute",
+      );
+
       developer.log(
         "api create shipment response: $response",
         name: "NIMSAPIService:createShipmentRoute",
@@ -371,4 +412,110 @@ class NIMSAPIService {
       return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }
+
+/// Deliver specimen/sample shipments
+  Future<Result<SpecimenDeliveryResponse>> deliverSpecimenShipments({
+    required List<SpecimenDeliveryRequest> deliveries,
+  }) async {
+    try {
+      final response = await dio.post(
+        "shipment/sample/deliver",
+        data: deliveries.map((delivery) => delivery.toJson()).toList(),
+      );
+      developer.log(
+        "api deliver specimen shipments response: $response",
+        name: "NIMSAPIService:deliverSpecimenShipments",
+      );
+      final decodedResponse = SpecimenDeliveryResponse.fromJson(response.data);
+      if (decodedResponse.status?.toLowerCase() == "success") {
+        return Success(decodedResponse);
+      } else {
+        return Error(
+          decodedResponse.message ?? "Request failed! please try again",
+        );
+      }
+    } catch (e, s) {
+      developer.log("e: $e, s: $s", name: "NIMSAPIService:deliverSpecimenShipments");
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
+    }
+  }
+
+  /// Pickup results from facility
+  Future<Result<ResultPickupResponse>> pickupResults({
+    required List<ResultPickupRequest> pickups,
+  }) async {
+    try {
+      final response = await dio.post(
+        "shipment/result/pickup",
+        data: pickups.map((pickup) => pickup.toJson()).toList(),
+      );
+      developer.log(
+        "api pickup results response: $response",
+        name: "NIMSAPIService:pickupResults",
+      );
+      final decodedResponse = ResultPickupResponse.fromJson(response.data);
+      if (decodedResponse.resultCode == 200) {
+        return Success(decodedResponse);
+      } else {
+        return Error(
+          decodedResponse.message ??
+              "${decodedResponse.resultCode}: Request failed! please try again",
+        );
+      }
+    } catch (e, s) {
+      developer.log("e: $e, s: $s", name: "NIMSAPIService:pickupResults");
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
+    }
+  }
+
+  /// Deliver results to facility
+  Future<Result<ResultDeliveryResponse>> deliverResults({
+    required List<ResultDeliveryRequest> deliveries,
+  }) async {
+    try {
+      final response = await dio.post(
+        "shipment/result/deliver",
+        data: deliveries.map((delivery) => delivery.toJson()).toList(),
+      );
+      developer.log(
+        "api deliver results response: $response",
+        name: "NIMSAPIService:deliverResults",
+      );
+      final decodedResponse = ResultDeliveryResponse.fromJson(response.data);
+      if (decodedResponse.resultCode == 200) {
+        return Success(decodedResponse);
+      } else {
+        return Error(
+          decodedResponse.message ??
+              "${decodedResponse.resultCode}: Request failed! please try again",
+        );
+      }
+    } catch (e, s) {
+      developer.log("e: $e, s: $s", name: "NIMSAPIService:deliverResults");
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
+    }
+  }
+
+/**
+ * curl -X 'POST' \
+    '{base_url}/sample/create' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "manifest_no": "MNF12345678",
+    "sample_code": "SMP000111",
+    "patient_code": "00930",
+    "age": "10 Months",
+    "gender": "Male",
+    "user_id": "DP0010"
+    }'
+
+    Response:
+    {
+    "result_code": 200,
+    "status": "success",
+    "message": "Sample created successfully",
+    "data": "Sample Created Successfully"
+    }
+ */
 }
