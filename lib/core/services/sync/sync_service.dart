@@ -99,6 +99,7 @@ class SyncService {
 
   /// Sync all pending data to server
   /// Order: Manifests first, then Routes (because routes depend on manifests)
+  /// Throws an exception if sync fails so the caller can show an error dialog
   Future<void> syncAll() async {
     if (_isSyncing) {
       developer.log(
@@ -114,7 +115,7 @@ class SyncService {
         "No network connection, skipping sync",
         name: "SyncService:syncAll",
       );
-      return;
+      throw Exception("No network connection. Please check your internet and try again.");
     }
 
     _isSyncing = true;
@@ -138,11 +139,19 @@ class SyncService {
       // Step 5: Sync pending result deliveries (after result pickups)
       await syncPendingResultDeliveries();
 
+      // Check if there are still failed records after sync attempt
+      final failedCount = await _localService.getFailedSyncCount();
+      if (failedCount > 0) {
+        _syncStatusController.add(SyncStatus.error);
+        throw Exception("$failedCount record(s) failed to sync. Check your connection and try again.");
+      }
+
       _syncStatusController.add(SyncStatus.success);
       developer.log("Sync completed successfully", name: "SyncService:syncAll");
     } catch (e, s) {
       developer.log("Sync failed: $e", name: "SyncService:syncAll", error: e, stackTrace: s);
       _syncStatusController.add(SyncStatus.error);
+      rethrow; // Rethrow so the caller can handle the error
     } finally {
       _isSyncing = false;
     }
@@ -311,7 +320,7 @@ class SyncService {
           pickupLongitude: s.pickupLongitude.toString(),
           sampleType: s.sampleType,
           sampleCount: s.sampleCount,
-          pickupDate: DateTime.now().toIso8601String(),
+          pickupDate: s.pickupDate ?? DateTime.now().toIso8601String(),
         )).toList(),
         approval: request.Approval(
           approvalNo: approval.approvalNo,
@@ -320,7 +329,7 @@ class SyncService {
           phone: approval.phone,
           designation: approval.designation,
           signature: approval.signature,
-          approvalDate: DateTime.now().toIso8601String(),
+          approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
         ),
       );
 
@@ -440,7 +449,7 @@ class SyncService {
         pickupLongitude: s.pickupLongitude.toString(),
         sampleType: s.sampleType,
         sampleCount: s.sampleCount,
-        pickupDate: DateTime.now().toIso8601String(),
+        pickupDate: s.pickupDate ?? DateTime.now().toIso8601String(),
       )).toList(),
       approval: request.Approval(
         approvalNo: approval.approvalNo,
@@ -449,7 +458,7 @@ class SyncService {
         phone: approval.phone,
         designation: approval.designation,
         signature: approval.signature,
-        approvalDate: DateTime.now().toIso8601String(),
+        approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
       ),
     );
 
@@ -580,9 +589,9 @@ class SyncService {
           routeNo: route.routeNo,
           shipmentNo: shipment.shipmentNo,
           manifestNo: shipment.manifestNo,
-          deliveryLatitude: route.latitude?.toString() ?? "0.0",
-          deliveryLongitude: route.longitude?.toString() ?? "0.0",
-          deliveryDate: DateTime.now().toIso8601String(),
+          latitude: route.latitude?.toString() ?? "0.0",
+          longitude: route.longitude?.toString() ?? "0.0",
+          deliveryDate: shipment.deliveryDate ?? DateTime.now().toIso8601String(),
           destinationType: shipment.destinationLocationType,
           approval: SpecimenDeliveryApproval(
             approvalNo: approval.approvalNo,
@@ -591,7 +600,7 @@ class SyncService {
             phone: approval.phone,
             designation: approval.designation,
             signature: approval.signature,
-            approvalDate: DateTime.now().toIso8601String(),
+            approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
           ),
         ));
       }
@@ -655,7 +664,7 @@ class SyncService {
         pickupLongitude: s.pickupLongitude.toString(),
         sampleType: s.sampleType,
         sampleCount: s.sampleCount,
-        pickupDate: DateTime.now().toIso8601String(),
+        pickupDate: s.pickupDate ?? DateTime.now().toIso8601String(),
       )).toList(),
       approval: request.Approval(
         approvalNo: approval.approvalNo,
@@ -664,7 +673,7 @@ class SyncService {
         phone: approval.phone,
         designation: approval.designation,
         signature: approval.signature,
-        approvalDate: DateTime.now().toIso8601String(),
+        approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
       ),
     );
 
@@ -757,9 +766,9 @@ class SyncService {
       routeNo: currentRoute.routeNo,
       shipmentNo: shipment.shipmentNo,
       manifestNo: shipment.manifestNo,
-      deliveryLatitude: currentRoute.latitude?.toString() ?? "0.0",
-      deliveryLongitude: currentRoute.longitude?.toString() ?? "0.0",
-      deliveryDate: DateTime.now().toIso8601String(),
+      latitude: currentRoute.latitude?.toString() ?? "0.0",
+      longitude: currentRoute.longitude?.toString() ?? "0.0",
+      deliveryDate: shipment.deliveryDate ?? DateTime.now().toIso8601String(),
       destinationType: shipment.destinationLocationType,
       approval: SpecimenDeliveryApproval(
         approvalNo: deliveryApproval.approvalNo,
@@ -768,7 +777,7 @@ class SyncService {
         phone: deliveryApproval.phone,
         designation: deliveryApproval.designation,
         signature: deliveryApproval.signature,
-        approvalDate: DateTime.now().toIso8601String(),
+        approvalDate: deliveryApproval.approvalDate ?? DateTime.now().toIso8601String(),
       ),
     )).toList();
 
@@ -843,7 +852,7 @@ class SyncService {
           destinationType: shipment.destinationLocationType,
           sampleType: shipment.sampleType,
           sampleCount: shipment.sampleCount,
-          pickupDate: DateTime.now().toIso8601String(),
+          pickupDate: shipment.pickupDate ?? DateTime.now().toIso8601String(),
         ),
         samples: [], // Sample codes would need to be stored
         approval: ResultPickupApproval(
@@ -853,7 +862,7 @@ class SyncService {
           phone: approval.phone,
           designation: approval.designation,
           signature: approval.signature,
-          approvalDate: DateTime.now().toIso8601String(),
+          approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
         ),
       );
 
@@ -910,7 +919,7 @@ class SyncService {
         destinationType: shipment.destinationLocationType,
         sampleType: shipment.sampleType,
         sampleCount: shipment.sampleCount,
-        pickupDate: DateTime.now().toIso8601String(),
+        pickupDate: shipment.pickupDate ?? DateTime.now().toIso8601String(),
       ),
       samples: sampleCodes,
       approval: ResultPickupApproval(
@@ -920,7 +929,7 @@ class SyncService {
         phone: approval.phone,
         designation: approval.designation,
         signature: approval.signature,
-        approvalDate: DateTime.now().toIso8601String(),
+        approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
       ),
     );
 
@@ -994,7 +1003,7 @@ class SyncService {
           destinationType: shipment.destinationLocationType,
           sampleType: shipment.sampleType,
           sampleCount: shipment.sampleCount,
-          deliveryDate: DateTime.now().toIso8601String(),
+          deliveryDate: shipment.deliveryDate ?? DateTime.now().toIso8601String(),
         ),
         samples: [], // Sample codes would need to be stored
         approval: ResultDeliveryApproval(
@@ -1004,7 +1013,7 @@ class SyncService {
           phone: approval.phone,
           designation: approval.designation,
           signature: approval.signature,
-          approvalDate: DateTime.now().toIso8601String(),
+          approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
         ),
       );
 
@@ -1049,7 +1058,7 @@ class SyncService {
         destinationType: shipment.destinationLocationType,
         sampleType: shipment.sampleType,
         sampleCount: shipment.sampleCount,
-        deliveryDate: DateTime.now().toIso8601String(),
+        deliveryDate: shipment.deliveryDate ?? DateTime.now().toIso8601String(),
       ),
       samples: sampleCodes,
       approval: ResultDeliveryApproval(
@@ -1059,7 +1068,7 @@ class SyncService {
         phone: approval.phone,
         designation: approval.designation,
         signature: approval.signature,
-        approvalDate: DateTime.now().toIso8601String(),
+        approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
       ),
     );
 

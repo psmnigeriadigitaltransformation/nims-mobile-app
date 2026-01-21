@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: (db, version) async {
 
         // Tables
@@ -200,6 +200,7 @@ class NIMSDatabase {
             sample_count INT NOT NULL,
             shipment_status TEXT NOT NULL DEFAULT 'pending',
             pickup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            delivery_date TEXT,
             sync_status TEXT NOT NULL DEFAULT 'pending',
             FOREIGN KEY (route_no) REFERENCES routes(route_no)
                 ON DELETE CASCADE
@@ -275,6 +276,12 @@ class NIMSDatabase {
           // Add origin_facility_name column to shipments table
           await db.execute('''
             ALTER TABLE shipments ADD COLUMN origin_facility_name TEXT NOT NULL DEFAULT ''
+          ''');
+        }
+        if (oldVersion < 5) {
+          // Add delivery_date column to shipments table
+          await db.execute('''
+            ALTER TABLE shipments ADD COLUMN delivery_date TEXT
           ''');
         }
       },

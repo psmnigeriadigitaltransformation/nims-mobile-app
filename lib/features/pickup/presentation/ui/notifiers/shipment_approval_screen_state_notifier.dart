@@ -87,17 +87,14 @@ class ShipmentApprovalScreenStateNotifier
     final user = await ref.read(authRepositoryProvider).getUser();
     final lsp = await localService.getFirstCachedLsp();
 
-    // Get etoken for approval number
-    final approvalEToken = await localService.getNextEToken();
-    if (approvalEToken == null) {
-      state = state.copyWith(
-        isSavingShipmentRoute: false,
-        alert: Alert(show: true, message: "No eTokens available. Please download more eTokens."),
-      );
-      return;
-    }
+    // Extract etoken_serial from the first shipment's manifest_no
+    // Format: {LSP}-{etoken_serial} -> e.g., "LSP1-001" -> "001"
+    final firstManifestNo = state.shipments.first.manifestNo;
+    final manifestParts = firstManifestNo.split('-');
+    final etokenSerial = manifestParts.length > 1 ? manifestParts.sublist(1).join('-') : firstManifestNo;
 
-    final approvalNo = '${lsp?.display ?? "UNKNOWN"}-AP-${approvalEToken.serialNo}';
+    // Generate approval_no with -PK suffix for pickup approval
+    final approvalNo = '${lsp?.display ?? "UNKNOWN"}-AP-$etokenSerial-PK';
     final routeNo = state.shipments.first.routeNo;
     final shipmentRoute = DomainShipmentRoute(
       routeNo: routeNo,
@@ -120,6 +117,7 @@ class ShipmentApprovalScreenStateNotifier
       phone: state.phoneNumber,
       designation: state.designation,
       signature: state.signature,
+      approvalDate: DateTime.now().toIso8601String(),
     );
 
     final result = await ref
@@ -128,8 +126,7 @@ class ShipmentApprovalScreenStateNotifier
 
     switch (result) {
       case Success<bool>():
-        // Delete used etoken after successful save
-        await localService.deleteEToken(approvalEToken.etokenId!);
+        // No etoken to delete - approval reuses etoken_serial from manifest
         ref.invalidate(dashboardScreenStateNotifierProvider);
         state = state.copyWith(
           showSuccessDialog: true,

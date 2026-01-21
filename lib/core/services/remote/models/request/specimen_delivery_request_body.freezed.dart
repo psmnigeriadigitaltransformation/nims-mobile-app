@@ -29,10 +29,10 @@ mixin _$SpecimenDeliveryRequest {
   String get shipmentNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'manifest_no')
   String get manifestNo => throw _privateConstructorUsedError;
-  @JsonKey(name: 'delivery_latitude')
-  String get deliveryLatitude => throw _privateConstructorUsedError;
-  @JsonKey(name: 'delivery_longitude')
-  String get deliveryLongitude => throw _privateConstructorUsedError;
+  @JsonKey(name: 'latitude')
+  String get latitude => throw _privateConstructorUsedError;
+  @JsonKey(name: 'longitude')
+  String get longitude => throw _privateConstructorUsedError;
   @JsonKey(name: 'delivery_date')
   String get deliveryDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'destination_type')
@@ -60,8 +60,8 @@ abstract class $SpecimenDeliveryRequestCopyWith<$Res> {
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'shipment_no') String shipmentNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
-    @JsonKey(name: 'delivery_latitude') String deliveryLatitude,
-    @JsonKey(name: 'delivery_longitude') String deliveryLongitude,
+    @JsonKey(name: 'latitude') String latitude,
+    @JsonKey(name: 'longitude') String longitude,
     @JsonKey(name: 'delivery_date') String deliveryDate,
     @JsonKey(name: 'destination_type') String destinationType,
     SpecimenDeliveryApproval approval,
@@ -91,8 +91,8 @@ class _$SpecimenDeliveryRequestCopyWithImpl<
     Object? routeNo = null,
     Object? shipmentNo = null,
     Object? manifestNo = null,
-    Object? deliveryLatitude = null,
-    Object? deliveryLongitude = null,
+    Object? latitude = null,
+    Object? longitude = null,
     Object? deliveryDate = null,
     Object? destinationType = null,
     Object? approval = null,
@@ -111,13 +111,13 @@ class _$SpecimenDeliveryRequestCopyWithImpl<
                 ? _value.manifestNo
                 : manifestNo // ignore: cast_nullable_to_non_nullable
                       as String,
-            deliveryLatitude: null == deliveryLatitude
-                ? _value.deliveryLatitude
-                : deliveryLatitude // ignore: cast_nullable_to_non_nullable
+            latitude: null == latitude
+                ? _value.latitude
+                : latitude // ignore: cast_nullable_to_non_nullable
                       as String,
-            deliveryLongitude: null == deliveryLongitude
-                ? _value.deliveryLongitude
-                : deliveryLongitude // ignore: cast_nullable_to_non_nullable
+            longitude: null == longitude
+                ? _value.longitude
+                : longitude // ignore: cast_nullable_to_non_nullable
                       as String,
             deliveryDate: null == deliveryDate
                 ? _value.deliveryDate
@@ -160,8 +160,8 @@ abstract class _$$SpecimenDeliveryRequestImplCopyWith<$Res>
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'shipment_no') String shipmentNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
-    @JsonKey(name: 'delivery_latitude') String deliveryLatitude,
-    @JsonKey(name: 'delivery_longitude') String deliveryLongitude,
+    @JsonKey(name: 'latitude') String latitude,
+    @JsonKey(name: 'longitude') String longitude,
     @JsonKey(name: 'delivery_date') String deliveryDate,
     @JsonKey(name: 'destination_type') String destinationType,
     SpecimenDeliveryApproval approval,
@@ -192,8 +192,8 @@ class __$$SpecimenDeliveryRequestImplCopyWithImpl<$Res>
     Object? routeNo = null,
     Object? shipmentNo = null,
     Object? manifestNo = null,
-    Object? deliveryLatitude = null,
-    Object? deliveryLongitude = null,
+    Object? latitude = null,
+    Object? longitude = null,
     Object? deliveryDate = null,
     Object? destinationType = null,
     Object? approval = null,
@@ -212,13 +212,13 @@ class __$$SpecimenDeliveryRequestImplCopyWithImpl<$Res>
             ? _value.manifestNo
             : manifestNo // ignore: cast_nullable_to_non_nullable
                   as String,
-        deliveryLatitude: null == deliveryLatitude
-            ? _value.deliveryLatitude
-            : deliveryLatitude // ignore: cast_nullable_to_non_nullable
+        latitude: null == latitude
+            ? _value.latitude
+            : latitude // ignore: cast_nullable_to_non_nullable
                   as String,
-        deliveryLongitude: null == deliveryLongitude
-            ? _value.deliveryLongitude
-            : deliveryLongitude // ignore: cast_nullable_to_non_nullable
+        longitude: null == longitude
+            ? _value.longitude
+            : longitude // ignore: cast_nullable_to_non_nullable
                   as String,
         deliveryDate: null == deliveryDate
             ? _value.deliveryDate
@@ -244,8 +244,8 @@ class _$SpecimenDeliveryRequestImpl implements _SpecimenDeliveryRequest {
     @JsonKey(name: 'route_no') required this.routeNo,
     @JsonKey(name: 'shipment_no') required this.shipmentNo,
     @JsonKey(name: 'manifest_no') required this.manifestNo,
-    @JsonKey(name: 'delivery_latitude') required this.deliveryLatitude,
-    @JsonKey(name: 'delivery_longitude') required this.deliveryLongitude,
+    @JsonKey(name: 'latitude') required this.latitude,
+    @JsonKey(name: 'longitude') required this.longitude,
     @JsonKey(name: 'delivery_date') required this.deliveryDate,
     @JsonKey(name: 'destination_type') required this.destinationType,
     required this.approval,
@@ -264,11 +264,11 @@ class _$SpecimenDeliveryRequestImpl implements _SpecimenDeliveryRequest {
   @JsonKey(name: 'manifest_no')
   final String manifestNo;
   @override
-  @JsonKey(name: 'delivery_latitude')
-  final String deliveryLatitude;
+  @JsonKey(name: 'latitude')
+  final String latitude;
   @override
-  @JsonKey(name: 'delivery_longitude')
-  final String deliveryLongitude;
+  @JsonKey(name: 'longitude')
+  final String longitude;
   @override
   @JsonKey(name: 'delivery_date')
   final String deliveryDate;
@@ -280,7 +280,7 @@ class _$SpecimenDeliveryRequestImpl implements _SpecimenDeliveryRequest {
 
   @override
   String toString() {
-    return 'SpecimenDeliveryRequest(routeNo: $routeNo, shipmentNo: $shipmentNo, manifestNo: $manifestNo, deliveryLatitude: $deliveryLatitude, deliveryLongitude: $deliveryLongitude, deliveryDate: $deliveryDate, destinationType: $destinationType, approval: $approval)';
+    return 'SpecimenDeliveryRequest(routeNo: $routeNo, shipmentNo: $shipmentNo, manifestNo: $manifestNo, latitude: $latitude, longitude: $longitude, deliveryDate: $deliveryDate, destinationType: $destinationType, approval: $approval)';
   }
 
   @override
@@ -293,10 +293,10 @@ class _$SpecimenDeliveryRequestImpl implements _SpecimenDeliveryRequest {
                 other.shipmentNo == shipmentNo) &&
             (identical(other.manifestNo, manifestNo) ||
                 other.manifestNo == manifestNo) &&
-            (identical(other.deliveryLatitude, deliveryLatitude) ||
-                other.deliveryLatitude == deliveryLatitude) &&
-            (identical(other.deliveryLongitude, deliveryLongitude) ||
-                other.deliveryLongitude == deliveryLongitude) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude) &&
             (identical(other.deliveryDate, deliveryDate) ||
                 other.deliveryDate == deliveryDate) &&
             (identical(other.destinationType, destinationType) ||
@@ -312,8 +312,8 @@ class _$SpecimenDeliveryRequestImpl implements _SpecimenDeliveryRequest {
     routeNo,
     shipmentNo,
     manifestNo,
-    deliveryLatitude,
-    deliveryLongitude,
+    latitude,
+    longitude,
     deliveryDate,
     destinationType,
     approval,
@@ -341,9 +341,8 @@ abstract class _SpecimenDeliveryRequest implements SpecimenDeliveryRequest {
     @JsonKey(name: 'route_no') required final String routeNo,
     @JsonKey(name: 'shipment_no') required final String shipmentNo,
     @JsonKey(name: 'manifest_no') required final String manifestNo,
-    @JsonKey(name: 'delivery_latitude') required final String deliveryLatitude,
-    @JsonKey(name: 'delivery_longitude')
-    required final String deliveryLongitude,
+    @JsonKey(name: 'latitude') required final String latitude,
+    @JsonKey(name: 'longitude') required final String longitude,
     @JsonKey(name: 'delivery_date') required final String deliveryDate,
     @JsonKey(name: 'destination_type') required final String destinationType,
     required final SpecimenDeliveryApproval approval,
@@ -362,11 +361,11 @@ abstract class _SpecimenDeliveryRequest implements SpecimenDeliveryRequest {
   @JsonKey(name: 'manifest_no')
   String get manifestNo;
   @override
-  @JsonKey(name: 'delivery_latitude')
-  String get deliveryLatitude;
+  @JsonKey(name: 'latitude')
+  String get latitude;
   @override
-  @JsonKey(name: 'delivery_longitude')
-  String get deliveryLongitude;
+  @JsonKey(name: 'longitude')
+  String get longitude;
   @override
   @JsonKey(name: 'delivery_date')
   String get deliveryDate;

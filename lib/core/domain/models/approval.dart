@@ -14,8 +14,8 @@ class Approval with _$Approval {
     required String phone,
     required String designation,
     required String signature,
+    @JsonKey(name: 'approval_date') String? approvalDate,
     @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
-    // @JsonKey(name: 'approval_date') String? approvalDate,
   }) = _Approval;
 
   factory Approval.fromJson(Map<String, dynamic> json) =>

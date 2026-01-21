@@ -83,8 +83,8 @@ class ShipmentScreenStateNotifier
       throw Exception("No LSP available. Please sync your data.");
     }
 
-    // We need 1 etoken for the route + 1 etoken per shipment
-    final requiredETokenCount = 1 + manifests.length;
+    // We only need 1 etoken for the route
+    // Shipments extract their etoken_serial from the manifest_no
     final usedETokens = <DomainETokenData>[];
 
     // Get etoken for route
@@ -94,21 +94,21 @@ class ShipmentScreenStateNotifier
     }
     usedETokens.add(routeEToken);
 
-    // Generate route number
+    // Generate route number with fresh etoken
     final routeNo = '${lsp.display}-RO-${routeEToken.serialNo}';
 
-    // Get etokens for each shipment and delete the route etoken so we get new ones
+    // Delete the route etoken after use
     await localService.deleteEToken(routeEToken.etokenId!);
 
     final shipments = <DomainShipment>[];
     for (final manifest in manifests) {
-      final shipmentEToken = await localService.getNextEToken();
-      if (shipmentEToken == null) {
-        throw Exception("Not enough eTokens available. Please download more eTokens before creating shipments. (Need ${requiredETokenCount - usedETokens.length} more)");
-      }
-      usedETokens.add(shipmentEToken);
+      // Extract etoken_serial from manifest_no (format: {LSP}-{etoken_serial})
+      // e.g., "LSP1-001" -> etoken_serial = "001"
+      final manifestParts = manifest.manifestNo.split('-');
+      final etokenSerial = manifestParts.length > 1 ? manifestParts.sublist(1).join('-') : manifest.manifestNo;
 
-      final shipmentNo = '${lsp.display}-SH-${shipmentEToken.serialNo}';
+      // Generate shipment_no using the same etoken_serial as the manifest
+      final shipmentNo = '${lsp.display}-SH-$etokenSerial';
 
       shipments.add(DomainShipment(
         shipmentNo: shipmentNo,
@@ -123,10 +123,8 @@ class ShipmentScreenStateNotifier
         sampleType: manifest.sampleType,
         sampleCount: manifest.sampleCount,
         routeNo: routeNo,
+        pickupDate: DateTime.now().toIso8601String(),
       ));
-
-      // Delete the used shipment etoken so next iteration gets a new one
-      await localService.deleteEToken(shipmentEToken.etokenId!);
     }
 
     if (facilitiesResult is Success && locationsResult is Success) {

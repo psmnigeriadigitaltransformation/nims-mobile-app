@@ -33,6 +33,8 @@ mixin _$Approval {
   String get phone => throw _privateConstructorUsedError;
   String get designation => throw _privateConstructorUsedError;
   String get signature => throw _privateConstructorUsedError;
+  @JsonKey(name: 'approval_date')
+  String? get approvalDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'sync_status')
   String get syncStatus => throw _privateConstructorUsedError;
 
@@ -60,6 +62,7 @@ abstract class $ApprovalCopyWith<$Res> {
     String phone,
     String designation,
     String signature,
+    @JsonKey(name: 'approval_date') String? approvalDate,
     @JsonKey(name: 'sync_status') String syncStatus,
   });
 }
@@ -87,6 +90,7 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
     Object? phone = null,
     Object? designation = null,
     Object? signature = null,
+    Object? approvalDate = freezed,
     Object? syncStatus = null,
   }) {
     return _then(
@@ -123,6 +127,10 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
                 ? _value.signature
                 : signature // ignore: cast_nullable_to_non_nullable
                       as String,
+            approvalDate: freezed == approvalDate
+                ? _value.approvalDate
+                : approvalDate // ignore: cast_nullable_to_non_nullable
+                      as String?,
             syncStatus: null == syncStatus
                 ? _value.syncStatus
                 : syncStatus // ignore: cast_nullable_to_non_nullable
@@ -151,6 +159,7 @@ abstract class _$$ApprovalImplCopyWith<$Res>
     String phone,
     String designation,
     String signature,
+    @JsonKey(name: 'approval_date') String? approvalDate,
     @JsonKey(name: 'sync_status') String syncStatus,
   });
 }
@@ -177,6 +186,7 @@ class __$$ApprovalImplCopyWithImpl<$Res>
     Object? phone = null,
     Object? designation = null,
     Object? signature = null,
+    Object? approvalDate = freezed,
     Object? syncStatus = null,
   }) {
     return _then(
@@ -213,6 +223,10 @@ class __$$ApprovalImplCopyWithImpl<$Res>
             ? _value.signature
             : signature // ignore: cast_nullable_to_non_nullable
                   as String,
+        approvalDate: freezed == approvalDate
+            ? _value.approvalDate
+            : approvalDate // ignore: cast_nullable_to_non_nullable
+                  as String?,
         syncStatus: null == syncStatus
             ? _value.syncStatus
             : syncStatus // ignore: cast_nullable_to_non_nullable
@@ -234,6 +248,7 @@ class _$ApprovalImpl implements _Approval {
     required this.phone,
     required this.designation,
     required this.signature,
+    @JsonKey(name: 'approval_date') this.approvalDate,
     @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
   });
 
@@ -261,12 +276,15 @@ class _$ApprovalImpl implements _Approval {
   @override
   final String signature;
   @override
+  @JsonKey(name: 'approval_date')
+  final String? approvalDate;
+  @override
   @JsonKey(name: 'sync_status')
   final String syncStatus;
 
   @override
   String toString() {
-    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature, syncStatus: $syncStatus)';
+    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature, approvalDate: $approvalDate, syncStatus: $syncStatus)';
   }
 
   @override
@@ -287,6 +305,8 @@ class _$ApprovalImpl implements _Approval {
                 other.designation == designation) &&
             (identical(other.signature, signature) ||
                 other.signature == signature) &&
+            (identical(other.approvalDate, approvalDate) ||
+                other.approvalDate == approvalDate) &&
             (identical(other.syncStatus, syncStatus) ||
                 other.syncStatus == syncStatus));
   }
@@ -303,6 +323,7 @@ class _$ApprovalImpl implements _Approval {
     phone,
     designation,
     signature,
+    approvalDate,
     syncStatus,
   );
 
@@ -330,6 +351,7 @@ abstract class _Approval implements Approval {
     required final String phone,
     required final String designation,
     required final String signature,
+    @JsonKey(name: 'approval_date') final String? approvalDate,
     @JsonKey(name: 'sync_status') final String syncStatus,
   }) = _$ApprovalImpl;
 
@@ -356,6 +378,9 @@ abstract class _Approval implements Approval {
   String get designation;
   @override
   String get signature;
+  @override
+  @JsonKey(name: 'approval_date')
+  String? get approvalDate;
   @override
   @JsonKey(name: 'sync_status')
   String get syncStatus;

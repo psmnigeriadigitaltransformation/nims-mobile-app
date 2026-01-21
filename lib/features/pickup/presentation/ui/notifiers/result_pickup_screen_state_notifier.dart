@@ -162,7 +162,7 @@ class ResultPickUpScreenStateNotifier
         return;
       }
 
-      // Get etokens for route, shipment, and approval
+      // Get 2 etokens: 1 for route, 1 for shipment+approval
       final routeEToken = await localService.getNextEToken();
       if (routeEToken == null) {
         state = AsyncData(currentData.copyWith(
@@ -183,19 +183,13 @@ class ResultPickUpScreenStateNotifier
       }
       await localService.deleteEToken(shipmentEToken.etokenId!);
 
-      final approvalEToken = await localService.getNextEToken();
-      if (approvalEToken == null) {
-        state = AsyncData(currentData.copyWith(
-          isSubmitting: false,
-          alert: Alert(show: true, message: "No eTokens available. Please download more eTokens."),
-        ));
-        return;
-      }
-
       final lspDisplay = lsp?.display ?? "UNKNOWN";
+      // Route gets its own fresh etoken
       final routeNo = '$lspDisplay-RO-${routeEToken.serialNo}';
+      // Shipment and approval share the same etoken
       final shipmentNo = '$lspDisplay-SH-${shipmentEToken.serialNo}';
-      final approvalNo = '$lspDisplay-AP-${approvalEToken.serialNo}';
+      // Approval uses the same etoken as shipment with -PK suffix
+      final approvalNo = '$lspDisplay-AP-${shipmentEToken.serialNo}-PK';
 
       // Create route
       final route = DomainShipmentRoute(
@@ -226,6 +220,7 @@ class ResultPickUpScreenStateNotifier
         sampleType: "Result",
         sampleCount: currentData.selectedResultCodes.length,
         shipmentStatus: 'pending',
+        pickupDate: DateTime.now().toIso8601String(),
         syncStatus: 'pending',
       );
 
@@ -238,6 +233,7 @@ class ResultPickUpScreenStateNotifier
         phone: currentData.phoneNumber,
         designation: currentData.designation,
         signature: currentData.signature,
+        approvalDate: DateTime.now().toIso8601String(),
         syncStatus: 'pending',
       );
 
@@ -253,8 +249,7 @@ class ResultPickUpScreenStateNotifier
 
       switch (result) {
         case Success<bool>():
-          // Delete used approval etoken after successful save
-          await localService.deleteEToken(approvalEToken.etokenId!);
+          // No extra etoken to delete - shipment and approval share the same etoken
           developer.log(
             "Result pickup saved successfully",
             name: "ResultPickUpScreenStateNotifier:onSubmitResultPickup",

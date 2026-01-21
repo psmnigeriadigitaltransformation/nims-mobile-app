@@ -65,15 +65,19 @@ class NIMSAPIService {
     required String deviceName,
   }) async {
     try {
+
+      final data = {
+        "loginId": loginId,
+        "password": password,
+        "deviceId": deviceId,
+        "deviceType": deviceType,
+        "deviceName": deviceName,
+      };
+      await _saveToJsonFile("login", data);
+
       final response = await dio.post(
         "auth/login",
-        data: {
-          "loginId": loginId,
-          "password": password,
-          "deviceId": deviceId,
-          "deviceType": deviceType,
-          "deviceName": deviceName,
-        },
+        data: data,
       );
       developer.log(
         "api login response: $response",
@@ -218,9 +222,12 @@ class NIMSAPIService {
     required List<ManifestRequestItem> manifests,
   }) async {
     try {
+      final data = manifests.map((manifest) => manifest.toJson()).toList();
+      await _saveToJsonFile("createManifests", data);
+
       final response = await dio.post(
         "manifests/create",
-        data: manifests.map((manifest) => manifest.toJson()).toList(),
+        data: data,
       );
       developer.log(
         "api create manifests response: $response",
@@ -245,9 +252,12 @@ class NIMSAPIService {
     required UpdateManifestRequest manifest,
   }) async {
     try {
+      final data = manifest.toJson();
+      await _saveToJsonFile("updateManifest", data);
+
       final response = await dio.post(
         "manifests/update",
-        data: manifest.toJson(),
+        data: data,
       );
       developer.log(
         "api update manifests response: $response",
@@ -272,9 +282,12 @@ class NIMSAPIService {
     required DeleteManifestRequest manifest,
   }) async {
     try {
+      final data = manifest.toJson();
+      await _saveToJsonFile("deleteManifest", data);
+
       final response = await dio.post(
         "manifests/delete",
-        data: manifest.toJson(),
+        data: data,
       );
       developer.log(
         "api delete manifests response: $response",
@@ -299,9 +312,12 @@ class NIMSAPIService {
     required UpdateSampleRequest sample,
   }) async {
     try {
+      final data = sample.toJson();
+      await _saveToJsonFile("updateSample", data);
+
       final response = await dio.post(
         "sample/update",
-        data: sample.toJson(),
+        data: data,
       );
       developer.log(
         "api update sample response: $response",
@@ -326,9 +342,12 @@ class NIMSAPIService {
     required DeleteSampleRequest sample,
   }) async {
     try {
+      final data = sample.toJson();
+      await _saveToJsonFile("deleteSample", data);
+
       final response = await dio.post(
         "sample/delete",
-        data: sample.toJson(),
+        data: data,
       );
       developer.log(
         "api delete sample response: $response",
@@ -353,9 +372,12 @@ class NIMSAPIService {
     required RejectSampleRequest sample,
   }) async {
     try {
+      final data = sample.toJson();
+      await _saveToJsonFile("rejectSample", data);
+
       final response = await dio.post(
         "sample/reject",
-        data: sample.toJson(),
+        data: data,
       );
       developer.log(
         "api reject sample response: $response",
@@ -380,14 +402,13 @@ class NIMSAPIService {
     required CreateShipmentRouteRequest shipmentRoute,
   }) async {
     try {
-      // API expects the route data wrapped in a 'route' array
+      final data = [shipmentRoute.toJson()];
+      await _saveToJsonFile("createShipmentRoute", data);
+
       final response = await dio.post(
         "shipment/sample/pickup",
-        data: [shipmentRoute.toJson()],
+        data: data,
       );
-      final data = [shipmentRoute.toJson()];
-      // Save shipment route data to JSON file for debugging
-      await _saveToJsonFile('shipment_route_request', data);
 
       developer.log(
         "api create shipment data: $data",
@@ -418,9 +439,12 @@ class NIMSAPIService {
     required List<SpecimenDeliveryRequest> deliveries,
   }) async {
     try {
+      final data = deliveries.map((delivery) => delivery.toJson()).toList();
+      await _saveToJsonFile("deliverSpecimenShipments", data);
+
       final response = await dio.post(
         "shipment/sample/deliver",
-        data: deliveries.map((delivery) => delivery.toJson()).toList(),
+        data: data,
       );
       developer.log(
         "api deliver specimen shipments response: $response",
@@ -445,9 +469,12 @@ class NIMSAPIService {
     required List<ResultPickupRequest> pickups,
   }) async {
     try {
+      final data = pickups.map((pickup) => pickup.toJson()).toList();
+      await _saveToJsonFile("pickupResults", data);
+
       final response = await dio.post(
         "shipment/result/pickup",
-        data: pickups.map((pickup) => pickup.toJson()).toList(),
+        data: data,
       );
       developer.log(
         "api pickup results response: $response",
@@ -473,9 +500,12 @@ class NIMSAPIService {
     required List<ResultDeliveryRequest> deliveries,
   }) async {
     try {
+      final data = deliveries.map((delivery) => delivery.toJson()).toList();
+      await _saveToJsonFile("deliverResults", data);
+
       final response = await dio.post(
         "shipment/result/deliver",
-        data: deliveries.map((delivery) => delivery.toJson()).toList(),
+        data: data,
       );
       developer.log(
         "api deliver results response: $response",

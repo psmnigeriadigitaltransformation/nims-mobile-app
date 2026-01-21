@@ -22,6 +22,8 @@ _$ShipmentImpl _$$ShipmentImplFromJson(Map<String, dynamic> json) =>
       sampleType: json['sample_type'] as String,
       sampleCount: (json['sample_count'] as num).toInt(),
       shipmentStatus: json['shipment_status'] as String? ?? 'pending',
+      pickupDate: json['pickup_date'] as String?,
+      deliveryDate: json['delivery_date'] as String?,
       syncStatus: json['sync_status'] as String? ?? 'pending',
     );
 
@@ -41,5 +43,7 @@ Map<String, dynamic> _$$ShipmentImplToJson(_$ShipmentImpl instance) =>
       'sample_type': instance.sampleType,
       'sample_count': instance.sampleCount,
       'shipment_status': instance.shipmentStatus,
+      'pickup_date': instance.pickupDate,
+      'delivery_date': instance.deliveryDate,
       'sync_status': instance.syncStatus,
     };

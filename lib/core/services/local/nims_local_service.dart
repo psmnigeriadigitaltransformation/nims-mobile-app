@@ -1067,9 +1067,50 @@ class NIMSLocalService {
     );
     totalCount += Sqflite.firstIntValue(routesResult) ?? 0;
 
+    // Count pending approvals
+    final approvalsResult = await db.rawQuery(
+      "SELECT COUNT(*) as count FROM approvals WHERE sync_status = 'pending' OR sync_status = 'failed'",
+    );
+    totalCount += Sqflite.firstIntValue(approvalsResult) ?? 0;
+
     developer.log(
       "Total pending count: $totalCount",
       name: "NIMSLocalService:getTotalPendingCount",
+    );
+    return totalCount;
+  }
+
+  /// Get count of records with 'failed' sync status across all tables
+  Future<int> getFailedSyncCount() async {
+    developer.log(
+      "Getting failed sync count",
+      name: "NIMSLocalService:getFailedSyncCount",
+    );
+    final db = await NIMSDatabase().instance;
+
+    int totalCount = 0;
+
+    // Count failed manifests
+    final manifestsResult = await db.rawQuery(
+      "SELECT COUNT(*) as count FROM manifests WHERE sync_status = 'failed'",
+    );
+    totalCount += Sqflite.firstIntValue(manifestsResult) ?? 0;
+
+    // Count failed routes
+    final routesResult = await db.rawQuery(
+      "SELECT COUNT(*) as count FROM routes WHERE sync_status = 'failed'",
+    );
+    totalCount += Sqflite.firstIntValue(routesResult) ?? 0;
+
+    // Count failed approvals
+    final approvalsResult = await db.rawQuery(
+      "SELECT COUNT(*) as count FROM approvals WHERE sync_status = 'failed'",
+    );
+    totalCount += Sqflite.firstIntValue(approvalsResult) ?? 0;
+
+    developer.log(
+      "Total failed count: $totalCount",
+      name: "NIMSLocalService:getFailedSyncCount",
     );
     return totalCount;
   }
@@ -1146,6 +1187,21 @@ class NIMSLocalService {
     await db.update(
       'shipments',
       {'shipment_status': status},
+      where: 'shipment_no = ?',
+      whereArgs: [shipmentNo],
+    );
+  }
+
+  /// Update shipment delivery date when shipment is delivered
+  Future<void> updateShipmentDeliveryDate(String shipmentNo, String deliveryDate) async {
+    developer.log(
+      "Updating shipment $shipmentNo delivery_date to $deliveryDate",
+      name: "NIMSLocalService:updateShipmentDeliveryDate",
+    );
+    final db = await NIMSDatabase().instance;
+    await db.update(
+      'shipments',
+      {'delivery_date': deliveryDate},
       where: 'shipment_no = ?',
       whereArgs: [shipmentNo],
     );

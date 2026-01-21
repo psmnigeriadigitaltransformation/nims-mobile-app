@@ -342,6 +342,13 @@ class ShipmentDetailsScreen extends ConsumerWidget {
       ),
       child: Column(
         children: [
+          /// Sync Status Indicator
+          Align(
+            alignment: Alignment.centerRight,
+            child: _buildSyncStatusChip(context, approval.syncStatus),
+          ),
+          const SizedBox(height: 8),
+
           /// Signature
           if (approval.signature.isNotEmpty)
             Container(
@@ -365,6 +372,62 @@ class ShipmentDetailsScreen extends ConsumerWidget {
 
           /// Phone
           _buildApprovalInfoRow(context, "Phone Number", approval.phone),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSyncStatusChip(BuildContext context, String syncStatus) {
+    Color statusColor;
+    Color backgroundColor;
+    IconData icon;
+    String label;
+
+    switch (syncStatus.toLowerCase()) {
+      case 'synced':
+        statusColor = NIMSColors.green05;
+        backgroundColor = NIMSColors.green02.withAlpha(50);
+        icon = Icons.cloud_done_outlined;
+        label = 'Synced';
+        break;
+      case 'pending':
+        statusColor = NIMSColors.orange05;
+        backgroundColor = NIMSColors.orange02.withAlpha(50);
+        icon = Icons.cloud_upload_outlined;
+        label = 'Pending';
+        break;
+      case 'failed':
+        statusColor = Colors.red;
+        backgroundColor = Colors.red.withAlpha(50);
+        icon = Icons.cloud_off_outlined;
+        label = 'Failed';
+        break;
+      default:
+        statusColor = Colors.grey;
+        backgroundColor = Colors.grey.withAlpha(50);
+        icon = Icons.cloud_outlined;
+        label = syncStatus;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: statusColor, width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: statusColor),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: statusColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ],
       ),
     );

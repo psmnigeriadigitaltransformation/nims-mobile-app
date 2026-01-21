@@ -16,6 +16,7 @@ _$ApprovalImpl _$$ApprovalImplFromJson(Map<String, dynamic> json) =>
       phone: json['phone'] as String,
       designation: json['designation'] as String,
       signature: json['signature'] as String,
+      approvalDate: json['approval_date'] as String?,
       syncStatus: json['sync_status'] as String? ?? 'pending',
     );
 
@@ -29,5 +30,6 @@ Map<String, dynamic> _$$ApprovalImplToJson(_$ApprovalImpl instance) =>
       'phone': instance.phone,
       'designation': instance.designation,
       'signature': instance.signature,
+      'approval_date': instance.approvalDate,
       'sync_status': instance.syncStatus,
     };
