@@ -40,7 +40,7 @@ class NIMSErrorContent extends StatelessWidget {
             padding: EdgeInsetsGeometry.symmetric(horizontal: 24, vertical: 16),
             child: Text(
               message,
-              maxLines: 3,
+              // maxLines: 3,
               style: TextTheme.of(context).bodySmall,
               textAlign: TextAlign.center,
             ),

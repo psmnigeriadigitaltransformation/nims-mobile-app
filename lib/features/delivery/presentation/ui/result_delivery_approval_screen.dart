@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nims_mobile_app/core/domain/models/facility.dart';
+import 'package:nims_mobile_app/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment_route.dart';
 import 'package:nims_mobile_app/core/ui/screens/nims_base_screen.dart';
@@ -15,16 +18,12 @@ import '../../providers.dart';
 
 class ResultDeliveryApprovalScreen extends ConsumerStatefulWidget {
   final ShipmentRoute route;
-  final List<Shipment> shipments;
-  final Facility destinationFacility;
-  final List<String> sampleCodes;
+  final DomainShipment shipment;
 
   const ResultDeliveryApprovalScreen({
     super.key,
     required this.route,
-    required this.shipments,
-    required this.destinationFacility,
-    required this.sampleCodes,
+    required this.shipment,
   });
 
   @override
@@ -38,9 +37,7 @@ class _ResultDeliveryApprovalScreenState
   Widget build(BuildContext context) {
     final args = (
       route: widget.route,
-      shipments: widget.shipments,
-      destinationFacility: widget.destinationFacility,
-      sampleCodes: widget.sampleCodes,
+      shipment: widget.shipment,
     );
 
     ref.listen(
@@ -71,9 +68,14 @@ class _ResultDeliveryApprovalScreenState
       resultDeliveryApprovalScreenStateNotifierProvider(args),
       (prev, next) {
         if (prev?.showSuccessScreen == false && next.showSuccessScreen) {
-          // Navigate to success screen or pop back
-          context.pop();
-          context.pop();
+          // Navigate to result delivery success screen
+          context.pushReplacementNamed(
+            resultDeliverySuccessScreen,
+            queryParameters: {
+              shipmentQueryParam: jsonEncode(widget.shipment.toJson()),
+              destinationFacilityNameQueryParam: widget.route.destinationFacilityName
+            },
+          );
         }
       },
     );
@@ -110,7 +112,7 @@ class _ResultDeliveryApprovalScreenState
             SizedBox(height: 8),
 
             Text(
-              "Result Delivery",
+              widget.route.destinationFacilityName,
               style: TextTheme.of(context).bodySmall,
             ),
             SizedBox(height: 24),
@@ -128,7 +130,7 @@ class _ResultDeliveryApprovalScreenState
             /// -------------------------------------------
             NIMSOriginDestinationLinkView(
               origin: widget.route.originFacilityName,
-              destination: widget.destinationFacility.facilityName ?? "",
+              destination: widget.route.destinationFacilityName,
             ),
 
             SizedBox(height: 40),
@@ -139,7 +141,7 @@ class _ResultDeliveryApprovalScreenState
             Align(
               alignment: AlignmentGeometry.centerLeft,
               child: Text(
-                "Results (${widget.sampleCodes.length})",
+                "Results (${state.results.length})",
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ),
@@ -152,12 +154,12 @@ class _ResultDeliveryApprovalScreenState
                 child: ListView.builder(
                   controller: ScrollController(),
                   shrinkWrap: true,
-                  itemCount: widget.sampleCodes.length,
+                  itemCount: state.results.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
                       child: NIMSSelectedResultCard(
-                        sampleCode: widget.sampleCodes[index],
+                        result: state.results[index],
                       ),
                     );
                   },

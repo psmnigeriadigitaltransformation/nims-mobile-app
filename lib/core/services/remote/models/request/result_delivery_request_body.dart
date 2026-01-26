@@ -9,7 +9,7 @@ class ResultDeliveryRequest with _$ResultDeliveryRequest {
     @JsonKey(name: 'route_no') required String routeNo,
     required String latitude,
     required String longitude,
-    required ResultDeliveryShipment shipment,
+    @JsonKey(name: 'shipment') required ResultDeliveryShipment shipment,
     required List<String> samples,
     required ResultDeliveryApproval approval,
   }) = _ResultDeliveryRequest;

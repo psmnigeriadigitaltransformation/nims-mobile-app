@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
+import 'package:nims_mobile_app/core/services/providers.dart';
 import 'package:nims_mobile_app/core/utils/result.dart';
 import 'package:nims_mobile_app/features/dashboard/presentation/ui/model/routes_screen_state.dart';
 
@@ -19,9 +20,21 @@ class RoutesScreenStateNotifier extends AutoDisposeAsyncNotifier<RoutesScreenSta
         .searchShipmentRoutes("");
 
     if (result is Success<List<ShipmentRoute>>) {
+      final localService = ref.read(nimsLocalServiceProvider);
+
+      // Fetch shipments for each route
+      final routesWithShipments = <RouteWithShipments>[];
+      for (final route in result.payload) {
+        final shipments = await localService.getCachedShipmentsByRouteNo(route.routeNo);
+        routesWithShipments.add(RouteWithShipments(
+          route: route,
+          shipments: shipments,
+        ));
+      }
+
       return RoutesScreenState(
-        routes: result.payload,
-        filteredRoutes: result.payload,
+        routes: routesWithShipments,
+        filteredRoutes: routesWithShipments,
         isLoading: false,
       );
     } else {
@@ -40,11 +53,12 @@ class RoutesScreenStateNotifier extends AutoDisposeAsyncNotifier<RoutesScreenSta
       ));
     } else {
       final lowerQuery = query.toLowerCase();
-      final filtered = currentState.routes.where((route) {
-        return route.routeNo.toLowerCase().contains(lowerQuery) ||
-            route.originFacilityName.toLowerCase().contains(lowerQuery) ||
-            route.destinationFacilityName.toLowerCase().contains(lowerQuery) ||
-            route.lspCode.toLowerCase().contains(lowerQuery);
+      final filtered = currentState.routes.where((routeWithShipments) {
+        return routeWithShipments.routeNo.toLowerCase().contains(lowerQuery) ||
+            routeWithShipments.originFacilityName.toLowerCase().contains(lowerQuery) ||
+            routeWithShipments.destinationFacilityName.toLowerCase().contains(lowerQuery) ||
+            routeWithShipments.lspCode.toLowerCase().contains(lowerQuery) ||
+            (routeWithShipments.payloadType?.toLowerCase().contains(lowerQuery) ?? false);
       }).toList();
 
       state = AsyncData(currentState.copyWith(

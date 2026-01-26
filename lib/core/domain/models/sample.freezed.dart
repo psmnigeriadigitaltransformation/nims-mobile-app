@@ -33,6 +33,7 @@ mixin _$Sample {
   String? get comment => throw _privateConstructorUsedError;
   @JsonKey(name: 'sync_status')
   String get syncStatus => throw _privateConstructorUsedError;
+  String get stage => throw _privateConstructorUsedError;
 
   /// Serializes this Sample to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -57,6 +58,7 @@ abstract class $SampleCopyWith<$Res> {
     String gender,
     String? comment,
     @JsonKey(name: 'sync_status') String syncStatus,
+    String stage,
   });
 }
 
@@ -83,6 +85,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? gender = null,
     Object? comment = freezed,
     Object? syncStatus = null,
+    Object? stage = null,
   }) {
     return _then(
       _value.copyWith(
@@ -118,6 +121,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
                 ? _value.syncStatus
                 : syncStatus // ignore: cast_nullable_to_non_nullable
                       as String,
+            stage: null == stage
+                ? _value.stage
+                : stage // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -141,6 +148,7 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
     String gender,
     String? comment,
     @JsonKey(name: 'sync_status') String syncStatus,
+    String stage,
   });
 }
 
@@ -166,6 +174,7 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? gender = null,
     Object? comment = freezed,
     Object? syncStatus = null,
+    Object? stage = null,
   }) {
     return _then(
       _$SampleImpl(
@@ -201,6 +210,10 @@ class __$$SampleImplCopyWithImpl<$Res>
             ? _value.syncStatus
             : syncStatus // ignore: cast_nullable_to_non_nullable
                   as String,
+        stage: null == stage
+            ? _value.stage
+            : stage // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -218,6 +231,7 @@ class _$SampleImpl implements _Sample {
     required this.gender,
     this.comment,
     @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
+    this.stage = 'Order',
   });
 
   factory _$SampleImpl.fromJson(Map<String, dynamic> json) =>
@@ -243,10 +257,13 @@ class _$SampleImpl implements _Sample {
   @override
   @JsonKey(name: 'sync_status')
   final String syncStatus;
+  @override
+  @JsonKey()
+  final String stage;
 
   @override
   String toString() {
-    return 'Sample(id: $id, manifestNo: $manifestNo, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, comment: $comment, syncStatus: $syncStatus)';
+    return 'Sample(id: $id, manifestNo: $manifestNo, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, comment: $comment, syncStatus: $syncStatus, stage: $stage)';
   }
 
   @override
@@ -265,7 +282,8 @@ class _$SampleImpl implements _Sample {
             (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.comment, comment) || other.comment == comment) &&
             (identical(other.syncStatus, syncStatus) ||
-                other.syncStatus == syncStatus));
+                other.syncStatus == syncStatus) &&
+            (identical(other.stage, stage) || other.stage == stage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -280,6 +298,7 @@ class _$SampleImpl implements _Sample {
     gender,
     comment,
     syncStatus,
+    stage,
   );
 
   /// Create a copy of Sample
@@ -306,6 +325,7 @@ abstract class _Sample implements Sample {
     required final String gender,
     final String? comment,
     @JsonKey(name: 'sync_status') final String syncStatus,
+    final String stage,
   }) = _$SampleImpl;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$SampleImpl.fromJson;
@@ -330,6 +350,8 @@ abstract class _Sample implements Sample {
   @override
   @JsonKey(name: 'sync_status')
   String get syncStatus;
+  @override
+  String get stage;
 
   /// Create a copy of Sample
   /// with the given fields replaced by the non-null parameter values.

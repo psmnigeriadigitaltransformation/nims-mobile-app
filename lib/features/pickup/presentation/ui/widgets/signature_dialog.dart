@@ -69,7 +69,7 @@ class _SignatureDialogState extends State<SignatureDialog> {
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      "Please sign below to confirm the shipment approval",
+                      "Please sign below to confirm the specimen approval",
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),

@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/app/route_name+path+params.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/utils/string_extensions.dart';
 
 class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
   final DomainShipment shipment;
 
   const NIMSSpecimenShipmentSummaryCard({super.key, required this.shipment});
+
+  bool get isResultShipment => shipment.payloadType.toLowerCase() == 'result';
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +60,7 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
                 const SizedBox(width: 20),
                 Expanded(
                   child: Text(
-                    "${shipment.sampleCount} Specimens",
+                    "${shipment.sampleCount} ${shipment.payloadType.capitalize()}${shipment.sampleCount != 1 ? 's' : ''}",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall,
@@ -70,18 +73,25 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          shipment.sampleType,
+                          isResultShipment ? shipment.payloadType.capitalize() : shipment.sampleType,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.end,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
-                      Image.asset(
-                        "lib/core/ui/icons/ic_test_tube.png",
-                        height: 16,
-                        width: 16,
-                      ),
+                      if (isResultShipment)
+                        Icon(
+                          Icons.science_outlined,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.tertiary,
+                        )
+                      else
+                        Image.asset(
+                          "lib/core/ui/icons/ic_test_tube.png",
+                          height: 16,
+                          width: 16,
+                        ),
                     ],
                   ),
                 ),

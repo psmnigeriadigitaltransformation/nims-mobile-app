@@ -16,11 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 );
 
 /// @nodoc
-mixin _$DeliveryApprovalScreenState {
-  MovementType get movementType => throw _privateConstructorUsedError;
-  Facility get destinationFacility => throw _privateConstructorUsedError;
+mixin _$SpecimenDeliveryApprovalScreenState {
+  ShipmentRoute get route => throw _privateConstructorUsedError;
   List<Shipment> get shipments => throw _privateConstructorUsedError;
-  String get routeNo => throw _privateConstructorUsedError;
   String get deliveryTemperature => throw _privateConstructorUsedError;
   String get fullName => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
@@ -30,29 +28,29 @@ mixin _$DeliveryApprovalScreenState {
   Alert get alert => throw _privateConstructorUsedError;
   bool get showSuccessScreen => throw _privateConstructorUsedError;
 
-  /// Create a copy of DeliveryApprovalScreenState
+  /// Create a copy of SpecimenDeliveryApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $DeliveryApprovalScreenStateCopyWith<DeliveryApprovalScreenState>
+  $SpecimenDeliveryApprovalScreenStateCopyWith<
+    SpecimenDeliveryApprovalScreenState
+  >
   get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $DeliveryApprovalScreenStateCopyWith<$Res> {
-  factory $DeliveryApprovalScreenStateCopyWith(
-    DeliveryApprovalScreenState value,
-    $Res Function(DeliveryApprovalScreenState) then,
+abstract class $SpecimenDeliveryApprovalScreenStateCopyWith<$Res> {
+  factory $SpecimenDeliveryApprovalScreenStateCopyWith(
+    SpecimenDeliveryApprovalScreenState value,
+    $Res Function(SpecimenDeliveryApprovalScreenState) then,
   ) =
-      _$DeliveryApprovalScreenStateCopyWithImpl<
+      _$SpecimenDeliveryApprovalScreenStateCopyWithImpl<
         $Res,
-        DeliveryApprovalScreenState
+        SpecimenDeliveryApprovalScreenState
       >;
   @useResult
   $Res call({
-    MovementType movementType,
-    Facility destinationFacility,
+    ShipmentRoute route,
     List<Shipment> shipments,
-    String routeNo,
     String deliveryTemperature,
     String fullName,
     String phoneNumber,
@@ -63,33 +61,30 @@ abstract class $DeliveryApprovalScreenStateCopyWith<$Res> {
     bool showSuccessScreen,
   });
 
-  $MovementTypeCopyWith<$Res> get movementType;
-  $FacilityCopyWith<$Res> get destinationFacility;
+  $ShipmentRouteCopyWith<$Res> get route;
   $AlertCopyWith<$Res> get alert;
 }
 
 /// @nodoc
-class _$DeliveryApprovalScreenStateCopyWithImpl<
+class _$SpecimenDeliveryApprovalScreenStateCopyWithImpl<
   $Res,
-  $Val extends DeliveryApprovalScreenState
+  $Val extends SpecimenDeliveryApprovalScreenState
 >
-    implements $DeliveryApprovalScreenStateCopyWith<$Res> {
-  _$DeliveryApprovalScreenStateCopyWithImpl(this._value, this._then);
+    implements $SpecimenDeliveryApprovalScreenStateCopyWith<$Res> {
+  _$SpecimenDeliveryApprovalScreenStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of DeliveryApprovalScreenState
+  /// Create a copy of SpecimenDeliveryApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? movementType = null,
-    Object? destinationFacility = null,
+    Object? route = null,
     Object? shipments = null,
-    Object? routeNo = null,
     Object? deliveryTemperature = null,
     Object? fullName = null,
     Object? phoneNumber = null,
@@ -101,22 +96,14 @@ class _$DeliveryApprovalScreenStateCopyWithImpl<
   }) {
     return _then(
       _value.copyWith(
-            movementType: null == movementType
-                ? _value.movementType
-                : movementType // ignore: cast_nullable_to_non_nullable
-                      as MovementType,
-            destinationFacility: null == destinationFacility
-                ? _value.destinationFacility
-                : destinationFacility // ignore: cast_nullable_to_non_nullable
-                      as Facility,
+            route: null == route
+                ? _value.route
+                : route // ignore: cast_nullable_to_non_nullable
+                      as ShipmentRoute,
             shipments: null == shipments
                 ? _value.shipments
                 : shipments // ignore: cast_nullable_to_non_nullable
                       as List<Shipment>,
-            routeNo: null == routeNo
-                ? _value.routeNo
-                : routeNo // ignore: cast_nullable_to_non_nullable
-                      as String,
             deliveryTemperature: null == deliveryTemperature
                 ? _value.deliveryTemperature
                 : deliveryTemperature // ignore: cast_nullable_to_non_nullable
@@ -154,27 +141,17 @@ class _$DeliveryApprovalScreenStateCopyWithImpl<
     );
   }
 
-  /// Create a copy of DeliveryApprovalScreenState
+  /// Create a copy of SpecimenDeliveryApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $MovementTypeCopyWith<$Res> get movementType {
-    return $MovementTypeCopyWith<$Res>(_value.movementType, (value) {
-      return _then(_value.copyWith(movementType: value) as $Val);
+  $ShipmentRouteCopyWith<$Res> get route {
+    return $ShipmentRouteCopyWith<$Res>(_value.route, (value) {
+      return _then(_value.copyWith(route: value) as $Val);
     });
   }
 
-  /// Create a copy of DeliveryApprovalScreenState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $FacilityCopyWith<$Res> get destinationFacility {
-    return $FacilityCopyWith<$Res>(_value.destinationFacility, (value) {
-      return _then(_value.copyWith(destinationFacility: value) as $Val);
-    });
-  }
-
-  /// Create a copy of DeliveryApprovalScreenState
+  /// Create a copy of SpecimenDeliveryApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -186,19 +163,17 @@ class _$DeliveryApprovalScreenStateCopyWithImpl<
 }
 
 /// @nodoc
-abstract class _$$DeliveryApprovalScreenStateImplCopyWith<$Res>
-    implements $DeliveryApprovalScreenStateCopyWith<$Res> {
-  factory _$$DeliveryApprovalScreenStateImplCopyWith(
-    _$DeliveryApprovalScreenStateImpl value,
-    $Res Function(_$DeliveryApprovalScreenStateImpl) then,
-  ) = __$$DeliveryApprovalScreenStateImplCopyWithImpl<$Res>;
+abstract class _$$SpecimenDeliveryApprovalScreenStateImplCopyWith<$Res>
+    implements $SpecimenDeliveryApprovalScreenStateCopyWith<$Res> {
+  factory _$$SpecimenDeliveryApprovalScreenStateImplCopyWith(
+    _$SpecimenDeliveryApprovalScreenStateImpl value,
+    $Res Function(_$SpecimenDeliveryApprovalScreenStateImpl) then,
+  ) = __$$SpecimenDeliveryApprovalScreenStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({
-    MovementType movementType,
-    Facility destinationFacility,
+    ShipmentRoute route,
     List<Shipment> shipments,
-    String routeNo,
     String deliveryTemperature,
     String fullName,
     String phoneNumber,
@@ -210,35 +185,31 @@ abstract class _$$DeliveryApprovalScreenStateImplCopyWith<$Res>
   });
 
   @override
-  $MovementTypeCopyWith<$Res> get movementType;
-  @override
-  $FacilityCopyWith<$Res> get destinationFacility;
+  $ShipmentRouteCopyWith<$Res> get route;
   @override
   $AlertCopyWith<$Res> get alert;
 }
 
 /// @nodoc
-class __$$DeliveryApprovalScreenStateImplCopyWithImpl<$Res>
+class __$$SpecimenDeliveryApprovalScreenStateImplCopyWithImpl<$Res>
     extends
-        _$DeliveryApprovalScreenStateCopyWithImpl<
+        _$SpecimenDeliveryApprovalScreenStateCopyWithImpl<
           $Res,
-          _$DeliveryApprovalScreenStateImpl
+          _$SpecimenDeliveryApprovalScreenStateImpl
         >
-    implements _$$DeliveryApprovalScreenStateImplCopyWith<$Res> {
-  __$$DeliveryApprovalScreenStateImplCopyWithImpl(
-    _$DeliveryApprovalScreenStateImpl _value,
-    $Res Function(_$DeliveryApprovalScreenStateImpl) _then,
+    implements _$$SpecimenDeliveryApprovalScreenStateImplCopyWith<$Res> {
+  __$$SpecimenDeliveryApprovalScreenStateImplCopyWithImpl(
+    _$SpecimenDeliveryApprovalScreenStateImpl _value,
+    $Res Function(_$SpecimenDeliveryApprovalScreenStateImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of DeliveryApprovalScreenState
+  /// Create a copy of SpecimenDeliveryApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? movementType = null,
-    Object? destinationFacility = null,
+    Object? route = null,
     Object? shipments = null,
-    Object? routeNo = null,
     Object? deliveryTemperature = null,
     Object? fullName = null,
     Object? phoneNumber = null,
@@ -249,23 +220,15 @@ class __$$DeliveryApprovalScreenStateImplCopyWithImpl<$Res>
     Object? showSuccessScreen = null,
   }) {
     return _then(
-      _$DeliveryApprovalScreenStateImpl(
-        movementType: null == movementType
-            ? _value.movementType
-            : movementType // ignore: cast_nullable_to_non_nullable
-                  as MovementType,
-        destinationFacility: null == destinationFacility
-            ? _value.destinationFacility
-            : destinationFacility // ignore: cast_nullable_to_non_nullable
-                  as Facility,
+      _$SpecimenDeliveryApprovalScreenStateImpl(
+        route: null == route
+            ? _value.route
+            : route // ignore: cast_nullable_to_non_nullable
+                  as ShipmentRoute,
         shipments: null == shipments
             ? _value._shipments
             : shipments // ignore: cast_nullable_to_non_nullable
                   as List<Shipment>,
-        routeNo: null == routeNo
-            ? _value.routeNo
-            : routeNo // ignore: cast_nullable_to_non_nullable
-                  as String,
         deliveryTemperature: null == deliveryTemperature
             ? _value.deliveryTemperature
             : deliveryTemperature // ignore: cast_nullable_to_non_nullable
@@ -305,12 +268,11 @@ class __$$DeliveryApprovalScreenStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DeliveryApprovalScreenStateImpl extends _DeliveryApprovalScreenState {
-  const _$DeliveryApprovalScreenStateImpl({
-    required this.movementType,
-    required this.destinationFacility,
+class _$SpecimenDeliveryApprovalScreenStateImpl
+    extends _SpecimenDeliveryApprovalScreenState {
+  const _$SpecimenDeliveryApprovalScreenStateImpl({
+    required this.route,
     required final List<Shipment> shipments,
-    required this.routeNo,
     this.deliveryTemperature = "",
     this.fullName = "",
     this.phoneNumber = "",
@@ -323,9 +285,7 @@ class _$DeliveryApprovalScreenStateImpl extends _DeliveryApprovalScreenState {
        super._();
 
   @override
-  final MovementType movementType;
-  @override
-  final Facility destinationFacility;
+  final ShipmentRoute route;
   final List<Shipment> _shipments;
   @override
   List<Shipment> get shipments {
@@ -334,8 +294,6 @@ class _$DeliveryApprovalScreenStateImpl extends _DeliveryApprovalScreenState {
     return EqualUnmodifiableListView(_shipments);
   }
 
-  @override
-  final String routeNo;
   @override
   @JsonKey()
   final String deliveryTemperature;
@@ -363,23 +321,19 @@ class _$DeliveryApprovalScreenStateImpl extends _DeliveryApprovalScreenState {
 
   @override
   String toString() {
-    return 'DeliveryApprovalScreenState(movementType: $movementType, destinationFacility: $destinationFacility, shipments: $shipments, routeNo: $routeNo, deliveryTemperature: $deliveryTemperature, fullName: $fullName, phoneNumber: $phoneNumber, designation: $designation, signature: $signature, isSavingDelivery: $isSavingDelivery, alert: $alert, showSuccessScreen: $showSuccessScreen)';
+    return 'SpecimenDeliveryApprovalScreenState(route: $route, shipments: $shipments, deliveryTemperature: $deliveryTemperature, fullName: $fullName, phoneNumber: $phoneNumber, designation: $designation, signature: $signature, isSavingDelivery: $isSavingDelivery, alert: $alert, showSuccessScreen: $showSuccessScreen)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DeliveryApprovalScreenStateImpl &&
-            (identical(other.movementType, movementType) ||
-                other.movementType == movementType) &&
-            (identical(other.destinationFacility, destinationFacility) ||
-                other.destinationFacility == destinationFacility) &&
+            other is _$SpecimenDeliveryApprovalScreenStateImpl &&
+            (identical(other.route, route) || other.route == route) &&
             const DeepCollectionEquality().equals(
               other._shipments,
               _shipments,
             ) &&
-            (identical(other.routeNo, routeNo) || other.routeNo == routeNo) &&
             (identical(other.deliveryTemperature, deliveryTemperature) ||
                 other.deliveryTemperature == deliveryTemperature) &&
             (identical(other.fullName, fullName) ||
@@ -400,10 +354,8 @@ class _$DeliveryApprovalScreenStateImpl extends _DeliveryApprovalScreenState {
   @override
   int get hashCode => Object.hash(
     runtimeType,
-    movementType,
-    destinationFacility,
+    route,
     const DeepCollectionEquality().hash(_shipments),
-    routeNo,
     deliveryTemperature,
     fullName,
     phoneNumber,
@@ -414,25 +366,25 @@ class _$DeliveryApprovalScreenStateImpl extends _DeliveryApprovalScreenState {
     showSuccessScreen,
   );
 
-  /// Create a copy of DeliveryApprovalScreenState
+  /// Create a copy of SpecimenDeliveryApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$DeliveryApprovalScreenStateImplCopyWith<_$DeliveryApprovalScreenStateImpl>
+  _$$SpecimenDeliveryApprovalScreenStateImplCopyWith<
+    _$SpecimenDeliveryApprovalScreenStateImpl
+  >
   get copyWith =>
-      __$$DeliveryApprovalScreenStateImplCopyWithImpl<
-        _$DeliveryApprovalScreenStateImpl
+      __$$SpecimenDeliveryApprovalScreenStateImplCopyWithImpl<
+        _$SpecimenDeliveryApprovalScreenStateImpl
       >(this, _$identity);
 }
 
-abstract class _DeliveryApprovalScreenState
-    extends DeliveryApprovalScreenState {
-  const factory _DeliveryApprovalScreenState({
-    required final MovementType movementType,
-    required final Facility destinationFacility,
+abstract class _SpecimenDeliveryApprovalScreenState
+    extends SpecimenDeliveryApprovalScreenState {
+  const factory _SpecimenDeliveryApprovalScreenState({
+    required final ShipmentRoute route,
     required final List<Shipment> shipments,
-    required final String routeNo,
     final String deliveryTemperature,
     final String fullName,
     final String phoneNumber,
@@ -441,17 +393,13 @@ abstract class _DeliveryApprovalScreenState
     final bool isSavingDelivery,
     final Alert alert,
     final bool showSuccessScreen,
-  }) = _$DeliveryApprovalScreenStateImpl;
-  const _DeliveryApprovalScreenState._() : super._();
+  }) = _$SpecimenDeliveryApprovalScreenStateImpl;
+  const _SpecimenDeliveryApprovalScreenState._() : super._();
 
   @override
-  MovementType get movementType;
-  @override
-  Facility get destinationFacility;
+  ShipmentRoute get route;
   @override
   List<Shipment> get shipments;
-  @override
-  String get routeNo;
   @override
   String get deliveryTemperature;
   @override
@@ -469,10 +417,12 @@ abstract class _DeliveryApprovalScreenState
   @override
   bool get showSuccessScreen;
 
-  /// Create a copy of DeliveryApprovalScreenState
+  /// Create a copy of SpecimenDeliveryApprovalScreenState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DeliveryApprovalScreenStateImplCopyWith<_$DeliveryApprovalScreenStateImpl>
+  _$$SpecimenDeliveryApprovalScreenStateImplCopyWith<
+    _$SpecimenDeliveryApprovalScreenStateImpl
+  >
   get copyWith => throw _privateConstructorUsedError;
 }

@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_manifest_card.dart';
 import 'package:nims_mobile_app/core/ui/widgets/sticky_header_delegate.dart';
-import 'package:nims_mobile_app/features/pickup/presentation/ui/widgets/manifest_deletion_confirmation_dialog.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/widgets/manifest/manifest_deletion_confirmation_dialog.dart';
 import '../../../../app/route_name+path+params.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
 import '../../../../core/ui/widgets/nims_error_content.dart';
@@ -53,7 +53,7 @@ class ManifestsScreen extends ConsumerWidget {
             SizedBox(height: 8),
 
             Text(
-              "These are the manifests you have created",
+              "These are the manifest you have created",
               style: TextTheme.of(context).bodySmall,
             ),
 
@@ -186,8 +186,8 @@ SliverList _buildList(
   return SliverList(
     delegate: SliverChildBuilderDelegate((context, index) {
       final manifest = items[index];
-      final shipmentStatus = shippedManifestStatuses[manifest.manifestNo];
-      final isShipped = shipmentStatus != null;
+      final shipmentStage = shippedManifestStatuses[manifest.manifestNo];
+      final isShipped = shipmentStage != null;
 
       return Padding(
         padding: EdgeInsetsGeometry.symmetric(vertical: 4),
@@ -207,7 +207,7 @@ SliverList _buildList(
           },
           isSelected: false,
           isShipped: isShipped,
-          shipmentStatus: shipmentStatus,
+          shipmentStage: shipmentStage,
           onTapDelete: () => onDeleteManifest(manifest),
         ),
       );

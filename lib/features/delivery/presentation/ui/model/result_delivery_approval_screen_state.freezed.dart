@@ -18,9 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ResultDeliveryApprovalScreenState {
   ShipmentRoute get route => throw _privateConstructorUsedError;
-  List<Shipment> get shipments => throw _privateConstructorUsedError;
-  Facility get destinationFacility => throw _privateConstructorUsedError;
-  List<String> get sampleCodes => throw _privateConstructorUsedError;
+  Shipment get shipment => throw _privateConstructorUsedError;
+  List<LabResult> get results => throw _privateConstructorUsedError;
   String get fullName => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
   String get designation => throw _privateConstructorUsedError;
@@ -49,9 +48,8 @@ abstract class $ResultDeliveryApprovalScreenStateCopyWith<$Res> {
   @useResult
   $Res call({
     ShipmentRoute route,
-    List<Shipment> shipments,
-    Facility destinationFacility,
-    List<String> sampleCodes,
+    Shipment shipment,
+    List<LabResult> results,
     String fullName,
     String phoneNumber,
     String designation,
@@ -62,7 +60,7 @@ abstract class $ResultDeliveryApprovalScreenStateCopyWith<$Res> {
   });
 
   $ShipmentRouteCopyWith<$Res> get route;
-  $FacilityCopyWith<$Res> get destinationFacility;
+  $ShipmentCopyWith<$Res> get shipment;
   $AlertCopyWith<$Res> get alert;
 }
 
@@ -85,9 +83,8 @@ class _$ResultDeliveryApprovalScreenStateCopyWithImpl<
   @override
   $Res call({
     Object? route = null,
-    Object? shipments = null,
-    Object? destinationFacility = null,
-    Object? sampleCodes = null,
+    Object? shipment = null,
+    Object? results = null,
     Object? fullName = null,
     Object? phoneNumber = null,
     Object? designation = null,
@@ -102,18 +99,14 @@ class _$ResultDeliveryApprovalScreenStateCopyWithImpl<
                 ? _value.route
                 : route // ignore: cast_nullable_to_non_nullable
                       as ShipmentRoute,
-            shipments: null == shipments
-                ? _value.shipments
-                : shipments // ignore: cast_nullable_to_non_nullable
-                      as List<Shipment>,
-            destinationFacility: null == destinationFacility
-                ? _value.destinationFacility
-                : destinationFacility // ignore: cast_nullable_to_non_nullable
-                      as Facility,
-            sampleCodes: null == sampleCodes
-                ? _value.sampleCodes
-                : sampleCodes // ignore: cast_nullable_to_non_nullable
-                      as List<String>,
+            shipment: null == shipment
+                ? _value.shipment
+                : shipment // ignore: cast_nullable_to_non_nullable
+                      as Shipment,
+            results: null == results
+                ? _value.results
+                : results // ignore: cast_nullable_to_non_nullable
+                      as List<LabResult>,
             fullName: null == fullName
                 ? _value.fullName
                 : fullName // ignore: cast_nullable_to_non_nullable
@@ -161,9 +154,9 @@ class _$ResultDeliveryApprovalScreenStateCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $FacilityCopyWith<$Res> get destinationFacility {
-    return $FacilityCopyWith<$Res>(_value.destinationFacility, (value) {
-      return _then(_value.copyWith(destinationFacility: value) as $Val);
+  $ShipmentCopyWith<$Res> get shipment {
+    return $ShipmentCopyWith<$Res>(_value.shipment, (value) {
+      return _then(_value.copyWith(shipment: value) as $Val);
     });
   }
 
@@ -189,9 +182,8 @@ abstract class _$$ResultDeliveryApprovalScreenStateImplCopyWith<$Res>
   @useResult
   $Res call({
     ShipmentRoute route,
-    List<Shipment> shipments,
-    Facility destinationFacility,
-    List<String> sampleCodes,
+    Shipment shipment,
+    List<LabResult> results,
     String fullName,
     String phoneNumber,
     String designation,
@@ -204,7 +196,7 @@ abstract class _$$ResultDeliveryApprovalScreenStateImplCopyWith<$Res>
   @override
   $ShipmentRouteCopyWith<$Res> get route;
   @override
-  $FacilityCopyWith<$Res> get destinationFacility;
+  $ShipmentCopyWith<$Res> get shipment;
   @override
   $AlertCopyWith<$Res> get alert;
 }
@@ -228,9 +220,8 @@ class __$$ResultDeliveryApprovalScreenStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? route = null,
-    Object? shipments = null,
-    Object? destinationFacility = null,
-    Object? sampleCodes = null,
+    Object? shipment = null,
+    Object? results = null,
     Object? fullName = null,
     Object? phoneNumber = null,
     Object? designation = null,
@@ -245,18 +236,14 @@ class __$$ResultDeliveryApprovalScreenStateImplCopyWithImpl<$Res>
             ? _value.route
             : route // ignore: cast_nullable_to_non_nullable
                   as ShipmentRoute,
-        shipments: null == shipments
-            ? _value._shipments
-            : shipments // ignore: cast_nullable_to_non_nullable
-                  as List<Shipment>,
-        destinationFacility: null == destinationFacility
-            ? _value.destinationFacility
-            : destinationFacility // ignore: cast_nullable_to_non_nullable
-                  as Facility,
-        sampleCodes: null == sampleCodes
-            ? _value._sampleCodes
-            : sampleCodes // ignore: cast_nullable_to_non_nullable
-                  as List<String>,
+        shipment: null == shipment
+            ? _value.shipment
+            : shipment // ignore: cast_nullable_to_non_nullable
+                  as Shipment,
+        results: null == results
+            ? _value._results
+            : results // ignore: cast_nullable_to_non_nullable
+                  as List<LabResult>,
         fullName: null == fullName
             ? _value.fullName
             : fullName // ignore: cast_nullable_to_non_nullable
@@ -296,9 +283,8 @@ class _$ResultDeliveryApprovalScreenStateImpl
     extends _ResultDeliveryApprovalScreenState {
   const _$ResultDeliveryApprovalScreenStateImpl({
     required this.route,
-    required final List<Shipment> shipments,
-    required this.destinationFacility,
-    final List<String> sampleCodes = const [],
+    required this.shipment,
+    final List<LabResult> results = const [],
     this.fullName = "",
     this.phoneNumber = "",
     this.designation = "",
@@ -306,29 +292,20 @@ class _$ResultDeliveryApprovalScreenStateImpl
     this.isSubmitting = false,
     this.alert = const Alert(message: "", show: false),
     this.showSuccessScreen = false,
-  }) : _shipments = shipments,
-       _sampleCodes = sampleCodes,
+  }) : _results = results,
        super._();
 
   @override
   final ShipmentRoute route;
-  final List<Shipment> _shipments;
   @override
-  List<Shipment> get shipments {
-    if (_shipments is EqualUnmodifiableListView) return _shipments;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_shipments);
-  }
-
-  @override
-  final Facility destinationFacility;
-  final List<String> _sampleCodes;
+  final Shipment shipment;
+  final List<LabResult> _results;
   @override
   @JsonKey()
-  List<String> get sampleCodes {
-    if (_sampleCodes is EqualUnmodifiableListView) return _sampleCodes;
+  List<LabResult> get results {
+    if (_results is EqualUnmodifiableListView) return _results;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_sampleCodes);
+    return EqualUnmodifiableListView(_results);
   }
 
   @override
@@ -355,7 +332,7 @@ class _$ResultDeliveryApprovalScreenStateImpl
 
   @override
   String toString() {
-    return 'ResultDeliveryApprovalScreenState(route: $route, shipments: $shipments, destinationFacility: $destinationFacility, sampleCodes: $sampleCodes, fullName: $fullName, phoneNumber: $phoneNumber, designation: $designation, signature: $signature, isSubmitting: $isSubmitting, alert: $alert, showSuccessScreen: $showSuccessScreen)';
+    return 'ResultDeliveryApprovalScreenState(route: $route, shipment: $shipment, results: $results, fullName: $fullName, phoneNumber: $phoneNumber, designation: $designation, signature: $signature, isSubmitting: $isSubmitting, alert: $alert, showSuccessScreen: $showSuccessScreen)';
   }
 
   @override
@@ -364,16 +341,9 @@ class _$ResultDeliveryApprovalScreenStateImpl
         (other.runtimeType == runtimeType &&
             other is _$ResultDeliveryApprovalScreenStateImpl &&
             (identical(other.route, route) || other.route == route) &&
-            const DeepCollectionEquality().equals(
-              other._shipments,
-              _shipments,
-            ) &&
-            (identical(other.destinationFacility, destinationFacility) ||
-                other.destinationFacility == destinationFacility) &&
-            const DeepCollectionEquality().equals(
-              other._sampleCodes,
-              _sampleCodes,
-            ) &&
+            (identical(other.shipment, shipment) ||
+                other.shipment == shipment) &&
+            const DeepCollectionEquality().equals(other._results, _results) &&
             (identical(other.fullName, fullName) ||
                 other.fullName == fullName) &&
             (identical(other.phoneNumber, phoneNumber) ||
@@ -393,9 +363,8 @@ class _$ResultDeliveryApprovalScreenStateImpl
   int get hashCode => Object.hash(
     runtimeType,
     route,
-    const DeepCollectionEquality().hash(_shipments),
-    destinationFacility,
-    const DeepCollectionEquality().hash(_sampleCodes),
+    shipment,
+    const DeepCollectionEquality().hash(_results),
     fullName,
     phoneNumber,
     designation,
@@ -423,9 +392,8 @@ abstract class _ResultDeliveryApprovalScreenState
     extends ResultDeliveryApprovalScreenState {
   const factory _ResultDeliveryApprovalScreenState({
     required final ShipmentRoute route,
-    required final List<Shipment> shipments,
-    required final Facility destinationFacility,
-    final List<String> sampleCodes,
+    required final Shipment shipment,
+    final List<LabResult> results,
     final String fullName,
     final String phoneNumber,
     final String designation,
@@ -439,11 +407,9 @@ abstract class _ResultDeliveryApprovalScreenState
   @override
   ShipmentRoute get route;
   @override
-  List<Shipment> get shipments;
+  Shipment get shipment;
   @override
-  Facility get destinationFacility;
-  @override
-  List<String> get sampleCodes;
+  List<LabResult> get results;
   @override
   String get fullName;
   @override

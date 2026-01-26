@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 
 class NIMSSelectedResultCard extends StatelessWidget {
-  final String? sampleCode;
+  final DomainResult result;
 
-  const NIMSSelectedResultCard({super.key, this.sampleCode});
+  const NIMSSelectedResultCard({super.key, required this.result});
 
   @override
   Widget build(BuildContext context) {
@@ -27,35 +28,19 @@ class NIMSSelectedResultCard extends StatelessWidget {
                   color: Theme.of(context).colorScheme.tertiaryContainer,
                 ),
                 child: Text(
-                  sampleCode ?? "PC-288939-29930",
+                  result.patientCode,
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),
               const SizedBox(width: 24),
-              Text("20 Results", style: Theme.of(context).textTheme.bodySmall),
-              const Spacer(),
-              Row(
-                children: [
-                  Text(
-                    "Sputum",
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  Image.asset(
-                    "lib/core/ui/icons/ic_test_tube.png",
-                    height: 16,
-                    width: 16,
-                  ),
-                ],
+              Text(
+                result.sampleCode,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               const Spacer(),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 16,
-                color: Theme.of(context).colorScheme.tertiary.withAlpha(100),
-              ),
+              Text(result.age, style: Theme.of(context).textTheme.bodySmall),
+              const Spacer(),
+              Text(result.gender, style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
         ],

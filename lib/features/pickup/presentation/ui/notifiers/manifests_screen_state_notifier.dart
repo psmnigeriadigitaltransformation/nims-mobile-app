@@ -7,7 +7,7 @@ import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/features/facilities/data/providers.dart';
 import '../../../../../core/ui/model/model/alert.dart';
 import '../../../../../core/utils/result.dart';
-import '../model/manifests_screen_state.dart';
+import '../models/manifests_screen_state.dart';
 
 class ManifestsScreenStateNotifier
     extends
@@ -103,7 +103,7 @@ class ManifestsScreenStateNotifier
 
       switch (manifestsResult) {
         case Success<List<DomainManifest>>(payload: final payload):
-          // Filter out manifests that have already been used in shipments
+          // Filter out manifest that have already been used in shipments
           final currentState = state.valueOrNull;
           final shippedStatuses = currentState?.shippedManifestStatuses ?? {};
           final availableManifests = payload
@@ -158,7 +158,7 @@ class ManifestsScreenStateNotifier
         .deleteManifest(manifestNo);
     switch (result) {
       case Success():
-        // Refresh the manifests list after deletion
+        // Refresh the manifest list after deletion
         final facility = state.valueOrNull?.selectedPickUpFacility;
         if (facility != null) {
           getFacilityManifests(facility);

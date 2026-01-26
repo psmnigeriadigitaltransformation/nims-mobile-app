@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 5,
+      version: 10,
       onCreate: (db, version) async {
 
         // Tables
@@ -147,7 +147,8 @@ class NIMSDatabase {
             originating_facility_name TEXT NOT NULL,
             destination_facility_name TEXT NOT NULL,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-            sync_status TEXT NOT NULL DEFAULT 'pending'
+            sync_status TEXT NOT NULL DEFAULT 'pending',
+            stage TEXT NOT NULL DEFAULT 'Pending'
           )
         ''');
 
@@ -162,6 +163,7 @@ class NIMSDatabase {
             comment TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             sync_status TEXT NOT NULL DEFAULT 'pending',
+            stage TEXT NOT NULL DEFAULT 'Order',
             FOREIGN KEY (manifest_no) REFERENCES manifests(manifest_no) ON DELETE CASCADE
           )
           ''');
@@ -170,6 +172,7 @@ class NIMSDatabase {
           CREATE TABLE routes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             route_no TEXT NOT NULL UNIQUE,
+            route_type TEXT NOT NULL,
             origin_facility_id TEXT NOT NULL,
             origin_facility_name TEXT NOT NULL,
             destination_facility_id TEXT NOT NULL,
@@ -179,7 +182,8 @@ class NIMSDatabase {
             latitude DECIMAL(10,6),
             longitude DECIMAL(10,6),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            sync_status TEXT NOT NULL DEFAULT 'pending'
+            sync_status TEXT NOT NULL DEFAULT 'pending',
+            stage TEXT NOT NULL DEFAULT 'Pending'
           )
           ''');
 
@@ -198,10 +202,11 @@ class NIMSDatabase {
             pickup_longitude DECIMAL(10,6) NOT NULL,
             sample_type TEXT NOT NULL,
             sample_count INT NOT NULL,
-            shipment_status TEXT NOT NULL DEFAULT 'pending',
+            payload_type TEXT NOT NULL DEFAULT 'specimen',
             pickup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             delivery_date TEXT,
             sync_status TEXT NOT NULL DEFAULT 'pending',
+            stage TEXT NOT NULL DEFAULT 'Pending',
             FOREIGN KEY (route_no) REFERENCES routes(route_no)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
@@ -218,12 +223,31 @@ class NIMSDatabase {
             phone TEXT,
             designation TEXT,
             signature TEXT,
+            latitude DECIMAL(10,6),
+            longitude DECIMAL(10,6),
             approval_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             sync_status TEXT NOT NULL DEFAULT 'pending',
             FOREIGN KEY (route_no) REFERENCES routes(route_no)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
         )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE results (
+            sample_code TEXT PRIMARY KEY,
+            manifest_no TEXT NOT NULL,
+            patient_code TEXT NOT NULL,
+            age TEXT NOT NULL,
+            gender TEXT NOT NULL,
+            facility_id TEXT NOT NULL,
+            is_picked INTEGER DEFAULT 0,
+            is_rejected INTEGER DEFAULT 0,
+            rejection_sync_status TEXT,
+            rejection_reason TEXT,
+            rejection_date TEXT,
+            route_no TEXT
+          )
         ''');
 
         // Indexes
@@ -245,6 +269,18 @@ class NIMSDatabase {
 
         await db.execute('''
           CREATE INDEX idx_approvals_route_no ON approvals(route_no)
+          ''');
+
+        await db.execute('''
+          CREATE INDEX idx_results_facility_id ON results(facility_id)
+          ''');
+
+        await db.execute('''
+          CREATE INDEX idx_results_manifest_no ON results(manifest_no)
+          ''');
+
+        await db.execute('''
+          CREATE INDEX idx_results_route_no ON results(route_no)
           ''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -282,6 +318,70 @@ class NIMSDatabase {
           // Add delivery_date column to shipments table
           await db.execute('''
             ALTER TABLE shipments ADD COLUMN delivery_date TEXT
+          ''');
+        }
+        if (oldVersion < 6) {
+          // Add latitude and longitude columns to approvals table
+          await db.execute('''
+            ALTER TABLE approvals ADD COLUMN latitude DECIMAL(10,6)
+          ''');
+          await db.execute('''
+            ALTER TABLE approvals ADD COLUMN longitude DECIMAL(10,6)
+          ''');
+        }
+        if (oldVersion < 7) {
+          // Add results table for caching available results
+          await db.execute('''
+            CREATE TABLE results (
+              sample_code TEXT PRIMARY KEY,
+              manifest_no TEXT NOT NULL,
+              patient_code TEXT NOT NULL,
+              age TEXT NOT NULL,
+              gender TEXT NOT NULL,
+              facility_id TEXT NOT NULL,
+              is_picked INTEGER DEFAULT 0,
+              is_rejected INTEGER DEFAULT 0,
+              rejection_sync_status TEXT,
+              rejection_reason TEXT,
+              rejection_date TEXT,
+              route_no TEXT
+            )
+          ''');
+          await db.execute('''
+            CREATE INDEX idx_results_facility_id ON results(facility_id)
+          ''');
+          await db.execute('''
+            CREATE INDEX idx_results_manifest_no ON results(manifest_no)
+          ''');
+          await db.execute('''
+            CREATE INDEX idx_results_route_no ON results(route_no)
+          ''');
+        }
+        if (oldVersion < 8) {
+          // Add payload_type column to shipments table
+          await db.execute('''
+            ALTER TABLE shipments ADD COLUMN payload_type TEXT NOT NULL DEFAULT 'specimen'
+          ''');
+        }
+        if (oldVersion < 9) {
+          // Add stage column to manifests, samples, routes, and shipments tables
+          await db.execute('''
+            ALTER TABLE manifests ADD COLUMN stage TEXT NOT NULL DEFAULT 'Pending'
+          ''');
+          await db.execute('''
+            ALTER TABLE samples ADD COLUMN stage TEXT NOT NULL DEFAULT 'Order'
+          ''');
+          await db.execute('''
+            ALTER TABLE routes ADD COLUMN stage TEXT NOT NULL DEFAULT 'Pending'
+          ''');
+          await db.execute('''
+            ALTER TABLE shipments ADD COLUMN stage TEXT NOT NULL DEFAULT 'Pending'
+          ''');
+        }
+        if (oldVersion < 10) {
+          // Remove shipment_status column from shipments table (replaced by stage)
+          await db.execute('''
+            ALTER TABLE shipments DROP COLUMN shipment_status
           ''');
         }
       },

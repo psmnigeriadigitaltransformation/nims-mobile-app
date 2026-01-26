@@ -8,6 +8,7 @@ class ShipmentRoute with _$ShipmentRoute {
   const factory ShipmentRoute({
     int? id,
     @JsonKey(name: 'route_no') required String routeNo,
+    @JsonKey(name: 'route_type') required String routeType,
     @JsonKey(name: 'origin_facility_id') required String originFacilityId,
     @JsonKey(name: 'origin_facility_name') required String originFacilityName,
     @JsonKey(name: 'destination_facility_id') required String destinationFacilityId,
@@ -17,7 +18,7 @@ class ShipmentRoute with _$ShipmentRoute {
     double? latitude,
     double? longitude,
     @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
-    // @JsonKey(name: 'created_at') String? createdAt,
+    @Default('Pending') String stage,
   }) = _ShipmentRoute;
 
   factory ShipmentRoute.fromJson(Map<String, dynamic> json) =>

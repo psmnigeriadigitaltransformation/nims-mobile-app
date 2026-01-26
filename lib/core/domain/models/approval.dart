@@ -14,6 +14,8 @@ class Approval with _$Approval {
     required String phone,
     required String designation,
     required String signature,
+    double? latitude,
+    double? longitude,
     @JsonKey(name: 'approval_date') String? approvalDate,
     @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
   }) = _Approval;

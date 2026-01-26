@@ -1,17 +1,39 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/core/domain/models/shipment.dart';
 
 class NIMSResultShipmentSummaryCard extends StatelessWidget {
-  const NIMSResultShipmentSummaryCard({super.key});
+  final Shipment? shipment;
+  final int resultCount;
+
+  const NIMSResultShipmentSummaryCard({
+    super.key,
+    this.shipment,
+    this.resultCount = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final shipmentNo = shipment?.shipmentNo ?? "Unknown";
+    final destinationName = shipment?.destinationFacilityName ?? "";
+    final destinationType = shipment?.destinationLocationType ?? "";
+    final count = resultCount > 0 ? resultCount : (shipment?.sampleCount ?? 0);
+
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(8)),
-      onTap: () {
-        context.pushNamed(manifestDetailsScreen);
-      },
+      onTap: shipment != null
+          ? () {
+              context.pushNamed(
+                shipmentDetailsScreen,
+                queryParameters: {
+                  shipmentQueryParam: jsonEncode(shipment!.toJson()),
+                },
+              );
+            }
+          : null,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -35,14 +57,14 @@ class NIMSResultShipmentSummaryCard extends StatelessWidget {
                     color: Theme.of(context).colorScheme.tertiaryContainer,
                   ),
                   child: Text(
-                    "PC-288939-29930",
+                    shipmentNo,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                 ),
                 const SizedBox(width: 24),
                 Expanded(
                   child: Text(
-                    "20 Results",
+                    "$count Result${count != 1 ? 's' : ''}",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall,
@@ -52,16 +74,17 @@ class NIMSResultShipmentSummaryCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      "Sputum",
+                      "Result",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    Image.asset(
-                      "lib/core/ui/icons/ic_test_tube.png",
-                      height: 16,
-                      width: 16,
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.science_outlined,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                   ],
                 ),
@@ -73,37 +96,40 @@ class NIMSResultShipmentSummaryCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 12),
-            Padding(
-              padding: EdgeInsetsGeometry.symmetric(horizontal: 4),
-              child: Align(
-                alignment: AlignmentGeometry.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Text(
-                        "National Reference Hospital",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        style: Theme.of(context).textTheme.bodySmall,
+            if (destinationName.isNotEmpty) ...[
+              SizedBox(height: 12),
+              Padding(
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 4),
+                child: Align(
+                  alignment: AlignmentGeometry.centerLeft,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: Text(
+                          destinationName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.start,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      child: Text(
-                        "Hub",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
-                  ],
+                      if (destinationType.isNotEmpty)
+                        Flexible(
+                          child: Text(
+                            destinationType,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ],
         ),
       ),

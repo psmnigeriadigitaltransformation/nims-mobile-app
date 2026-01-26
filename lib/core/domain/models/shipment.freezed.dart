@@ -46,14 +46,15 @@ mixin _$Shipment {
   String get sampleType => throw _privateConstructorUsedError;
   @JsonKey(name: 'sample_count')
   int get sampleCount => throw _privateConstructorUsedError;
-  @JsonKey(name: 'shipment_status')
-  String get shipmentStatus => throw _privateConstructorUsedError;
+  @JsonKey(name: 'payload_type')
+  String get payloadType => throw _privateConstructorUsedError;
   @JsonKey(name: 'pickup_date')
   String? get pickupDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'delivery_date')
   String? get deliveryDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'sync_status')
   String get syncStatus => throw _privateConstructorUsedError;
+  String get stage => throw _privateConstructorUsedError;
 
   /// Serializes this Shipment to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -84,10 +85,11 @@ abstract class $ShipmentCopyWith<$Res> {
     @JsonKey(name: 'pickup_longitude') double pickupLongitude,
     @JsonKey(name: 'sample_type') String sampleType,
     @JsonKey(name: 'sample_count') int sampleCount,
-    @JsonKey(name: 'shipment_status') String shipmentStatus,
+    @JsonKey(name: 'payload_type') String payloadType,
     @JsonKey(name: 'pickup_date') String? pickupDate,
     @JsonKey(name: 'delivery_date') String? deliveryDate,
     @JsonKey(name: 'sync_status') String syncStatus,
+    String stage,
   });
 }
 
@@ -119,10 +121,11 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
     Object? pickupLongitude = null,
     Object? sampleType = null,
     Object? sampleCount = null,
-    Object? shipmentStatus = null,
+    Object? payloadType = null,
     Object? pickupDate = freezed,
     Object? deliveryDate = freezed,
     Object? syncStatus = null,
+    Object? stage = null,
   }) {
     return _then(
       _value.copyWith(
@@ -178,9 +181,9 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
                 ? _value.sampleCount
                 : sampleCount // ignore: cast_nullable_to_non_nullable
                       as int,
-            shipmentStatus: null == shipmentStatus
-                ? _value.shipmentStatus
-                : shipmentStatus // ignore: cast_nullable_to_non_nullable
+            payloadType: null == payloadType
+                ? _value.payloadType
+                : payloadType // ignore: cast_nullable_to_non_nullable
                       as String,
             pickupDate: freezed == pickupDate
                 ? _value.pickupDate
@@ -193,6 +196,10 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
             syncStatus: null == syncStatus
                 ? _value.syncStatus
                 : syncStatus // ignore: cast_nullable_to_non_nullable
+                      as String,
+            stage: null == stage
+                ? _value.stage
+                : stage // ignore: cast_nullable_to_non_nullable
                       as String,
           )
           as $Val,
@@ -223,10 +230,11 @@ abstract class _$$ShipmentImplCopyWith<$Res>
     @JsonKey(name: 'pickup_longitude') double pickupLongitude,
     @JsonKey(name: 'sample_type') String sampleType,
     @JsonKey(name: 'sample_count') int sampleCount,
-    @JsonKey(name: 'shipment_status') String shipmentStatus,
+    @JsonKey(name: 'payload_type') String payloadType,
     @JsonKey(name: 'pickup_date') String? pickupDate,
     @JsonKey(name: 'delivery_date') String? deliveryDate,
     @JsonKey(name: 'sync_status') String syncStatus,
+    String stage,
   });
 }
 
@@ -257,10 +265,11 @@ class __$$ShipmentImplCopyWithImpl<$Res>
     Object? pickupLongitude = null,
     Object? sampleType = null,
     Object? sampleCount = null,
-    Object? shipmentStatus = null,
+    Object? payloadType = null,
     Object? pickupDate = freezed,
     Object? deliveryDate = freezed,
     Object? syncStatus = null,
+    Object? stage = null,
   }) {
     return _then(
       _$ShipmentImpl(
@@ -316,9 +325,9 @@ class __$$ShipmentImplCopyWithImpl<$Res>
             ? _value.sampleCount
             : sampleCount // ignore: cast_nullable_to_non_nullable
                   as int,
-        shipmentStatus: null == shipmentStatus
-            ? _value.shipmentStatus
-            : shipmentStatus // ignore: cast_nullable_to_non_nullable
+        payloadType: null == payloadType
+            ? _value.payloadType
+            : payloadType // ignore: cast_nullable_to_non_nullable
                   as String,
         pickupDate: freezed == pickupDate
             ? _value.pickupDate
@@ -331,6 +340,10 @@ class __$$ShipmentImplCopyWithImpl<$Res>
         syncStatus: null == syncStatus
             ? _value.syncStatus
             : syncStatus // ignore: cast_nullable_to_non_nullable
+                  as String,
+        stage: null == stage
+            ? _value.stage
+            : stage // ignore: cast_nullable_to_non_nullable
                   as String,
       ),
     );
@@ -357,10 +370,11 @@ class _$ShipmentImpl implements _Shipment {
     @JsonKey(name: 'pickup_longitude') required this.pickupLongitude,
     @JsonKey(name: 'sample_type') required this.sampleType,
     @JsonKey(name: 'sample_count') required this.sampleCount,
-    @JsonKey(name: 'shipment_status') this.shipmentStatus = 'pending',
+    @JsonKey(name: 'payload_type') this.payloadType = 'specimen',
     @JsonKey(name: 'pickup_date') this.pickupDate,
     @JsonKey(name: 'delivery_date') this.deliveryDate,
     @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
+    this.stage = 'Pending',
   });
 
   factory _$ShipmentImpl.fromJson(Map<String, dynamic> json) =>
@@ -405,8 +419,8 @@ class _$ShipmentImpl implements _Shipment {
   @JsonKey(name: 'sample_count')
   final int sampleCount;
   @override
-  @JsonKey(name: 'shipment_status')
-  final String shipmentStatus;
+  @JsonKey(name: 'payload_type')
+  final String payloadType;
   @override
   @JsonKey(name: 'pickup_date')
   final String? pickupDate;
@@ -416,10 +430,13 @@ class _$ShipmentImpl implements _Shipment {
   @override
   @JsonKey(name: 'sync_status')
   final String syncStatus;
+  @override
+  @JsonKey()
+  final String stage;
 
   @override
   String toString() {
-    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originType: $originType, originFacilityName: $originFacilityName, destinationLocationType: $destinationLocationType, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount, shipmentStatus: $shipmentStatus, pickupDate: $pickupDate, deliveryDate: $deliveryDate, syncStatus: $syncStatus)';
+    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originType: $originType, originFacilityName: $originFacilityName, destinationLocationType: $destinationLocationType, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount, payloadType: $payloadType, pickupDate: $pickupDate, deliveryDate: $deliveryDate, syncStatus: $syncStatus, stage: $stage)';
   }
 
   @override
@@ -457,14 +474,15 @@ class _$ShipmentImpl implements _Shipment {
                 other.sampleType == sampleType) &&
             (identical(other.sampleCount, sampleCount) ||
                 other.sampleCount == sampleCount) &&
-            (identical(other.shipmentStatus, shipmentStatus) ||
-                other.shipmentStatus == shipmentStatus) &&
+            (identical(other.payloadType, payloadType) ||
+                other.payloadType == payloadType) &&
             (identical(other.pickupDate, pickupDate) ||
                 other.pickupDate == pickupDate) &&
             (identical(other.deliveryDate, deliveryDate) ||
                 other.deliveryDate == deliveryDate) &&
             (identical(other.syncStatus, syncStatus) ||
-                other.syncStatus == syncStatus));
+                other.syncStatus == syncStatus) &&
+            (identical(other.stage, stage) || other.stage == stage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -484,10 +502,11 @@ class _$ShipmentImpl implements _Shipment {
     pickupLongitude,
     sampleType,
     sampleCount,
-    shipmentStatus,
+    payloadType,
     pickupDate,
     deliveryDate,
     syncStatus,
+    stage,
   );
 
   /// Create a copy of Shipment
@@ -522,10 +541,11 @@ abstract class _Shipment implements Shipment {
     @JsonKey(name: 'pickup_longitude') required final double pickupLongitude,
     @JsonKey(name: 'sample_type') required final String sampleType,
     @JsonKey(name: 'sample_count') required final int sampleCount,
-    @JsonKey(name: 'shipment_status') final String shipmentStatus,
+    @JsonKey(name: 'payload_type') final String payloadType,
     @JsonKey(name: 'pickup_date') final String? pickupDate,
     @JsonKey(name: 'delivery_date') final String? deliveryDate,
     @JsonKey(name: 'sync_status') final String syncStatus,
+    final String stage,
   }) = _$ShipmentImpl;
 
   factory _Shipment.fromJson(Map<String, dynamic> json) =
@@ -570,8 +590,8 @@ abstract class _Shipment implements Shipment {
   @JsonKey(name: 'sample_count')
   int get sampleCount;
   @override
-  @JsonKey(name: 'shipment_status')
-  String get shipmentStatus;
+  @JsonKey(name: 'payload_type')
+  String get payloadType;
   @override
   @JsonKey(name: 'pickup_date')
   String? get pickupDate;
@@ -581,6 +601,8 @@ abstract class _Shipment implements Shipment {
   @override
   @JsonKey(name: 'sync_status')
   String get syncStatus;
+  @override
+  String get stage;
 
   /// Create a copy of Shipment
   /// with the given fields replaced by the non-null parameter values.

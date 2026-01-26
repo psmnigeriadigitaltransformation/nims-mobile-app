@@ -45,6 +45,7 @@ mixin _$Manifest {
   String get destinationFacilityName => throw _privateConstructorUsedError;
   @JsonKey(name: 'sync_status')
   String get syncStatus => throw _privateConstructorUsedError;
+  String get stage => throw _privateConstructorUsedError;
 
   /// Serializes this Manifest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -75,6 +76,7 @@ abstract class $ManifestCopyWith<$Res> {
     @JsonKey(name: 'originating_facility_name') String originatingFacilityName,
     @JsonKey(name: 'destination_facility_name') String destinationFacilityName,
     @JsonKey(name: 'sync_status') String syncStatus,
+    String stage,
   });
 }
 
@@ -106,6 +108,7 @@ class _$ManifestCopyWithImpl<$Res, $Val extends Manifest>
     Object? originatingFacilityName = null,
     Object? destinationFacilityName = null,
     Object? syncStatus = null,
+    Object? stage = null,
   }) {
     return _then(
       _value.copyWith(
@@ -161,6 +164,10 @@ class _$ManifestCopyWithImpl<$Res, $Val extends Manifest>
                 ? _value.syncStatus
                 : syncStatus // ignore: cast_nullable_to_non_nullable
                       as String,
+            stage: null == stage
+                ? _value.stage
+                : stage // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -190,6 +197,7 @@ abstract class _$$ManifestImplCopyWith<$Res>
     @JsonKey(name: 'originating_facility_name') String originatingFacilityName,
     @JsonKey(name: 'destination_facility_name') String destinationFacilityName,
     @JsonKey(name: 'sync_status') String syncStatus,
+    String stage,
   });
 }
 
@@ -220,6 +228,7 @@ class __$$ManifestImplCopyWithImpl<$Res>
     Object? originatingFacilityName = null,
     Object? destinationFacilityName = null,
     Object? syncStatus = null,
+    Object? stage = null,
   }) {
     return _then(
       _$ManifestImpl(
@@ -275,6 +284,10 @@ class __$$ManifestImplCopyWithImpl<$Res>
             ? _value.syncStatus
             : syncStatus // ignore: cast_nullable_to_non_nullable
                   as String,
+        stage: null == stage
+            ? _value.stage
+            : stage // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -299,6 +312,7 @@ class _$ManifestImpl implements _Manifest {
     @JsonKey(name: 'destination_facility_name')
     required this.destinationFacilityName,
     @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
+    this.stage = 'Pending',
   });
 
   factory _$ManifestImpl.fromJson(Map<String, dynamic> json) =>
@@ -341,10 +355,13 @@ class _$ManifestImpl implements _Manifest {
   @override
   @JsonKey(name: 'sync_status')
   final String syncStatus;
+  @override
+  @JsonKey()
+  final String stage;
 
   @override
   String toString() {
-    return 'Manifest(id: $id, manifestNo: $manifestNo, originId: $originId, destinationId: $destinationId, sampleType: $sampleType, sampleCount: $sampleCount, phlebotomyNo: $phlebotomyNo, lspCode: $lspCode, temperature: $temperature, userId: $userId, originatingFacilityName: $originatingFacilityName, destinationFacilityName: $destinationFacilityName, syncStatus: $syncStatus)';
+    return 'Manifest(id: $id, manifestNo: $manifestNo, originId: $originId, destinationId: $destinationId, sampleType: $sampleType, sampleCount: $sampleCount, phlebotomyNo: $phlebotomyNo, lspCode: $lspCode, temperature: $temperature, userId: $userId, originatingFacilityName: $originatingFacilityName, destinationFacilityName: $destinationFacilityName, syncStatus: $syncStatus, stage: $stage)';
   }
 
   @override
@@ -380,7 +397,8 @@ class _$ManifestImpl implements _Manifest {
                 ) ||
                 other.destinationFacilityName == destinationFacilityName) &&
             (identical(other.syncStatus, syncStatus) ||
-                other.syncStatus == syncStatus));
+                other.syncStatus == syncStatus) &&
+            (identical(other.stage, stage) || other.stage == stage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -400,6 +418,7 @@ class _$ManifestImpl implements _Manifest {
     originatingFacilityName,
     destinationFacilityName,
     syncStatus,
+    stage,
   );
 
   /// Create a copy of Manifest
@@ -433,6 +452,7 @@ abstract class _Manifest implements Manifest {
     @JsonKey(name: 'destination_facility_name')
     required final String destinationFacilityName,
     @JsonKey(name: 'sync_status') final String syncStatus,
+    final String stage,
   }) = _$ManifestImpl;
 
   factory _Manifest.fromJson(Map<String, dynamic> json) =
@@ -475,6 +495,8 @@ abstract class _Manifest implements Manifest {
   @override
   @JsonKey(name: 'sync_status')
   String get syncStatus;
+  @override
+  String get stage;
 
   /// Create a copy of Manifest
   /// with the given fields replaced by the non-null parameter values.

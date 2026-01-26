@@ -26,11 +26,14 @@ import 'package:nims_mobile_app/core/services/remote/models/request/create_manif
 import 'package:nims_mobile_app/core/domain/models/manifest.dart' as domain_manifest;
 import 'package:nims_mobile_app/core/domain/models/sample.dart' as domain_sample;
 
-import 'package:nims_mobile_app/core/services/remote/models/request/create_shipment_route_request_body.dart' as create_shipment_route_request_body;
+import 'package:nims_mobile_app/core/services/remote/models/request/create_specimen_shipment_route_request_body.dart' as create_shipment_route_request_body;
 import 'package:nims_mobile_app/core/domain/models/shipment_route.dart' as domain_route;
 
 import 'package:nims_mobile_app/core/domain/models/shipment.dart' as domain_shipment;
 import 'package:nims_mobile_app/core/domain/models/approval.dart' as domain_approval;
+import 'package:nims_mobile_app/core/domain/models/result.dart' as domain_result;
+
+import 'package:nims_mobile_app/core/services/remote/models/results_response.dart' as available_results_response;
 
 typedef RemoteUser = login_response.User;
 typedef DomainUser = domain_user.User;
@@ -68,7 +71,7 @@ typedef DomainManifest = domain_manifest.Manifest;
 typedef RemoteSample = create_manifest_request_body.ManifestSampleRequest;
 typedef DomainSample = domain_sample.Sample;
 
-typedef RemoteShipmentRoute = create_shipment_route_request_body.CreateShipmentRouteRequest;
+typedef RemoteShipmentRoute = create_shipment_route_request_body.CreateSpecimenShipmentRouteRequest;
 typedef DomainShipmentRoute = domain_route.ShipmentRoute;
 
 typedef RemoteShipment = create_shipment_route_request_body.Shipment;
@@ -76,3 +79,6 @@ typedef DomainShipment = domain_shipment.Shipment;
 
 typedef RemoteApproval = create_shipment_route_request_body.Approval;
 typedef DomainApproval = domain_approval.Approval;
+
+typedef RemoteAvailableResultItem = available_results_response.ResultItem;
+typedef DomainResult = domain_result.LabResult;

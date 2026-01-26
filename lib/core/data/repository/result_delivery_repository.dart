@@ -23,15 +23,13 @@ class ResultDeliveryRepository {
   /// Save result delivery approval locally and attempt immediate sync if online
   Future<Result<bool>> saveResultDelivery({
     required String routeNo,
-    required List<DomainShipment> shipments,
+    required DomainShipment shipment,
     required DomainApproval approval,
     required List<String> sampleCodes,
   }) async {
     try {
-      final shipmentNos = shipments.map((s) => s.shipmentNo).toList();
-
       // Save locally first
-      await _localService.saveResultDeliveryApproval(routeNo, shipmentNos, approval);
+      await _localService.saveResultDeliveryApproval(routeNo, shipment.shipmentNo, approval);
 
       developer.log(
         "Result delivery saved locally: route=$routeNo",
@@ -48,10 +46,10 @@ class ResultDeliveryRepository {
 
         // Get the route for this delivery
         final route = await _localService.getCachedRouteByRouteNo(routeNo);
-        if (route != null && shipments.isNotEmpty) {
+        if (route != null) {
           final synced = await _syncService.syncResultDeliveryNow(
             route,
-            shipments.first,
+            shipment,
             approval,
             sampleCodes,
           );

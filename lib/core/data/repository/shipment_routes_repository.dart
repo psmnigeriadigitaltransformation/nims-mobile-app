@@ -21,8 +21,8 @@ class ShipmentRoutesRepository {
     this._syncService,
   );
 
-  /// Save a shipment route locally and attempt immediate sync if online
-  /// Note: All related manifests must be synced first before the route can be synced
+  /// Save a specimen route locally and attempt immediate sync if online
+  /// Note: All related manifest must be synced first before the route can be synced
   Future<Result<bool>> saveShipmentRoute(
     DomainShipmentRoute shipmentRoute,
     List<DomainShipment> shipments,
@@ -47,7 +47,7 @@ class ShipmentRoutesRepository {
           );
         } else {
           developer.log(
-            "Route ${shipmentRoute.routeNo} saved locally, sync failed (manifests may not be synced yet)",
+            "Route ${shipmentRoute.routeNo} saved locally, sync failed (manifest may not be synced yet)",
             name: "ShipmentRoutesRepository:saveShipmentRoute",
           );
         }
@@ -85,7 +85,7 @@ class ShipmentRoutesRepository {
     }
   }
 
-  /// Get all shipment routes
+  /// Get all specimen routes
   Future<Result<List<DomainShipmentRoute>>> getAllRoutes() async {
     try {
       final routes = await _localService.getAllCachedRoutes();
@@ -144,6 +144,65 @@ class ShipmentRoutesRepository {
         error: e,
         stackTrace: s,
         name: "ShipmentRoutesRepository:getApprovalsByRouteNo",
+      );
+      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+    }
+  }
+
+  /// Save a result specimen route locally and attempt immediate sync if online
+  /// This is for result pickup flow - also marks results as picked
+  Future<Result<bool>> saveResultShipmentRoute(
+    DomainShipmentRoute shipmentRoute,
+    List<DomainShipment> shipments,
+    DomainApproval approval,
+    List<String> sampleCodes,
+  ) async {
+    try {
+      // 1. Mark results as picked for this route
+      await _localService.markResultsAsPickedForRoute(sampleCodes, shipmentRoute.routeNo);
+
+      // 2. Save route, shipments, and approval locally with pending sync status
+      await _localService.cacheShipmentRoute(shipmentRoute, shipments, approval);
+
+      developer.log(
+        "Result specimen route ${shipmentRoute.routeNo} saved locally with ${sampleCodes.length} results",
+        name: "ShipmentRoutesRepository:saveResultShipmentRoute",
+      );
+
+      // 3. If online, try to sync immediately
+      final isConnected = await _connectivityService.isConnected;
+      if (isConnected) {
+        final synced = await _syncService.syncResultPickupNow(
+          shipmentRoute,
+          shipments.first, // Use first specimen for compatibility
+          approval,
+          sampleCodes,
+        );
+        if (synced) {
+          developer.log(
+            "Result pickup route ${shipmentRoute.routeNo} synced immediately",
+            name: "ShipmentRoutesRepository:saveResultShipmentRoute",
+          );
+        } else {
+          developer.log(
+            "Result pickup route ${shipmentRoute.routeNo} saved locally, sync pending",
+            name: "ShipmentRoutesRepository:saveResultShipmentRoute",
+          );
+        }
+      } else {
+        developer.log(
+          "Result pickup route ${shipmentRoute.routeNo} saved locally (offline)",
+          name: "ShipmentRoutesRepository:saveResultShipmentRoute",
+        );
+      }
+
+      return Success(true);
+    } catch (e, s) {
+      developer.log(
+        e.toString(),
+        error: e,
+        stackTrace: s,
+        name: "ShipmentRoutesRepository:saveResultShipmentRoute",
       );
       return Error(e.toString(), exception: e as Exception, stackTrace: s);
     }

@@ -4,9 +4,11 @@ import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment_route.dart';
 import 'package:nims_mobile_app/features/dashboard/presentation/ui/dashboard_screen_state_notifier.dart';
 import 'package:nims_mobile_app/features/dashboard/presentation/ui/model/dashboard_screen_state.dart';
-import 'package:nims_mobile_app/features/dashboard/presentation/ui/model/route_details_screen_state.dart';
+import 'package:nims_mobile_app/features/dashboard/presentation/ui/model/specimen_shipment_route_details_screen_state.dart';
 import 'package:nims_mobile_app/features/dashboard/presentation/ui/model/routes_screen_state.dart';
-import 'package:nims_mobile_app/features/dashboard/presentation/ui/route_details_screen_state_notifier.dart';
+import 'package:nims_mobile_app/features/dashboard/presentation/ui/result_shipment_route_details_screen_state.dart';
+import 'package:nims_mobile_app/features/dashboard/presentation/ui/result_shipment_route_details_screen_state_notifier.dart';
+import 'package:nims_mobile_app/features/dashboard/presentation/ui/specimen_shipment_route_details_screen_state_notifier.dart';
 import 'package:nims_mobile_app/features/dashboard/presentation/ui/routes_screen_state_notifier.dart';
 
 import '../../core/services/remote/models/login_response.dart';
@@ -17,12 +19,19 @@ AsyncNotifierProvider.autoDispose<DashboardScreenStateNotifier, DashboardScreenS
   DashboardScreenStateNotifier.new,
 );
 
-final routeDetailsScreenStateNotifierProvider =
+final specimenShipmentRouteDetailsScreenStateNotifierProvider =
     AsyncNotifierProvider.family<
-      RouteDetailsScreenStateNotifier,
-      RouteDetailsScreenState,
+      SpecimenShipmentRouteDetailsScreenStateNotifier,
+      SpecimenShipmentRouteDetailsScreenState,
       ShipmentRoute
-    >(RouteDetailsScreenStateNotifier.new);
+    >(SpecimenShipmentRouteDetailsScreenStateNotifier.new);
+
+final resultShipmentRouteDetailsScreenStateNotifierProvider =
+AsyncNotifierProvider.family<
+    ResultShipmentRouteDetailsScreenStateNotifier,
+    ResultShipmentRouteDetailsScreenState,
+    ShipmentRoute
+>(ResultShipmentRouteDetailsScreenStateNotifier.new);
 
 final routesScreenStateNotifierProvider =
     AsyncNotifierProvider.autoDispose<RoutesScreenStateNotifier, RoutesScreenState>(

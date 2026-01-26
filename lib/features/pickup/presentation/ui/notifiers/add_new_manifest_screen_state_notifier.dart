@@ -14,8 +14,8 @@ import 'package:nims_mobile_app/features/facilities/data/providers.dart';
 import '../../../../../core/utils/list_extensions.dart';
 import '../../../../../core/utils/result.dart';
 import '../../../providers.dart';
-import '../model/add_new_manifest_screen_state.dart';
-import '../model/manifests_screen_state.dart';
+import '../models/add_new_manifest_screen_state.dart';
+import '../models/manifests_screen_state.dart';
 
 class AddNewManifestScreenStateNotifier
     extends
@@ -36,21 +36,20 @@ class AddNewManifestScreenStateNotifier
     final facilitiesRepository = ref.read(facilitiesRepositoryProvider);
     final sampleTypesRepository = ref.read(samplesRepositoryProvider);
     final localService = ref.read(nimsLocalServiceProvider);
+    final eTokenService = ref.read(eTokenServiceProvider);
 
     final facilitiesResult = await facilitiesRepository.getFacilities(false);
     final sampleTypesResult = await sampleTypesRepository.getSampleTypes(false);
 
-    // Get LSP and EToken for manifest number generation
+    // Get LSP for manifest number generation
     final lsp = await localService.getFirstCachedLsp();
-    final etoken = await localService.getNextEToken();
 
     if (lsp == null) {
       throw Exception("No LSP available. Please sync your data.");
     }
 
-    if (etoken == null) {
-      throw Exception("No eTokens available. Please download more eTokens before creating manifests.");
-    }
+    // Get etoken (auto-downloads if needed)
+    final etoken = await eTokenService.getNextEToken();
 
     // Generate manifest number using LSP display and EToken serial number
     final manifestNo = '${lsp.display}-${etoken.serialNo}';
@@ -60,12 +59,12 @@ class AddNewManifestScreenStateNotifier
         facilities: (facilitiesResult as Success<List<DomainFacility>>).payload
             .where(
               (facility) =>
-                  param.movementType.destinationPrimary!.toLowerCase().contains(
+                  param.movementType.destinationPrimary?.toLowerCase().contains(
                     facility.type?.toLowerCase() ?? "",
-                  ) ||
-                  param.movementType.destinationSecondary!
-                      .toLowerCase()
-                      .contains(facility.type?.toLowerCase() ?? ""),
+                  ) == true ||
+                  param.movementType.destinationSecondary
+                      ?.toLowerCase()
+                      .contains(facility.type?.toLowerCase() ?? "") == true,
             )
             .distinctBy((facility) => facility.facilityId),
         sampleTypes:

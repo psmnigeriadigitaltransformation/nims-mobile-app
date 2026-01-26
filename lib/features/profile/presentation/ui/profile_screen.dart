@@ -16,7 +16,7 @@ import 'package:nims_mobile_app/features/profile/providers.dart';
 
 import '../../../../app/route_name+path+params.dart';
 import '../../../../core/ui/screens/nims_base_screen.dart';
-import '../../../../core/ui/widgets/nims_transit_card.dart';
+import '../../../../core/ui/widgets/nims_route_card.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});

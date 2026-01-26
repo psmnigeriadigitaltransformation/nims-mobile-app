@@ -5,6 +5,8 @@ import '../../core/services/location/geo_location_service.dart';
 import '../../core/services/network/connectivity_service.dart';
 import '../../core/services/remote/nims_api_service.dart';
 import '../../core/services/sync/sync_service.dart';
+import '../../core/services/etoken/etoken_service.dart';
+import '../../core/data/repository/etoken_repository.dart';
 
 final nimsApiServiceProvider = Provider((ref) => NIMSAPIService());
 final nimsLocalServiceProvider = Provider((ref) => NIMSLocalService());
@@ -29,4 +31,18 @@ final syncServiceProvider = Provider((ref) {
 
   ref.onDispose(() => syncService.dispose());
   return syncService;
+});
+
+final eTokenServiceProvider = Provider((ref) {
+  final localService = ref.watch(nimsLocalServiceProvider);
+  final apiService = ref.watch(nimsApiServiceProvider);
+  final connectivityService = ref.watch(connectivityServiceProvider);
+
+  final eTokenRepository = ETokenRepository(apiService, localService);
+
+  return ETokenService(
+    localService,
+    eTokenRepository,
+    connectivityService,
+  );
 });

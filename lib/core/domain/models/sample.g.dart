@@ -15,6 +15,7 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
   gender: json['gender'] as String,
   comment: json['comment'] as String?,
   syncStatus: json['sync_status'] as String? ?? 'pending',
+  stage: json['stage'] as String? ?? 'Order',
 );
 
 Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
@@ -27,4 +28,5 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
       'gender': instance.gender,
       'comment': instance.comment,
       'sync_status': instance.syncStatus,
+      'stage': instance.stage,
     };

@@ -19,6 +19,7 @@ class Manifest with _$Manifest {
     @JsonKey(name: 'originating_facility_name') required String originatingFacilityName,
     @JsonKey(name: 'destination_facility_name') required String destinationFacilityName,
     @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
+    @Default('Pending') String stage,
     // @JsonKey(name: 'created_at') String? createdAt,
   }) = _Manifest;
 

@@ -36,7 +36,7 @@ class ShipmentsRepository {
     }
   }
 
-  /// Save delivery approval and update shipment status to delivered
+  /// Save delivery approval and update specimen status to delivered
   Future<Result<bool>> saveDeliveryApproval(
     List<DomainShipment> shipments,
     DomainApproval deliveryApproval,
@@ -44,7 +44,7 @@ class ShipmentsRepository {
   ) async {
     try {
       final shipmentNos = shipments.map((s) => s.shipmentNo).toList();
-      await _localService.saveDeliveryApproval(shipmentNos, deliveryApproval);
+      await _localService.saveSpecimenDeliveryApproval(shipmentNos, deliveryApproval);
 
       developer.log(
         "Delivery approval saved for ${shipmentNos.length} shipments",

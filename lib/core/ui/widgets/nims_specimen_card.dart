@@ -58,7 +58,7 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
                           ),
                         ),
                         child: Text(
-                          widget.sample.sampleCode,
+                          widget.sample.patientCode,
                           style: Theme.of(context).textTheme.labelMedium,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

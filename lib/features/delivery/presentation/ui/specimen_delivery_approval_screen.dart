@@ -15,17 +15,14 @@ import '../../../pickup/presentation/ui/widgets/signature_dialog.dart';
 import '../../providers.dart';
 
 class SpecimenDeliveryApprovalScreen extends ConsumerStatefulWidget {
-  final DomainMovementType movementType;
-  final DomainFacility destinationFacility;
+  final DomainShipmentRoute route;
   final List<DomainShipment> shipments;
-  final String routeNo;
 
   const SpecimenDeliveryApprovalScreen({
     super.key,
-    required this.movementType,
-    required this.destinationFacility,
+    required this.route,
     required this.shipments,
-    required this.routeNo,
+
   });
 
   @override
@@ -38,14 +35,13 @@ class _SpecimenDeliveryApprovalScreenState
   @override
   Widget build(BuildContext context) {
     final args = (
-      movementType: widget.movementType,
-      destinationFacility: widget.destinationFacility,
+    route: widget.route,
       shipments: widget.shipments,
-      routeNo: widget.routeNo,
+
     );
 
     ref.listen(
-      deliveryApprovalScreenStateNotifierProvider(args).select((s) => s.alert),
+      specimenDeliveryApprovalScreenStateNotifierProvider(args).select((s) => s.alert),
       (prev, next) {
         final prevShow = prev?.show ?? false;
         final nextShow = next.show;
@@ -59,7 +55,7 @@ class _SpecimenDeliveryApprovalScreenState
                 context.pop();
                 ref
                     .read(
-                      deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                      specimenDeliveryApprovalScreenStateNotifierProvider(args).notifier,
                     )
                     .onDismissAlertDialog();
               },
@@ -71,13 +67,13 @@ class _SpecimenDeliveryApprovalScreenState
     );
 
     ref.listen(
-      deliveryApprovalScreenStateNotifierProvider(args),
+      specimenDeliveryApprovalScreenStateNotifierProvider(args),
       (prev, next) {
         if (prev?.showSuccessScreen == false && next.showSuccessScreen) {
           context.goNamed(
-            deliverySuccessScreen,
+            specimenDeliverySuccessScreen,
             queryParameters: {
-              destinationFacilityQueryParam: jsonEncode(widget.destinationFacility.toJson()),
+              destinationFacilityNameQueryParam: widget.route.destinationFacilityName,
               shipmentsQueryParam: jsonEncode(
                 next.shipments.map((s) => s.toJson()).toList(),
               ),
@@ -87,7 +83,7 @@ class _SpecimenDeliveryApprovalScreenState
       },
     );
 
-    final state = ref.watch(deliveryApprovalScreenStateNotifierProvider(args));
+    final state = ref.watch(specimenDeliveryApprovalScreenStateNotifierProvider(args));
 
     return NIMSBaseScreen(
       header: Padding(
@@ -119,7 +115,7 @@ class _SpecimenDeliveryApprovalScreenState
             SizedBox(height: 8),
 
             Text(
-              widget.movementType.movement ?? "",
+              widget.route.destinationFacilityName,
               style: TextTheme.of(context).bodySmall,
             ),
             SizedBox(height: 24),
@@ -136,8 +132,8 @@ class _SpecimenDeliveryApprovalScreenState
             /// ORIGIN + DESTINATION FACILITY
             /// -------------------------------------------
             NIMSOriginDestinationLinkView(
-              origin: widget.movementType.origin ?? "",
-              destination: widget.destinationFacility.facilityName ?? "",
+              origin: widget.route.originFacilityName,
+              destination: widget.route.destinationFacilityName,
             ),
 
             SizedBox(height: 40),
@@ -195,7 +191,7 @@ class _SpecimenDeliveryApprovalScreenState
                 onChanged: (value) {
                   ref
                       .read(
-                        deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                        specimenDeliveryApprovalScreenStateNotifierProvider(args).notifier,
                       )
                       .onUpdateDeliveryTemperature(value);
                 },
@@ -222,7 +218,7 @@ class _SpecimenDeliveryApprovalScreenState
                 onChanged: (value) {
                   ref
                       .read(
-                        deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                        specimenDeliveryApprovalScreenStateNotifierProvider(args).notifier,
                       )
                       .onUpdateFullName(value);
                 },
@@ -251,7 +247,7 @@ class _SpecimenDeliveryApprovalScreenState
                 onChanged: (value) {
                   ref
                       .read(
-                        deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                        specimenDeliveryApprovalScreenStateNotifierProvider(args).notifier,
                       )
                       .onUpdatePhoneNumber(value);
                 },
@@ -278,7 +274,7 @@ class _SpecimenDeliveryApprovalScreenState
                 onChanged: (value) {
                   ref
                       .read(
-                        deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                        specimenDeliveryApprovalScreenStateNotifierProvider(args).notifier,
                       )
                       .onUpdateDesignation(value);
                 },
@@ -303,12 +299,12 @@ class _SpecimenDeliveryApprovalScreenState
                       onFinish: (signatureBase64) async {
                         ref
                             .read(
-                              deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                              specimenDeliveryApprovalScreenStateNotifierProvider(args).notifier,
                             )
                             .onUpdateSignature(signatureBase64);
                         await ref
                             .read(
-                              deliveryApprovalScreenStateNotifierProvider(args).notifier,
+                              specimenDeliveryApprovalScreenStateNotifierProvider(args).notifier,
                             )
                             .onApproveDelivery();
                       },

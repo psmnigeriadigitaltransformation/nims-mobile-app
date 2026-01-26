@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nims_mobile_app/app/providers.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/core/ui/theme/colors.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_alert_dialog_content.dart';
@@ -11,7 +12,7 @@ import 'package:nims_mobile_app/core/ui/widgets/nims_manifest_card.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_primary_button.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_quick_action_card.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_specimen_shipment_summary_card.dart';
-import 'package:nims_mobile_app/core/ui/widgets/nims_transit_card.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_route_card.dart';
 import 'package:nims_mobile_app/features/dashboard/domain/quick_action.dart';
 import 'package:nims_mobile_app/features/dashboard/presentation/ui/model/dashboard_screen_state.dart';
 import 'package:nims_mobile_app/features/dashboard/presentation/ui/select_movement_type_bottom_sheet_dialog.dart';
@@ -29,13 +30,28 @@ class DashboardScreen extends ConsumerStatefulWidget {
   ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+class _DashboardScreenState extends ConsumerState<DashboardScreen> with RouteAware {
   final TextEditingController searchController = TextEditingController();
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Subscribe to route changes
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
   void dispose() {
+    routeObserver.unsubscribe(this);
     searchController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // Called when returning to this screen from another screen
+    // Refresh the dashboard data including routes
+    ref.read(dashboardScreenStateNotifierProvider.notifier).refreshState();
   }
 
   @override
@@ -154,7 +170,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               Container(
                 padding: EdgeInsetsGeometry.symmetric(vertical: 16),
                 child: SearchBar(
-                  hintText: "Search for specimen, shipment or facility",
+                  hintText: "Search for specimen, specimen or facility",
                   controller: searchController,
                   onChanged: (value) {
                     ref
@@ -314,16 +330,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         }
         return Padding(
           padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-          child: NIMSTransitCard(
-            status: "Dispatched",
-            statusColor: NIMSColors.green05,
-            statusBackgroundColor: NIMSColors.green02.withAlpha(50),
-            sourceCode: _initialsFrom(route.originFacilityName ?? ""),
-            sourceName: route.originFacilityName ?? "",
-            destinationCode: _initialsFrom(route.destinationFacilityName ?? ""),
-            destinationName: route.destinationFacilityName ?? "",
-            shipmentRoute: route,
-          ),
+          child: NIMSRouteCard(route: route),
         );
       },
     );
@@ -487,15 +494,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ],
       ),
     );
-  }
-
-  String _initialsFrom(String text) {
-    return text
-        .trim()
-        .split(RegExp(r'\s+'))
-        .where((word) => word.isNotEmpty)
-        .map((word) => word[0].toUpperCase())
-        .join();
   }
 
   String _formatTime(DateTime dateTime) {

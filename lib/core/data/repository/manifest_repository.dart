@@ -228,7 +228,7 @@ class ManifestRepository {
     }
   }
 
-  /// Get all manifests
+  /// Get all manifest
   Future<Result<List<DomainManifest>>> getAllManifests() async {
     try {
       final manifests = await _localService.getAllCachedManifests();

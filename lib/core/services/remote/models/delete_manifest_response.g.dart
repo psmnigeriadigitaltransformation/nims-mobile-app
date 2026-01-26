@@ -12,7 +12,9 @@ _$DeleteManifestResponseImpl _$$DeleteManifestResponseImplFromJson(
   resultCode: (json['result_code'] as num?)?.toInt(),
   status: json['status'] as String?,
   message: json['message'] as String?,
-  data: json['data'] as bool?,
+  data: json['data'] == null
+      ? null
+      : DeleteManifestData.fromJson(json['data'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$$DeleteManifestResponseImplToJson(
@@ -23,3 +25,13 @@ Map<String, dynamic> _$$DeleteManifestResponseImplToJson(
   'message': instance.message,
   'data': instance.data,
 };
+
+_$DeleteManifestDataImpl _$$DeleteManifestDataImplFromJson(
+  Map<String, dynamic> json,
+) => _$DeleteManifestDataImpl(
+  manifestsDeleted: (json['manifests_deleted'] as num?)?.toInt(),
+);
+
+Map<String, dynamic> _$$DeleteManifestDataImplToJson(
+  _$DeleteManifestDataImpl instance,
+) => <String, dynamic>{'manifests_deleted': instance.manifestsDeleted};

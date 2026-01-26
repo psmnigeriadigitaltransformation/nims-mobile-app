@@ -9,9 +9,19 @@ class DeleteManifestResponse with _$DeleteManifestResponse {
     @JsonKey(name: 'result_code') required int? resultCode,
     required String? status,
     required String? message,
-    required bool? data,
+    required DeleteManifestData? data,
   }) = _DeleteManifestResponse;
 
   factory DeleteManifestResponse.fromJson(Map<String, dynamic> json) =>
       _$DeleteManifestResponseFromJson(json);
+}
+
+@freezed
+class DeleteManifestData with _$DeleteManifestData {
+  const factory DeleteManifestData({
+    @JsonKey(name: 'manifests_deleted') required int? manifestsDeleted,
+  }) = _DeleteManifestData;
+
+  factory DeleteManifestData.fromJson(Map<String, dynamic> json) =>
+      _$DeleteManifestDataFromJson(json);
 }

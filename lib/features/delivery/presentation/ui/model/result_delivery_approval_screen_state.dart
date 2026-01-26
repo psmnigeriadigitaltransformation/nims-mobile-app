@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nims_mobile_app/core/domain/models/facility.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/result.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment_route.dart';
 
@@ -13,9 +14,8 @@ class ResultDeliveryApprovalScreenState with _$ResultDeliveryApprovalScreenState
 
   const factory ResultDeliveryApprovalScreenState({
     required ShipmentRoute route,
-    required List<Shipment> shipments,
-    required Facility destinationFacility,
-    @Default([]) List<String> sampleCodes,
+    required Shipment shipment,
+    @Default([]) List<DomainResult> results,
     @Default("") String fullName,
     @Default("") String phoneNumber,
     @Default("") String designation,

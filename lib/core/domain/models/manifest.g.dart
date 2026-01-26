@@ -21,6 +21,7 @@ _$ManifestImpl _$$ManifestImplFromJson(Map<String, dynamic> json) =>
       originatingFacilityName: json['originating_facility_name'] as String,
       destinationFacilityName: json['destination_facility_name'] as String,
       syncStatus: json['sync_status'] as String? ?? 'pending',
+      stage: json['stage'] as String? ?? 'Pending',
     );
 
 Map<String, dynamic> _$$ManifestImplToJson(_$ManifestImpl instance) =>
@@ -38,4 +39,5 @@ Map<String, dynamic> _$$ManifestImplToJson(_$ManifestImpl instance) =>
       'originating_facility_name': instance.originatingFacilityName,
       'destination_facility_name': instance.destinationFacilityName,
       'sync_status': instance.syncStatus,
+      'stage': instance.stage,
     };

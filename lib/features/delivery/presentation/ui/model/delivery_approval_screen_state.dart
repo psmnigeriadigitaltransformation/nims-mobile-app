@@ -1,22 +1,19 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 
-import '../../../../../core/domain/models/facility.dart';
-import '../../../../../core/domain/models/movement_type.dart';
 import '../../../../../core/domain/models/shipment.dart';
+import '../../../../../core/domain/models/shipment_route.dart';
 import '../../../../../core/ui/model/model/alert.dart';
 
 part 'delivery_approval_screen_state.freezed.dart';
 
 @freezed
-class DeliveryApprovalScreenState with _$DeliveryApprovalScreenState {
-  const DeliveryApprovalScreenState._();
+class SpecimenDeliveryApprovalScreenState with _$SpecimenDeliveryApprovalScreenState {
+  const SpecimenDeliveryApprovalScreenState._();
 
-  const factory DeliveryApprovalScreenState({
-    required DomainMovementType movementType,
-    required DomainFacility destinationFacility,
+  const factory SpecimenDeliveryApprovalScreenState({
+    required DomainShipmentRoute route,
     required List<DomainShipment> shipments,
-    required String routeNo,
     @Default("") String deliveryTemperature,
     @Default("") String fullName,
     @Default("") String phoneNumber,
@@ -25,7 +22,7 @@ class DeliveryApprovalScreenState with _$DeliveryApprovalScreenState {
     @Default(false) bool isSavingDelivery,
     @Default(Alert(message: "", show: false)) Alert alert,
     @Default(false) bool showSuccessScreen,
-  }) = _DeliveryApprovalScreenState;
+  }) = _SpecimenDeliveryApprovalScreenState;
 
   String? get phoneNumberError {
     if (phoneNumber.isEmpty) return null;

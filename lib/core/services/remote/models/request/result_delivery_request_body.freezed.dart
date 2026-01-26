@@ -27,6 +27,7 @@ mixin _$ResultDeliveryRequest {
   String get routeNo => throw _privateConstructorUsedError;
   String get latitude => throw _privateConstructorUsedError;
   String get longitude => throw _privateConstructorUsedError;
+  @JsonKey(name: 'shipment')
   ResultDeliveryShipment get shipment => throw _privateConstructorUsedError;
   List<String> get samples => throw _privateConstructorUsedError;
   ResultDeliveryApproval get approval => throw _privateConstructorUsedError;
@@ -52,7 +53,7 @@ abstract class $ResultDeliveryRequestCopyWith<$Res> {
     @JsonKey(name: 'route_no') String routeNo,
     String latitude,
     String longitude,
-    ResultDeliveryShipment shipment,
+    @JsonKey(name: 'shipment') ResultDeliveryShipment shipment,
     List<String> samples,
     ResultDeliveryApproval approval,
   });
@@ -151,7 +152,7 @@ abstract class _$$ResultDeliveryRequestImplCopyWith<$Res>
     @JsonKey(name: 'route_no') String routeNo,
     String latitude,
     String longitude,
-    ResultDeliveryShipment shipment,
+    @JsonKey(name: 'shipment') ResultDeliveryShipment shipment,
     List<String> samples,
     ResultDeliveryApproval approval,
   });
@@ -222,7 +223,7 @@ class _$ResultDeliveryRequestImpl implements _ResultDeliveryRequest {
     @JsonKey(name: 'route_no') required this.routeNo,
     required this.latitude,
     required this.longitude,
-    required this.shipment,
+    @JsonKey(name: 'shipment') required this.shipment,
     required final List<String> samples,
     required this.approval,
   }) : _samples = samples;
@@ -238,6 +239,7 @@ class _$ResultDeliveryRequestImpl implements _ResultDeliveryRequest {
   @override
   final String longitude;
   @override
+  @JsonKey(name: 'shipment')
   final ResultDeliveryShipment shipment;
   final List<String> _samples;
   @override
@@ -307,7 +309,7 @@ abstract class _ResultDeliveryRequest implements ResultDeliveryRequest {
     @JsonKey(name: 'route_no') required final String routeNo,
     required final String latitude,
     required final String longitude,
-    required final ResultDeliveryShipment shipment,
+    @JsonKey(name: 'shipment') required final ResultDeliveryShipment shipment,
     required final List<String> samples,
     required final ResultDeliveryApproval approval,
   }) = _$ResultDeliveryRequestImpl;
@@ -323,6 +325,7 @@ abstract class _ResultDeliveryRequest implements ResultDeliveryRequest {
   @override
   String get longitude;
   @override
+  @JsonKey(name: 'shipment')
   ResultDeliveryShipment get shipment;
   @override
   List<String> get samples;

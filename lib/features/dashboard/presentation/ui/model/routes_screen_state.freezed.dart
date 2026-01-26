@@ -17,8 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$RoutesScreenState {
-  List<ShipmentRoute> get routes => throw _privateConstructorUsedError;
-  List<ShipmentRoute> get filteredRoutes => throw _privateConstructorUsedError;
+  List<RouteWithShipments> get routes => throw _privateConstructorUsedError;
+  List<RouteWithShipments> get filteredRoutes =>
+      throw _privateConstructorUsedError;
   String get searchQuery => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
 
@@ -37,8 +38,8 @@ abstract class $RoutesScreenStateCopyWith<$Res> {
   ) = _$RoutesScreenStateCopyWithImpl<$Res, RoutesScreenState>;
   @useResult
   $Res call({
-    List<ShipmentRoute> routes,
-    List<ShipmentRoute> filteredRoutes,
+    List<RouteWithShipments> routes,
+    List<RouteWithShipments> filteredRoutes,
     String searchQuery,
     bool isLoading,
   });
@@ -69,11 +70,11 @@ class _$RoutesScreenStateCopyWithImpl<$Res, $Val extends RoutesScreenState>
             routes: null == routes
                 ? _value.routes
                 : routes // ignore: cast_nullable_to_non_nullable
-                      as List<ShipmentRoute>,
+                      as List<RouteWithShipments>,
             filteredRoutes: null == filteredRoutes
                 ? _value.filteredRoutes
                 : filteredRoutes // ignore: cast_nullable_to_non_nullable
-                      as List<ShipmentRoute>,
+                      as List<RouteWithShipments>,
             searchQuery: null == searchQuery
                 ? _value.searchQuery
                 : searchQuery // ignore: cast_nullable_to_non_nullable
@@ -98,8 +99,8 @@ abstract class _$$RoutesScreenStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call({
-    List<ShipmentRoute> routes,
-    List<ShipmentRoute> filteredRoutes,
+    List<RouteWithShipments> routes,
+    List<RouteWithShipments> filteredRoutes,
     String searchQuery,
     bool isLoading,
   });
@@ -129,11 +130,11 @@ class __$$RoutesScreenStateImplCopyWithImpl<$Res>
         routes: null == routes
             ? _value._routes
             : routes // ignore: cast_nullable_to_non_nullable
-                  as List<ShipmentRoute>,
+                  as List<RouteWithShipments>,
         filteredRoutes: null == filteredRoutes
             ? _value._filteredRoutes
             : filteredRoutes // ignore: cast_nullable_to_non_nullable
-                  as List<ShipmentRoute>,
+                  as List<RouteWithShipments>,
         searchQuery: null == searchQuery
             ? _value.searchQuery
             : searchQuery // ignore: cast_nullable_to_non_nullable
@@ -151,26 +152,26 @@ class __$$RoutesScreenStateImplCopyWithImpl<$Res>
 
 class _$RoutesScreenStateImpl implements _RoutesScreenState {
   const _$RoutesScreenStateImpl({
-    final List<ShipmentRoute> routes = const [],
-    final List<ShipmentRoute> filteredRoutes = const [],
+    final List<RouteWithShipments> routes = const [],
+    final List<RouteWithShipments> filteredRoutes = const [],
     this.searchQuery = '',
     this.isLoading = true,
   }) : _routes = routes,
        _filteredRoutes = filteredRoutes;
 
-  final List<ShipmentRoute> _routes;
+  final List<RouteWithShipments> _routes;
   @override
   @JsonKey()
-  List<ShipmentRoute> get routes {
+  List<RouteWithShipments> get routes {
     if (_routes is EqualUnmodifiableListView) return _routes;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_routes);
   }
 
-  final List<ShipmentRoute> _filteredRoutes;
+  final List<RouteWithShipments> _filteredRoutes;
   @override
   @JsonKey()
-  List<ShipmentRoute> get filteredRoutes {
+  List<RouteWithShipments> get filteredRoutes {
     if (_filteredRoutes is EqualUnmodifiableListView) return _filteredRoutes;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_filteredRoutes);
@@ -227,16 +228,16 @@ class _$RoutesScreenStateImpl implements _RoutesScreenState {
 
 abstract class _RoutesScreenState implements RoutesScreenState {
   const factory _RoutesScreenState({
-    final List<ShipmentRoute> routes,
-    final List<ShipmentRoute> filteredRoutes,
+    final List<RouteWithShipments> routes,
+    final List<RouteWithShipments> filteredRoutes,
     final String searchQuery,
     final bool isLoading,
   }) = _$RoutesScreenStateImpl;
 
   @override
-  List<ShipmentRoute> get routes;
+  List<RouteWithShipments> get routes;
   @override
-  List<ShipmentRoute> get filteredRoutes;
+  List<RouteWithShipments> get filteredRoutes;
   @override
   String get searchQuery;
   @override

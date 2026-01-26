@@ -29,9 +29,9 @@ mixin _$SpecimenDeliveryRequest {
   String get shipmentNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'manifest_no')
   String get manifestNo => throw _privateConstructorUsedError;
-  @JsonKey(name: 'latitude')
+  @JsonKey(name: 'delivery_latitude')
   String get latitude => throw _privateConstructorUsedError;
-  @JsonKey(name: 'longitude')
+  @JsonKey(name: 'delivery_longitude')
   String get longitude => throw _privateConstructorUsedError;
   @JsonKey(name: 'delivery_date')
   String get deliveryDate => throw _privateConstructorUsedError;
@@ -60,8 +60,8 @@ abstract class $SpecimenDeliveryRequestCopyWith<$Res> {
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'shipment_no') String shipmentNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
-    @JsonKey(name: 'latitude') String latitude,
-    @JsonKey(name: 'longitude') String longitude,
+    @JsonKey(name: 'delivery_latitude') String latitude,
+    @JsonKey(name: 'delivery_longitude') String longitude,
     @JsonKey(name: 'delivery_date') String deliveryDate,
     @JsonKey(name: 'destination_type') String destinationType,
     SpecimenDeliveryApproval approval,
@@ -160,8 +160,8 @@ abstract class _$$SpecimenDeliveryRequestImplCopyWith<$Res>
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'shipment_no') String shipmentNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
-    @JsonKey(name: 'latitude') String latitude,
-    @JsonKey(name: 'longitude') String longitude,
+    @JsonKey(name: 'delivery_latitude') String latitude,
+    @JsonKey(name: 'delivery_longitude') String longitude,
     @JsonKey(name: 'delivery_date') String deliveryDate,
     @JsonKey(name: 'destination_type') String destinationType,
     SpecimenDeliveryApproval approval,
@@ -244,8 +244,8 @@ class _$SpecimenDeliveryRequestImpl implements _SpecimenDeliveryRequest {
     @JsonKey(name: 'route_no') required this.routeNo,
     @JsonKey(name: 'shipment_no') required this.shipmentNo,
     @JsonKey(name: 'manifest_no') required this.manifestNo,
-    @JsonKey(name: 'latitude') required this.latitude,
-    @JsonKey(name: 'longitude') required this.longitude,
+    @JsonKey(name: 'delivery_latitude') required this.latitude,
+    @JsonKey(name: 'delivery_longitude') required this.longitude,
     @JsonKey(name: 'delivery_date') required this.deliveryDate,
     @JsonKey(name: 'destination_type') required this.destinationType,
     required this.approval,
@@ -264,10 +264,10 @@ class _$SpecimenDeliveryRequestImpl implements _SpecimenDeliveryRequest {
   @JsonKey(name: 'manifest_no')
   final String manifestNo;
   @override
-  @JsonKey(name: 'latitude')
+  @JsonKey(name: 'delivery_latitude')
   final String latitude;
   @override
-  @JsonKey(name: 'longitude')
+  @JsonKey(name: 'delivery_longitude')
   final String longitude;
   @override
   @JsonKey(name: 'delivery_date')
@@ -341,8 +341,8 @@ abstract class _SpecimenDeliveryRequest implements SpecimenDeliveryRequest {
     @JsonKey(name: 'route_no') required final String routeNo,
     @JsonKey(name: 'shipment_no') required final String shipmentNo,
     @JsonKey(name: 'manifest_no') required final String manifestNo,
-    @JsonKey(name: 'latitude') required final String latitude,
-    @JsonKey(name: 'longitude') required final String longitude,
+    @JsonKey(name: 'delivery_latitude') required final String latitude,
+    @JsonKey(name: 'delivery_longitude') required final String longitude,
     @JsonKey(name: 'delivery_date') required final String deliveryDate,
     @JsonKey(name: 'destination_type') required final String destinationType,
     required final SpecimenDeliveryApproval approval,
@@ -361,10 +361,10 @@ abstract class _SpecimenDeliveryRequest implements SpecimenDeliveryRequest {
   @JsonKey(name: 'manifest_no')
   String get manifestNo;
   @override
-  @JsonKey(name: 'latitude')
+  @JsonKey(name: 'delivery_latitude')
   String get latitude;
   @override
-  @JsonKey(name: 'longitude')
+  @JsonKey(name: 'delivery_longitude')
   String get longitude;
   @override
   @JsonKey(name: 'delivery_date')

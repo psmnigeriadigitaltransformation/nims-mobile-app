@@ -8,7 +8,7 @@ class NIMSManifestCard extends StatelessWidget {
   final VoidCallback? onTapDelete;
   final bool isSelected;
   final bool isShipped;
-  final String? shipmentStatus;
+  final String? shipmentStage;
 
   const NIMSManifestCard({
     super.key,
@@ -17,7 +17,7 @@ class NIMSManifestCard extends StatelessWidget {
     required this.isSelected,
     this.onTapDelete,
     this.isShipped = false,
-    this.shipmentStatus,
+    this.shipmentStage,
   });
 
   @override
@@ -34,12 +34,14 @@ class NIMSManifestCard extends StatelessWidget {
               color: isShipped
                   ? Theme.of(context).colorScheme.outline.withAlpha(100)
                   : isSelected
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.outline,
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.outline,
               width: 0.5,
             ),
             color: isShipped
-                ? Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(100)
+                ? Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerHighest.withAlpha(100)
                 : null,
           ),
           padding: const EdgeInsets.all(12),
@@ -47,28 +49,26 @@ class NIMSManifestCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 3,
-                        horizontal: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(4)),
-                        color: Theme.of(context).colorScheme.tertiaryContainer,
-                      ),
-                      child: Text(
-                        manifest.manifestNo,
-                        style: Theme.of(context).textTheme.labelMedium,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 3,
+                      horizontal: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      color: Theme.of(context).colorScheme.tertiaryContainer,
+                    ),
+                    child: Text(
+                      manifest.manifestNo,
+                      style: Theme.of(context).textTheme.labelMedium,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
                   const SizedBox(width: 8),
                   // Sync status indicator
                   _buildSyncStatusIndicator(context, manifest.syncStatus),
-                  if (shipmentStatus != null) ...[
+                  if (shipmentStage != null) ...[
                     const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -76,55 +76,67 @@ class NIMSManifestCard extends StatelessWidget {
                         horizontal: 6,
                       ),
                       decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(4)),
-                        color: _getShipmentStatusColor(shipmentStatus!),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(4),
+                        ),
+                        color: _getStageColor(shipmentStage!),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            _getShipmentStatusIcon(shipmentStatus!),
+                            _getStageIcon(shipmentStage!),
                             size: 12,
                             color: Colors.white,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            _getShipmentStatusLabel(shipmentStatus!),
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            _getStageLabel(shipmentStage!),
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
                         ],
                       ),
                     ),
                   ],
-                  const SizedBox(width: 8,),
+                  const Spacer(),
                   Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 16,
-                    color: Theme.of(context).colorScheme.tertiary.withAlpha(100),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.tertiary.withAlpha(100),
                   ),
                 ],
               ),
 
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 4,
+                  vertical: 10,
+                ),
                 child: Row(
                   children: [
-                   Expanded(child:  Text(
-                     manifest.originatingFacilityName,
-                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                       color: Theme.of(context).colorScheme.tertiary,
-                     ),
-                     maxLines: 1,
-                     overflow: TextOverflow.ellipsis,
-                   ),),
+                    Expanded(
+                      child: Text(
+                        manifest.originatingFacilityName,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.tertiary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                     const SizedBox(width: 24),
                     if (onTapDelete != null && !isShipped)
                       InkWell(
                         onTap: onTapDelete,
-                        borderRadius: const BorderRadius.all(Radius.circular(8)),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(8),
+                        ),
                         child: Container(
                           decoration: BoxDecoration(
                             color: Theme.of(
@@ -240,42 +252,39 @@ class NIMSManifestCard extends StatelessWidget {
     );
   }
 
-  Color _getShipmentStatusColor(String status) {
-    switch (status.toLowerCase()) {
+  Color _getStageColor(String stage) {
+    switch (stage.toLowerCase()) {
       case 'in-transit':
         return NIMSColors.orange05;
       case 'delivered':
         return NIMSColors.green05;
-      case 'cancelled':
-        return Colors.red;
+      case 'pending':
       default:
-        return Colors.grey;
+        return NIMSColors.red05;
     }
   }
 
-  IconData _getShipmentStatusIcon(String status) {
-    switch (status.toLowerCase()) {
+  IconData _getStageIcon(String stage) {
+    switch (stage.toLowerCase()) {
       case 'in-transit':
         return Icons.local_shipping_outlined;
       case 'delivered':
         return Icons.check_circle_outline;
-      case 'cancelled':
-        return Icons.cancel_outlined;
+      case 'pending':
       default:
-        return Icons.help_outline;
+        return Icons.schedule_outlined;
     }
   }
 
-  String _getShipmentStatusLabel(String status) {
-    switch (status.toLowerCase()) {
+  String _getStageLabel(String stage) {
+    switch (stage.toLowerCase()) {
       case 'in-transit':
         return 'In Transit';
       case 'delivered':
         return 'Delivered';
-      case 'cancelled':
-        return 'Cancelled';
+      case 'pending':
       default:
-        return status;
+        return 'Pending';
     }
   }
 }

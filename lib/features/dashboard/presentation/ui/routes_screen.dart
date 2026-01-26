@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/core/ui/theme/colors.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_round_icon_button.dart';
-import 'package:nims_mobile_app/core/ui/widgets/nims_transit_card.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_route_card.dart';
 import 'package:nims_mobile_app/features/dashboard/providers.dart';
 
 class RoutesScreen extends ConsumerStatefulWidget {
@@ -133,19 +133,12 @@ class _RoutesScreenState extends ConsumerState<RoutesScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       itemCount: state.filteredRoutes.length,
                       itemBuilder: (context, index) {
-                        final route = state.filteredRoutes[index];
+                        final routeWithShipments = state.filteredRoutes[index];
+                        final route = routeWithShipments.route;
+
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: NIMSTransitCard(
-                            status: "Dispatched",
-                            statusColor: NIMSColors.green05,
-                            statusBackgroundColor: NIMSColors.green02.withAlpha(50),
-                            sourceCode: _initialsFrom(route.originFacilityName),
-                            sourceName: route.originFacilityName,
-                            destinationCode: _initialsFrom(route.destinationFacilityName),
-                            destinationName: route.destinationFacilityName,
-                            shipmentRoute: route,
-                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: NIMSRouteCard(route: route),
                         );
                       },
                     ),
@@ -178,12 +171,4 @@ class _RoutesScreenState extends ConsumerState<RoutesScreen> {
     );
   }
 
-  String _initialsFrom(String text) {
-    return text
-        .trim()
-        .split(RegExp(r'\s+'))
-        .where((word) => word.isNotEmpty)
-        .map((word) => word[0].toUpperCase())
-        .join();
-  }
 }

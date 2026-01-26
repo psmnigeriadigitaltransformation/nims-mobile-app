@@ -33,6 +33,8 @@ mixin _$Approval {
   String get phone => throw _privateConstructorUsedError;
   String get designation => throw _privateConstructorUsedError;
   String get signature => throw _privateConstructorUsedError;
+  double? get latitude => throw _privateConstructorUsedError;
+  double? get longitude => throw _privateConstructorUsedError;
   @JsonKey(name: 'approval_date')
   String? get approvalDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'sync_status')
@@ -62,6 +64,8 @@ abstract class $ApprovalCopyWith<$Res> {
     String phone,
     String designation,
     String signature,
+    double? latitude,
+    double? longitude,
     @JsonKey(name: 'approval_date') String? approvalDate,
     @JsonKey(name: 'sync_status') String syncStatus,
   });
@@ -90,6 +94,8 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
     Object? phone = null,
     Object? designation = null,
     Object? signature = null,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
     Object? approvalDate = freezed,
     Object? syncStatus = null,
   }) {
@@ -127,6 +133,14 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
                 ? _value.signature
                 : signature // ignore: cast_nullable_to_non_nullable
                       as String,
+            latitude: freezed == latitude
+                ? _value.latitude
+                : latitude // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            longitude: freezed == longitude
+                ? _value.longitude
+                : longitude // ignore: cast_nullable_to_non_nullable
+                      as double?,
             approvalDate: freezed == approvalDate
                 ? _value.approvalDate
                 : approvalDate // ignore: cast_nullable_to_non_nullable
@@ -159,6 +173,8 @@ abstract class _$$ApprovalImplCopyWith<$Res>
     String phone,
     String designation,
     String signature,
+    double? latitude,
+    double? longitude,
     @JsonKey(name: 'approval_date') String? approvalDate,
     @JsonKey(name: 'sync_status') String syncStatus,
   });
@@ -186,6 +202,8 @@ class __$$ApprovalImplCopyWithImpl<$Res>
     Object? phone = null,
     Object? designation = null,
     Object? signature = null,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
     Object? approvalDate = freezed,
     Object? syncStatus = null,
   }) {
@@ -223,6 +241,14 @@ class __$$ApprovalImplCopyWithImpl<$Res>
             ? _value.signature
             : signature // ignore: cast_nullable_to_non_nullable
                   as String,
+        latitude: freezed == latitude
+            ? _value.latitude
+            : latitude // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        longitude: freezed == longitude
+            ? _value.longitude
+            : longitude // ignore: cast_nullable_to_non_nullable
+                  as double?,
         approvalDate: freezed == approvalDate
             ? _value.approvalDate
             : approvalDate // ignore: cast_nullable_to_non_nullable
@@ -248,6 +274,8 @@ class _$ApprovalImpl implements _Approval {
     required this.phone,
     required this.designation,
     required this.signature,
+    this.latitude,
+    this.longitude,
     @JsonKey(name: 'approval_date') this.approvalDate,
     @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
   });
@@ -276,6 +304,10 @@ class _$ApprovalImpl implements _Approval {
   @override
   final String signature;
   @override
+  final double? latitude;
+  @override
+  final double? longitude;
+  @override
   @JsonKey(name: 'approval_date')
   final String? approvalDate;
   @override
@@ -284,7 +316,7 @@ class _$ApprovalImpl implements _Approval {
 
   @override
   String toString() {
-    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature, approvalDate: $approvalDate, syncStatus: $syncStatus)';
+    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature, latitude: $latitude, longitude: $longitude, approvalDate: $approvalDate, syncStatus: $syncStatus)';
   }
 
   @override
@@ -305,6 +337,10 @@ class _$ApprovalImpl implements _Approval {
                 other.designation == designation) &&
             (identical(other.signature, signature) ||
                 other.signature == signature) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude) &&
             (identical(other.approvalDate, approvalDate) ||
                 other.approvalDate == approvalDate) &&
             (identical(other.syncStatus, syncStatus) ||
@@ -323,6 +359,8 @@ class _$ApprovalImpl implements _Approval {
     phone,
     designation,
     signature,
+    latitude,
+    longitude,
     approvalDate,
     syncStatus,
   );
@@ -351,6 +389,8 @@ abstract class _Approval implements Approval {
     required final String phone,
     required final String designation,
     required final String signature,
+    final double? latitude,
+    final double? longitude,
     @JsonKey(name: 'approval_date') final String? approvalDate,
     @JsonKey(name: 'sync_status') final String syncStatus,
   }) = _$ApprovalImpl;
@@ -378,6 +418,10 @@ abstract class _Approval implements Approval {
   String get designation;
   @override
   String get signature;
+  @override
+  double? get latitude;
+  @override
+  double? get longitude;
   @override
   @JsonKey(name: 'approval_date')
   String? get approvalDate;

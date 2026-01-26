@@ -24,6 +24,8 @@ mixin _$ShipmentRoute {
   int? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'route_no')
   String get routeNo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'route_type')
+  String get routeType => throw _privateConstructorUsedError;
   @JsonKey(name: 'origin_facility_id')
   String get originFacilityId => throw _privateConstructorUsedError;
   @JsonKey(name: 'origin_facility_name')
@@ -40,6 +42,7 @@ mixin _$ShipmentRoute {
   double? get longitude => throw _privateConstructorUsedError;
   @JsonKey(name: 'sync_status')
   String get syncStatus => throw _privateConstructorUsedError;
+  String get stage => throw _privateConstructorUsedError;
 
   /// Serializes this ShipmentRoute to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -61,6 +64,7 @@ abstract class $ShipmentRouteCopyWith<$Res> {
   $Res call({
     int? id,
     @JsonKey(name: 'route_no') String routeNo,
+    @JsonKey(name: 'route_type') String routeType,
     @JsonKey(name: 'origin_facility_id') String originFacilityId,
     @JsonKey(name: 'origin_facility_name') String originFacilityName,
     @JsonKey(name: 'destination_facility_id') String destinationFacilityId,
@@ -70,6 +74,7 @@ abstract class $ShipmentRouteCopyWith<$Res> {
     double? latitude,
     double? longitude,
     @JsonKey(name: 'sync_status') String syncStatus,
+    String stage,
   });
 }
 
@@ -90,6 +95,7 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
   $Res call({
     Object? id = freezed,
     Object? routeNo = null,
+    Object? routeType = null,
     Object? originFacilityId = null,
     Object? originFacilityName = null,
     Object? destinationFacilityId = null,
@@ -99,6 +105,7 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
     Object? latitude = freezed,
     Object? longitude = freezed,
     Object? syncStatus = null,
+    Object? stage = null,
   }) {
     return _then(
       _value.copyWith(
@@ -109,6 +116,10 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
             routeNo: null == routeNo
                 ? _value.routeNo
                 : routeNo // ignore: cast_nullable_to_non_nullable
+                      as String,
+            routeType: null == routeType
+                ? _value.routeType
+                : routeType // ignore: cast_nullable_to_non_nullable
                       as String,
             originFacilityId: null == originFacilityId
                 ? _value.originFacilityId
@@ -146,6 +157,10 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
                 ? _value.syncStatus
                 : syncStatus // ignore: cast_nullable_to_non_nullable
                       as String,
+            stage: null == stage
+                ? _value.stage
+                : stage // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -164,6 +179,7 @@ abstract class _$$ShipmentRouteImplCopyWith<$Res>
   $Res call({
     int? id,
     @JsonKey(name: 'route_no') String routeNo,
+    @JsonKey(name: 'route_type') String routeType,
     @JsonKey(name: 'origin_facility_id') String originFacilityId,
     @JsonKey(name: 'origin_facility_name') String originFacilityName,
     @JsonKey(name: 'destination_facility_id') String destinationFacilityId,
@@ -173,6 +189,7 @@ abstract class _$$ShipmentRouteImplCopyWith<$Res>
     double? latitude,
     double? longitude,
     @JsonKey(name: 'sync_status') String syncStatus,
+    String stage,
   });
 }
 
@@ -192,6 +209,7 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? routeNo = null,
+    Object? routeType = null,
     Object? originFacilityId = null,
     Object? originFacilityName = null,
     Object? destinationFacilityId = null,
@@ -201,6 +219,7 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
     Object? latitude = freezed,
     Object? longitude = freezed,
     Object? syncStatus = null,
+    Object? stage = null,
   }) {
     return _then(
       _$ShipmentRouteImpl(
@@ -211,6 +230,10 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
         routeNo: null == routeNo
             ? _value.routeNo
             : routeNo // ignore: cast_nullable_to_non_nullable
+                  as String,
+        routeType: null == routeType
+            ? _value.routeType
+            : routeType // ignore: cast_nullable_to_non_nullable
                   as String,
         originFacilityId: null == originFacilityId
             ? _value.originFacilityId
@@ -248,6 +271,10 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
             ? _value.syncStatus
             : syncStatus // ignore: cast_nullable_to_non_nullable
                   as String,
+        stage: null == stage
+            ? _value.stage
+            : stage // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -259,6 +286,7 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
   const _$ShipmentRouteImpl({
     this.id,
     @JsonKey(name: 'route_no') required this.routeNo,
+    @JsonKey(name: 'route_type') required this.routeType,
     @JsonKey(name: 'origin_facility_id') required this.originFacilityId,
     @JsonKey(name: 'origin_facility_name') required this.originFacilityName,
     @JsonKey(name: 'destination_facility_id')
@@ -270,6 +298,7 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
     this.latitude,
     this.longitude,
     @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
+    this.stage = 'Pending',
   });
 
   factory _$ShipmentRouteImpl.fromJson(Map<String, dynamic> json) =>
@@ -280,6 +309,9 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
   @override
   @JsonKey(name: 'route_no')
   final String routeNo;
+  @override
+  @JsonKey(name: 'route_type')
+  final String routeType;
   @override
   @JsonKey(name: 'origin_facility_id')
   final String originFacilityId;
@@ -305,10 +337,13 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
   @override
   @JsonKey(name: 'sync_status')
   final String syncStatus;
+  @override
+  @JsonKey()
+  final String stage;
 
   @override
   String toString() {
-    return 'ShipmentRoute(id: $id, routeNo: $routeNo, originFacilityId: $originFacilityId, originFacilityName: $originFacilityName, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude, syncStatus: $syncStatus)';
+    return 'ShipmentRoute(id: $id, routeNo: $routeNo, routeType: $routeType, originFacilityId: $originFacilityId, originFacilityName: $originFacilityName, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude, syncStatus: $syncStatus, stage: $stage)';
   }
 
   @override
@@ -318,6 +353,8 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
             other is _$ShipmentRouteImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.routeNo, routeNo) || other.routeNo == routeNo) &&
+            (identical(other.routeType, routeType) ||
+                other.routeType == routeType) &&
             (identical(other.originFacilityId, originFacilityId) ||
                 other.originFacilityId == originFacilityId) &&
             (identical(other.originFacilityName, originFacilityName) ||
@@ -337,7 +374,8 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
             (identical(other.syncStatus, syncStatus) ||
-                other.syncStatus == syncStatus));
+                other.syncStatus == syncStatus) &&
+            (identical(other.stage, stage) || other.stage == stage));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -346,6 +384,7 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
     runtimeType,
     id,
     routeNo,
+    routeType,
     originFacilityId,
     originFacilityName,
     destinationFacilityId,
@@ -355,6 +394,7 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
     latitude,
     longitude,
     syncStatus,
+    stage,
   );
 
   /// Create a copy of ShipmentRoute
@@ -375,6 +415,7 @@ abstract class _ShipmentRoute implements ShipmentRoute {
   const factory _ShipmentRoute({
     final int? id,
     @JsonKey(name: 'route_no') required final String routeNo,
+    @JsonKey(name: 'route_type') required final String routeType,
     @JsonKey(name: 'origin_facility_id') required final String originFacilityId,
     @JsonKey(name: 'origin_facility_name')
     required final String originFacilityName,
@@ -387,6 +428,7 @@ abstract class _ShipmentRoute implements ShipmentRoute {
     final double? latitude,
     final double? longitude,
     @JsonKey(name: 'sync_status') final String syncStatus,
+    final String stage,
   }) = _$ShipmentRouteImpl;
 
   factory _ShipmentRoute.fromJson(Map<String, dynamic> json) =
@@ -397,6 +439,9 @@ abstract class _ShipmentRoute implements ShipmentRoute {
   @override
   @JsonKey(name: 'route_no')
   String get routeNo;
+  @override
+  @JsonKey(name: 'route_type')
+  String get routeType;
   @override
   @JsonKey(name: 'origin_facility_id')
   String get originFacilityId;
@@ -422,6 +467,8 @@ abstract class _ShipmentRoute implements ShipmentRoute {
   @override
   @JsonKey(name: 'sync_status')
   String get syncStatus;
+  @override
+  String get stage;
 
   /// Create a copy of ShipmentRoute
   /// with the given fields replaced by the non-null parameter values.

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/domain/models/manifest.dart';
-import 'package:nims_mobile_app/features/pickup/presentation/ui/model/manifest_details_screen_state.dart';
+import 'package:nims_mobile_app/features/pickup/presentation/ui/models/manifest_details_screen_state.dart';
 
 import '../../../../../core/services/providers.dart';
 
