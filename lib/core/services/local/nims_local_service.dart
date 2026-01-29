@@ -20,7 +20,7 @@ typedef DomainResultModel = domain_result.LabResult;
 
 /// Facade service that provides a unified interface to all local database operations.
 ///
-/// This service delegates to specialized DAOs for each domain area:
+/// This service delegates to specialized DAOs for each models area:
 /// - [UserDao] for user, platform, system privilege, privilege, and LSP operations
 /// - [MasterDataDao] for facility, sample type, location, and movement type operations
 /// - [ETokenDao] for etoken operations
@@ -193,6 +193,9 @@ class NIMSLocalService {
   Future<void> updateRouteStageToInTransit(String routeNo) =>
       _routeDao.updateRouteStageToInTransit(routeNo);
 
+  Future<void> updateRouteStageToDelivered(String routeNo) =>
+      _routeDao.updateRouteStageToDelivered(routeNo);
+
   // ==================== SHIPMENT OPERATIONS ====================
 
   Future<void> cacheShipmentRoute(
@@ -275,14 +278,14 @@ class NIMSLocalService {
 
   // ==================== RESULT PICKUP OPERATIONS ====================
 
-  /// Cache result pickup (route, shipment, approval)
+  /// Cache result shipment_pickup (route, shipment, approval)
   Future<void> cacheResultPickup(
     DomainShipmentRoute route,
     DomainShipment shipment,
     DomainApproval approval,
   ) async {
     developer.log(
-      'Caching result pickup: route=${route.routeNo}',
+      'Caching result shipment_pickup: route=${route.routeNo}',
       name: 'NIMSLocalService:cacheResultPickup',
     );
     final db = await NIMSDatabase().instance;

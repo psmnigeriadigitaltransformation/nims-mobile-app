@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
-import 'package:nims_mobile_app/core/domain/models/location.dart';
-import 'package:nims_mobile_app/core/utils/string_extensions.dart';
 
-import '../../../features/dashboard/domain/mock.dart';
+import '../theme/colors.dart';
 import '../theme/theme.dart';
+import 'nims_status_chip.dart';
 
 class NIMSShipmentCard extends StatefulWidget {
   final DomainShipment shipment;
@@ -30,6 +29,32 @@ class NIMSShipmentCard extends StatefulWidget {
 }
 
 class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
+  /// Get stage color based on stage value
+  Color _getStageColor() {
+    switch (widget.shipment.stage.toLowerCase()) {
+      case 'delivered':
+        return NIMSColors.green05;
+      case 'in-transit':
+        return NIMSColors.orange05;
+      case 'pending':
+      default:
+        return NIMSColors.red05;
+    }
+  }
+
+  /// Get stage background color based on stage value
+  Color _getStageBackgroundColor() {
+    switch (widget.shipment.stage.toLowerCase()) {
+      case 'delivered':
+        return NIMSColors.green02.withAlpha(50);
+      case 'in-transit':
+        return NIMSColors.orange02.withAlpha(50);
+      case 'pending':
+      default:
+        return NIMSColors.red02.withAlpha(50);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -50,24 +75,20 @@ class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
             Row(
               children: [
                 Flexible(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 3,
-                      horizontal: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
-                      // color: Theme.of(context).colorScheme.tertiaryContainer,
-                    ),
-                    child: Text(
-                      widget.shipment.shipmentNo,
-                      style: Theme.of(context).textTheme.labelMedium,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
+                  child: Text(
+                    widget.shipment.shipmentNo,
+                    style: Theme.of(context).textTheme.labelMedium,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
                 const SizedBox(width: 8),
+                NIMSStatusChip(
+                  status: widget.shipment.stage,
+                  statusBackgroundColor: _getStageBackgroundColor(),
+                  statusColor: _getStageColor(),
+                ),
+                const Spacer(),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

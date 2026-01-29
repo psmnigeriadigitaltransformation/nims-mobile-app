@@ -6,14 +6,14 @@ const loginPath = '/login';
 const dashboardScreen = 'dashboard_screen';
 const dashboardPath = '/dashboard';
 
-const specimenPickUpScreen = 'specimen_pickup_screen';
-const specimenPickUpPath = '/specimen_pickup';
+const selectManifestsScreen = 'select_manifests_screen';
+const selectManifestsPath = '/select_manifests';
 
-const resultPickUpScreen = 'result_pickup_screen';
-const resultPickUpPath = '/result_pickup';
+const selectResultsScreen = 'select_results_screen';
+const selectResultsPath = '/select_results';
 
 const resultShipmentScreen = 'result_shipment_screen';
-const resultShipmentPath = '/result_shipment';
+const resultShipmentPath = '/result_shipment_route';
 
 const resultDispatchApprovalScreen = 'result_dispatch_approval_screen';
 const resultDispatchApprovalPath = '/result_dispatch_approval';
@@ -41,9 +41,6 @@ const manifestDetailsPath = '/manifest_details';
 
 const shipmentScreen = 'shipment_screen';
 const shipmentPath = '/shipment_screen';
-
-const profileScreen = 'profile_screen';
-const profilePath = '/profile';
 
 const facilitiesScreen = 'facilities_screen';
 const facilitiesPath = '/facilities';

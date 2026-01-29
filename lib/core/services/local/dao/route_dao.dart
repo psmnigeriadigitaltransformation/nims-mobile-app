@@ -71,6 +71,15 @@ class RouteDao extends BaseDao {
     await updateStage(Tables.routes, Columns.routeNo, routeNo, Stage.inTransit);
   }
 
+  /// Updates route stage to Delivered
+  Future<void> updateRouteStageToDelivered(String routeNo) async {
+    log(
+      'Updating route $routeNo stage to Delivered',
+      method: 'updateRouteStageToDelivered',
+    );
+    await updateStage(Tables.routes, Columns.routeNo, routeNo, Stage.delivered);
+  }
+
   /// Inserts a new route
   Future<void> insertRoute(DomainShipmentRoute route) async {
     log('Inserting route: ${route.routeNo}', method: 'insertRoute');

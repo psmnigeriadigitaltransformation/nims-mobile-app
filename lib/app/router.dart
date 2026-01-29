@@ -1,45 +1,36 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:developer' as developers;
-
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/app/providers.dart';
 import 'package:nims_mobile_app/app/route_name+path+params.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
-import 'package:nims_mobile_app/core/domain/models/facility.dart';
-import 'package:nims_mobile_app/core/domain/models/shipment.dart';
-import 'package:nims_mobile_app/core/domain/models/shipment_route.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_error_content.dart';
-import 'package:nims_mobile_app/features/dashboard/presentation/ui/dashboard_screen.dart';
-import 'package:nims_mobile_app/features/dashboard/presentation/ui/specimen_shipment_route_details_screen.dart';
-import 'package:nims_mobile_app/features/facilities/presentation/ui/facilities_screen.dart';
-import 'package:nims_mobile_app/features/pickup/presentation/ui/widgets/specimen/specimen_shipment_screen.dart';
-import 'package:nims_mobile_app/features/profile/presentation/ui/profile_screen.dart';
-import '../features/auth/presentation/ui/login/login_screen.dart';
-import '../features/dashboard/presentation/ui/result_shipment_route_details_screen.dart';
-import '../features/delivery/presentation/ui/result_delivery_approval_screen.dart';
-import '../features/delivery/presentation/ui/specimen_delivery_approval_screen.dart';
-import '../features/pickup/presentation/ui/widgets/manifest/add_new_manifest_screen.dart';
-import '../features/pickup/presentation/ui/widgets/manifest/manifest_details_screen.dart';
-import '../features/pickup/presentation/ui/widgets/manifest/manifests_screen.dart'
-    as pickup_manifests_screen;
-import '../features/manifests/presentation/ui/manifests_screen.dart'
-    as manifests_screen;
-import '../features/pickup/presentation/ui/widgets/result/results_screen.dart';
-import '../features/pickup/presentation/ui/widgets/result/result_shipment_screen.dart';
-import '../features/pickup/presentation/ui/widgets/result/result_shipment_approval_screen.dart';
+import 'package:nims_mobile_app/features/dashboard/dashboard_screen.dart';
 import '../core/domain/models/result.dart';
-import '../features/pickup/presentation/ui/widgets/specimen/specimen_shipment_approval_screen.dart';
-import '../features/pickup/presentation/ui/widgets/specimen/specimen_shipment_success_screen.dart';
-import '../features/pickup/presentation/ui/widgets/result/result_shipment_success_screen.dart';
-import '../features/delivery/presentation/ui/specimen_delivery_success_screen.dart';
-import '../features/delivery/presentation/ui/result_delivery_success_screen.dart';
-import '../features/shipments/presentation/ui/shipments_screen.dart';
-import '../features/shipments/presentation/ui/widgets/specimen/specimen_shipment_details_screen.dart'
-    as specimen_shipment_details;
-import '../features/shipments/presentation/ui/widgets/result/result_shipment_details_screen.dart'
-    as result_shipment_details;
-import '../features/dashboard/presentation/ui/routes_screen.dart';
+import '../features/auth/login/login_screen.dart';
+import '../features/dashboard/facilities/facilities_screen.dart';
+import '../features/dashboard/manifests/manifests_screen.dart';
+import '../features/dashboard/routes/result_shipment_route/result_shipment_route_details_screen.dart';
+import '../features/dashboard/routes/specimen_shipment_route/specimen_shipment_route_details_screen.dart';
+import '../features/dashboard/shipments/shipments_screen.dart';
+import '../features/shipment_delivery/result_shipment_delivery/result_delivery_approval_screen.dart';
+import '../features/shipment_delivery/result_shipment_delivery/result_delivery_success_screen.dart';
+import '../features/shipment_delivery/specimen_shipment_delivery/specimen_delivery_approval_screen.dart';
+import '../features/shipment_delivery/specimen_shipment_delivery/specimen_delivery_success_screen.dart';
+import '../features/shipment_pickup/specimen_shipment_pickup/manifest/add_new_manifest_screen.dart';
+import '../features/shipment_pickup/specimen_shipment_pickup/manifest/manifest_details_screen.dart';
+import '../features/shipment_pickup/specimen_shipment_pickup/manifest/select_manifests_screen.dart';
+import '../features/shipment_pickup/presentation/ui/widgets/result/result_shipment_approval_screen.dart';
+import '../features/shipment_pickup/presentation/ui/widgets/result/result_shipment_screen.dart';
+import '../features/shipment_pickup/presentation/ui/widgets/result/result_shipment_success_screen.dart';
+import '../features/shipment_pickup/presentation/ui/widgets/result/results_screen.dart';
+import '../features/shipment_pickup/specimen_shipment_pickup/approval/specimen_shipment_approval/specimen_shipment_approval_screen.dart';
+import '../features/shipment_pickup/specimen_shipment_pickup/specimen/specimen_shipment_screen.dart';
+import '../features/shipment_pickup/specimen_shipment_pickup/specimen/specimen_shipment_success_screen.dart';
+import '../features/dashboard/shipments/specimen_shipment/specimen_shipment_details_screen.dart';
+import '../features/dashboard/shipments/result_shipment/result_shipment_details_screen.dart';
+import '../features/dashboard/routes/routes_screen.dart';
 
 final router = GoRouter(
   initialLocation: loginPath,
@@ -61,20 +52,15 @@ final router = GoRouter(
       builder: (context, state) => FacilitiesScreen(),
     ),
     GoRoute(
-      name: profileScreen,
-      path: profilePath,
-      builder: (context, state) => const ProfileScreen(),
-    ),
-    GoRoute(
       name: manifestsScreen,
       path: manifestsPath,
       builder: (context, state) {
-        return manifests_screen.ManifestsScreen();
+        return ManifestsScreen();
       },
     ),
     GoRoute(
-      name: specimenPickUpScreen,
-      path: specimenPickUpPath,
+      name: selectManifestsScreen,
+      path: selectManifestsPath,
       builder: (context, state) {
         final movementTypeJson =
             state.uri.queryParameters[movementTypeQueryParam];
@@ -89,15 +75,13 @@ final router = GoRouter(
             jsonDecode(movementTypeJson),
           );
 
-          return pickup_manifests_screen.ManifestsScreen(
-            movementType: movementType,
-          );
+          return SelectManifestsScreen(movementType: movementType);
         }
       },
     ),
     GoRoute(
-      name: resultPickUpScreen,
-      path: resultPickUpPath,
+      name: selectResultsScreen,
+      path: selectResultsPath,
       builder: (context, state) {
         final movementTypeJson =
             state.uri.queryParameters[movementTypeQueryParam];
@@ -111,7 +95,7 @@ final router = GoRouter(
           final movementType = DomainMovementType.fromJson(
             jsonDecode(movementTypeJson),
           );
-          return ResultsScreen(movementType: movementType);
+          return SelectResultsScreen(movementType: movementType);
         }
       },
     ),
@@ -307,11 +291,6 @@ final router = GoRouter(
         final routeJson = state.uri.queryParameters[routeQueryParam];
         final shipmentsJson = state.uri.queryParameters[shipmentsQueryParam];
 
-        // final destinationFacilityJson =
-        //     state.uri.queryParameters[destinationFacilityQueryParam];
-        // final originFacilityJson =
-        // state.uri.queryParameters[originFacilityQueryParam];
-        // final route = state.uri.queryParameters[routeQueryParam];
         developer.log(
           routeJson.toString(),
           name: "GoRoute:specimenDeliveryApprovalScreen:routeJson",
@@ -320,15 +299,6 @@ final router = GoRouter(
           shipmentsJson.toString(),
           name: "GoRoute:specimenDeliveryApprovalScreen:shipmentsJson",
         );
-        // developer.log(
-        //   destinationFacilityJson.toString(),
-        //   name:
-        //       "GoRoute:specimenDeliveryApprovalScreen:destinationFacilityJson",
-        // );
-        // developer.log(
-        //   route.toString(),
-        //   name: "GoRoute:specimenDeliveryApprovalScreen:routeNo",
-        // );
 
         if (routeJson == null || shipmentsJson == null) {
           return NIMSErrorContent(
@@ -358,11 +328,6 @@ final router = GoRouter(
         final routeJson = state.uri.queryParameters[routeQueryParam];
         final shipmentJson = state.uri.queryParameters[shipmentQueryParam];
 
-        // final destinationFacilityJson =
-        //     state.uri.queryParameters[destinationFacilityQueryParam];
-        // final originFacilityJson =
-        // state.uri.queryParameters[originFacilityQueryParam];
-        // final route = state.uri.queryParameters[routeQueryParam];
         developer.log(
           routeJson.toString(),
           name: "GoRoute:resultDeliveryApprovalScreen:routeJson",
@@ -371,15 +336,6 @@ final router = GoRouter(
           shipmentJson.toString(),
           name: "GoRoute:resultDeliveryApprovalScreen:shipmentJson",
         );
-        // developer.log(
-        //   destinationFacilityJson.toString(),
-        //   name:
-        //       "GoRoute:specimenDeliveryApprovalScreen:destinationFacilityJson",
-        // );
-        // developer.log(
-        //   route.toString(),
-        //   name: "GoRoute:specimenDeliveryApprovalScreen:routeNo",
-        // );
 
         if (routeJson == null || shipmentJson == null) {
           return NIMSErrorContent(
@@ -559,14 +515,12 @@ final router = GoRouter(
             final sampleCodes = sampleCodesJson != null
                 ? List<String>.from(jsonDecode(sampleCodesJson))
                 : <String>[];
-            return result_shipment_details.ResultShipmentDetailsScreen(
+            return ResultShipmentDetailsScreen(
               shipment: shipment,
               sampleCodes: sampleCodes,
             );
           }
-          return specimen_shipment_details.SpecimenShipmentDetailsScreen(
-            shipment: shipment,
-          );
+          return SpecimenShipmentDetailsScreen(shipment: shipment);
         }
       },
     ),
@@ -588,7 +542,7 @@ final router = GoRouter(
           final sampleCodes = sampleCodesJson != null
               ? List<String>.from(jsonDecode(sampleCodesJson))
               : <String>[];
-          return result_shipment_details.ResultShipmentDetailsScreen(
+          return ResultShipmentDetailsScreen(
             shipment: shipment,
             sampleCodes: sampleCodes,
           );
@@ -716,7 +670,10 @@ final router = GoRouter(
             state.uri.queryParameters[destinationFacilityNameQueryParam];
 
         developers.log(shipmentJson.toString(), name: "shipmentJson");
-        developers.log(destinationFacilityName.toString(), name: "destinationFacilityJson",);
+        developers.log(
+          destinationFacilityName.toString(),
+          name: "destinationFacilityJson",
+        );
 
         if (shipmentJson == null || destinationFacilityName == null) {
           return NIMSErrorContent(
@@ -725,7 +682,6 @@ final router = GoRouter(
             actionButtonLabel: "Go Back",
           );
         } else {
-
           final shipment = DomainShipment.fromJson(jsonDecode(shipmentJson));
 
           return ResultDeliverySuccessScreen(

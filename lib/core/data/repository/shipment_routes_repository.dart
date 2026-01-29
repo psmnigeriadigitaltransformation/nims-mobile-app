@@ -150,7 +150,7 @@ class ShipmentRoutesRepository {
   }
 
   /// Save a result specimen route locally and attempt immediate sync if online
-  /// This is for result pickup flow - also marks results as picked
+  /// This is for result shipment_pickup flow - also marks results as picked
   Future<Result<bool>> saveResultShipmentRoute(
     DomainShipmentRoute shipmentRoute,
     List<DomainShipment> shipments,
@@ -180,18 +180,18 @@ class ShipmentRoutesRepository {
         );
         if (synced) {
           developer.log(
-            "Result pickup route ${shipmentRoute.routeNo} synced immediately",
+            "Result shipment_pickup route ${shipmentRoute.routeNo} synced immediately",
             name: "ShipmentRoutesRepository:saveResultShipmentRoute",
           );
         } else {
           developer.log(
-            "Result pickup route ${shipmentRoute.routeNo} saved locally, sync pending",
+            "Result shipment_pickup route ${shipmentRoute.routeNo} saved locally, sync pending",
             name: "ShipmentRoutesRepository:saveResultShipmentRoute",
           );
         }
       } else {
         developer.log(
-          "Result pickup route ${shipmentRoute.routeNo} saved locally (offline)",
+          "Result shipment_pickup route ${shipmentRoute.routeNo} saved locally (offline)",
           name: "ShipmentRoutesRepository:saveResultShipmentRoute",
         );
       }

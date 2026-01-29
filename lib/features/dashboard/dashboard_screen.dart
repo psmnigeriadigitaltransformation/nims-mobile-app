@@ -28,7 +28,8 @@ class DashboardScreen extends ConsumerStatefulWidget {
   ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends ConsumerState<DashboardScreen> with RouteAware {
+class _DashboardScreenState extends ConsumerState<DashboardScreen>
+    with RouteAware {
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -171,7 +172,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> with RouteAwa
               Container(
                 padding: EdgeInsetsGeometry.symmetric(vertical: 16),
                 child: SearchBar(
-                  hintText: "Search for specimen, specimen or facility",
+                  hintText: "Search for facilities, manifests and shipments",
                   controller: searchController,
                   onChanged: (value) {
                     ref
@@ -548,9 +549,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> with RouteAwa
               )
             else
               Icon(
-                pendingCount > 0 ? Icons.cloud_upload_outlined : Icons.cloud_done_outlined,
+                pendingCount > 0
+                    ? Icons.cloud_upload_outlined
+                    : Icons.cloud_done_outlined,
                 size: 18,
-                color: pendingCount > 0 ? NIMSColors.orange05 : NIMSColors.green05,
+                color: pendingCount > 0
+                    ? NIMSColors.orange05
+                    : NIMSColors.green05,
               ),
             // const SizedBox(width: 6),
             // Expanded(
@@ -665,10 +670,7 @@ class _SyncErrorDialog extends StatelessWidget {
               /// Retry Button
               SizedBox(
                 width: double.infinity,
-                child: NIMSPrimaryButton(
-                  text: "Retry",
-                  onPressed: onRetry,
-                ),
+                child: NIMSPrimaryButton(text: "Retry", onPressed: onRetry),
               ),
 
               SizedBox(height: 8),

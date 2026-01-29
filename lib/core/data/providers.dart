@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nims_mobile_app/core/data/repository/auth_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/etoken_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/locations_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/manifest_repository.dart';
@@ -8,10 +9,16 @@ import 'package:nims_mobile_app/core/data/repository/result_pickup_repository.da
 import 'package:nims_mobile_app/core/data/repository/samples_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/shipment_routes_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/shipments_repository.dart';
-import 'package:nims_mobile_app/features/facilities/data/repository/facilities_repository.dart';
+import 'package:nims_mobile_app/core/data/repository/facilities_repository.dart';
 
 import '../../../core/services/providers.dart';
 
+final authRepositoryProvider = Provider(
+      (ref) => AuthRepository(
+    ref.watch(nimsApiServiceProvider),
+    ref.watch(nimsLocalServiceProvider),
+  ),
+);
 final locationsRepositoryProvider = Provider(
   (ref) => LocationsRepository(
     ref.watch(nimsApiServiceProvider),
@@ -24,6 +31,13 @@ final samplesRepositoryProvider = Provider(
     ref.watch(nimsApiServiceProvider),
     ref.watch(nimsLocalServiceProvider),
     ref.watch(connectivityServiceProvider),
+  ),
+);
+
+final facilitiesRepositoryProvider = Provider(
+      (ref) => FacilitiesRepository(
+    ref.watch(nimsApiServiceProvider),
+    ref.watch(nimsLocalServiceProvider),
   ),
 );
 
@@ -85,3 +99,5 @@ final resultDeliveryRepositoryProvider = Provider(
     ref.watch(syncServiceProvider),
   ),
 );
+
+

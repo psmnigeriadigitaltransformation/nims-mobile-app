@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../../../domain/mappers/typedefs.dart';
 import '../database/tables.dart';
 import 'base_dao.dart';
@@ -89,6 +91,71 @@ class ApprovalDao extends BaseDao {
     return result.map((a) => DomainApproval.fromJson(a)).toList();
   }
 
+  /// Updates manifest and its samples stage to Delivered
+  Future<void> _updateManifestAndSamplesStage(
+    Transaction txn,
+    String manifestNo,
+  ) async {
+    log(
+      'Updating manifest $manifestNo and samples stage to Delivered',
+      method: '_updateManifestAndSamplesStage',
+    );
+    // Update manifest stage
+    await txn.update(
+      Tables.manifests,
+      {Columns.stage: Stage.delivered},
+      where: '${Columns.manifestNo} = ?',
+      whereArgs: [manifestNo],
+    );
+    // Update all samples linked to manifest
+    await txn.update(
+      Tables.samples,
+      {Columns.stage: Stage.delivered},
+      where: '${Columns.manifestNo} = ?',
+      whereArgs: [manifestNo],
+    );
+  }
+
+  /// Checks if all shipments for a route are delivered and updates route stage
+  Future<void> _updateRouteIfAllShipmentsDelivered(
+    Transaction txn,
+    String routeNo,
+  ) async {
+    final totalResult = await txn.query(
+      Tables.shipments,
+      columns: ['COUNT(*) as count'],
+      where: '${Columns.routeNo} = ?',
+      whereArgs: [routeNo],
+    );
+    final total = Sqflite.firstIntValue(totalResult) ?? 0;
+
+    final deliveredResult = await txn.query(
+      Tables.shipments,
+      columns: ['COUNT(*) as count'],
+      where: '${Columns.routeNo} = ? AND ${Columns.stage} = ?',
+      whereArgs: [routeNo, Stage.delivered],
+    );
+    final delivered = Sqflite.firstIntValue(deliveredResult) ?? 0;
+
+    log(
+      'Route $routeNo: $delivered/$total shipments delivered',
+      method: '_updateRouteIfAllShipmentsDelivered',
+    );
+
+    if (total > 0 && delivered == total) {
+      log(
+        'All shipments delivered, updating route stage to Delivered',
+        method: '_updateRouteIfAllShipmentsDelivered',
+      );
+      await txn.update(
+        Tables.routes,
+        {Columns.stage: Stage.delivered},
+        where: '${Columns.routeNo} = ?',
+        whereArgs: [routeNo],
+      );
+    }
+  }
+
   /// Saves delivery approval and updates shipment stages
   Future<void> saveSpecimenDeliveryApproval(
     List<String> shipmentNos,
@@ -100,8 +167,23 @@ class ApprovalDao extends BaseDao {
     );
     final database = await db;
     await database.transaction((txn) async {
+      // Collect unique manifest numbers from shipments being delivered
+      final manifestNos = <String>{};
+
       // Update shipment stage to 'Delivered' for each shipment
       for (final shipmentNo in shipmentNos) {
+        // Get manifest_no for this shipment
+        final shipmentResult = await txn.query(
+          Tables.shipments,
+          columns: [Columns.manifestNo],
+          where: '${Columns.shipmentNo} = ?',
+          whereArgs: [shipmentNo],
+        );
+        if (shipmentResult.isNotEmpty) {
+          final manifestNo = shipmentResult.first[Columns.manifestNo] as String;
+          manifestNos.add(manifestNo);
+        }
+
         await txn.update(
           Tables.shipments,
           {Columns.stage: Stage.delivered},
@@ -109,15 +191,23 @@ class ApprovalDao extends BaseDao {
           whereArgs: [shipmentNo],
         );
       }
+
+      // Update manifest and samples stages for each unique manifest
+      for (final manifestNo in manifestNos) {
+        await _updateManifestAndSamplesStage(txn, manifestNo);
+      }
+
       // Save the delivery approval
       await txn.insert(Tables.approvals, deliveryApproval.toJson());
+      // Check if all shipments are delivered and update route stage
+      await _updateRouteIfAllShipmentsDelivered(txn, deliveryApproval.routeNo);
     });
   }
 
   /// Saves result delivery approval
   Future<void> saveResultDeliveryApproval(
     String routeNo,
-      String shipmentNo,
+    String shipmentNo,
     DomainApproval approval,
   ) async {
     log(
@@ -135,6 +225,8 @@ class ApprovalDao extends BaseDao {
       );
       // Save the delivery approval
       await txn.insert(Tables.approvals, approval.toJson());
+      // Check if all shipments are delivered and update route stage
+      await _updateRouteIfAllShipmentsDelivered(txn, routeNo);
     });
   }
 

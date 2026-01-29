@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/ui/theme/colors.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_status_chip.dart';
 
 class NIMSSpecimenCard extends StatefulWidget {
   final VoidCallback? onTapDelete;
@@ -14,11 +16,82 @@ class NIMSSpecimenCard extends StatefulWidget {
   });
 
   @override
-  State<StatefulWidget> createState() => NIMSSpecimenCardState();
+  State<StatefulWidget> createState() => _NIMSSpecimenCardState();
 }
 
-class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
+class _NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
   bool isCommentRevealed = false;
+
+  /// Get stage color based on stage value
+  Color _getStageColor() {
+    switch (widget.sample.stage.toLowerCase()) {
+      case 'delivered':
+        return NIMSColors.green05;
+      case 'in-transit':
+        return NIMSColors.orange05;
+      case 'order':
+      case 'pending':
+      default:
+        return NIMSColors.blue05;
+    }
+  }
+
+  /// Get stage background color based on stage value
+  Color _getStageBackgroundColor() {
+    switch (widget.sample.stage.toLowerCase()) {
+      case 'delivered':
+        return NIMSColors.green02.withAlpha(50);
+      case 'in-transit':
+        return NIMSColors.orange02.withAlpha(50);
+      case 'order':
+      case 'pending':
+      default:
+        return NIMSColors.blue02.withAlpha(50);
+    }
+  }
+
+  /// Build sync status indicator widget
+  Widget _buildSyncStatusIndicator(BuildContext context) {
+    final syncStatus = widget.sample.syncStatus.toLowerCase();
+
+    IconData icon;
+    Color color;
+    String tooltip;
+
+    switch (syncStatus) {
+      case 'synced':
+        icon = Icons.cloud_done_outlined;
+        color = NIMSColors.green05;
+        tooltip = 'Synced';
+        break;
+      case 'pending':
+        icon = Icons.cloud_upload_outlined;
+        color = NIMSColors.orange05;
+        tooltip = 'Pending sync';
+        break;
+      case 'failed':
+        icon = Icons.cloud_off_outlined;
+        color = NIMSColors.red05;
+        tooltip = 'Sync failed';
+        break;
+      default:
+        icon = Icons.cloud_outlined;
+        color = Theme.of(context).colorScheme.secondary;
+        tooltip = syncStatus;
+    }
+
+    return Tooltip(
+      message: tooltip,
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: color.withAlpha(20),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Icon(icon, size: 14, color: color),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,36 +120,39 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
                 Row(
                   children: [
                     Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3,
-                          horizontal: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(4),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              widget.sample.patientCode,
+                              style: Theme.of(context).textTheme.labelMedium,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          widget.sample.patientCode,
-                          style: Theme.of(context).textTheme.labelMedium,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                          const SizedBox(width: 8),
+                          NIMSStatusChip(
+                            status: widget.sample.stage,
+                            statusBackgroundColor: _getStageBackgroundColor(),
+                            statusColor: _getStageColor(),
+                          ),
+                          const SizedBox(width: 8),
+                          _buildSyncStatusIndicator(context),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 12),
                     Text(
                       widget.sample.age,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 12),
                     Text(
                       widget.sample.gender,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    const SizedBox(width: 20),
-                    if (widget.onTapDelete != null)
+                    if (widget.onTapDelete != null) ...[
+                      const SizedBox(width: 12),
                       InkWell(
                         onTap: widget.onTapDelete,
                         borderRadius: BorderRadius.all(Radius.circular(4)),
@@ -89,7 +165,6 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
                               Radius.circular(4),
                             ),
                           ),
-
                           child: Padding(
                             padding: EdgeInsetsGeometry.symmetric(
                               vertical: 2,
@@ -105,34 +180,7 @@ class NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
                           ),
                         ),
                       ),
-
-                    // if (widget.sample.comment?.isNotEmpty == true)
-                    //   Row(
-                    //     children: [
-                    //       const SizedBox(width: 20),
-                    //       InkWell(
-                    //         borderRadius: BorderRadius.circular(4),
-                    //         child: Container(
-                    //           decoration: BoxDecoration(
-                    //             borderRadius: BorderRadiusGeometry.circular(4),
-                    //           ),
-                    //           child: Image.asset(
-                    //             isCommentRevealed
-                    //                 ? "lib/core/ui/icons/ic_unfold_less.png"
-                    //                 : "lib/core/ui/icons/ic_unfold_more.png",
-                    //             height: 24,
-                    //             width: 24,
-                    //             color: Theme.of(context).colorScheme.secondary,
-                    //           ),
-                    //         ),
-                    //         onTap: () {
-                    //           setState(() {
-                    //             isCommentRevealed = !isCommentRevealed;
-                    //           });
-                    //         },
-                    //       ),
-                    //     ],
-                    //   )
+                    ],
                   ],
                 ),
               ],

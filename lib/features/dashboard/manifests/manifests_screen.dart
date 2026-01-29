@@ -1,0 +1,215 @@
+import 'dart:convert';
+import 'dart:developer' as developer;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_manifest_card.dart';
+import 'package:nims_mobile_app/core/ui/widgets/sticky_header_delegate.dart';
+import 'package:nims_mobile_app/features/shipment_pickup/specimen_shipment_pickup/manifest/manifest_deletion_confirmation_dialog.dart';
+import '../../../app/route_name+path+params.dart';
+import '../../../core/ui/screens/nims_base_screen.dart';
+import '../../../core/ui/widgets/nims_error_content.dart';
+import '../../../core/ui/widgets/nims_round_icon_button.dart';
+import 'providers.dart';
+
+class ManifestsScreen extends ConsumerWidget {
+  final TextEditingController searchBarController = TextEditingController();
+
+  ManifestsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncState = ref.watch(manifestsScreenStateNotifierProvider);
+    final size = MediaQuery.of(context).size;
+
+    return NIMSBaseScreen(
+      header: Padding(
+        padding: EdgeInsetsGeometry.only(left: 16, right: 16, top: 16),
+        child: Column(
+          children: [
+            /// ----------------------------------------
+            /// TITLE + SUBTITLE
+            /// ----------------------------------------
+            Row(
+              children: [
+                NIMSRoundIconButton(
+                  icon: Icons.arrow_back_ios_rounded,
+                  onPressed: () => context.pop(),
+                ),
+                Spacer(),
+                Text(
+                  "Manifests",
+                  style: TextTheme.of(context).titleSmall,
+                  textAlign: TextAlign.center,
+                ),
+                Spacer(),
+                SizedBox(width: 40),
+              ],
+            ),
+
+            SizedBox(height: 8),
+
+            Text(
+              "These are the manifest you have created",
+              style: TextTheme.of(context).bodySmall,
+            ),
+
+            SizedBox(height: 16),
+
+            /// -------------------------------
+            /// SEARCH BAR
+            /// -------------------------------
+            Container(
+              padding: EdgeInsetsGeometry.symmetric(vertical: 16),
+              child: SearchBar(
+                hintText: "Search for manifest",
+                controller: searchBarController,
+                onChanged: (value) => {
+                  searchBarController.text = value,
+                  ref
+                      .read(manifestsScreenStateNotifierProvider.notifier)
+                      .filterManifests(value),
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: asyncState.when(
+        loading: () => Container(
+          color: Theme.of(context).colorScheme.surface,
+          child: Center(
+            child: const SizedBox(
+              width: 40,
+              height: 40,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          ),
+        ),
+        error: (err, stack) => NIMSErrorContent(
+          message: err.toString(),
+          onTapActionButton: () {
+            ref
+                .read(manifestsScreenStateNotifierProvider.notifier)
+                .refreshManifests();
+          },
+          actionButtonLabel: 'Retry',
+        ),
+        data: (state) {
+          // Show alert dialog if there's an error
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (state.alert?.show == true) {
+              showDialog(
+                context: context,
+                builder: (dialogContext) => AlertDialog(
+                  title: const Text("Error"),
+                  content: Text(state.alert?.message ?? "An error occurred"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop();
+                        ref
+                            .read(manifestsScreenStateNotifierProvider.notifier)
+                            .dismissAlert();
+                      },
+                      child: const Text("OK"),
+                    ),
+                  ],
+                ),
+              );
+            }
+          });
+
+          /// ----------------------------------------
+          /// MANIFESTS LIST
+          /// ----------------------------------------
+          return SizedBox(
+            child: Padding(
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
+              child: CustomScrollView(
+                shrinkWrap: true,
+                controller: ScrollController(),
+                slivers: [
+                  if (state.manifests.isNotEmpty)
+                    _buildList(
+                      state.manifests,
+                      shippedManifestStatuses: state.shippedManifestStatuses,
+                      onDeleteManifest: (manifest) {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) =>
+                              ManifestDeletionConfirmationDialog(
+                            manifest: manifest,
+                            onConfirmDelete: () {
+                              ref
+                                  .read(manifestsScreenStateNotifierProvider
+                                      .notifier)
+                                  .deleteManifest(manifest.manifestNo);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+      bottom: null,
+    );
+  }
+}
+
+SliverPersistentHeader _buildHeader(String title, BuildContext context) {
+  return SliverPersistentHeader(
+    pinned: true,
+    delegate: StickyHeaderDelegate(
+      child: Container(
+        color: Theme.of(context).colorScheme.surface,
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 24),
+        alignment: Alignment.centerLeft,
+        child: Text(title, style: Theme.of(context).textTheme.titleSmall),
+      ),
+    ),
+  );
+}
+
+SliverList _buildList(
+  List<DomainManifest> items, {
+  required Function(DomainManifest) onDeleteManifest,
+  required Map<String, String> shippedManifestStatuses,
+}) {
+  return SliverList(
+    delegate: SliverChildBuilderDelegate((context, index) {
+      final manifest = items[index];
+      final shipmentStage = shippedManifestStatuses[manifest.manifestNo];
+      final isShipped = shipmentStage != null;
+
+      return Padding(
+        padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+        child: NIMSManifestCard(
+          manifest: manifest,
+          onTapManifest: () {
+            developer.log(
+              manifest.toJson().toString(),
+              name: "ManifestsScreen:onTapManifest",
+            );
+            context.pushNamed(
+              manifestDetailsScreen,
+              queryParameters: {
+                manifestsQueryParam: jsonEncode(manifest.toJson()),
+              },
+            );
+          },
+          isSelected: false,
+          isShipped: isShipped,
+          shipmentStage: shipmentStage,
+          onTapDelete: () => onDeleteManifest(manifest),
+        ),
+      );
+    }, childCount: items.length),
+  );
+}
