@@ -9,12 +9,14 @@ import '../../../../core/utils/constants.dart';
 class AddNewSpecimenDialog extends StatefulWidget {
   final Function(DomainSample) onSaveSpecimen;
   final String manifestNo;
+  final String originId;
   final int currentSampleCount;
 
   const AddNewSpecimenDialog({
     super.key,
     required this.onSaveSpecimen,
     required this.manifestNo,
+    required this.originId,
     required this.currentSampleCount,
   });
 
@@ -280,6 +282,7 @@ class _AddNewSpecimenDialogState extends State<AddNewSpecimenDialog> {
                         widget.onSaveSpecimen(
                           DomainSample(
                             manifestNo: widget.manifestNo,
+                            originId: widget.originId,
                             sampleCode: sampleCode,
                             patientCode: patientCodeController.text
                                 .trim()

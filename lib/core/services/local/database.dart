@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 11,
+      version: 12,
       onCreate: (db, version) async {
 
         // Tables
@@ -135,7 +135,7 @@ class NIMSDatabase {
         await db.execute('''
           CREATE TABLE manifests (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            manifest_no TEXT NOT NULL UNIQUE,
+            manifest_no TEXT NOT NULL,
             origin_id TEXT NOT NULL,
             destination_id TEXT NOT NULL,
             sample_type TEXT NOT NULL,
@@ -148,7 +148,8 @@ class NIMSDatabase {
             destination_facility_name TEXT NOT NULL,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             sync_status TEXT NOT NULL DEFAULT 'pending',
-            stage TEXT NOT NULL DEFAULT 'Pending'
+            stage TEXT NOT NULL DEFAULT 'Pending',
+            UNIQUE (manifest_no, origin_id)
           )
         ''');
 
@@ -156,6 +157,7 @@ class NIMSDatabase {
           CREATE TABLE samples (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             manifest_no TEXT NOT NULL,
+            origin_id TEXT NOT NULL,
             sample_code TEXT NOT NULL UNIQUE,
             patient_code TEXT NOT NULL,
             age TEXT NOT NULL,
@@ -164,7 +166,7 @@ class NIMSDatabase {
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             sync_status TEXT NOT NULL DEFAULT 'pending',
             stage TEXT NOT NULL DEFAULT 'Order',
-            FOREIGN KEY (manifest_no) REFERENCES manifests(manifest_no) ON DELETE CASCADE
+            FOREIGN KEY (manifest_no, origin_id) REFERENCES manifests(manifest_no, origin_id) ON DELETE CASCADE
           )
           ''');
 
@@ -193,6 +195,7 @@ class NIMSDatabase {
             shipment_no TEXT NOT NULL UNIQUE,
             route_no TEXT NOT NULL,
             manifest_no TEXT NOT NULL,
+            origin_id TEXT NOT NULL,
             origin_type TEXT NOT NULL,
             origin_facility_name TEXT NOT NULL DEFAULT '',
             destination_location_type TEXT NOT NULL,
@@ -208,6 +211,9 @@ class NIMSDatabase {
             sync_status TEXT NOT NULL DEFAULT 'pending',
             stage TEXT NOT NULL DEFAULT 'Pending',
             FOREIGN KEY (route_no) REFERENCES routes(route_no)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+            FOREIGN KEY (manifest_no, origin_id) REFERENCES manifests(manifest_no, origin_id)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
         )
@@ -390,6 +396,34 @@ class NIMSDatabase {
           await db.execute('''
             ALTER TABLE approvals ADD COLUMN destination_location_type TEXT
           ''');
+        }
+        if (oldVersion < 12) {
+          // Add origin_id column to samples table
+          await db.execute('''
+            ALTER TABLE samples ADD COLUMN origin_id TEXT NOT NULL DEFAULT ''
+          ''');
+          // Populate origin_id in samples from manifests
+          await db.execute('''
+            UPDATE samples SET origin_id = (
+              SELECT origin_id FROM manifests WHERE manifests.manifest_no = samples.manifest_no
+            ) WHERE origin_id = ''
+          ''');
+
+          // Add origin_id column to shipments table
+          await db.execute('''
+            ALTER TABLE shipments ADD COLUMN origin_id TEXT NOT NULL DEFAULT ''
+          ''');
+          // Populate origin_id in shipments from manifests
+          await db.execute('''
+            UPDATE shipments SET origin_id = (
+              SELECT origin_id FROM manifests WHERE manifests.manifest_no = shipments.manifest_no
+            ) WHERE origin_id = ''
+          ''');
+
+          // Note: SQLite doesn't support dropping/altering unique constraints directly.
+          // The composite unique constraint (manifest_no, origin_id) will be enforced
+          // at the application level for existing installations. New installations
+          // will have the proper constraint from onCreate.
         }
       },
     );

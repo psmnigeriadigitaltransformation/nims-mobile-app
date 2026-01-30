@@ -132,11 +132,8 @@ class NIMSLocalService {
   ) =>
       _manifestDao.cacheManifest(manifest, samples);
 
-  Future<void> deleteManifest(String manifestNo) =>
-      _manifestDao.deleteManifest(manifestNo);
-
-  Future<void> deleteManifestLocally(String manifestNo) =>
-      _manifestDao.deleteManifestLocally(manifestNo);
+  Future<void> deleteManifest(String manifestNo, String originId) =>
+      _manifestDao.deleteManifest(manifestNo, originId);
 
   Future<List<DomainManifest>> getCacheManifestsByOriginId(String originId) =>
       _manifestDao.getCacheManifestsByOriginId(originId);
@@ -150,17 +147,33 @@ class NIMSLocalService {
   Future<DomainManifest?> getManifestByNo(String manifestNo) =>
       _manifestDao.getManifestByNo(manifestNo);
 
+  Future<DomainManifest?> getManifestByCompositeKey(
+    String manifestNo,
+    String originId,
+  ) =>
+      _manifestDao.getManifestByCompositeKey(manifestNo, originId);
+
   Future<void> updateManifestLocally(DomainManifest manifest) =>
       _manifestDao.updateManifestLocally(manifest);
 
-  Future<void> updateManifestSampleCount(String manifestNo, int newCount) =>
-      _manifestDao.updateManifestSampleCount(manifestNo, newCount);
+  Future<void> updateManifestSampleCount(
+    String manifestNo,
+    String originId,
+    int newCount,
+  ) =>
+      _manifestDao.updateManifestSampleCount(manifestNo, originId, newCount);
+
+  Future<void> deleteManifestLocally(String manifestNo, String originId) =>
+      _manifestDao.deleteManifestLocally(manifestNo, originId);
 
   Future<List<DomainManifest>> getPendingManifests() =>
       _manifestDao.getPendingManifests();
 
-  Future<List<DomainSample>> getCachedSamplesByManifestNo(String manifestNo) =>
-      _manifestDao.getCachedSamplesByManifestNo(manifestNo);
+  Future<List<DomainSample>> getCachedSamplesByManifestNo(
+    String manifestNo, {
+    String? originId,
+  }) =>
+      _manifestDao.getCachedSamplesByManifestNo(manifestNo, originId: originId);
 
   Future<DomainSample?> getSampleByCode(String sampleCode) =>
       _manifestDao.getSampleByCode(sampleCode);

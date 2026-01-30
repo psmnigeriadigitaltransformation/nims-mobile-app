@@ -48,7 +48,7 @@ class ManifestsScreenStateNotifier
     );
   }
 
-  Future<void> deleteManifest(String manifestNo) async {
+  Future<void> deleteManifest(String manifestNo, String originId) async {
     // Set deleting state
     state = state.whenData(
       (data) => data.copyWith(isDeleting: true),
@@ -56,7 +56,7 @@ class ManifestsScreenStateNotifier
 
     final result = await ref
         .read(manifestRepositoryProvider)
-        .deleteManifest(manifestNo);
+        .deleteManifest(manifestNo, originId);
 
     switch (result) {
       case Success():

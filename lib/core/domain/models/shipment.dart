@@ -11,6 +11,7 @@ class Shipment with _$Shipment {
     @JsonKey(name: 'shipment_no') required String shipmentNo,
     @JsonKey(name: 'route_no') required String routeNo,
     @JsonKey(name: 'manifest_no') required String manifestNo,
+    @JsonKey(name: 'origin_id') required String originId,
     @JsonKey(name: 'origin_type') required String originType,
     @JsonKey(name: 'origin_facility_name') @Default('') String originFacilityName,
     @JsonKey(name: 'destination_location_type') required String destinationLocationType,

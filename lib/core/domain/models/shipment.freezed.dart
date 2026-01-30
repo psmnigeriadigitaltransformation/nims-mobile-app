@@ -28,6 +28,8 @@ mixin _$Shipment {
   String get routeNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'manifest_no')
   String get manifestNo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'origin_id')
+  String get originId => throw _privateConstructorUsedError;
   @JsonKey(name: 'origin_type')
   String get originType => throw _privateConstructorUsedError;
   @JsonKey(name: 'origin_facility_name')
@@ -76,6 +78,7 @@ abstract class $ShipmentCopyWith<$Res> {
     @JsonKey(name: 'shipment_no') String shipmentNo,
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
+    @JsonKey(name: 'origin_id') String originId,
     @JsonKey(name: 'origin_type') String originType,
     @JsonKey(name: 'origin_facility_name') String originFacilityName,
     @JsonKey(name: 'destination_location_type') String destinationLocationType,
@@ -112,6 +115,7 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
     Object? shipmentNo = null,
     Object? routeNo = null,
     Object? manifestNo = null,
+    Object? originId = null,
     Object? originType = null,
     Object? originFacilityName = null,
     Object? destinationLocationType = null,
@@ -144,6 +148,10 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
             manifestNo: null == manifestNo
                 ? _value.manifestNo
                 : manifestNo // ignore: cast_nullable_to_non_nullable
+                      as String,
+            originId: null == originId
+                ? _value.originId
+                : originId // ignore: cast_nullable_to_non_nullable
                       as String,
             originType: null == originType
                 ? _value.originType
@@ -221,6 +229,7 @@ abstract class _$$ShipmentImplCopyWith<$Res>
     @JsonKey(name: 'shipment_no') String shipmentNo,
     @JsonKey(name: 'route_no') String routeNo,
     @JsonKey(name: 'manifest_no') String manifestNo,
+    @JsonKey(name: 'origin_id') String originId,
     @JsonKey(name: 'origin_type') String originType,
     @JsonKey(name: 'origin_facility_name') String originFacilityName,
     @JsonKey(name: 'destination_location_type') String destinationLocationType,
@@ -256,6 +265,7 @@ class __$$ShipmentImplCopyWithImpl<$Res>
     Object? shipmentNo = null,
     Object? routeNo = null,
     Object? manifestNo = null,
+    Object? originId = null,
     Object? originType = null,
     Object? originFacilityName = null,
     Object? destinationLocationType = null,
@@ -288,6 +298,10 @@ class __$$ShipmentImplCopyWithImpl<$Res>
         manifestNo: null == manifestNo
             ? _value.manifestNo
             : manifestNo // ignore: cast_nullable_to_non_nullable
+                  as String,
+        originId: null == originId
+            ? _value.originId
+            : originId // ignore: cast_nullable_to_non_nullable
                   as String,
         originType: null == originType
             ? _value.originType
@@ -358,6 +372,7 @@ class _$ShipmentImpl implements _Shipment {
     @JsonKey(name: 'shipment_no') required this.shipmentNo,
     @JsonKey(name: 'route_no') required this.routeNo,
     @JsonKey(name: 'manifest_no') required this.manifestNo,
+    @JsonKey(name: 'origin_id') required this.originId,
     @JsonKey(name: 'origin_type') required this.originType,
     @JsonKey(name: 'origin_facility_name') this.originFacilityName = '',
     @JsonKey(name: 'destination_location_type')
@@ -391,6 +406,9 @@ class _$ShipmentImpl implements _Shipment {
   @override
   @JsonKey(name: 'manifest_no')
   final String manifestNo;
+  @override
+  @JsonKey(name: 'origin_id')
+  final String originId;
   @override
   @JsonKey(name: 'origin_type')
   final String originType;
@@ -436,7 +454,7 @@ class _$ShipmentImpl implements _Shipment {
 
   @override
   String toString() {
-    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originType: $originType, originFacilityName: $originFacilityName, destinationLocationType: $destinationLocationType, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount, payloadType: $payloadType, pickupDate: $pickupDate, deliveryDate: $deliveryDate, syncStatus: $syncStatus, stage: $stage)';
+    return 'Shipment(id: $id, shipmentNo: $shipmentNo, routeNo: $routeNo, manifestNo: $manifestNo, originId: $originId, originType: $originType, originFacilityName: $originFacilityName, destinationLocationType: $destinationLocationType, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, pickupLatitude: $pickupLatitude, pickupLongitude: $pickupLongitude, sampleType: $sampleType, sampleCount: $sampleCount, payloadType: $payloadType, pickupDate: $pickupDate, deliveryDate: $deliveryDate, syncStatus: $syncStatus, stage: $stage)';
   }
 
   @override
@@ -450,6 +468,8 @@ class _$ShipmentImpl implements _Shipment {
             (identical(other.routeNo, routeNo) || other.routeNo == routeNo) &&
             (identical(other.manifestNo, manifestNo) ||
                 other.manifestNo == manifestNo) &&
+            (identical(other.originId, originId) ||
+                other.originId == originId) &&
             (identical(other.originType, originType) ||
                 other.originType == originType) &&
             (identical(other.originFacilityName, originFacilityName) ||
@@ -487,12 +507,13 @@ class _$ShipmentImpl implements _Shipment {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     runtimeType,
     id,
     shipmentNo,
     routeNo,
     manifestNo,
+    originId,
     originType,
     originFacilityName,
     destinationLocationType,
@@ -507,7 +528,7 @@ class _$ShipmentImpl implements _Shipment {
     deliveryDate,
     syncStatus,
     stage,
-  );
+  ]);
 
   /// Create a copy of Shipment
   /// with the given fields replaced by the non-null parameter values.
@@ -529,6 +550,7 @@ abstract class _Shipment implements Shipment {
     @JsonKey(name: 'shipment_no') required final String shipmentNo,
     @JsonKey(name: 'route_no') required final String routeNo,
     @JsonKey(name: 'manifest_no') required final String manifestNo,
+    @JsonKey(name: 'origin_id') required final String originId,
     @JsonKey(name: 'origin_type') required final String originType,
     @JsonKey(name: 'origin_facility_name') final String originFacilityName,
     @JsonKey(name: 'destination_location_type')
@@ -562,6 +584,9 @@ abstract class _Shipment implements Shipment {
   @override
   @JsonKey(name: 'manifest_no')
   String get manifestNo;
+  @override
+  @JsonKey(name: 'origin_id')
+  String get originId;
   @override
   @JsonKey(name: 'origin_type')
   String get originType;

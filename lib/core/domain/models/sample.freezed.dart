@@ -24,6 +24,8 @@ mixin _$Sample {
   int? get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'manifest_no')
   String get manifestNo => throw _privateConstructorUsedError;
+  @JsonKey(name: 'origin_id')
+  String get originId => throw _privateConstructorUsedError;
   @JsonKey(name: 'sample_code')
   String get sampleCode => throw _privateConstructorUsedError;
   @JsonKey(name: 'patient_code')
@@ -52,6 +54,7 @@ abstract class $SampleCopyWith<$Res> {
   $Res call({
     int? id,
     @JsonKey(name: 'manifest_no') String manifestNo,
+    @JsonKey(name: 'origin_id') String originId,
     @JsonKey(name: 'sample_code') String sampleCode,
     @JsonKey(name: 'patient_code') String patientCode,
     String age,
@@ -79,6 +82,7 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
   $Res call({
     Object? id = freezed,
     Object? manifestNo = null,
+    Object? originId = null,
     Object? sampleCode = null,
     Object? patientCode = null,
     Object? age = null,
@@ -96,6 +100,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
             manifestNo: null == manifestNo
                 ? _value.manifestNo
                 : manifestNo // ignore: cast_nullable_to_non_nullable
+                      as String,
+            originId: null == originId
+                ? _value.originId
+                : originId // ignore: cast_nullable_to_non_nullable
                       as String,
             sampleCode: null == sampleCode
                 ? _value.sampleCode
@@ -142,6 +150,7 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
   $Res call({
     int? id,
     @JsonKey(name: 'manifest_no') String manifestNo,
+    @JsonKey(name: 'origin_id') String originId,
     @JsonKey(name: 'sample_code') String sampleCode,
     @JsonKey(name: 'patient_code') String patientCode,
     String age,
@@ -168,6 +177,7 @@ class __$$SampleImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? manifestNo = null,
+    Object? originId = null,
     Object? sampleCode = null,
     Object? patientCode = null,
     Object? age = null,
@@ -185,6 +195,10 @@ class __$$SampleImplCopyWithImpl<$Res>
         manifestNo: null == manifestNo
             ? _value.manifestNo
             : manifestNo // ignore: cast_nullable_to_non_nullable
+                  as String,
+        originId: null == originId
+            ? _value.originId
+            : originId // ignore: cast_nullable_to_non_nullable
                   as String,
         sampleCode: null == sampleCode
             ? _value.sampleCode
@@ -225,6 +239,7 @@ class _$SampleImpl implements _Sample {
   const _$SampleImpl({
     this.id,
     @JsonKey(name: 'manifest_no') required this.manifestNo,
+    @JsonKey(name: 'origin_id') required this.originId,
     @JsonKey(name: 'sample_code') required this.sampleCode,
     @JsonKey(name: 'patient_code') required this.patientCode,
     required this.age,
@@ -242,6 +257,9 @@ class _$SampleImpl implements _Sample {
   @override
   @JsonKey(name: 'manifest_no')
   final String manifestNo;
+  @override
+  @JsonKey(name: 'origin_id')
+  final String originId;
   @override
   @JsonKey(name: 'sample_code')
   final String sampleCode;
@@ -263,7 +281,7 @@ class _$SampleImpl implements _Sample {
 
   @override
   String toString() {
-    return 'Sample(id: $id, manifestNo: $manifestNo, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, comment: $comment, syncStatus: $syncStatus, stage: $stage)';
+    return 'Sample(id: $id, manifestNo: $manifestNo, originId: $originId, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, comment: $comment, syncStatus: $syncStatus, stage: $stage)';
   }
 
   @override
@@ -274,6 +292,8 @@ class _$SampleImpl implements _Sample {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.manifestNo, manifestNo) ||
                 other.manifestNo == manifestNo) &&
+            (identical(other.originId, originId) ||
+                other.originId == originId) &&
             (identical(other.sampleCode, sampleCode) ||
                 other.sampleCode == sampleCode) &&
             (identical(other.patientCode, patientCode) ||
@@ -292,6 +312,7 @@ class _$SampleImpl implements _Sample {
     runtimeType,
     id,
     manifestNo,
+    originId,
     sampleCode,
     patientCode,
     age,
@@ -319,6 +340,7 @@ abstract class _Sample implements Sample {
   const factory _Sample({
     final int? id,
     @JsonKey(name: 'manifest_no') required final String manifestNo,
+    @JsonKey(name: 'origin_id') required final String originId,
     @JsonKey(name: 'sample_code') required final String sampleCode,
     @JsonKey(name: 'patient_code') required final String patientCode,
     required final String age,
@@ -335,6 +357,9 @@ abstract class _Sample implements Sample {
   @override
   @JsonKey(name: 'manifest_no')
   String get manifestNo;
+  @override
+  @JsonKey(name: 'origin_id')
+  String get originId;
   @override
   @JsonKey(name: 'sample_code')
   String get sampleCode;

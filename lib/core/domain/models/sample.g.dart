@@ -9,6 +9,7 @@ part of 'sample.dart';
 _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
   id: (json['id'] as num?)?.toInt(),
   manifestNo: json['manifest_no'] as String,
+  originId: json['origin_id'] as String,
   sampleCode: json['sample_code'] as String,
   patientCode: json['patient_code'] as String,
   age: json['age'] as String,
@@ -22,6 +23,7 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'manifest_no': instance.manifestNo,
+      'origin_id': instance.originId,
       'sample_code': instance.sampleCode,
       'patient_code': instance.patientCode,
       'age': instance.age,

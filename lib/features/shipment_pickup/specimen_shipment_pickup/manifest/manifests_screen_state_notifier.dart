@@ -159,10 +159,10 @@ class SelectManifestsScreenStateNotifier
     }
   }
 
-  Future<void> deleteManifest(String manifestNo) async {
+  Future<void> deleteManifest(String manifestNo, String originId) async {
     final result = await ref
         .read(manifestRepositoryProvider)
-        .deleteManifest(manifestNo);
+        .deleteManifest(manifestNo, originId);
     switch (result) {
       case Success():
         // Refresh the manifest list after deletion

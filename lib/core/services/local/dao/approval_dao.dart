@@ -95,24 +95,25 @@ class ApprovalDao extends BaseDao {
   Future<void> _updateManifestAndSamplesStage(
     Transaction txn,
     String manifestNo,
+    String originId,
   ) async {
     log(
-      'Updating manifest $manifestNo and samples stage to Delivered',
+      'Updating manifest $manifestNo (originId: $originId) and samples stage to Delivered',
       method: '_updateManifestAndSamplesStage',
     );
-    // Update manifest stage
+    // Update manifest stage using composite key
     await txn.update(
       Tables.manifests,
       {Columns.stage: Stage.delivered},
-      where: '${Columns.manifestNo} = ?',
-      whereArgs: [manifestNo],
+      where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
+      whereArgs: [manifestNo, originId],
     );
-    // Update all samples linked to manifest
+    // Update all samples linked to manifest using composite key
     await txn.update(
       Tables.samples,
       {Columns.stage: Stage.delivered},
-      where: '${Columns.manifestNo} = ?',
-      whereArgs: [manifestNo],
+      where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
+      whereArgs: [manifestNo, originId],
     );
   }
 
@@ -167,21 +168,22 @@ class ApprovalDao extends BaseDao {
     );
     final database = await db;
     await database.transaction((txn) async {
-      // Collect unique manifest numbers from shipments being delivered
-      final manifestNos = <String>{};
+      // Collect unique manifest composite keys (manifestNo, originId) from shipments being delivered
+      final manifestKeys = <(String, String)>{};
 
       // Update shipment stage to 'Delivered' for each shipment
       for (final shipmentNo in shipmentNos) {
-        // Get manifest_no for this shipment
+        // Get manifest_no and origin_id for this shipment
         final shipmentResult = await txn.query(
           Tables.shipments,
-          columns: [Columns.manifestNo],
+          columns: [Columns.manifestNo, Columns.originId],
           where: '${Columns.shipmentNo} = ?',
           whereArgs: [shipmentNo],
         );
         if (shipmentResult.isNotEmpty) {
           final manifestNo = shipmentResult.first[Columns.manifestNo] as String;
-          manifestNos.add(manifestNo);
+          final originId = shipmentResult.first[Columns.originId] as String;
+          manifestKeys.add((manifestNo, originId));
         }
 
         await txn.update(
@@ -193,8 +195,8 @@ class ApprovalDao extends BaseDao {
       }
 
       // Update manifest and samples stages for each unique manifest
-      for (final manifestNo in manifestNos) {
-        await _updateManifestAndSamplesStage(txn, manifestNo);
+      for (final (manifestNo, originId) in manifestKeys) {
+        await _updateManifestAndSamplesStage(txn, manifestNo, originId);
       }
 
       // Save the delivery approval

@@ -114,6 +114,7 @@ class SpecimenShipmentScreenStateNotifier
       shipments.add(DomainShipment(
         shipmentNo: shipmentNo,
         manifestNo: manifest.manifestNo,
+        originId: manifest.originId,
         originType: pickUpFacility.type ?? '',
         originFacilityName: pickUpFacility.facilityName ?? '',
         destinationLocationType: '',

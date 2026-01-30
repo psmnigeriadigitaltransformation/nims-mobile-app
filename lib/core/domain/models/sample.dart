@@ -8,6 +8,7 @@ class Sample with _$Sample {
   const factory Sample({
     int? id,
     @JsonKey(name: 'manifest_no') required String manifestNo,
+    @JsonKey(name: 'origin_id') required String originId,
     @JsonKey(name: 'sample_code') required String sampleCode,
     @JsonKey(name: 'patient_code') required String patientCode,
     required String age,

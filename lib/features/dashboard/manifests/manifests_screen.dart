@@ -146,7 +146,7 @@ class ManifestsScreen extends ConsumerWidget {
                               ref
                                   .read(manifestsScreenStateNotifierProvider
                                       .notifier)
-                                  .deleteManifest(manifest.manifestNo);
+                                  .deleteManifest(manifest.manifestNo, manifest.originId);
                             },
                           ),
                         );

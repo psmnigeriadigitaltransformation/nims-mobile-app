@@ -284,6 +284,7 @@ class AddNewManifestScreen extends ConsumerWidget {
                             context: context,
                             builder: (builder) => AddNewSpecimenDialog(
                               manifestNo: data.manifestNo,
+                              originId: pickUpFacility.facilityId.toString(),
                               currentSampleCount: data.samples.length,
                               onSaveSpecimen: (sample) {
                                 ref

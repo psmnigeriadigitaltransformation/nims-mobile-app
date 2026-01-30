@@ -31,30 +31,36 @@ class ManifestDao extends BaseDao {
     });
   }
 
-  /// Deletes a manifest and its samples
-  Future<void> deleteManifest(String manifestNo) async {
-    log('manifestNo: $manifestNo', method: 'deleteManifest');
+  /// Deletes a manifest and its samples by composite key
+  Future<void> deleteManifest(String manifestNo, String originId) async {
+    log(
+      'manifestNo: $manifestNo, originId: $originId',
+      method: 'deleteManifest',
+    );
     final database = await db;
     await database.transaction((txn) async {
       // Delete samples linked to the manifest first
       await txn.delete(
         Tables.samples,
-        where: '${Columns.manifestNo} = ?',
-        whereArgs: [manifestNo],
+        where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
+        whereArgs: [manifestNo, originId],
       );
       // Delete the manifest
       await txn.delete(
         Tables.manifests,
-        where: '${Columns.manifestNo} = ?',
-        whereArgs: [manifestNo],
+        where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
+        whereArgs: [manifestNo, originId],
       );
     });
   }
 
   /// Deletes a manifest locally (alias for deleteManifest)
-  Future<void> deleteManifestLocally(String manifestNo) async {
-    log('Deleting manifest locally: $manifestNo', method: 'deleteManifestLocally');
-    await deleteManifest(manifestNo);
+  Future<void> deleteManifestLocally(String manifestNo, String originId) async {
+    log(
+      'Deleting manifest locally: $manifestNo, originId: $originId',
+      method: 'deleteManifestLocally',
+    );
+    await deleteManifest(manifestNo, originId);
   }
 
   /// Gets manifests by origin ID
@@ -97,7 +103,7 @@ class ManifestDao extends BaseDao {
     return result.map((m) => DomainManifest.fromJson(m)).toList();
   }
 
-  /// Gets a manifest by its manifest number
+  /// Gets a manifest by its manifest number (legacy - may return first match if duplicates exist)
   Future<DomainManifest?> getManifestByNo(String manifestNo) async {
     log('manifestNo: $manifestNo', method: 'getManifestByNo');
     final result = await getByUniqueId(
@@ -112,30 +118,62 @@ class ManifestDao extends BaseDao {
     return null;
   }
 
-  /// Updates a manifest locally
+  /// Gets a manifest by its composite key (manifest_no, origin_id)
+  Future<DomainManifest?> getManifestByCompositeKey(
+    String manifestNo,
+    String originId,
+  ) async {
+    log(
+      'manifestNo: $manifestNo, originId: $originId',
+      method: 'getManifestByCompositeKey',
+    );
+    final database = await db;
+    final result = await database.query(
+      Tables.manifests,
+      where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
+      whereArgs: [manifestNo, originId],
+      limit: 1,
+    );
+    log('manifest: $result', method: 'getManifestByCompositeKey');
+    if (result.isNotEmpty) {
+      return DomainManifest.fromJson(result.first);
+    }
+    return null;
+  }
+
+  /// Updates a manifest locally using composite key
   Future<void> updateManifestLocally(DomainManifest manifest) async {
-    log('Updating manifest: ${manifest.manifestNo}', method: 'updateManifestLocally');
+    log(
+      'Updating manifest: ${manifest.manifestNo}, originId: ${manifest.originId}',
+      method: 'updateManifestLocally',
+    );
+    final database = await db;
     final data = manifest.toJson();
     data.remove('id'); // Don't update the id
-    await updateByUniqueId(
+    await database.update(
       Tables.manifests,
-      Columns.manifestNo,
-      manifest.manifestNo,
       data,
+      where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
+      whereArgs: [manifest.manifestNo, manifest.originId],
     );
   }
 
-  /// Updates manifest sample count
-  Future<void> updateManifestSampleCount(String manifestNo, int newCount) async {
+  /// Updates manifest sample count using composite key
+  Future<void> updateManifestSampleCount(
+    String manifestNo,
+    String originId,
+    int newCount,
+  ) async {
     log(
-      'Updating manifest $manifestNo sample count to $newCount',
+      'Updating manifest $manifestNo (originId: $originId) sample count to $newCount',
       method: 'updateManifestSampleCount',
     );
-    await updateByUniqueId(
+    final database = await db;
+    await database.update(
       Tables.manifests,
-      Columns.manifestNo,
-      manifestNo,
       {Columns.sampleCount: newCount},
+      where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
+      whereArgs: [manifestNo, originId],
     );
   }
 
@@ -152,14 +190,30 @@ class ManifestDao extends BaseDao {
 
   // ==================== SAMPLE OPERATIONS ====================
 
-  /// Gets samples by manifest number
-  Future<List<DomainSample>> getCachedSamplesByManifestNo(String manifestNo) async {
-    log('manifestNo: $manifestNo', method: 'getCachedSamplesByManifestNo');
-    final result = await queryAll(
-      Tables.samples,
-      where: '${Columns.manifestNo} = ?',
-      whereArgs: [manifestNo],
+  /// Gets samples by manifest composite key (manifest_no, origin_id)
+  Future<List<DomainSample>> getCachedSamplesByManifestNo(
+    String manifestNo, {
+    String? originId,
+  }) async {
+    log(
+      'manifestNo: $manifestNo, originId: $originId',
+      method: 'getCachedSamplesByManifestNo',
     );
+    final database = await db;
+    List<Map<String, dynamic>> result;
+    if (originId != null) {
+      result = await database.query(
+        Tables.samples,
+        where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
+        whereArgs: [manifestNo, originId],
+      );
+    } else {
+      result = await database.query(
+        Tables.samples,
+        where: '${Columns.manifestNo} = ?',
+        whereArgs: [manifestNo],
+      );
+    }
     log('samples: $result', method: 'getCachedSamplesByManifestNo');
     return result.map((s) => DomainSample.fromJson(s)).toList();
   }

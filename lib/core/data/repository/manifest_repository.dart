@@ -120,9 +120,9 @@ class ManifestRepository {
   }
 
   /// Delete a manifest - server-first for synced records
-  Future<Result<bool>> deleteManifest(String manifestNo) async {
+  Future<Result<bool>> deleteManifest(String manifestNo, String originId) async {
     try {
-      final existing = await _localService.getManifestByNo(manifestNo);
+      final existing = await _localService.getManifestByCompositeKey(manifestNo, originId);
 
       if (existing == null) {
         return Error("Manifest not found");
@@ -142,14 +142,14 @@ class ManifestRepository {
 
         if (result is Success) {
           // Delete locally
-          await _localService.deleteManifestLocally(manifestNo);
+          await _localService.deleteManifestLocally(manifestNo, originId);
           return Success(true);
         } else {
           return Error("Failed to delete on server: ${(result as Error).message}");
         }
       } else {
         // Local-only record: delete directly
-        await _localService.deleteManifestLocally(manifestNo);
+        await _localService.deleteManifestLocally(manifestNo, originId);
         return Success(true);
       }
     } catch (e, s) {

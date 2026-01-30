@@ -145,8 +145,15 @@ class SamplesRepository {
           await _localService.deleteSampleLocally(sampleCode);
 
           // Update manifest sample count
-          final samples = await _localService.getCachedSamplesByManifestNo(manifestNo);
-          await _localService.updateManifestSampleCount(manifestNo, samples.length);
+          final samples = await _localService.getCachedSamplesByManifestNo(
+            manifestNo,
+            originId: existing.originId,
+          );
+          await _localService.updateManifestSampleCount(
+            manifestNo,
+            existing.originId,
+            samples.length,
+          );
 
           return Success(true);
         } else {
@@ -157,8 +164,15 @@ class SamplesRepository {
         await _localService.deleteSampleLocally(sampleCode);
 
         // Update manifest sample count
-        final samples = await _localService.getCachedSamplesByManifestNo(manifestNo);
-        await _localService.updateManifestSampleCount(manifestNo, samples.length);
+        final samples = await _localService.getCachedSamplesByManifestNo(
+          manifestNo,
+          originId: existing.originId,
+        );
+        await _localService.updateManifestSampleCount(
+          manifestNo,
+          existing.originId,
+          samples.length,
+        );
 
         return Success(true);
       }
@@ -207,8 +221,15 @@ class SamplesRepository {
           await _localService.deleteSampleLocally(sampleCode);
 
           // Update manifest sample count
-          final samples = await _localService.getCachedSamplesByManifestNo(manifestNo);
-          await _localService.updateManifestSampleCount(manifestNo, samples.length);
+          final samples = await _localService.getCachedSamplesByManifestNo(
+            manifestNo,
+            originId: existing.originId,
+          );
+          await _localService.updateManifestSampleCount(
+            manifestNo,
+            existing.originId,
+            samples.length,
+          );
 
           return Success(true);
         } else {
@@ -219,8 +240,15 @@ class SamplesRepository {
         await _localService.deleteSampleLocally(sampleCode);
 
         // Update manifest sample count
-        final samples = await _localService.getCachedSamplesByManifestNo(manifestNo);
-        await _localService.updateManifestSampleCount(manifestNo, samples.length);
+        final samples = await _localService.getCachedSamplesByManifestNo(
+          manifestNo,
+          originId: existing.originId,
+        );
+        await _localService.updateManifestSampleCount(
+          manifestNo,
+          existing.originId,
+          samples.length,
+        );
 
         return Success(true);
       }

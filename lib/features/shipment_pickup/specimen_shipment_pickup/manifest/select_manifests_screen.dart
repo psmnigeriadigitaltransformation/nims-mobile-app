@@ -287,6 +287,7 @@ class _SelectManifestsScreenState extends ConsumerState<SelectManifestsScreen> {
                                             )
                                             .deleteManifest(
                                               manifest.manifestNo,
+                                              manifest.originId,
                                             );
                                       },
                                     ),
