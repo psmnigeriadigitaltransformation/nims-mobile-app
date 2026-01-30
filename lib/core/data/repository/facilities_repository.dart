@@ -98,19 +98,19 @@ class FacilitiesRepository {
 
             // Deduplicate facilities by facilityId
             final seenIds = <int>{};
-            final combinedDomainFacilities = allFacilities.where((facility) {
-              final id = facility.facilityId;
-              if (id == null || seenIds.contains(id)) {
-                return false;
-              }
-              seenIds.add(id);
-              return true;
-            }).toList();
-            await _localService.cacheFacilities(combinedDomainFacilities);
-            if (combinedDomainFacilities.isEmpty) {
+            // final combinedDomainFacilities = allFacilities.where((facility) {
+            //   final id = facility.facilityId;
+            //   if (id == null || seenIds.contains(id)) {
+            //     return false;
+            //   }
+            //   seenIds.add(id);
+            //   return true;
+            // }).toList();
+            await _localService.cacheFacilities(allFacilities);
+            if (allFacilities.isEmpty) {
               Error<List<DomainFacility>>("No facility available");
             }
-            return Success(combinedDomainFacilities);
+            return Success(allFacilities);
           case Error<FacilitiesResponse>():
             developer.log(
               "error: ${result.message}",

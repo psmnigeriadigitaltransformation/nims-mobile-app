@@ -220,7 +220,7 @@ class SpecimenShipmentDetailsScreen extends ConsumerWidget {
         ),
         const Spacer(),
         Text(
-          "Shipment Details",
+          "Specimen Shipment Details",
           style: Theme.of(context).textTheme.titleSmall,
           textAlign: TextAlign.center,
         ),

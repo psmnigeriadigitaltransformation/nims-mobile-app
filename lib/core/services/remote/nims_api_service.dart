@@ -33,6 +33,7 @@ import '../../../../../core/utils/result.dart';
 import '../local/shared_preferences_helper.dart';
 import 'models/create_manifest_response.dart';
 import 'models/facilities_response.dart';
+import 'models/manifest_samples_response.dart';
 import 'models/request/create_manifest_request_body.dart';
 
 class NIMSAPIService {
@@ -550,6 +551,35 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:getFacilityResults");
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
+    }
+  }
+
+  /// Fetches manifest samples for a specific facility
+  /// GET /manifests/sample?facilityId={facilityId}
+  Future<Result<ManifestSamplesResponse>> getManifestSamples({
+    required String facilityId,
+  }) async {
+    try {
+      final response = await dio.get(
+        "manifests/sample",
+        queryParameters: {"facilityId": facilityId},
+      );
+      developer.log(
+        "api get manifest samples response: $response",
+        name: "NIMSAPIService:getManifestSamples",
+      );
+      final decodedResponse = ManifestSamplesResponse.fromJson(response.data);
+      if (decodedResponse.resultCode == 200) {
+        return Success(decodedResponse);
+      } else {
+        return Error(
+          decodedResponse.message ??
+              "${decodedResponse.resultCode}: Request failed! please try again",
+        );
+      }
+    } catch (e, s) {
+      developer.log("e: $e, s: $s", name: "NIMSAPIService:getManifestSamples");
       return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }

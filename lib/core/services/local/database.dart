@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 10,
+      version: 11,
       onCreate: (db, version) async {
 
         // Tables
@@ -227,6 +227,7 @@ class NIMSDatabase {
             longitude DECIMAL(10,6),
             approval_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             sync_status TEXT NOT NULL DEFAULT 'pending',
+            destination_location_type TEXT,
             FOREIGN KEY (route_no) REFERENCES routes(route_no)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
@@ -382,6 +383,12 @@ class NIMSDatabase {
           // Remove shipment_status column from shipments table (replaced by stage)
           await db.execute('''
             ALTER TABLE shipments DROP COLUMN shipment_status
+          ''');
+        }
+        if (oldVersion < 11) {
+          // Add destination_location_type column to approvals table
+          await db.execute('''
+            ALTER TABLE approvals ADD COLUMN destination_location_type TEXT
           ''');
         }
       },

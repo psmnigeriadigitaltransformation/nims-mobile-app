@@ -75,6 +75,10 @@ class SpecimenDeliveryApprovalScreenStateNotifier
     // Generate approval_no with -DL suffix for shipment_delivery approval
     final approvalNo = '${lsp?.display ?? "UNKNOWN"}-AP-$etokenSerial-DL';
 
+    // Get destination_location_type from the shipments being delivered
+    // All shipments in this group have the same destination_location_type
+    final destinationLocationType = state.shipments.first.destinationLocationType;
+
     final deliveryApproval = DomainApproval(
       approvalNo: approvalNo,
       routeNo: state.route.routeNo,
@@ -86,6 +90,7 @@ class SpecimenDeliveryApprovalScreenStateNotifier
       latitude: ref.read(geoLocationServiceProvider).latitude,
       longitude: ref.read(geoLocationServiceProvider).longitude,
       approvalDate: DateTime.now().toIso8601String(),
+      destinationLocationType: destinationLocationType,
     );
 
     final result = await ref

@@ -18,6 +18,7 @@ class Approval with _$Approval {
     double? longitude,
     @JsonKey(name: 'approval_date') String? approvalDate,
     @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
+    @JsonKey(name: 'destination_location_type') String? destinationLocationType,
   }) = _Approval;
 
   factory Approval.fromJson(Map<String, dynamic> json) =>

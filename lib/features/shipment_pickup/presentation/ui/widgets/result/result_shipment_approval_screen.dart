@@ -37,6 +37,51 @@ class ResultShipmentApprovalScreen extends ConsumerStatefulWidget {
 
 class _ResultShipmentApprovalScreenState
     extends ConsumerState<ResultShipmentApprovalScreen> {
+  late final TextEditingController _fullNameController;
+  late final TextEditingController _phoneNumberController;
+  late final TextEditingController _designationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _fullNameController = TextEditingController();
+    _phoneNumberController = TextEditingController();
+    _designationController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _phoneNumberController.dispose();
+    _designationController.dispose();
+    super.dispose();
+  }
+
+  /// Syncs controller values back to state if controllers have values but state is empty
+  void _syncControllersToState(
+    ({
+      DomainMovementType movementType,
+      DomainFacility pickUpFacility,
+      DomainFacility destinationFacility,
+      List<DomainShipment> shipments,
+      List<String> shipmentSampleCodes,
+    }) args,
+  ) {
+    final notifier = ref.read(resultShipmentApprovalScreenStateNotifierProvider(args).notifier);
+    final state = ref.read(resultShipmentApprovalScreenStateNotifierProvider(args));
+
+    // Sync values from controllers to state if controller has value but state is empty
+    if (_fullNameController.text.isNotEmpty && state.fullName.isEmpty) {
+      notifier.onUpdateFullName(_fullNameController.text);
+    }
+    if (_phoneNumberController.text.isNotEmpty && state.phoneNumber.isEmpty) {
+      notifier.onUpdatePhoneNumber(_phoneNumberController.text);
+    }
+    if (_designationController.text.isNotEmpty && state.designation.isEmpty) {
+      notifier.onUpdateDesignation(_designationController.text);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = (
@@ -46,6 +91,11 @@ class _ResultShipmentApprovalScreenState
       shipments: widget.shipments,
       shipmentSampleCodes: widget.shipmentSampleCodes,
     );
+
+    // Sync controller values to state after frame to handle navigation back
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _syncControllersToState(args);
+    });
 
     ref.listen(
       resultShipmentApprovalScreenStateNotifierProvider(args)
@@ -195,6 +245,7 @@ class _ResultShipmentApprovalScreenState
             Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
               child: TextField(
+                controller: _fullNameController,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.tertiary,
                     ),
@@ -224,6 +275,7 @@ class _ResultShipmentApprovalScreenState
             Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
               child: TextField(
+                controller: _phoneNumberController,
                 keyboardType: TextInputType.phone,
                 maxLength: 11,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -255,6 +307,7 @@ class _ResultShipmentApprovalScreenState
             Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
               child: TextField(
+                controller: _designationController,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.tertiary,
                     ),

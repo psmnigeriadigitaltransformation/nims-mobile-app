@@ -31,14 +31,14 @@ class ResultShipmentRouteDetailsScreenStateNotifier
       route.routeNo,
     );
 
-    // Separate shipment_pickup and shipment_delivery approvals
+    // Separate result_pickup and result_delivery approvals
     Approval? pickupApproval;
     Approval? deliveryApproval;
 
     for (final approval in approvals) {
-      if (approval.approvalType.toLowerCase().contains('shipment_pickup')) {
+      if (approval.approvalType.toLowerCase().contains('result_pickup')) {
         pickupApproval = approval;
-      } else if (approval.approvalType.toLowerCase().contains('shipment_delivery')) {
+      } else if (approval.approvalType.toLowerCase().contains('result_delivery')) {
         deliveryApproval = approval;
       }
     }

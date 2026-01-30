@@ -35,15 +35,70 @@ class SpecimenShipmentApprovalScreen extends ConsumerStatefulWidget {
 
 class _SpecimenShipmentApprovalScreenState
     extends ConsumerState<SpecimenShipmentApprovalScreen> {
+  late final TextEditingController _temperatureController;
+  late final TextEditingController _fullNameController;
+  late final TextEditingController _phoneNumberController;
+  late final TextEditingController _designationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _temperatureController = TextEditingController();
+    _fullNameController = TextEditingController();
+    _phoneNumberController = TextEditingController();
+    _designationController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _temperatureController.dispose();
+    _fullNameController.dispose();
+    _phoneNumberController.dispose();
+    _designationController.dispose();
+    super.dispose();
+  }
+
+  /// Syncs controller values back to state if controllers have values but state is empty
+  void _syncControllersToState(
+    ({
+      DomainMovementType movementType,
+      DomainFacility pickUpFacility,
+      DomainFacility destinationFacility,
+      List<DomainShipment> shipments,
+    }) args,
+  ) {
+    final notifier = ref.read(shipmentApprovalScreenStateNotifierProvider(args).notifier);
+    final state = ref.read(shipmentApprovalScreenStateNotifierProvider(args));
+
+    // Sync values from controllers to state if controller has value but state is empty
+    if (_temperatureController.text.isNotEmpty && state.pickUpTemperature.isEmpty) {
+      notifier.onUpdatePickUpTemperature(_temperatureController.text);
+    }
+    if (_fullNameController.text.isNotEmpty && state.fullName.isEmpty) {
+      notifier.onUpdateFullName(_fullNameController.text);
+    }
+    if (_phoneNumberController.text.isNotEmpty && state.phoneNumber.isEmpty) {
+      notifier.onUpdatePhoneNumber(_phoneNumberController.text);
+    }
+    if (_designationController.text.isNotEmpty && state.designation.isEmpty) {
+      notifier.onUpdateDesignation(_designationController.text);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final args = (
       movementType: widget.movementType,
       pickUpFacility: widget.pickUpFacility,
       destinationFacility: widget.destinationFacility,
       shipments: widget.shipments,
     );
+
+    // Sync controller values to state after frame to handle navigation back
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _syncControllersToState(args);
+    });
+
     ref.listen(
       shipmentApprovalScreenStateNotifierProvider(args).select((s) => s.alert),
       (prev, next) {
@@ -187,6 +242,7 @@ class _SpecimenShipmentApprovalScreenState
             Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
               child: TextField(
+                controller: _temperatureController,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
@@ -216,6 +272,7 @@ class _SpecimenShipmentApprovalScreenState
             Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
               child: TextField(
+                controller: _fullNameController,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
@@ -245,6 +302,7 @@ class _SpecimenShipmentApprovalScreenState
             Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
               child: TextField(
+                controller: _phoneNumberController,
                 keyboardType: TextInputType.phone,
                 maxLength: 11,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -276,6 +334,7 @@ class _SpecimenShipmentApprovalScreenState
             Padding(
               padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
               child: TextField(
+                controller: _designationController,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.tertiary,
                 ),

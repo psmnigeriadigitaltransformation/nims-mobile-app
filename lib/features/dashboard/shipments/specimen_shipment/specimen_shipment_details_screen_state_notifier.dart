@@ -31,6 +31,8 @@ class ShipmentDetailsScreenStateNotifier
     );
 
     // Separate shipment_pickup and shipment_delivery approvals
+    // Pickup approval is shared across all shipments in the route
+    // Delivery approval is specific to shipments with the same destination_location_type
     Approval? pickupApproval;
     Approval? deliveryApproval;
 
@@ -38,7 +40,10 @@ class ShipmentDetailsScreenStateNotifier
       if (approval.approvalType.toLowerCase().contains('specimen_pickup')) {
         pickupApproval = approval;
       } else if (approval.approvalType.toLowerCase().contains('specimen_delivery')) {
-        deliveryApproval = approval;
+        // Only match delivery approval if destination_location_type matches
+        if (approval.destinationLocationType == shipment.destinationLocationType) {
+          deliveryApproval = approval;
+        }
       }
     }
 

@@ -232,7 +232,7 @@ class ResultShipmentDetailsScreen extends ConsumerWidget {
         ),
         const Spacer(),
         Text(
-          "Shipment Details",
+          "Result Shipment Details",
           style: Theme.of(context).textTheme.titleSmall,
           textAlign: TextAlign.center,
         ),

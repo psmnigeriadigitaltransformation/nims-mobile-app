@@ -39,6 +39,8 @@ mixin _$Approval {
   String? get approvalDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'sync_status')
   String get syncStatus => throw _privateConstructorUsedError;
+  @JsonKey(name: 'destination_location_type')
+  String? get destinationLocationType => throw _privateConstructorUsedError;
 
   /// Serializes this Approval to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -68,6 +70,7 @@ abstract class $ApprovalCopyWith<$Res> {
     double? longitude,
     @JsonKey(name: 'approval_date') String? approvalDate,
     @JsonKey(name: 'sync_status') String syncStatus,
+    @JsonKey(name: 'destination_location_type') String? destinationLocationType,
   });
 }
 
@@ -98,6 +101,7 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
     Object? longitude = freezed,
     Object? approvalDate = freezed,
     Object? syncStatus = null,
+    Object? destinationLocationType = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -149,6 +153,10 @@ class _$ApprovalCopyWithImpl<$Res, $Val extends Approval>
                 ? _value.syncStatus
                 : syncStatus // ignore: cast_nullable_to_non_nullable
                       as String,
+            destinationLocationType: freezed == destinationLocationType
+                ? _value.destinationLocationType
+                : destinationLocationType // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -177,6 +185,7 @@ abstract class _$$ApprovalImplCopyWith<$Res>
     double? longitude,
     @JsonKey(name: 'approval_date') String? approvalDate,
     @JsonKey(name: 'sync_status') String syncStatus,
+    @JsonKey(name: 'destination_location_type') String? destinationLocationType,
   });
 }
 
@@ -206,6 +215,7 @@ class __$$ApprovalImplCopyWithImpl<$Res>
     Object? longitude = freezed,
     Object? approvalDate = freezed,
     Object? syncStatus = null,
+    Object? destinationLocationType = freezed,
   }) {
     return _then(
       _$ApprovalImpl(
@@ -257,6 +267,10 @@ class __$$ApprovalImplCopyWithImpl<$Res>
             ? _value.syncStatus
             : syncStatus // ignore: cast_nullable_to_non_nullable
                   as String,
+        destinationLocationType: freezed == destinationLocationType
+            ? _value.destinationLocationType
+            : destinationLocationType // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -278,6 +292,7 @@ class _$ApprovalImpl implements _Approval {
     this.longitude,
     @JsonKey(name: 'approval_date') this.approvalDate,
     @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
+    @JsonKey(name: 'destination_location_type') this.destinationLocationType,
   });
 
   factory _$ApprovalImpl.fromJson(Map<String, dynamic> json) =>
@@ -313,10 +328,13 @@ class _$ApprovalImpl implements _Approval {
   @override
   @JsonKey(name: 'sync_status')
   final String syncStatus;
+  @override
+  @JsonKey(name: 'destination_location_type')
+  final String? destinationLocationType;
 
   @override
   String toString() {
-    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature, latitude: $latitude, longitude: $longitude, approvalDate: $approvalDate, syncStatus: $syncStatus)';
+    return 'Approval(id: $id, approvalNo: $approvalNo, routeNo: $routeNo, approvalType: $approvalType, fullname: $fullname, phone: $phone, designation: $designation, signature: $signature, latitude: $latitude, longitude: $longitude, approvalDate: $approvalDate, syncStatus: $syncStatus, destinationLocationType: $destinationLocationType)';
   }
 
   @override
@@ -344,7 +362,12 @@ class _$ApprovalImpl implements _Approval {
             (identical(other.approvalDate, approvalDate) ||
                 other.approvalDate == approvalDate) &&
             (identical(other.syncStatus, syncStatus) ||
-                other.syncStatus == syncStatus));
+                other.syncStatus == syncStatus) &&
+            (identical(
+                  other.destinationLocationType,
+                  destinationLocationType,
+                ) ||
+                other.destinationLocationType == destinationLocationType));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -363,6 +386,7 @@ class _$ApprovalImpl implements _Approval {
     longitude,
     approvalDate,
     syncStatus,
+    destinationLocationType,
   );
 
   /// Create a copy of Approval
@@ -393,6 +417,8 @@ abstract class _Approval implements Approval {
     final double? longitude,
     @JsonKey(name: 'approval_date') final String? approvalDate,
     @JsonKey(name: 'sync_status') final String syncStatus,
+    @JsonKey(name: 'destination_location_type')
+    final String? destinationLocationType,
   }) = _$ApprovalImpl;
 
   factory _Approval.fromJson(Map<String, dynamic> json) =
@@ -428,6 +454,9 @@ abstract class _Approval implements Approval {
   @override
   @JsonKey(name: 'sync_status')
   String get syncStatus;
+  @override
+  @JsonKey(name: 'destination_location_type')
+  String? get destinationLocationType;
 
   /// Create a copy of Approval
   /// with the given fields replaced by the non-null parameter values.

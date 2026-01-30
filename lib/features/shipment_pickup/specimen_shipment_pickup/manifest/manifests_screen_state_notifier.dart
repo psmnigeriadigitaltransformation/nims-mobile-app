@@ -4,6 +4,7 @@ import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/utils/list_extensions.dart';
 import 'package:nims_mobile_app/features/dashboard/facilities/providers.dart';
 import '../../../../core/ui/model/alert.dart';
 import '../../../../core/utils/result.dart';
@@ -50,25 +51,24 @@ class SelectManifestsScreenStateNotifier
           "All facilities count: ${payload.length}, types: ${payload.map((f) => f.type).toSet()}",
           name: "ManifestsScreenStateNotifier:_loadData",
         );
-        final filteredFacilities = payload
-            .where(
-              (facility) {
-                final typeLower = facility.type?.toLowerCase() ?? "";
-                // Check if origin contains type OR type contains origin
-                // This handles cases like origin="Hub" matching type="hub"
-                final matches = originLower == typeLower ||
-                    originLower.contains(typeLower) ||
-                    typeLower.contains(originLower);
-                return matches;
-              },
-            )
-            .toList();
+        final filteredFacilities = payload.where((facility) {
+          final typeLower = facility.type?.toLowerCase() ?? "";
+          // Check if origin contains type OR type contains origin
+          // This handles cases like origin="Hub" matching type="hub"
+          final matches =
+              originLower == typeLower ||
+              originLower.contains(typeLower) ||
+              typeLower.contains(originLower);
+          return matches;
+        }).toList();
         developer.log(
           "Filtered facilities for origin '$originLower': ${filteredFacilities.length}",
           name: "ManifestsScreenStateNotifier:_loadData",
         );
         return SelectManifestsScreenState(
-          facilities: filteredFacilities,
+          facilities: filteredFacilities.distinctBy(
+            (facility) => facility.facilityId,
+          ),
           movementType: param.movementType,
           manifests: [],
           shippedManifestStatuses: shippedStatuses,
@@ -86,7 +86,10 @@ class SelectManifestsScreenStateNotifier
 
   Future<void> onSelectPickUpFacility(DomainFacility facility) async {
     state = state.whenData(
-      (data) => data.copyWith(selectedPickUpFacility: facility, selectedManifestIndices: []),
+      (data) => data.copyWith(
+        selectedPickUpFacility: facility,
+        selectedManifestIndices: [],
+      ),
     );
     getFacilityManifests(facility);
   }
@@ -107,12 +110,16 @@ class SelectManifestsScreenStateNotifier
           final currentState = state.valueOrNull;
           final shippedStatuses = currentState?.shippedManifestStatuses ?? {};
           final availableManifests = payload
-              .where((manifest) => !shippedStatuses.containsKey(manifest.manifestNo))
+              .where(
+                (manifest) => !shippedStatuses.containsKey(manifest.manifestNo),
+              )
               .toList();
 
           state = state.whenData(
-            (data) =>
-                data.copyWith(manifests: availableManifests, isFetchingManifests: false),
+            (data) => data.copyWith(
+              manifests: availableManifests,
+              isFetchingManifests: false,
+            ),
           );
         case Error<List<DomainManifest>>():
           state = state.whenData(
@@ -165,9 +172,7 @@ class SelectManifestsScreenStateNotifier
         }
       case Error(message: final m):
         state = state.whenData(
-          (data) => data.copyWith(
-            alert: Alert(show: true, message: m),
-          ),
+          (data) => data.copyWith(alert: Alert(show: true, message: m)),
         );
     }
   }
