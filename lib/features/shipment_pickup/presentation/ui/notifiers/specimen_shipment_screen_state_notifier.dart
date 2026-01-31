@@ -135,12 +135,14 @@ class SpecimenShipmentScreenStateNotifier
         facilities: (facilitiesResult as Success<List<DomainFacility>>).payload
             .where(
               (facility) =>
-                  movementType.destinationPrimary!.toLowerCase().contains(
+                  // Exclude pickup facility from destination list
+                  facility.facilityId != pickUpFacility.facilityId &&
+                  (movementType.destinationPrimary!.toLowerCase().contains(
                     facility.type?.toLowerCase() ?? "",
                   ) ||
                   movementType.destinationSecondary!
                       .toLowerCase()
-                      .contains(facility.type?.toLowerCase() ?? ""),
+                      .contains(facility.type?.toLowerCase() ?? "")),
             )
             .distinctBy((facility) => facility.facilityId),
         locations: (locationsResult as Success<List<DomainLocation>>).payload

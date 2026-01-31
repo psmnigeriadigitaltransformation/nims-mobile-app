@@ -194,12 +194,14 @@ class ResultShipmentScreenStateNotifier
                 .payload
                 .where(
                   (facility) =>
-                      movementType.destinationPrimary!.toLowerCase().contains(
+                      // Exclude pickup facility from destination list
+                      facility.facilityId != pickUpFacility.facilityId &&
+                      (movementType.destinationPrimary!.toLowerCase().contains(
                             facility.type?.toLowerCase() ?? "",
                           ) ||
                       movementType.destinationSecondary
                           ?.toLowerCase()
-                          .contains(facility.type?.toLowerCase() ?? "") == true,
+                          .contains(facility.type?.toLowerCase() ?? "") == true),
                 )
                 .distinctBy((facility) => facility.facilityId),
         locations:

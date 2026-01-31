@@ -51,6 +51,7 @@ class AddNewManifestScreenStateNotifier
     if (facilitiesResult is Success && sampleTypesResult is Success) {
       return AddNewManifestScreenState(
         facilities: (facilitiesResult as Success<List<DomainFacility>>).payload
+            .where((facility) => facility.facilityId != param.pickUpFacility.facilityId)
             .distinctBy((facility) => facility.facilityId),
         sampleTypes:
             (sampleTypesResult as Success<List<DomainSampleType>>).payload,
