@@ -184,7 +184,7 @@ class _SpecimenDeliveryApprovalScreenState
                 ),
                 decoration: const InputDecoration(
                   labelText: "Delivery Temperature",
-                  hintText: "Enter shipment_delivery temperature",
+                  hintText: "Enter delivery temperature",
                   helperText: "",
                   errorText: null,
                 ),

@@ -27,14 +27,14 @@ class SpecimenShipmentRouteDetailsScreenStateNotifier
       route.routeNo,
     );
 
-    // Separate shipment_pickup and shipment_delivery approvals
+    // Separate specimen_pickup and specimen_delivery approvals
     Approval? pickupApproval;
     Approval? deliveryApproval;
 
     for (final approval in approvals) {
-      if (approval.approvalType.toLowerCase().contains('shipment_pickup')) {
+      if (approval.approvalType.toLowerCase().contains('specimen_pickup')) {
         pickupApproval = approval;
-      } else if (approval.approvalType.toLowerCase().contains('shipment_delivery')) {
+      } else if (approval.approvalType.toLowerCase().contains('specimen_delivery')) {
         deliveryApproval = approval;
       }
     }

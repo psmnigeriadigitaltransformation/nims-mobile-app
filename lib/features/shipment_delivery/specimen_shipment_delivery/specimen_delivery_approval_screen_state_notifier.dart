@@ -66,13 +66,13 @@ class SpecimenDeliveryApprovalScreenStateNotifier
 
     // Extract etoken_serial from the first specimen's manifest_no
     // Format: {LSP}-{etoken_serial} -> e.g., "LSP1-001" -> "001"
-    final firstManifestNo = state.shipments.first.manifestNo;
+    final firstManifestNo = state.shipments.first.manifestNo ?? '';
     final manifestParts = firstManifestNo.split('-');
     final etokenSerial = manifestParts.length > 1
         ? manifestParts.sublist(1).join('-')
         : firstManifestNo;
 
-    // Generate approval_no with -DL suffix for shipment_delivery approval
+    // Generate approval_no with -DL suffix for specimen_delivery approval
     final approvalNo = '${lsp?.display ?? "UNKNOWN"}-AP-$etokenSerial-DL';
 
     // Get destination_location_type from the shipments being delivered
@@ -123,7 +123,7 @@ class SpecimenDeliveryApprovalScreenStateNotifier
         );
       case Error<bool>():
         developer.log(
-          "Failed to save shipment_delivery approval: ${result.message}",
+          "Failed to save specimen_delivery approval: ${result.message}",
           name: "DeliveryApprovalScreenStateNotifier:onApproveDelivery",
         );
         state = state.copyWith(

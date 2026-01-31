@@ -304,7 +304,7 @@ class SpecimenShipmentRouteDetailsScreen extends ConsumerWidget {
     return widgets;
   }
 
-  /// Builds a single collapsible group of shipments with header and shipment_delivery button
+  /// Builds a single collapsible group of shipments with header and delivery button
   Widget _buildSpecimenDeliveryShipmentGroup(
     BuildContext context,
     String locationType,
@@ -320,7 +320,7 @@ class SpecimenShipmentRouteDetailsScreen extends ConsumerWidget {
   }
 
 
-  /// Navigates to the specimen shipment_delivery approval screen with the given shipments
+  /// Navigates to the specimen delivery approval screen with the given shipments
   void _navigateToSpecimenDeliveryApproval(
     BuildContext context,
     List<Shipment> shipments,

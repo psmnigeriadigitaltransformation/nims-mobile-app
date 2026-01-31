@@ -330,8 +330,11 @@ class SyncService {
       bool allManifestsSynced = true;
 
       for (final shipment in shipments) {
+        // Skip manifest check for result shipments (manifestNo is null)
+        if (shipment.manifestNo == null) continue;
+
         final manifest = await _localService.getManifestByNo(
-          shipment.manifestNo,
+          shipment.manifestNo!,
         );
         if (manifest != null && manifest.syncStatus != SyncStatus.synced) {
           developer.log(
@@ -344,7 +347,7 @@ class SyncService {
 
           // Check again
           final updatedManifest = await _localService.getManifestByNo(
-            shipment.manifestNo,
+            shipment.manifestNo!,
           );
           if (updatedManifest?.syncStatus != SyncStatus.synced) {
             allManifestsSynced = false;
@@ -388,7 +391,7 @@ class SyncService {
             .map(
               (s) => Shipment(
                 shipmentNo: s.shipmentNo,
-                manifestNo: s.manifestNo,
+                manifestNo: s.manifestNo ?? '',
                 originType: s.originType,
                 destinationType: s.destinationLocationType,
                 pickupLatitude: s.pickupLatitude.toString(),
@@ -444,10 +447,13 @@ class SyncService {
             Stage.inTransit,
           );
           // Update shipment, manifest, and samples stage to In-Transit
-          await _localService.updateShipmentStageToInTransit(
-            shipment.shipmentNo,
-            shipment.manifestNo,
-          );
+          // Only for specimen shipments (result shipments have null manifestNo)
+          if (shipment.manifestNo != null) {
+            await _localService.updateShipmentStageToInTransit(
+              shipment.shipmentNo,
+              shipment.manifestNo!,
+            );
+          }
         }
         await _localService.updateSyncStatus(
           Tables.approvals,
@@ -605,7 +611,10 @@ class SyncService {
 
     // Ensure all manifest are synced first
     for (final shipment in shipments) {
-      final manifest = await _localService.getManifestByNo(shipment.manifestNo);
+      // Skip manifest check for result shipments (manifestNo is null)
+      if (shipment.manifestNo == null) continue;
+
+      final manifest = await _localService.getManifestByNo(shipment.manifestNo!);
       if (manifest != null && manifest.syncStatus != SyncStatus.synced) {
         final synced = await _syncSingleManifest(manifest);
         if (!synced) {
@@ -631,7 +640,7 @@ class SyncService {
           .map(
             (s) => Shipment(
               shipmentNo: s.shipmentNo,
-              manifestNo: s.manifestNo,
+              manifestNo: s.manifestNo ?? '',
               originType: s.originType,
               destinationType: s.destinationLocationType,
               pickupLatitude: s.pickupLatitude.toString(),
@@ -680,10 +689,13 @@ class SyncService {
           Stage.inTransit,
         );
         // Update shipment, manifest, and samples stage to In-Transit
-        await _localService.updateShipmentStageToInTransit(
-          shipment.shipmentNo,
-          shipment.manifestNo,
-        );
+        // Only for specimen shipments (result shipments have null manifestNo)
+        if (shipment.manifestNo != null) {
+          await _localService.updateShipmentStageToInTransit(
+            shipment.shipmentNo,
+            shipment.manifestNo!,
+          );
+        }
       }
       await _localService.updateSyncStatus(
         Tables.approvals,
@@ -743,8 +755,11 @@ class SyncService {
       // Step 1: Ensure all manifest are synced first
       bool allManifestsSynced = true;
       for (final shipment in shipments) {
+        // Skip manifest check for result shipments (manifestNo is null)
+        if (shipment.manifestNo == null) continue;
+
         final manifest = await _localService.getManifestByNo(
-          shipment.manifestNo,
+          shipment.manifestNo!,
         );
         if (manifest != null && manifest.syncStatus != SyncStatus.synced) {
           developer.log(
@@ -820,7 +835,7 @@ class SyncService {
           SpecimenDeliveryRequest(
             routeNo: route.routeNo,
             shipmentNo: shipment.shipmentNo,
-            manifestNo: shipment.manifestNo,
+            manifestNo: shipment.manifestNo ?? '',
             latitude: route.latitude?.toString() ?? "0.0",
             longitude: route.longitude?.toString() ?? "0.0",
             deliveryDate:
@@ -906,7 +921,7 @@ class SyncService {
           .map(
             (s) => Shipment(
               shipmentNo: s.shipmentNo,
-              manifestNo: s.manifestNo,
+              manifestNo: s.manifestNo ?? '',
               originType: s.originType,
               destinationType: s.destinationLocationType,
               pickupLatitude: s.pickupLatitude.toString(),
@@ -954,10 +969,13 @@ class SyncService {
           Stage.inTransit,
         );
         // Update shipment, manifest, and samples stage to In-Transit
-        await _localService.updateShipmentStageToInTransit(
-          shipment.shipmentNo,
-          shipment.manifestNo,
-        );
+        // Only for specimen shipments (result shipments have null manifestNo)
+        if (shipment.manifestNo != null) {
+          await _localService.updateShipmentStageToInTransit(
+            shipment.shipmentNo,
+            shipment.manifestNo!,
+          );
+        }
       }
       await _localService.updateSyncStatus(
         Tables.approvals,
@@ -986,7 +1004,10 @@ class SyncService {
 
     // Step 1: Ensure all manifest are synced first
     for (final shipment in shipments) {
-      final manifest = await _localService.getManifestByNo(shipment.manifestNo);
+      // Skip manifest check for result shipments (manifestNo is null)
+      if (shipment.manifestNo == null) continue;
+
+      final manifest = await _localService.getManifestByNo(shipment.manifestNo!);
       if (manifest != null && manifest.syncStatus != SyncStatus.synced) {
         developer.log(
           "Manifest ${shipment.manifestNo} not synced, attempting sync first",
@@ -1055,7 +1076,7 @@ class SyncService {
           (shipment) => SpecimenDeliveryRequest(
             routeNo: currentRoute.routeNo,
             shipmentNo: shipment.shipmentNo,
-            manifestNo: shipment.manifestNo,
+            manifestNo: shipment.manifestNo ?? '',
             latitude: currentRoute.latitude?.toString() ?? "0.0",
             longitude: currentRoute.longitude?.toString() ?? "0.0",
             deliveryDate:

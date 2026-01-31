@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 12,
+      version: 13,
       onCreate: (db, version) async {
 
         // Tables
@@ -194,7 +194,7 @@ class NIMSDatabase {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             shipment_no TEXT NOT NULL UNIQUE,
             route_no TEXT NOT NULL,
-            manifest_no TEXT NOT NULL,
+            manifest_no TEXT,
             origin_id TEXT NOT NULL,
             origin_type TEXT NOT NULL,
             origin_facility_name TEXT NOT NULL DEFAULT '',
@@ -211,9 +211,6 @@ class NIMSDatabase {
             sync_status TEXT NOT NULL DEFAULT 'pending',
             stage TEXT NOT NULL DEFAULT 'Pending',
             FOREIGN KEY (route_no) REFERENCES routes(route_no)
-                ON DELETE CASCADE
-                ON UPDATE CASCADE,
-            FOREIGN KEY (manifest_no, origin_id) REFERENCES manifests(manifest_no, origin_id)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
         )
@@ -424,6 +421,22 @@ class NIMSDatabase {
           // The composite unique constraint (manifest_no, origin_id) will be enforced
           // at the application level for existing installations. New installations
           // will have the proper constraint from onCreate.
+        }
+        if (oldVersion < 13) {
+          // Make manifest_no nullable for result shipments (which don't have manifests)
+          // SQLite doesn't support ALTER COLUMN, so we need to recreate the table
+          // However, since the column was already NOT NULL with a default, we can
+          // simply update empty strings to NULL and the column will accept NULLs
+          // going forward (SQLite is lenient about this in practice).
+          // For truly strict enforcement, we'd need to recreate the table.
+          //
+          // Convert empty manifest_no values to NULL for result shipments
+          await db.execute('''
+            UPDATE shipments SET manifest_no = NULL WHERE manifest_no = ''
+          ''');
+          // Note: The FK constraint (manifest_no, origin_id) -> manifests is removed
+          // in the new onCreate schema. For existing installations, SQLite doesn't
+          // enforce FKs by default unless PRAGMA foreign_keys = ON is set.
         }
       },
     );

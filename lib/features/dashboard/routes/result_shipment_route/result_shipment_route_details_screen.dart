@@ -282,7 +282,7 @@ class ResultShipmentRouteDetailsScreen extends ConsumerWidget {
     return widgets;
   }
 
-  /// Navigates to the specimen shipment_delivery approval screen with the given shipments
+  /// Navigates to the result delivery approval screen with the given shipments
   void _navigateToResultDeliveryApproval(
       BuildContext context,
       DomainShipment shipment,
@@ -297,7 +297,7 @@ class ResultShipmentRouteDetailsScreen extends ConsumerWidget {
     );
   }
 
-  /// Builds a single collapsible group of shipments with header and shipment_delivery button
+  /// Builds a single collapsible group of shipments with header and delivery button
   Widget _buildResultDeliveryShipmentGroup(
     BuildContext context,
     String locationType,

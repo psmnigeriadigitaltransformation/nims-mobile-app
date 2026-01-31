@@ -37,7 +37,7 @@ class ResultShipmentDetailsScreenStateNotifier
       shipment.routeNo,
     );
 
-    // Separate shipment_pickup and shipment_delivery approvals
+    // Separate result_pickup and result_delivery approvals
     Approval? pickupApproval;
     Approval? deliveryApproval;
 

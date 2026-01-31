@@ -27,7 +27,7 @@ mixin _$Shipment {
   @JsonKey(name: 'route_no')
   String get routeNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'manifest_no')
-  String get manifestNo => throw _privateConstructorUsedError;
+  String? get manifestNo => throw _privateConstructorUsedError;
   @JsonKey(name: 'origin_id')
   String get originId => throw _privateConstructorUsedError;
   @JsonKey(name: 'origin_type')
@@ -77,7 +77,7 @@ abstract class $ShipmentCopyWith<$Res> {
     int? id,
     @JsonKey(name: 'shipment_no') String shipmentNo,
     @JsonKey(name: 'route_no') String routeNo,
-    @JsonKey(name: 'manifest_no') String manifestNo,
+    @JsonKey(name: 'manifest_no') String? manifestNo,
     @JsonKey(name: 'origin_id') String originId,
     @JsonKey(name: 'origin_type') String originType,
     @JsonKey(name: 'origin_facility_name') String originFacilityName,
@@ -114,7 +114,7 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
     Object? id = freezed,
     Object? shipmentNo = null,
     Object? routeNo = null,
-    Object? manifestNo = null,
+    Object? manifestNo = freezed,
     Object? originId = null,
     Object? originType = null,
     Object? originFacilityName = null,
@@ -145,10 +145,10 @@ class _$ShipmentCopyWithImpl<$Res, $Val extends Shipment>
                 ? _value.routeNo
                 : routeNo // ignore: cast_nullable_to_non_nullable
                       as String,
-            manifestNo: null == manifestNo
+            manifestNo: freezed == manifestNo
                 ? _value.manifestNo
                 : manifestNo // ignore: cast_nullable_to_non_nullable
-                      as String,
+                      as String?,
             originId: null == originId
                 ? _value.originId
                 : originId // ignore: cast_nullable_to_non_nullable
@@ -228,7 +228,7 @@ abstract class _$$ShipmentImplCopyWith<$Res>
     int? id,
     @JsonKey(name: 'shipment_no') String shipmentNo,
     @JsonKey(name: 'route_no') String routeNo,
-    @JsonKey(name: 'manifest_no') String manifestNo,
+    @JsonKey(name: 'manifest_no') String? manifestNo,
     @JsonKey(name: 'origin_id') String originId,
     @JsonKey(name: 'origin_type') String originType,
     @JsonKey(name: 'origin_facility_name') String originFacilityName,
@@ -264,7 +264,7 @@ class __$$ShipmentImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? shipmentNo = null,
     Object? routeNo = null,
-    Object? manifestNo = null,
+    Object? manifestNo = freezed,
     Object? originId = null,
     Object? originType = null,
     Object? originFacilityName = null,
@@ -295,10 +295,10 @@ class __$$ShipmentImplCopyWithImpl<$Res>
             ? _value.routeNo
             : routeNo // ignore: cast_nullable_to_non_nullable
                   as String,
-        manifestNo: null == manifestNo
+        manifestNo: freezed == manifestNo
             ? _value.manifestNo
             : manifestNo // ignore: cast_nullable_to_non_nullable
-                  as String,
+                  as String?,
         originId: null == originId
             ? _value.originId
             : originId // ignore: cast_nullable_to_non_nullable
@@ -371,7 +371,7 @@ class _$ShipmentImpl implements _Shipment {
     this.id,
     @JsonKey(name: 'shipment_no') required this.shipmentNo,
     @JsonKey(name: 'route_no') required this.routeNo,
-    @JsonKey(name: 'manifest_no') required this.manifestNo,
+    @JsonKey(name: 'manifest_no') this.manifestNo,
     @JsonKey(name: 'origin_id') required this.originId,
     @JsonKey(name: 'origin_type') required this.originType,
     @JsonKey(name: 'origin_facility_name') this.originFacilityName = '',
@@ -405,7 +405,7 @@ class _$ShipmentImpl implements _Shipment {
   final String routeNo;
   @override
   @JsonKey(name: 'manifest_no')
-  final String manifestNo;
+  final String? manifestNo;
   @override
   @JsonKey(name: 'origin_id')
   final String originId;
@@ -549,7 +549,7 @@ abstract class _Shipment implements Shipment {
     final int? id,
     @JsonKey(name: 'shipment_no') required final String shipmentNo,
     @JsonKey(name: 'route_no') required final String routeNo,
-    @JsonKey(name: 'manifest_no') required final String manifestNo,
+    @JsonKey(name: 'manifest_no') final String? manifestNo,
     @JsonKey(name: 'origin_id') required final String originId,
     @JsonKey(name: 'origin_type') required final String originType,
     @JsonKey(name: 'origin_facility_name') final String originFacilityName,
@@ -583,7 +583,7 @@ abstract class _Shipment implements Shipment {
   String get routeNo;
   @override
   @JsonKey(name: 'manifest_no')
-  String get manifestNo;
+  String? get manifestNo;
   @override
   @JsonKey(name: 'origin_id')
   String get originId;

@@ -133,7 +133,7 @@ class ResultShipmentScreenStateNotifier
 
     final shipment = DomainShipment(
       shipmentNo: shipmentNo,
-      manifestNo: "",
+      manifestNo: null,
       originId: pickUpFacility.facilityId.toString(),
       originType: pickUpFacility.type ?? '',
       originFacilityName: pickUpFacility.facilityName ?? '',

@@ -181,9 +181,12 @@ class ApprovalDao extends BaseDao {
           whereArgs: [shipmentNo],
         );
         if (shipmentResult.isNotEmpty) {
-          final manifestNo = shipmentResult.first[Columns.manifestNo] as String;
+          final manifestNo = shipmentResult.first[Columns.manifestNo] as String?;
           final originId = shipmentResult.first[Columns.originId] as String;
-          manifestKeys.add((manifestNo, originId));
+          // Only add to manifestKeys if manifestNo is not null (result shipments have null manifestNo)
+          if (manifestNo != null) {
+            manifestKeys.add((manifestNo, originId));
+          }
         }
 
         await txn.update(
@@ -195,6 +198,7 @@ class ApprovalDao extends BaseDao {
       }
 
       // Update manifest and samples stages for each unique manifest
+      // (result shipments have null manifestNo and are excluded)
       for (final (manifestNo, originId) in manifestKeys) {
         await _updateManifestAndSamplesStage(txn, manifestNo, originId);
       }

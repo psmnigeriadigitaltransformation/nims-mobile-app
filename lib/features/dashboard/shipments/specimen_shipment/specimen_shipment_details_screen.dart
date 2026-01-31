@@ -280,8 +280,10 @@ class SpecimenShipmentDetailsScreen extends ConsumerWidget {
       child: Column(
         children: [
           _buildInfoRow(context, "Route", state.shipment.routeNo),
-          const Divider(height: 20),
-          _buildInfoRow(context, "Manifest", state.shipment.manifestNo),
+          if (state.shipment.manifestNo != null) ...[
+            const Divider(height: 20),
+            _buildInfoRow(context, "Manifest", state.shipment.manifestNo!),
+          ],
           const Divider(height: 20),
           _buildInfoRow(context, "Payload Type", state.shipment.payloadType.toString().capitalize()),
           const Divider(height: 20),

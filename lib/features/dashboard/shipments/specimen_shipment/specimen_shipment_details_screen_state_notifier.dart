@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/domain/models/approval.dart';
+import 'package:nims_mobile_app/core/domain/models/sample.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment.dart';
 import 'package:nims_mobile_app/features/dashboard/shipments/specimen_shipment/specimen_shipment_details_screen_state.dart';
 
@@ -17,10 +18,10 @@ class ShipmentDetailsScreenStateNotifier
   Future<SpecimenShipmentDetailsScreenState> _fetchDetails(Shipment shipment) async {
     final localService = ref.read(nimsLocalServiceProvider);
 
-    // Fetch samples by manifestNo
-    final samples = await localService.getCachedSamplesByManifestNo(
-      shipment.manifestNo,
-    );
+    // Fetch samples by manifestNo (result shipments have null manifestNo and no samples)
+    final samples = shipment.manifestNo != null
+        ? await localService.getCachedSamplesByManifestNo(shipment.manifestNo!)
+        : <Sample>[];
 
     // Fetch route by routeNo
     final route = await localService.getCachedRouteByRouteNo(shipment.routeNo);
@@ -30,7 +31,7 @@ class ShipmentDetailsScreenStateNotifier
       shipment.routeNo,
     );
 
-    // Separate shipment_pickup and shipment_delivery approvals
+    // Separate specimen_pickup and specimen_delivery approvals
     // Pickup approval is shared across all shipments in the route
     // Delivery approval is specific to shipments with the same destination_location_type
     Approval? pickupApproval;

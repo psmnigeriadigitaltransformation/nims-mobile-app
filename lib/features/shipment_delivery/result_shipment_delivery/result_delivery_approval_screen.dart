@@ -67,7 +67,7 @@ class _ResultDeliveryApprovalScreenState
       resultDeliveryApprovalScreenStateNotifierProvider(args),
       (prev, next) {
         if (prev?.showSuccessScreen == false && next.showSuccessScreen) {
-          // Navigate to result shipment_delivery success screen
+          // Navigate to result delivery success screen
           context.pushReplacementNamed(
             resultDeliverySuccessScreen,
             queryParameters: {

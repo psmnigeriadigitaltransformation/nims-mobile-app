@@ -76,7 +76,7 @@ class ResultDeliveryApprovalScreenStateNotifier
         ? shipmentParts.sublist(2).join('-')
         : shipmentNo;
 
-    // Generate approval_no with -DL suffix for shipment_delivery approval
+    // Generate approval_no with -DL suffix for result_delivery approval
     final approvalNo = '${lsp?.display ?? "UNKNOWN"}-AP-$etokenSerial-DL';
 
     final approval = DomainApproval(
@@ -114,7 +114,7 @@ class ResultDeliveryApprovalScreenStateNotifier
           deliveryDate,
         );
         developer.log(
-          "Result shipment_delivery approval saved successfully",
+          "Result delivery approval saved successfully",
           name: "ResultDeliveryApprovalScreenStateNotifier:onApproveDelivery",
         );
         // Invalidate all relevant providers to refresh data
@@ -124,7 +124,7 @@ class ResultDeliveryApprovalScreenStateNotifier
         state = state.copyWith(showSuccessScreen: true, isSubmitting: false);
       case Error<bool>():
         developer.log(
-          "Failed to save result shipment_delivery approval: ${result.message}",
+          "Failed to save result delivery approval: ${result.message}",
           name: "ResultDeliveryApprovalScreenStateNotifier:onApproveDelivery",
         );
         state = state.copyWith(

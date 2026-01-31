@@ -120,17 +120,22 @@ class ShipmentDao extends BaseDao {
   }
 
   /// Returns a map of manifest_no to stage for all manifests in shipments
+  /// Note: Result shipments have null manifest_no and are excluded from this map
   Future<Map<String, String>> getShippedManifestStatuses() async {
     log('Getting shipped manifest statuses', method: 'getShippedManifestStatuses');
     final database = await db;
     final result = await database.query(
       Tables.shipments,
       columns: [Columns.manifestNo, Columns.stage],
+      where: '${Columns.manifestNo} IS NOT NULL',
     );
     log('shippedManifests: $result', method: 'getShippedManifestStatuses');
     final Map<String, String> statusMap = {};
     for (final row in result) {
-      statusMap[row[Columns.manifestNo] as String] = row[Columns.stage] as String;
+      final manifestNo = row[Columns.manifestNo] as String?;
+      if (manifestNo != null) {
+        statusMap[manifestNo] = row[Columns.stage] as String;
+      }
     }
     return statusMap;
   }

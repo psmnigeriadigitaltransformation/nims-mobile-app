@@ -81,7 +81,7 @@ class SpecimenShipmentApprovalScreenStateNotifier
 
     // Extract etoken_serial from the first specimen's manifest_no
     // Format: {LSP}-{etoken_serial} -> e.g., "LSP1-001" -> "001"
-    final firstManifestNo = state.shipments.first.manifestNo;
+    final firstManifestNo = state.shipments.first.manifestNo ?? '';
     final manifestParts = firstManifestNo.split('-');
     final etokenSerial = manifestParts.length > 1 ? manifestParts.sublist(1).join('-') : firstManifestNo;
 

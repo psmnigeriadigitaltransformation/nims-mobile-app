@@ -11,7 +11,7 @@ _$ShipmentImpl _$$ShipmentImplFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num?)?.toInt(),
       shipmentNo: json['shipment_no'] as String,
       routeNo: json['route_no'] as String,
-      manifestNo: json['manifest_no'] as String,
+      manifestNo: json['manifest_no'] as String?,
       originId: json['origin_id'] as String,
       originType: json['origin_type'] as String,
       originFacilityName: json['origin_facility_name'] as String? ?? '',
