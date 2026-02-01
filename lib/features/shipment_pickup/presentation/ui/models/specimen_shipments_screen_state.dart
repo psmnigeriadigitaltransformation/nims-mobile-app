@@ -24,6 +24,8 @@ class SpecimenShipmentScreenState with _$SpecimenShipmentScreenState {
     DomainFacility? selectedDestinationFacility,
     @Default([]) List<DomainETokenData> usedETokens,
     DomainLsp? lsp,
+    /// Maps facilityId to all its types (for auto-detection when facility has multiple types)
+    @Default({}) Map<int, List<String>> facilityTypesMap,
   }) = _SpecimenShipmentsScreenState;
 
   // factory ShipmentsScreenState.initial() => const ShipmentsScreenState(

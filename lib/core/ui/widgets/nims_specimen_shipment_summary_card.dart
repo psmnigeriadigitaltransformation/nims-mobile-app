@@ -4,20 +4,32 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/app/route_name+path+params.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/shipment_route.dart';
+import 'package:nims_mobile_app/core/domain/models/stage.dart';
 import 'package:nims_mobile_app/core/ui/theme/colors.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_status_chip.dart';
 import 'package:nims_mobile_app/core/utils/string_extensions.dart';
 
 class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
   final DomainShipment shipment;
+  final String? routeStage;
 
-  const NIMSSpecimenShipmentSummaryCard({super.key, required this.shipment});
+  const NIMSSpecimenShipmentSummaryCard({
+    super.key,
+    required this.shipment,
+    this.routeStage,
+  });
 
   bool get isResultShipment => shipment.payloadType.toLowerCase() == 'result';
 
+  /// Get the displayed stage (capped by parent route stage if provided)
+  String get _displayedStage {
+    return Stage.getCappedDisplayName(shipment.stage, routeStage);
+  }
+
   /// Get stage color based on stage value
   Color _getStageColor() {
-    switch (shipment.stage.toLowerCase()) {
+    switch (_displayedStage.toLowerCase()) {
       case 'delivered':
         return NIMSColors.green05;
       case 'in-transit':
@@ -30,7 +42,7 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
 
   /// Get stage background color based on stage value
   Color _getStageBackgroundColor() {
-    switch (shipment.stage.toLowerCase()) {
+    switch (_displayedStage.toLowerCase()) {
       case 'delivered':
         return NIMSColors.green02.withAlpha(50);
       case 'in-transit':
@@ -120,7 +132,7 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 NIMSStatusChip(
-                  status: shipment.stage,
+                  status: _displayedStage,
                   statusBackgroundColor: _getStageBackgroundColor(),
                   statusColor: _getStageColor(),
                 ),

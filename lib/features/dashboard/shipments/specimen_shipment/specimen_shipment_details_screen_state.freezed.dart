@@ -20,6 +20,7 @@ mixin _$SpecimenShipmentDetailsScreenState {
   Shipment get shipment => throw _privateConstructorUsedError;
   List<Sample> get samples => throw _privateConstructorUsedError;
   ShipmentRoute? get route => throw _privateConstructorUsedError;
+  Manifest? get manifest => throw _privateConstructorUsedError;
   Approval? get pickupApproval => throw _privateConstructorUsedError;
   Approval? get deliveryApproval => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $SpecimenShipmentDetailsScreenStateCopyWith<$Res> {
     Shipment shipment,
     List<Sample> samples,
     ShipmentRoute? route,
+    Manifest? manifest,
     Approval? pickupApproval,
     Approval? deliveryApproval,
     bool isLoading,
@@ -55,6 +57,7 @@ abstract class $SpecimenShipmentDetailsScreenStateCopyWith<$Res> {
 
   $ShipmentCopyWith<$Res> get shipment;
   $ShipmentRouteCopyWith<$Res>? get route;
+  $ManifestCopyWith<$Res>? get manifest;
   $ApprovalCopyWith<$Res>? get pickupApproval;
   $ApprovalCopyWith<$Res>? get deliveryApproval;
 }
@@ -80,6 +83,7 @@ class _$SpecimenShipmentDetailsScreenStateCopyWithImpl<
     Object? shipment = null,
     Object? samples = null,
     Object? route = freezed,
+    Object? manifest = freezed,
     Object? pickupApproval = freezed,
     Object? deliveryApproval = freezed,
     Object? isLoading = null,
@@ -98,6 +102,10 @@ class _$SpecimenShipmentDetailsScreenStateCopyWithImpl<
                 ? _value.route
                 : route // ignore: cast_nullable_to_non_nullable
                       as ShipmentRoute?,
+            manifest: freezed == manifest
+                ? _value.manifest
+                : manifest // ignore: cast_nullable_to_non_nullable
+                      as Manifest?,
             pickupApproval: freezed == pickupApproval
                 ? _value.pickupApproval
                 : pickupApproval // ignore: cast_nullable_to_non_nullable
@@ -143,6 +151,20 @@ class _$SpecimenShipmentDetailsScreenStateCopyWithImpl<
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
+  $ManifestCopyWith<$Res>? get manifest {
+    if (_value.manifest == null) {
+      return null;
+    }
+
+    return $ManifestCopyWith<$Res>(_value.manifest!, (value) {
+      return _then(_value.copyWith(manifest: value) as $Val);
+    });
+  }
+
+  /// Create a copy of SpecimenShipmentDetailsScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
   $ApprovalCopyWith<$Res>? get pickupApproval {
     if (_value.pickupApproval == null) {
       return null;
@@ -181,6 +203,7 @@ abstract class _$$SpecimenShipmentDetailsScreenStateImplCopyWith<$Res>
     Shipment shipment,
     List<Sample> samples,
     ShipmentRoute? route,
+    Manifest? manifest,
     Approval? pickupApproval,
     Approval? deliveryApproval,
     bool isLoading,
@@ -190,6 +213,8 @@ abstract class _$$SpecimenShipmentDetailsScreenStateImplCopyWith<$Res>
   $ShipmentCopyWith<$Res> get shipment;
   @override
   $ShipmentRouteCopyWith<$Res>? get route;
+  @override
+  $ManifestCopyWith<$Res>? get manifest;
   @override
   $ApprovalCopyWith<$Res>? get pickupApproval;
   @override
@@ -217,6 +242,7 @@ class __$$SpecimenShipmentDetailsScreenStateImplCopyWithImpl<$Res>
     Object? shipment = null,
     Object? samples = null,
     Object? route = freezed,
+    Object? manifest = freezed,
     Object? pickupApproval = freezed,
     Object? deliveryApproval = freezed,
     Object? isLoading = null,
@@ -235,6 +261,10 @@ class __$$SpecimenShipmentDetailsScreenStateImplCopyWithImpl<$Res>
             ? _value.route
             : route // ignore: cast_nullable_to_non_nullable
                   as ShipmentRoute?,
+        manifest: freezed == manifest
+            ? _value.manifest
+            : manifest // ignore: cast_nullable_to_non_nullable
+                  as Manifest?,
         pickupApproval: freezed == pickupApproval
             ? _value.pickupApproval
             : pickupApproval // ignore: cast_nullable_to_non_nullable
@@ -260,6 +290,7 @@ class _$SpecimenShipmentDetailsScreenStateImpl
     required this.shipment,
     final List<Sample> samples = const [],
     this.route,
+    this.manifest,
     this.pickupApproval,
     this.deliveryApproval,
     this.isLoading = true,
@@ -279,6 +310,8 @@ class _$SpecimenShipmentDetailsScreenStateImpl
   @override
   final ShipmentRoute? route;
   @override
+  final Manifest? manifest;
+  @override
   final Approval? pickupApproval;
   @override
   final Approval? deliveryApproval;
@@ -288,7 +321,7 @@ class _$SpecimenShipmentDetailsScreenStateImpl
 
   @override
   String toString() {
-    return 'SpecimenShipmentDetailsScreenState(shipment: $shipment, samples: $samples, route: $route, pickupApproval: $pickupApproval, deliveryApproval: $deliveryApproval, isLoading: $isLoading)';
+    return 'SpecimenShipmentDetailsScreenState(shipment: $shipment, samples: $samples, route: $route, manifest: $manifest, pickupApproval: $pickupApproval, deliveryApproval: $deliveryApproval, isLoading: $isLoading)';
   }
 
   @override
@@ -300,6 +333,8 @@ class _$SpecimenShipmentDetailsScreenStateImpl
                 other.shipment == shipment) &&
             const DeepCollectionEquality().equals(other._samples, _samples) &&
             (identical(other.route, route) || other.route == route) &&
+            (identical(other.manifest, manifest) ||
+                other.manifest == manifest) &&
             (identical(other.pickupApproval, pickupApproval) ||
                 other.pickupApproval == pickupApproval) &&
             (identical(other.deliveryApproval, deliveryApproval) ||
@@ -314,6 +349,7 @@ class _$SpecimenShipmentDetailsScreenStateImpl
     shipment,
     const DeepCollectionEquality().hash(_samples),
     route,
+    manifest,
     pickupApproval,
     deliveryApproval,
     isLoading,
@@ -339,6 +375,7 @@ abstract class _SpecimenShipmentDetailsScreenState
     required final Shipment shipment,
     final List<Sample> samples,
     final ShipmentRoute? route,
+    final Manifest? manifest,
     final Approval? pickupApproval,
     final Approval? deliveryApproval,
     final bool isLoading,
@@ -350,6 +387,8 @@ abstract class _SpecimenShipmentDetailsScreenState
   List<Sample> get samples;
   @override
   ShipmentRoute? get route;
+  @override
+  Manifest? get manifest;
   @override
   Approval? get pickupApproval;
   @override

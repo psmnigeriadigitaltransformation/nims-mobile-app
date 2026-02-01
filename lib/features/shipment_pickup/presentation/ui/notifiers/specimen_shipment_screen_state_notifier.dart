@@ -87,8 +87,7 @@ class SpecimenShipmentScreenStateNotifier
       throw Exception("No LSP available. Please sync your data.");
     }
 
-    // We only need 1 etoken for the route
-    // Shipments extract their etoken_serial from the manifest_no
+    // We need 1 etoken for the route + 1 etoken per shipment
     final usedETokens = <DomainETokenData>[];
 
     // Get etoken for route (auto-downloads if needed)
@@ -103,13 +102,15 @@ class SpecimenShipmentScreenStateNotifier
 
     final shipments = <DomainShipment>[];
     for (final manifest in manifests) {
-      // Extract etoken_serial from manifest_no (format: {LSP}-{etoken_serial})
-      // e.g., "LSP1-001" -> etoken_serial = "001"
-      final manifestParts = manifest.manifestNo.split('-');
-      final etokenSerial = manifestParts.length > 1 ? manifestParts.sublist(1).join('-') : manifest.manifestNo;
+      // Get fresh etoken for each shipment
+      final shipmentEToken = await eTokenService.getNextEToken();
+      usedETokens.add(shipmentEToken);
 
-      // Generate shipment_no using the same etoken_serial as the manifest
-      final shipmentNo = '${lsp.display}-SH-$etokenSerial';
+      // Generate shipment_no using fresh etoken
+      final shipmentNo = '${lsp.display}-SH-${shipmentEToken.serialNo}';
+
+      // Delete the shipment etoken after use
+      await eTokenService.deleteEToken(shipmentEToken.etokenId!);
 
       shipments.add(DomainShipment(
         shipmentNo: shipmentNo,
@@ -131,20 +132,41 @@ class SpecimenShipmentScreenStateNotifier
     }
 
     if (facilitiesResult is Success && locationsResult is Success) {
+      // Filter facilities based on movement type
+      final filteredFacilities = (facilitiesResult as Success<List<DomainFacility>>).payload
+          .where(
+            (facility) =>
+                // Exclude pickup facility from destination list
+                facility.facilityId != pickUpFacility.facilityId &&
+                (movementType.destinationPrimary!.toLowerCase().contains(
+                  facility.type?.toLowerCase() ?? "",
+                ) ||
+                movementType.destinationSecondary!
+                    .toLowerCase()
+                    .contains(facility.type?.toLowerCase() ?? "")),
+          )
+          .toList();
+
+      // Build map of facilityId -> all types BEFORE deduplication
+      final facilityTypesMap = <int, List<String>>{};
+      for (final facility in filteredFacilities) {
+        final facilityId = facility.facilityId;
+        final facilityType = facility.type;
+        if (facilityId != null && facilityType != null && facilityType.isNotEmpty) {
+          facilityTypesMap.putIfAbsent(facilityId, () => []);
+          if (!facilityTypesMap[facilityId]!.contains(facilityType)) {
+            facilityTypesMap[facilityId]!.add(facilityType);
+          }
+        }
+      }
+
+      developer.log(
+        "Facility types map: $facilityTypesMap",
+        name: "SpecimenShipmentScreenStateNotifier:_loadData",
+      );
+
       _cachedState = SpecimenShipmentScreenState(
-        facilities: (facilitiesResult as Success<List<DomainFacility>>).payload
-            .where(
-              (facility) =>
-                  // Exclude pickup facility from destination list
-                  facility.facilityId != pickUpFacility.facilityId &&
-                  (movementType.destinationPrimary!.toLowerCase().contains(
-                    facility.type?.toLowerCase() ?? "",
-                  ) ||
-                  movementType.destinationSecondary!
-                      .toLowerCase()
-                      .contains(facility.type?.toLowerCase() ?? "")),
-            )
-            .distinctBy((facility) => facility.facilityId),
+        facilities: filteredFacilities.distinctBy((facility) => facility.facilityId),
         locations: (locationsResult as Success<List<DomainLocation>>).payload
             .where(
               (location) =>
@@ -160,6 +182,7 @@ class SpecimenShipmentScreenStateNotifier
         shipments: shipments,
         usedETokens: usedETokens,
         lsp: lsp,
+        facilityTypesMap: facilityTypesMap,
       );
       return _cachedState!;
     } else {
@@ -193,10 +216,56 @@ class SpecimenShipmentScreenStateNotifier
 
   updateDestinationFacility(DomainFacility facility) {
     state = state.whenData((data) {
+      // Get all types for this facility from the map
+      final allFacilityTypes = data.facilityTypesMap[facility.facilityId] ?? [];
+
+      developer.log(
+        "Facility ${facility.facilityName} (ID: ${facility.facilityId}) has types: $allFacilityTypes",
+        name: "SpecimenShipmentScreenStateNotifier:updateDestinationFacility",
+      );
+
+      // Auto-detect destination location type based on all facility types
+      // Use contains matching: facility.type contains location OR location contains facility.type
+      // Collect all unique matching locations
+      final matchedLocations = <String>{};
+
+      for (final facilityType in allFacilityTypes) {
+        final facilityTypeLower = facilityType.toLowerCase();
+        for (final location in data.locations) {
+          final locationType = location.location?.toLowerCase() ?? '';
+          if (locationType.isNotEmpty &&
+              (facilityTypeLower.contains(locationType) || locationType.contains(facilityTypeLower))) {
+            matchedLocations.add(location.location!);
+          }
+        }
+      }
+
+      // Determine auto-detected location type
+      String? autoDetectedLocationType;
+      if (matchedLocations.length == 1) {
+        // Exactly one match - auto-detect
+        autoDetectedLocationType = matchedLocations.first;
+      } else if (matchedLocations.length > 1) {
+        // Multiple different matches - ambiguous, leave blank for manual selection
+        developer.log(
+          "Ambiguous auto-detection: facility types $allFacilityTypes matched multiple locations: $matchedLocations. Leaving blank for manual selection.",
+          name: "SpecimenShipmentScreenStateNotifier:updateDestinationFacility",
+        );
+        autoDetectedLocationType = null;
+      }
+      // If no matches, autoDetectedLocationType remains null
+
+      developer.log(
+        "Auto-detected location type: $autoDetectedLocationType (matched locations: $matchedLocations)",
+        name: "SpecimenShipmentScreenStateNotifier:updateDestinationFacility",
+      );
+
       final updatedShipments = data.shipments.map((shp) {
         return shp.copyWith(
           destinationFacilityName: facility.facilityName ?? "",
           destinationFacilityId: facility.facilityId?.toString() ?? "",
+          // Auto-set location type if detected, otherwise clear for manual selection
+          destinationLocationType: autoDetectedLocationType ?? '',
         );
       }).toList();
       final newState = data.copyWith(

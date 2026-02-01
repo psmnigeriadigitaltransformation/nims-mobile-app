@@ -35,6 +35,9 @@ class SelectManifestsScreenStateNotifier
         .read(manifestRepositoryProvider)
         .getShippedManifestStatuses();
 
+    // Fetch current user
+    final currentUser = await ref.read(authRepositoryProvider).getUser();
+
     Map<String, String> shippedStatuses = {};
     if (shippedStatusesResult is Success<Map<String, String>>) {
       shippedStatuses = shippedStatusesResult.payload;
@@ -72,6 +75,7 @@ class SelectManifestsScreenStateNotifier
           movementType: param.movementType,
           manifests: [],
           shippedManifestStatuses: shippedStatuses,
+          currentUserId: currentUser?.userId,
         );
 
       case Error(message: final m):
@@ -100,20 +104,38 @@ class SelectManifestsScreenStateNotifier
         (data) => data.copyWith(isFetchingManifests: true),
       );
       final manifestsRepository = ref.read(manifestRepositoryProvider);
-      final manifestsResult = await manifestsRepository.getFacilityManifests(
-        facility,
+
+      // Check if movement type origin is "Hub" to fetch from server
+      final currentState = state.valueOrNull;
+      final movementTypeOrigin = currentState?.movementType?.origin?.toLowerCase() ?? '';
+      final isHubOrigin = movementTypeOrigin == 'hub';
+
+      developer.log(
+        "getFacilityManifests: origin='$movementTypeOrigin', isHub=$isHubOrigin",
+        name: "SelectManifestsScreenStateNotifier:getFacilityManifests",
       );
+
+      Result<List<DomainManifest>> manifestsResult;
+      if (isHubOrigin) {
+        // Fetch from server for Hub origin
+        manifestsResult = await manifestsRepository.getHubManifestsAndSamples(
+          facility.facilityId.toString(),
+        );
+      } else {
+        // Fetch from local DB for non-Hub origin
+        manifestsResult = await manifestsRepository.getFacilityManifests(
+          facility,
+        );
+      }
 
       switch (manifestsResult) {
         case Success<List<DomainManifest>>(payload: final payload):
-          // Filter out manifest that have already been used in shipments
-          final currentState = state.valueOrNull;
-          final shippedStatuses = currentState?.shippedManifestStatuses ?? {};
-          final availableManifests = payload
-              .where(
-                (manifest) => !shippedStatuses.containsKey(manifest.manifestNo),
-              )
-              .toList();
+          // Filter manifests based on origin type
+          // - Non-Hub origin: Only show manifests with non-empty userId
+          // - Hub origin: Show all manifests (including hub-created ones with empty userId)
+          final availableManifests = isHubOrigin
+              ? payload
+              : payload.where((manifest) => manifest.userId.isNotEmpty).toList();
 
           state = state.whenData(
             (data) => data.copyWith(
@@ -121,10 +143,10 @@ class SelectManifestsScreenStateNotifier
               isFetchingManifests: false,
             ),
           );
-        case Error<List<DomainManifest>>():
+        case Error<List<DomainManifest>>(message: final m):
           state = state.whenData(
             (data) => data.copyWith(
-              alert: Alert(show: true, message: manifestsResult.message),
+              alert: Alert(show: true, message: m),
               isFetchingManifests: false,
             ),
           );

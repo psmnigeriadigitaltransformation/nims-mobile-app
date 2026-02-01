@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/data/providers.dart';
+import 'package:nims_mobile_app/core/services/etoken/etoken_service.dart';
 import 'package:nims_mobile_app/core/services/providers.dart';
 import 'package:nims_mobile_app/core/ui/model/alert.dart';
 
@@ -61,75 +62,96 @@ class SpecimenDeliveryApprovalScreenStateNotifier
   Future<void> onApproveDelivery() async {
     state = state.copyWith(isSavingDelivery: true);
 
-    final localService = ref.read(nimsLocalServiceProvider);
-    final lsp = await localService.getFirstCachedLsp();
+    try {
+      final localService = ref.read(nimsLocalServiceProvider);
+      final eTokenService = ref.read(eTokenServiceProvider);
+      final lsp = await localService.getFirstCachedLsp();
 
-    // Extract etoken_serial from the first specimen's manifest_no
-    // Format: {LSP}-{etoken_serial} -> e.g., "LSP1-001" -> "001"
-    final firstManifestNo = state.shipments.first.manifestNo ?? '';
-    final manifestParts = firstManifestNo.split('-');
-    final etokenSerial = manifestParts.length > 1
-        ? manifestParts.sublist(1).join('-')
-        : firstManifestNo;
+      // Get a fresh etoken for the approval (auto-downloads if needed)
+      DomainETokenData approvalEToken;
+      try {
+        approvalEToken = await eTokenService.getNextEToken();
+      } on NoETokensAvailableException catch (e) {
+        state = state.copyWith(
+          isSavingDelivery: false,
+          alert: Alert(show: true, message: e.message),
+        );
+        return;
+      }
 
-    // Generate approval_no with -DL suffix for specimen_delivery approval
-    final approvalNo = '${lsp?.display ?? "UNKNOWN"}-AP-$etokenSerial-DL';
+      // Generate approval_no with -DL suffix for specimen_delivery approval
+      final approvalNo =
+          '${lsp?.display ?? "UNKNOWN"}-AP-${approvalEToken.serialNo}-DL';
 
-    // Get destination_location_type from the shipments being delivered
-    // All shipments in this group have the same destination_location_type
-    final destinationLocationType = state.shipments.first.destinationLocationType;
+      // Delete the approval etoken after use
+      await eTokenService.deleteEToken(approvalEToken.etokenId!);
 
-    final deliveryApproval = DomainApproval(
-      approvalNo: approvalNo,
-      routeNo: state.route.routeNo,
-      approvalType: 'specimen_delivery',
-      fullname: state.fullName,
-      phone: state.phoneNumber,
-      designation: state.designation,
-      signature: state.signature,
-      latitude: ref.read(geoLocationServiceProvider).latitude,
-      longitude: ref.read(geoLocationServiceProvider).longitude,
-      approvalDate: DateTime.now().toIso8601String(),
-      destinationLocationType: destinationLocationType,
-    );
+      // Get destination_location_type from the shipments being delivered
+      // All shipments in this group have the same destination_location_type
+      final destinationLocationType = state.shipments.first.destinationLocationType;
 
-    final result = await ref
-        .read(shipmentsRepositoryProvider)
-        .saveDeliveryApproval(state.shipments, deliveryApproval, state.route.routeNo);
+      final deliveryApproval = DomainApproval(
+        approvalNo: approvalNo,
+        routeNo: state.route.routeNo,
+        approvalType: 'specimen_delivery',
+        fullname: state.fullName,
+        phone: state.phoneNumber,
+        designation: state.designation,
+        signature: state.signature,
+        latitude: ref.read(geoLocationServiceProvider).latitude,
+        longitude: ref.read(geoLocationServiceProvider).longitude,
+        approvalDate: DateTime.now().toIso8601String(),
+        destinationLocationType: destinationLocationType,
+      );
 
-    switch (result) {
-      case Success<bool>():
-        // No etoken to delete - approval reuses etoken_serial from manifest
-        // Update delivery_date on all shipments
-        final deliveryDate = DateTime.now().toIso8601String();
-        for (final shipment in state.shipments) {
-          await localService.updateShipmentDeliveryDate(
-            shipment.shipmentNo,
-            deliveryDate,
+      final result = await ref
+          .read(shipmentsRepositoryProvider)
+          .saveDeliveryApproval(state.shipments, deliveryApproval, state.route.routeNo);
+
+      switch (result) {
+        case Success<bool>():
+          // Update delivery_date on all shipments
+          final deliveryDate = DateTime.now().toIso8601String();
+          for (final shipment in state.shipments) {
+            await localService.updateShipmentDeliveryDate(
+              shipment.shipmentNo,
+              deliveryDate,
+            );
+          }
+          developer.log(
+            "Delivery approval saved successfully",
+            name: "SpecimenDeliveryApprovalScreenStateNotifier:onApproveDelivery",
           );
-        }
-        developer.log(
-          "Delivery approval saved successfully",
-          name: "DeliveryApprovalScreenStateNotifier:onApproveDelivery",
-        );
-        // Invalidate all relevant providers to refresh data
-        ref.invalidate(dashboardScreenStateNotifierProvider);
-        ref.invalidate(routesScreenStateNotifierProvider);
-        // Invalidate route details for this specific route
-        ref.invalidate(specimenShipmentRouteDetailsScreenStateNotifierProvider);
-        state = state.copyWith(
-          showSuccessScreen: true,
-          isSavingDelivery: false,
-        );
-      case Error<bool>():
-        developer.log(
-          "Failed to save specimen_delivery approval: ${result.message}",
-          name: "DeliveryApprovalScreenStateNotifier:onApproveDelivery",
-        );
-        state = state.copyWith(
-          alert: Alert(show: true, message: result.message),
-          isSavingDelivery: false,
-        );
+          // Invalidate all relevant providers to refresh data
+          ref.invalidate(dashboardScreenStateNotifierProvider);
+          ref.invalidate(routesScreenStateNotifierProvider);
+          // Invalidate route details for this specific route
+          ref.invalidate(specimenShipmentRouteDetailsScreenStateNotifierProvider);
+          state = state.copyWith(
+            showSuccessScreen: true,
+            isSavingDelivery: false,
+          );
+        case Error<bool>():
+          developer.log(
+            "Failed to save specimen_delivery approval: ${result.message}",
+            name: "SpecimenDeliveryApprovalScreenStateNotifier:onApproveDelivery",
+          );
+          state = state.copyWith(
+            alert: Alert(show: true, message: result.message),
+            isSavingDelivery: false,
+          );
+      }
+    } catch (e, s) {
+      developer.log(
+        "Error approving delivery: $e",
+        name: "SpecimenDeliveryApprovalScreenStateNotifier:onApproveDelivery",
+        error: e,
+        stackTrace: s,
+      );
+      state = state.copyWith(
+        isSavingDelivery: false,
+        alert: Alert(show: true, message: e.toString()),
+      );
     }
   }
 

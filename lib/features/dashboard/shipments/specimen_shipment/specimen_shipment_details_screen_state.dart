@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nims_mobile_app/core/domain/models/approval.dart';
+import 'package:nims_mobile_app/core/domain/models/manifest.dart';
 import 'package:nims_mobile_app/core/domain/models/sample.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment_route.dart';
@@ -12,6 +13,7 @@ class SpecimenShipmentDetailsScreenState with _$SpecimenShipmentDetailsScreenSta
     required Shipment shipment,
     @Default([]) List<Sample> samples,
     ShipmentRoute? route,
+    Manifest? manifest,
     Approval? pickupApproval,
     Approval? deliveryApproval,
     @Default(true) bool isLoading,

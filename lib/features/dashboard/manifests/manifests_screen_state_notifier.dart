@@ -25,12 +25,16 @@ class ManifestsScreenStateNotifier
         .read(nimsLocalServiceProvider)
         .getShippedManifestStatuses();
 
+    // Fetch current user
+    final currentUser = await ref.read(authRepositoryProvider).getUser();
+
     switch (result) {
       case Success(payload: final payload):
         return ManifestsScreenState(
           manifests: payload,
           searchQuery: searchQuery,
           shippedManifestStatuses: shippedStatuses,
+          currentUserId: currentUser?.userId,
         );
       case Error(message: final m):
         throw Exception(m);

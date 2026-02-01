@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 13,
+      version: 14,
       onCreate: (db, version) async {
 
         // Tables
@@ -135,7 +135,7 @@ class NIMSDatabase {
         await db.execute('''
           CREATE TABLE manifests (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            manifest_no TEXT NOT NULL,
+            manifest_no TEXT NOT NULL UNIQUE,
             origin_id TEXT NOT NULL,
             destination_id TEXT NOT NULL,
             sample_type TEXT NOT NULL,
@@ -148,8 +148,7 @@ class NIMSDatabase {
             destination_facility_name TEXT NOT NULL,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             sync_status TEXT NOT NULL DEFAULT 'pending',
-            stage TEXT NOT NULL DEFAULT 'Pending',
-            UNIQUE (manifest_no, origin_id)
+            stage TEXT NOT NULL DEFAULT 'Pending'
           )
         ''');
 
@@ -166,7 +165,7 @@ class NIMSDatabase {
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             sync_status TEXT NOT NULL DEFAULT 'pending',
             stage TEXT NOT NULL DEFAULT 'Order',
-            FOREIGN KEY (manifest_no, origin_id) REFERENCES manifests(manifest_no, origin_id) ON DELETE CASCADE
+            FOREIGN KEY (manifest_no) REFERENCES manifests(manifest_no) ON DELETE CASCADE
           )
           ''');
 
@@ -437,6 +436,17 @@ class NIMSDatabase {
           // Note: The FK constraint (manifest_no, origin_id) -> manifests is removed
           // in the new onCreate schema. For existing installations, SQLite doesn't
           // enforce FKs by default unless PRAGMA foreign_keys = ON is set.
+        }
+        if (oldVersion < 14) {
+          // Change unique constraint from (manifest_no, origin_id) to just manifest_no
+          // SQLite doesn't support altering unique constraints directly.
+          // New installations will have manifest_no UNIQUE from onCreate.
+          // For existing installations, we create a unique index to enforce uniqueness.
+          // Note: This may fail if there are duplicate manifest_no values. In that case,
+          // duplicates should be resolved manually before upgrading.
+          await db.execute('''
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_manifests_manifest_no_unique ON manifests(manifest_no)
+          ''');
         }
       },
     );

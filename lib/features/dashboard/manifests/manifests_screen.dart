@@ -136,6 +136,7 @@ class ManifestsScreen extends ConsumerWidget {
                     _buildList(
                       state.manifests,
                       shippedManifestStatuses: state.shippedManifestStatuses,
+                      currentUserId: state.currentUserId,
                       onDeleteManifest: (manifest) {
                         showDialog(
                           context: context,
@@ -181,6 +182,7 @@ SliverList _buildList(
   List<DomainManifest> items, {
   required Function(DomainManifest) onDeleteManifest,
   required Map<String, String> shippedManifestStatuses,
+  String? currentUserId,
 }) {
   return SliverList(
     delegate: SliverChildBuilderDelegate((context, index) {
@@ -207,6 +209,7 @@ SliverList _buildList(
           isSelected: false,
           isShipped: isShipped,
           shipmentStage: shipmentStage,
+          currentUserId: currentUserId,
           onTapDelete: () => onDeleteManifest(manifest),
         ),
       );

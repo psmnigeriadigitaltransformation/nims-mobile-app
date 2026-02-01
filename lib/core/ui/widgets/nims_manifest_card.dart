@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/stage.dart';
 import 'package:nims_mobile_app/core/ui/theme/colors.dart';
 
 class NIMSManifestCard extends StatelessWidget {
@@ -9,6 +10,7 @@ class NIMSManifestCard extends StatelessWidget {
   final bool isSelected;
   final bool isShipped;
   final String? shipmentStage;
+  final String? currentUserId;
 
   const NIMSManifestCard({
     super.key,
@@ -18,7 +20,22 @@ class NIMSManifestCard extends StatelessWidget {
     this.onTapDelete,
     this.isShipped = false,
     this.shipmentStage,
+    this.currentUserId,
   });
+
+  /// Determines if the manifest can be deleted based on:
+  /// 1. User ownership (if currentUserId is provided)
+  /// 2. Stage rank <= 1 (pending/order stage only)
+  bool get canDelete {
+    // Check stage rank - only allow deletion for rank <= 1
+    final manifestStage = Stage.fromDisplayName(manifest.stage);
+    final isValidStage = (manifestStage?.rank ?? 1) <= 1;
+
+    // Check user ownership if currentUserId is provided
+    final isOwnedByUser = currentUserId == null || manifest.userId == currentUserId;
+
+    return isOwnedByUser && isValidStage;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,39 +87,48 @@ class NIMSManifestCard extends StatelessWidget {
                   _buildSyncStatusIndicator(context, manifest.syncStatus),
                   if (shipmentStage != null) ...[
                     const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 2,
-                        horizontal: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        color: _getStageColor(shipmentStage!),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            _getStageIcon(shipmentStage!),
-                            size: 12,
-                            color: Colors.white,
+                    Builder(
+                      builder: (context) {
+                        // Cap the manifest's stage by the shipment's stage
+                        final cappedStage = Stage.getCappedDisplayName(
+                          manifest.stage,
+                          shipmentStage,
+                        );
+                        return Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2,
+                            horizontal: 6,
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            _getStageLabel(shipmentStage!),
-                            style: Theme.of(context).textTheme.labelSmall
-                                ?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            color: _getStageColor(cappedStage),
                           ),
-                        ],
-                      ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                _getStageIcon(cappedStage),
+                                size: 12,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                _getStageLabel(cappedStage),
+                                style: Theme.of(context).textTheme.labelSmall
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ],
-                  const Spacer(),
+                  const SizedBox(width: 12,),
                   Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 16,
@@ -131,7 +157,7 @@ class NIMSManifestCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 24),
-                    if (onTapDelete != null && !isShipped)
+                    if (onTapDelete != null && canDelete)
                       InkWell(
                         onTap: onTapDelete,
                         borderRadius: const BorderRadius.all(

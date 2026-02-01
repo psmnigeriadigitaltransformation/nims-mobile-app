@@ -24,6 +24,8 @@ class SelectManifestsScreenState with _$SelectManifestsScreenState {
     @Default([]) List<DomainManifest> manifests,
     /// Map of manifest_no to stage for manifests already in shipments
     @Default({}) Map<String, String> shippedManifestStatuses,
+    /// Current user's ID to check manifest ownership
+    String? currentUserId,
   }) = _SelectManifestsScreenState;
 
   bool get isFacilitySelected => selectedPickUpFacility != null;

@@ -23,6 +23,7 @@ mixin _$ManifestsScreenState {
   bool get isDeleting => throw _privateConstructorUsedError;
   Map<String, String> get shippedManifestStatuses =>
       throw _privateConstructorUsedError;
+  String? get currentUserId => throw _privateConstructorUsedError;
 
   /// Create a copy of ManifestsScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -44,6 +45,7 @@ abstract class $ManifestsScreenStateCopyWith<$Res> {
     Alert? alert,
     bool isDeleting,
     Map<String, String> shippedManifestStatuses,
+    String? currentUserId,
   });
 
   $AlertCopyWith<$Res>? get alert;
@@ -72,6 +74,7 @@ class _$ManifestsScreenStateCopyWithImpl<
     Object? alert = freezed,
     Object? isDeleting = null,
     Object? shippedManifestStatuses = null,
+    Object? currentUserId = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -95,6 +98,10 @@ class _$ManifestsScreenStateCopyWithImpl<
                 ? _value.shippedManifestStatuses
                 : shippedManifestStatuses // ignore: cast_nullable_to_non_nullable
                       as Map<String, String>,
+            currentUserId: freezed == currentUserId
+                ? _value.currentUserId
+                : currentUserId // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -130,6 +137,7 @@ abstract class _$$ManifestsScreenStateImplCopyWith<$Res>
     Alert? alert,
     bool isDeleting,
     Map<String, String> shippedManifestStatuses,
+    String? currentUserId,
   });
 
   @override
@@ -155,6 +163,7 @@ class __$$ManifestsScreenStateImplCopyWithImpl<$Res>
     Object? alert = freezed,
     Object? isDeleting = null,
     Object? shippedManifestStatuses = null,
+    Object? currentUserId = freezed,
   }) {
     return _then(
       _$ManifestsScreenStateImpl(
@@ -178,6 +187,10 @@ class __$$ManifestsScreenStateImplCopyWithImpl<$Res>
             ? _value._shippedManifestStatuses
             : shippedManifestStatuses // ignore: cast_nullable_to_non_nullable
                   as Map<String, String>,
+        currentUserId: freezed == currentUserId
+            ? _value.currentUserId
+            : currentUserId // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -192,6 +205,7 @@ class _$ManifestsScreenStateImpl implements _ManifestsScreenState {
     this.alert,
     this.isDeleting = false,
     final Map<String, String> shippedManifestStatuses = const {},
+    this.currentUserId,
   }) : _manifests = manifests,
        _shippedManifestStatuses = shippedManifestStatuses;
 
@@ -222,8 +236,11 @@ class _$ManifestsScreenStateImpl implements _ManifestsScreenState {
   }
 
   @override
+  final String? currentUserId;
+
+  @override
   String toString() {
-    return 'ManifestsScreenState(manifests: $manifests, searchQuery: $searchQuery, alert: $alert, isDeleting: $isDeleting, shippedManifestStatuses: $shippedManifestStatuses)';
+    return 'ManifestsScreenState(manifests: $manifests, searchQuery: $searchQuery, alert: $alert, isDeleting: $isDeleting, shippedManifestStatuses: $shippedManifestStatuses, currentUserId: $currentUserId)';
   }
 
   @override
@@ -243,7 +260,9 @@ class _$ManifestsScreenStateImpl implements _ManifestsScreenState {
             const DeepCollectionEquality().equals(
               other._shippedManifestStatuses,
               _shippedManifestStatuses,
-            ));
+            ) &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId));
   }
 
   @override
@@ -254,6 +273,7 @@ class _$ManifestsScreenStateImpl implements _ManifestsScreenState {
     alert,
     isDeleting,
     const DeepCollectionEquality().hash(_shippedManifestStatuses),
+    currentUserId,
   );
 
   /// Create a copy of ManifestsScreenState
@@ -276,6 +296,7 @@ abstract class _ManifestsScreenState implements ManifestsScreenState {
     final Alert? alert,
     final bool isDeleting,
     final Map<String, String> shippedManifestStatuses,
+    final String? currentUserId,
   }) = _$ManifestsScreenStateImpl;
 
   @override
@@ -288,6 +309,8 @@ abstract class _ManifestsScreenState implements ManifestsScreenState {
   bool get isDeleting;
   @override
   Map<String, String> get shippedManifestStatuses;
+  @override
+  String? get currentUserId;
 
   /// Create a copy of ManifestsScreenState
   /// with the given fields replaced by the non-null parameter values.

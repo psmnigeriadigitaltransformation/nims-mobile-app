@@ -533,6 +533,7 @@ class _CollapsibleShipmentGroupState extends State<_CollapsibleShipmentGroup> {
                             padding: const EdgeInsets.symmetric(vertical: 4),
                             child: NIMSSpecimenShipmentSummaryCard(
                               shipment: shipment,
+                              routeStage: widget.route.stage,
                             ),
                           ),
                         )

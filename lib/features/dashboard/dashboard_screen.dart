@@ -415,6 +415,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 child: NIMSManifestCard(
                   manifest: state.searchedManifests[index],
                   isSelected: false,
+                  currentUserId: state.userId,
                   onTapManifest: () {
                     // Navigate to manifest details if needed
                   },

@@ -26,6 +26,10 @@ mixin _$SpecimenShipmentScreenState {
   List<ETokenData> get usedETokens => throw _privateConstructorUsedError;
   Lsp? get lsp => throw _privateConstructorUsedError;
 
+  /// Maps facilityId to all its types (for auto-detection when facility has multiple types)
+  Map<int, List<String>> get facilityTypesMap =>
+      throw _privateConstructorUsedError;
+
   /// Create a copy of SpecimenShipmentScreenState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -52,6 +56,7 @@ abstract class $SpecimenShipmentScreenStateCopyWith<$Res> {
     Facility? selectedDestinationFacility,
     List<ETokenData> usedETokens,
     Lsp? lsp,
+    Map<int, List<String>> facilityTypesMap,
   });
 
   $MovementTypeCopyWith<$Res>? get movementType;
@@ -84,6 +89,7 @@ class _$SpecimenShipmentScreenStateCopyWithImpl<
     Object? selectedDestinationFacility = freezed,
     Object? usedETokens = null,
     Object? lsp = freezed,
+    Object? facilityTypesMap = null,
   }) {
     return _then(
       _value.copyWith(
@@ -115,6 +121,10 @@ class _$SpecimenShipmentScreenStateCopyWithImpl<
                 ? _value.lsp
                 : lsp // ignore: cast_nullable_to_non_nullable
                       as Lsp?,
+            facilityTypesMap: null == facilityTypesMap
+                ? _value.facilityTypesMap
+                : facilityTypesMap // ignore: cast_nullable_to_non_nullable
+                      as Map<int, List<String>>,
           )
           as $Val,
     );
@@ -182,6 +192,7 @@ abstract class _$$SpecimenShipmentsScreenStateImplCopyWith<$Res>
     Facility? selectedDestinationFacility,
     List<ETokenData> usedETokens,
     Lsp? lsp,
+    Map<int, List<String>> facilityTypesMap,
   });
 
   @override
@@ -217,6 +228,7 @@ class __$$SpecimenShipmentsScreenStateImplCopyWithImpl<$Res>
     Object? selectedDestinationFacility = freezed,
     Object? usedETokens = null,
     Object? lsp = freezed,
+    Object? facilityTypesMap = null,
   }) {
     return _then(
       _$SpecimenShipmentsScreenStateImpl(
@@ -248,6 +260,10 @@ class __$$SpecimenShipmentsScreenStateImplCopyWithImpl<$Res>
             ? _value.lsp
             : lsp // ignore: cast_nullable_to_non_nullable
                   as Lsp?,
+        facilityTypesMap: null == facilityTypesMap
+            ? _value._facilityTypesMap
+            : facilityTypesMap // ignore: cast_nullable_to_non_nullable
+                  as Map<int, List<String>>,
       ),
     );
   }
@@ -264,10 +280,12 @@ class _$SpecimenShipmentsScreenStateImpl extends _SpecimenShipmentsScreenState {
     this.selectedDestinationFacility,
     final List<ETokenData> usedETokens = const [],
     this.lsp,
+    final Map<int, List<String>> facilityTypesMap = const {},
   }) : _facilities = facilities,
        _locations = locations,
        _shipments = shipments,
        _usedETokens = usedETokens,
+       _facilityTypesMap = facilityTypesMap,
        super._();
 
   final List<Facility> _facilities;
@@ -311,9 +329,21 @@ class _$SpecimenShipmentsScreenStateImpl extends _SpecimenShipmentsScreenState {
   @override
   final Lsp? lsp;
 
+  /// Maps facilityId to all its types (for auto-detection when facility has multiple types)
+  final Map<int, List<String>> _facilityTypesMap;
+
+  /// Maps facilityId to all its types (for auto-detection when facility has multiple types)
+  @override
+  @JsonKey()
+  Map<int, List<String>> get facilityTypesMap {
+    if (_facilityTypesMap is EqualUnmodifiableMapView) return _facilityTypesMap;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_facilityTypesMap);
+  }
+
   @override
   String toString() {
-    return 'SpecimenShipmentScreenState(facilities: $facilities, locations: $locations, movementType: $movementType, shipments: $shipments, selectedDestinationFacility: $selectedDestinationFacility, usedETokens: $usedETokens, lsp: $lsp)';
+    return 'SpecimenShipmentScreenState(facilities: $facilities, locations: $locations, movementType: $movementType, shipments: $shipments, selectedDestinationFacility: $selectedDestinationFacility, usedETokens: $usedETokens, lsp: $lsp, facilityTypesMap: $facilityTypesMap)';
   }
 
   @override
@@ -345,7 +375,11 @@ class _$SpecimenShipmentsScreenStateImpl extends _SpecimenShipmentsScreenState {
               other._usedETokens,
               _usedETokens,
             ) &&
-            (identical(other.lsp, lsp) || other.lsp == lsp));
+            (identical(other.lsp, lsp) || other.lsp == lsp) &&
+            const DeepCollectionEquality().equals(
+              other._facilityTypesMap,
+              _facilityTypesMap,
+            ));
   }
 
   @override
@@ -358,6 +392,7 @@ class _$SpecimenShipmentsScreenStateImpl extends _SpecimenShipmentsScreenState {
     selectedDestinationFacility,
     const DeepCollectionEquality().hash(_usedETokens),
     lsp,
+    const DeepCollectionEquality().hash(_facilityTypesMap),
   );
 
   /// Create a copy of SpecimenShipmentScreenState
@@ -384,6 +419,7 @@ abstract class _SpecimenShipmentsScreenState
     final Facility? selectedDestinationFacility,
     final List<ETokenData> usedETokens,
     final Lsp? lsp,
+    final Map<int, List<String>> facilityTypesMap,
   }) = _$SpecimenShipmentsScreenStateImpl;
   const _SpecimenShipmentsScreenState._() : super._();
 
@@ -401,6 +437,10 @@ abstract class _SpecimenShipmentsScreenState
   List<ETokenData> get usedETokens;
   @override
   Lsp? get lsp;
+
+  /// Maps facilityId to all its types (for auto-detection when facility has multiple types)
+  @override
+  Map<int, List<String>> get facilityTypesMap;
 
   /// Create a copy of SpecimenShipmentScreenState
   /// with the given fields replaced by the non-null parameter values.

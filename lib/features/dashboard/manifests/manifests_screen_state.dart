@@ -16,6 +16,7 @@ class ManifestsScreenState with _$ManifestsScreenState {
     Alert? alert,
     @Default(false) bool isDeleting,
     @Default({}) Map<String, String> shippedManifestStatuses,
+    String? currentUserId,
   }) = _ManifestsScreenState;
 
 }

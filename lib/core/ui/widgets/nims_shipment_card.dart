@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
+import 'package:nims_mobile_app/core/domain/models/stage.dart';
 
 import '../theme/colors.dart';
 import '../theme/theme.dart';
@@ -11,6 +12,7 @@ class NIMSShipmentCard extends StatefulWidget {
   final List<DomainLocation> locations;
   final VoidCallback onTap;
   final Function(DomainLocation)? onSelectDestinationLocationType;
+  final String? routeStage;
 
   late final TextEditingController selectedLocationController =
       TextEditingController(text: shipment.destinationLocationType);
@@ -22,6 +24,7 @@ class NIMSShipmentCard extends StatefulWidget {
     required this.locations,
     required this.onTap,
     this.onSelectDestinationLocationType,
+    this.routeStage,
   });
 
   @override
@@ -29,9 +32,17 @@ class NIMSShipmentCard extends StatefulWidget {
 }
 
 class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
+  /// Get the displayed stage (capped by parent route stage if provided)
+  String get _displayedStage {
+    return Stage.getCappedDisplayName(
+      widget.shipment.stage,
+      widget.routeStage,
+    );
+  }
+
   /// Get stage color based on stage value
   Color _getStageColor() {
-    switch (widget.shipment.stage.toLowerCase()) {
+    switch (_displayedStage.toLowerCase()) {
       case 'delivered':
         return NIMSColors.green05;
       case 'in-transit':
@@ -44,7 +55,7 @@ class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
 
   /// Get stage background color based on stage value
   Color _getStageBackgroundColor() {
-    switch (widget.shipment.stage.toLowerCase()) {
+    switch (_displayedStage.toLowerCase()) {
       case 'delivered':
         return NIMSColors.green02.withAlpha(50);
       case 'in-transit':
@@ -84,7 +95,7 @@ class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
                 ),
                 const SizedBox(width: 8),
                 NIMSStatusChip(
-                  status: widget.shipment.stage,
+                  status: _displayedStage,
                   statusBackgroundColor: _getStageBackgroundColor(),
                   statusColor: _getStageColor(),
                 ),

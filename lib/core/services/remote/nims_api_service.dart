@@ -555,9 +555,7 @@ class NIMSAPIService {
     }
   }
 
-  /// Fetches manifest samples for a specific facility
-  /// GET /manifests/sample?facilityId={facilityId}
-  Future<Result<ManifestSamplesResponse>> getManifestSamples({
+  Future<Result<ManifestSamplesResponse>> getHubManifestsAndSamples({
     required String facilityId,
   }) async {
     try {

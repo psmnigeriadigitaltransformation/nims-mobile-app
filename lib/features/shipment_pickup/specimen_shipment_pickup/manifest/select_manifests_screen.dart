@@ -237,42 +237,58 @@ class _SelectManifestsScreenState extends ConsumerState<SelectManifestsScreen> {
             ],
           ),
         ),
-        body: Scrollbar(
-          trackVisibility: true,
-          // triggerMode: RefreshIndicatorTriggerMode.anywhere,
-          child: ListView.builder(
-            controller: ScrollController(),
-            shrinkWrap: true,
-            itemCount: state.manifests.length,
-            itemBuilder: (context, index) {
-              final manifest = state.manifests[index];
-              final isSelected = state.selectedManifestIndices.contains(index);
-              final shipmentStage = state.shippedManifestStatuses[manifest.manifestNo];
-              final isShipped = shipmentStage != null;
-
-              return Padding(
-                padding: EdgeInsetsGeometry.symmetric(vertical: 4, horizontal: 8),
-                child: Row(
+        body: state.isFetchingManifests
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (!isShipped)
-                    Checkbox(
-                      value: isSelected,
-                      onChanged: (isChecked) {
-                              ref
-                                  .read(
-                                    selectManifestsScreenStateNotifierProvider((
-                                      movementType: widget.movementType,
-                                    )).notifier,
-                                  )
-                                  .onToggleManifest(index, isSelected);
-                            },
+                    const SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(strokeWidth: 2),
                     ),
+                    const SizedBox(height: 16),
+                    Text(
+                      "Loading manifests...",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+              )
+            : Scrollbar(
+                trackVisibility: true,
+                child: ListView.builder(
+                  controller: ScrollController(),
+                  shrinkWrap: true,
+                  itemCount: state.manifests.length,
+                  itemBuilder: (context, index) {
+                    final manifest = state.manifests[index];
+                    final isSelected = state.selectedManifestIndices.contains(index);
+                    final shipmentStage = state.shippedManifestStatuses[manifest.manifestNo];
+                    final isShipped = shipmentStage != null;
 
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
-                        child: NIMSManifestCard(
-                          onTapDelete: () {
+                    return Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 4, horizontal: 8),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: isSelected,
+                            onChanged: (isChecked) {
+                                    ref
+                                        .read(
+                                          selectManifestsScreenStateNotifierProvider((
+                                            movementType: widget.movementType,
+                                          )).notifier,
+                                        )
+                                        .onToggleManifest(index, isSelected);
+                                  },
+                          ),
+
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsetsGeometry.symmetric(horizontal: 8),
+                              child: NIMSManifestCard(
+                                onTapDelete: () {
                                   showDialog(
                                     context: context,
                                     builder: (buildContext) =>
@@ -293,33 +309,34 @@ class _SelectManifestsScreenState extends ConsumerState<SelectManifestsScreen> {
                                     ),
                                   );
                                 },
-                          isSelected: isSelected,
-                          isShipped: isShipped,
-                          shipmentStage: shipmentStage,
-                          manifest: manifest,
-                          onTapManifest: () {
-                            developer.log(
-                              manifest.toJson().toString(),
-                              name: "ManifestsScreen:onTapManifest",
-                            );
-                            context.pushNamed(
-                              manifestDetailsScreen,
-                              queryParameters: {
-                                manifestsQueryParam: jsonEncode(
-                                  manifest.toJson(),
-                                ),
-                              },
-                            );
-                          },
-                        ),
+                                currentUserId: state.currentUserId,
+                                isSelected: isSelected,
+                                isShipped: isShipped,
+                                shipmentStage: shipmentStage,
+                                manifest: manifest,
+                                onTapManifest: () {
+                                  developer.log(
+                                    manifest.toJson().toString(),
+                                    name: "ManifestsScreen:onTapManifest",
+                                  );
+                                  context.pushNamed(
+                                    manifestDetailsScreen,
+                                    queryParameters: {
+                                      manifestsQueryParam: jsonEncode(
+                                        manifest.toJson(),
+                                      ),
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
+              ),
         bottom: Padding(
           padding: EdgeInsetsGeometry.only(bottom: 16),
           child: NIMSPrimaryButton(

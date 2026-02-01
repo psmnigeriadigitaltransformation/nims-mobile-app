@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nims_mobile_app/core/domain/models/approval.dart';
+import 'package:nims_mobile_app/core/domain/models/manifest.dart';
 import 'package:nims_mobile_app/core/domain/models/sample.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment.dart';
 import 'package:nims_mobile_app/features/dashboard/shipments/specimen_shipment/specimen_shipment_details_screen_state.dart';
@@ -17,6 +18,12 @@ class ShipmentDetailsScreenStateNotifier
 
   Future<SpecimenShipmentDetailsScreenState> _fetchDetails(Shipment shipment) async {
     final localService = ref.read(nimsLocalServiceProvider);
+
+    // Fetch manifest by manifestNo (result shipments have null manifestNo)
+    Manifest? manifest;
+    if (shipment.manifestNo != null) {
+      manifest = await localService.getManifestByNo(shipment.manifestNo!);
+    }
 
     // Fetch samples by manifestNo (result shipments have null manifestNo and no samples)
     final samples = shipment.manifestNo != null
@@ -52,6 +59,7 @@ class ShipmentDetailsScreenStateNotifier
       shipment: shipment,
       samples: samples,
       route: route,
+      manifest: manifest,
       pickupApproval: pickupApproval,
       deliveryApproval: deliveryApproval,
       isLoading: false,

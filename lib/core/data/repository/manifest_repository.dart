@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/core/services/network/connectivity_service.dart';
+import 'package:nims_mobile_app/core/services/remote/models/manifest_samples_response.dart';
 import 'package:nims_mobile_app/core/services/remote/models/request/delete_manifest_request_body.dart';
 import 'package:nims_mobile_app/core/services/remote/models/request/update_manifest_request_body.dart';
 import 'package:nims_mobile_app/core/services/sync/sync_service.dart';
@@ -242,5 +243,143 @@ class ManifestRepository {
       );
       return Error(e.toString(), exception: e as Exception, stackTrace: s);
     }
+  }
+
+  /// Get hub manifests and samples from server.
+  ///
+  /// This method:
+  /// 1. Fetches manifests from the server API
+  /// 2. Upserts manifests and samples to local DB (only updates synced records)
+  /// 3. Returns the manifests from the API response
+  Future<Result<List<DomainManifest>>> getHubManifestsAndSamples(
+    String facilityId,
+  ) async {
+    try {
+      developer.log(
+        "Fetching hub manifests for facility: $facilityId",
+        name: "ManifestRepository:getHubManifestsAndSamples",
+      );
+
+      final localManifests = await _localService.getCacheManifestsByOriginId(facilityId);
+
+      // Check connectivity first
+      final isConnected = await _connectivityService.isConnected;
+      if (!isConnected) {
+        developer.log(
+          "Offline - fetched only local manifests",
+          name: "ManifestRepository:getHubManifestsAndSamples",
+        );
+        return Success(localManifests);
+      }
+
+      // Fetch from API
+      final apiResult = await _apiService.getHubManifestsAndSamples(
+        facilityId: facilityId,
+      );
+
+      if (apiResult is Error) {
+        developer.log(
+          "API error: ${(apiResult as Error).message}",
+          name: "ManifestRepository:getHubManifestsAndSamples",
+        );
+        return Success(localManifests);
+      }
+
+      final response = (apiResult as Success<ManifestSamplesResponse>).payload;
+      final manifestItems = response.data ?? [];
+
+      developer.log(
+        "Received ${manifestItems.length} manifests from API",
+        name: "ManifestRepository:getHubManifestsAndSamples",
+      );
+
+      // Map API response to domain models and upsert to local DB
+      final List<DomainManifest> domainManifestsFromRemote = [];
+
+      for (final item in manifestItems) {
+        // Map ManifestSampleItem to DomainManifest
+        final domainManifest = _mapManifestSampleItemToDomain(item);
+        domainManifestsFromRemote.add(domainManifest);
+
+        // Upsert manifest to local DB
+        await _localService.upsertManifestFromServer(domainManifest);
+
+        // Map and upsert samples
+        final samples = item.samples ?? [];
+        for (final sampleDetail in samples) {
+          final domainSample = _mapManifestSampleDetailToDomain(
+            sampleDetail,
+            item,
+          );
+          await _localService.upsertSampleFromServer(domainSample);
+        }
+      }
+
+      developer.log(
+        "Successfully upserted ${domainManifestsFromRemote.length} manifests to local DB",
+        name: "ManifestRepository:getHubManifestsAndSamples",
+      );
+
+      // Combine local and remote manifests, using manifest_no to avoid duplicates
+      // Remote manifests take precedence (they have latest server data)
+      final remoteKeys = domainManifestsFromRemote
+          .map((m) => m.manifestNo)
+          .toSet();
+      final uniqueLocalManifests = localManifests
+          .where((m) => !remoteKeys.contains(m.manifestNo))
+          .toList();
+      final combinedManifests = [...domainManifestsFromRemote, ...uniqueLocalManifests];
+
+      developer.log(
+        "Returning ${combinedManifests.length} manifests (${domainManifestsFromRemote.length} remote + ${uniqueLocalManifests.length} local-only)",
+        name: "ManifestRepository:getHubManifestsAndSamples",
+      );
+
+      return Success(combinedManifests);
+    } catch (e, s) {
+      developer.log(
+        e.toString(),
+        error: e,
+        stackTrace: s,
+        name: "ManifestRepository:getHubManifestsAndSamples",
+      );
+      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+    }
+  }
+
+  /// Maps a ManifestSampleItem (API response) to DomainManifest
+  DomainManifest _mapManifestSampleItemToDomain(ManifestSampleItem item) {
+    return DomainManifest(
+      manifestNo: item.manifestNo ?? '',
+      originId: item.originFacilityId?.toString() ?? '',
+      destinationId: item.destinationFacilityId?.toString() ?? '',
+      sampleType: item.sampleType ?? '',
+      sampleCount: item.sampleCount ?? 0,
+      phlebotomyNo: item.phlebotomyNo ?? '',
+      originatingFacilityName: item.originFacilityName ?? '',
+      destinationFacilityName: item.destinationFacilityName ?? '',
+      stage: item.stage ?? 'Pending',
+      syncStatus: 'synced', // Came from server
+      lspCode: '', // Not in API response
+      userId: '', // Not in API response
+      temperature: null, // Not in API response
+    );
+  }
+
+  /// Maps a ManifestSampleDetail (API response) to DomainSample
+  DomainSample _mapManifestSampleDetailToDomain(
+    ManifestSampleDetail detail,
+    ManifestSampleItem parentManifest,
+  ) {
+    return DomainSample(
+      manifestNo: parentManifest.manifestNo ?? '',
+      originId: parentManifest.originFacilityId?.toString() ?? '',
+      sampleCode: detail.sampleCode ?? '',
+      patientCode: detail.patientCode ?? '',
+      age: detail.age ?? '',
+      gender: detail.gender ?? '',
+      syncStatus: 'synced', // Came from server
+      stage: parentManifest.stage ?? 'Order', // Inherit stage from parent manifest
+    );
   }
 }

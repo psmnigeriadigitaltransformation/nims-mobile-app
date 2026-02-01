@@ -159,7 +159,10 @@ class SpecimenShipmentDetailsScreen extends ConsumerWidget {
                         ...state.samples.map(
                           (sample) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: NIMSSpecimenCard(sample: sample),
+                            child: NIMSSpecimenCard(
+                              sample: sample,
+                              manifestStage: state.manifest?.stage,
+                            ),
                           ),
                         ),
 

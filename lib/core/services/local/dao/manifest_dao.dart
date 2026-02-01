@@ -31,10 +31,10 @@ class ManifestDao extends BaseDao {
     });
   }
 
-  /// Deletes a manifest and its samples by composite key
+  /// Deletes a manifest and its samples by manifest_no
   Future<void> deleteManifest(String manifestNo, String originId) async {
     log(
-      'manifestNo: $manifestNo, originId: $originId',
+      'manifestNo: $manifestNo',
       method: 'deleteManifest',
     );
     final database = await db;
@@ -42,14 +42,14 @@ class ManifestDao extends BaseDao {
       // Delete samples linked to the manifest first
       await txn.delete(
         Tables.samples,
-        where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
-        whereArgs: [manifestNo, originId],
+        where: '${Columns.manifestNo} = ?',
+        whereArgs: [manifestNo],
       );
       // Delete the manifest
       await txn.delete(
         Tables.manifests,
-        where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
-        whereArgs: [manifestNo, originId],
+        where: '${Columns.manifestNo} = ?',
+        whereArgs: [manifestNo],
       );
     });
   }
@@ -57,7 +57,7 @@ class ManifestDao extends BaseDao {
   /// Deletes a manifest locally (alias for deleteManifest)
   Future<void> deleteManifestLocally(String manifestNo, String originId) async {
     log(
-      'Deleting manifest locally: $manifestNo, originId: $originId',
+      'Deleting manifest locally: $manifestNo',
       method: 'deleteManifestLocally',
     );
     await deleteManifest(manifestNo, originId);
@@ -103,7 +103,7 @@ class ManifestDao extends BaseDao {
     return result.map((m) => DomainManifest.fromJson(m)).toList();
   }
 
-  /// Gets a manifest by its manifest number (legacy - may return first match if duplicates exist)
+  /// Gets a manifest by its manifest number (unique identifier)
   Future<DomainManifest?> getManifestByNo(String manifestNo) async {
     log('manifestNo: $manifestNo', method: 'getManifestByNo');
     final result = await getByUniqueId(
@@ -118,33 +118,24 @@ class ManifestDao extends BaseDao {
     return null;
   }
 
-  /// Gets a manifest by its composite key (manifest_no, origin_id)
+  /// Gets a manifest by manifest_no and origin_id (legacy method, use getManifestByNo instead)
+  /// Kept for backward compatibility
   Future<DomainManifest?> getManifestByCompositeKey(
     String manifestNo,
     String originId,
   ) async {
     log(
-      'manifestNo: $manifestNo, originId: $originId',
+      'manifestNo: $manifestNo (using manifest_no lookup)',
       method: 'getManifestByCompositeKey',
     );
-    final database = await db;
-    final result = await database.query(
-      Tables.manifests,
-      where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
-      whereArgs: [manifestNo, originId],
-      limit: 1,
-    );
-    log('manifest: $result', method: 'getManifestByCompositeKey');
-    if (result.isNotEmpty) {
-      return DomainManifest.fromJson(result.first);
-    }
-    return null;
+    // Since manifest_no is now unique, just use that
+    return getManifestByNo(manifestNo);
   }
 
-  /// Updates a manifest locally using composite key
+  /// Updates a manifest locally using manifest_no
   Future<void> updateManifestLocally(DomainManifest manifest) async {
     log(
-      'Updating manifest: ${manifest.manifestNo}, originId: ${manifest.originId}',
+      'Updating manifest: ${manifest.manifestNo}',
       method: 'updateManifestLocally',
     );
     final database = await db;
@@ -153,27 +144,27 @@ class ManifestDao extends BaseDao {
     await database.update(
       Tables.manifests,
       data,
-      where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
-      whereArgs: [manifest.manifestNo, manifest.originId],
+      where: '${Columns.manifestNo} = ?',
+      whereArgs: [manifest.manifestNo],
     );
   }
 
-  /// Updates manifest sample count using composite key
+  /// Updates manifest sample count using manifest_no
   Future<void> updateManifestSampleCount(
     String manifestNo,
     String originId,
     int newCount,
   ) async {
     log(
-      'Updating manifest $manifestNo (originId: $originId) sample count to $newCount',
+      'Updating manifest $manifestNo sample count to $newCount',
       method: 'updateManifestSampleCount',
     );
     final database = await db;
     await database.update(
       Tables.manifests,
       {Columns.sampleCount: newCount},
-      where: '${Columns.manifestNo} = ? AND ${Columns.originId} = ?',
-      whereArgs: [manifestNo, originId],
+      where: '${Columns.manifestNo} = ?',
+      whereArgs: [manifestNo],
     );
   }
 
@@ -257,5 +248,79 @@ class ManifestDao extends BaseDao {
     log('Getting pending samples', method: 'getPendingSamples');
     final result = await getPendingRecords(Tables.samples);
     return result.map((s) => DomainSample.fromJson(s)).toList();
+  }
+
+  // ==================== UPSERT OPERATIONS (FOR SERVER DATA) ====================
+
+  /// Upserts a manifest from server data.
+  ///
+  /// - If manifest doesn't exist locally: insert with sync_status='synced'
+  /// - If manifest exists with sync_status='synced': update it
+  /// - If manifest exists with sync_status!='synced': skip (preserve local pending changes)
+  Future<void> upsertManifestFromServer(DomainManifest manifest) async {
+    log(
+      'Upserting manifest from server: ${manifest.manifestNo}',
+      method: 'upsertManifestFromServer',
+    );
+    final existing = await getManifestByNo(manifest.manifestNo);
+
+    if (existing == null) {
+      // Insert new manifest with synced status
+      log(
+        'Inserting new manifest: ${manifest.manifestNo}',
+        method: 'upsertManifestFromServer',
+      );
+      final database = await db;
+      await database.insert(Tables.manifests, manifest.toJson());
+    } else if (existing.syncStatus == SyncStatus.synced) {
+      // Update only if synced (server has latest data)
+      log(
+        'Updating synced manifest: ${manifest.manifestNo}',
+        method: 'upsertManifestFromServer',
+      );
+      await updateManifestLocally(manifest);
+    } else {
+      // Skip update - preserve local pending changes
+      log(
+        'Skipping manifest update (local has pending changes): ${manifest.manifestNo}, syncStatus: ${existing.syncStatus}',
+        method: 'upsertManifestFromServer',
+      );
+    }
+  }
+
+  /// Upserts a sample from server data.
+  ///
+  /// - If sample doesn't exist locally: insert with sync_status='synced'
+  /// - If sample exists with sync_status='synced': update it
+  /// - If sample exists with sync_status!='synced': skip (preserve local pending changes)
+  Future<void> upsertSampleFromServer(DomainSample sample) async {
+    log(
+      'Upserting sample from server: ${sample.sampleCode}',
+      method: 'upsertSampleFromServer',
+    );
+    final existing = await getSampleByCode(sample.sampleCode);
+
+    if (existing == null) {
+      // Insert new sample with synced status
+      log(
+        'Inserting new sample: ${sample.sampleCode}',
+        method: 'upsertSampleFromServer',
+      );
+      final database = await db;
+      await database.insert(Tables.samples, sample.toJson());
+    } else if (existing.syncStatus == SyncStatus.synced) {
+      // Update only if synced (server has latest data)
+      log(
+        'Updating synced sample: ${sample.sampleCode}',
+        method: 'upsertSampleFromServer',
+      );
+      await updateSampleLocally(sample);
+    } else {
+      // Skip update - preserve local pending changes
+      log(
+        'Skipping sample update (local has pending changes): ${sample.sampleCode}, syncStatus: ${existing.syncStatus}',
+        method: 'upsertSampleFromServer',
+      );
+    }
   }
 }

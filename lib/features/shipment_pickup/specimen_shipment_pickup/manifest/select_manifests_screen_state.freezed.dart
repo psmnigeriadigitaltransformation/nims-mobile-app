@@ -30,6 +30,9 @@ mixin _$SelectManifestsScreenState {
   Map<String, String> get shippedManifestStatuses =>
       throw _privateConstructorUsedError;
 
+  /// Current user's ID to check manifest ownership
+  String? get currentUserId => throw _privateConstructorUsedError;
+
   /// Create a copy of SelectManifestsScreenState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -57,6 +60,7 @@ abstract class $SelectManifestsScreenStateCopyWith<$Res> {
     Alert alert,
     List<Manifest> manifests,
     Map<String, String> shippedManifestStatuses,
+    String? currentUserId,
   });
 
   $MovementTypeCopyWith<$Res>? get movementType;
@@ -90,6 +94,7 @@ class _$SelectManifestsScreenStateCopyWithImpl<
     Object? alert = null,
     Object? manifests = null,
     Object? shippedManifestStatuses = null,
+    Object? currentUserId = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -125,6 +130,10 @@ class _$SelectManifestsScreenStateCopyWithImpl<
                 ? _value.shippedManifestStatuses
                 : shippedManifestStatuses // ignore: cast_nullable_to_non_nullable
                       as Map<String, String>,
+            currentUserId: freezed == currentUserId
+                ? _value.currentUserId
+                : currentUserId // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -187,6 +196,7 @@ abstract class _$$SelectManifestsScreenStateImplCopyWith<$Res>
     Alert alert,
     List<Manifest> manifests,
     Map<String, String> shippedManifestStatuses,
+    String? currentUserId,
   });
 
   @override
@@ -223,6 +233,7 @@ class __$$SelectManifestsScreenStateImplCopyWithImpl<$Res>
     Object? alert = null,
     Object? manifests = null,
     Object? shippedManifestStatuses = null,
+    Object? currentUserId = freezed,
   }) {
     return _then(
       _$SelectManifestsScreenStateImpl(
@@ -258,6 +269,10 @@ class __$$SelectManifestsScreenStateImplCopyWithImpl<$Res>
             ? _value._shippedManifestStatuses
             : shippedManifestStatuses // ignore: cast_nullable_to_non_nullable
                   as Map<String, String>,
+        currentUserId: freezed == currentUserId
+            ? _value.currentUserId
+            : currentUserId // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -275,6 +290,7 @@ class _$SelectManifestsScreenStateImpl extends _SelectManifestsScreenState {
     this.alert = const Alert(show: false, message: ""),
     final List<Manifest> manifests = const [],
     final Map<String, String> shippedManifestStatuses = const {},
+    this.currentUserId,
   }) : _facilities = facilities,
        _selectedManifestIndices = selectedManifestIndices,
        _manifests = manifests,
@@ -334,9 +350,13 @@ class _$SelectManifestsScreenStateImpl extends _SelectManifestsScreenState {
     return EqualUnmodifiableMapView(_shippedManifestStatuses);
   }
 
+  /// Current user's ID to check manifest ownership
+  @override
+  final String? currentUserId;
+
   @override
   String toString() {
-    return 'SelectManifestsScreenState(facilities: $facilities, movementType: $movementType, selectedPickUpFacility: $selectedPickUpFacility, selectedManifestIndices: $selectedManifestIndices, isFetchingManifests: $isFetchingManifests, alert: $alert, manifests: $manifests, shippedManifestStatuses: $shippedManifestStatuses)';
+    return 'SelectManifestsScreenState(facilities: $facilities, movementType: $movementType, selectedPickUpFacility: $selectedPickUpFacility, selectedManifestIndices: $selectedManifestIndices, isFetchingManifests: $isFetchingManifests, alert: $alert, manifests: $manifests, shippedManifestStatuses: $shippedManifestStatuses, currentUserId: $currentUserId)';
   }
 
   @override
@@ -366,7 +386,9 @@ class _$SelectManifestsScreenStateImpl extends _SelectManifestsScreenState {
             const DeepCollectionEquality().equals(
               other._shippedManifestStatuses,
               _shippedManifestStatuses,
-            ));
+            ) &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId));
   }
 
   @override
@@ -380,6 +402,7 @@ class _$SelectManifestsScreenStateImpl extends _SelectManifestsScreenState {
     alert,
     const DeepCollectionEquality().hash(_manifests),
     const DeepCollectionEquality().hash(_shippedManifestStatuses),
+    currentUserId,
   );
 
   /// Create a copy of SelectManifestsScreenState
@@ -404,6 +427,7 @@ abstract class _SelectManifestsScreenState extends SelectManifestsScreenState {
     final Alert alert,
     final List<Manifest> manifests,
     final Map<String, String> shippedManifestStatuses,
+    final String? currentUserId,
   }) = _$SelectManifestsScreenStateImpl;
   const _SelectManifestsScreenState._() : super._();
 
@@ -425,6 +449,10 @@ abstract class _SelectManifestsScreenState extends SelectManifestsScreenState {
   /// Map of manifest_no to stage for manifests already in shipments
   @override
   Map<String, String> get shippedManifestStatuses;
+
+  /// Current user's ID to check manifest ownership
+  @override
+  String? get currentUserId;
 
   /// Create a copy of SelectManifestsScreenState
   /// with the given fields replaced by the non-null parameter values.

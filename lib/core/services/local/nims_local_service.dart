@@ -187,6 +187,12 @@ class NIMSLocalService {
   Future<List<DomainSample>> getPendingSamples() =>
       _manifestDao.getPendingSamples();
 
+  Future<void> upsertManifestFromServer(DomainManifest manifest) =>
+      _manifestDao.upsertManifestFromServer(manifest);
+
+  Future<void> upsertSampleFromServer(DomainSample sample) =>
+      _manifestDao.upsertSampleFromServer(sample);
+
   // ==================== ROUTE OPERATIONS ====================
 
   Future<DomainShipmentRoute?> getCachedRouteByRouteNo(String routeNo) =>
