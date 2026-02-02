@@ -265,7 +265,6 @@ class _SelectManifestsScreenState extends ConsumerState<SelectManifestsScreen> {
                     final manifest = state.manifests[index];
                     final isSelected = state.selectedManifestIndices.contains(index);
                     final shipmentStage = state.shippedManifestStatuses[manifest.manifestNo];
-                    final isShipped = shipmentStage != null;
 
                     return Padding(
                       padding: EdgeInsetsGeometry.symmetric(vertical: 4, horizontal: 8),
@@ -311,7 +310,6 @@ class _SelectManifestsScreenState extends ConsumerState<SelectManifestsScreen> {
                                 },
                                 currentUserId: state.currentUserId,
                                 isSelected: isSelected,
-                                isShipped: isShipped,
                                 shipmentStage: shipmentStage,
                                 manifest: manifest,
                                 onTapManifest: () {

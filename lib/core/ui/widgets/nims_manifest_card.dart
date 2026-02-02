@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:nims_mobile_app/core/domain/mappers/typedefs.dart';
 import 'package:nims_mobile_app/core/domain/models/stage.dart';
@@ -8,7 +10,6 @@ class NIMSManifestCard extends StatelessWidget {
   final VoidCallback onTapManifest;
   final VoidCallback? onTapDelete;
   final bool isSelected;
-  final bool isShipped;
   final String? shipmentStage;
   final String? currentUserId;
 
@@ -18,7 +19,6 @@ class NIMSManifestCard extends StatelessWidget {
     required this.onTapManifest,
     required this.isSelected,
     this.onTapDelete,
-    this.isShipped = false,
     this.shipmentStage,
     this.currentUserId,
   });
@@ -39,31 +39,22 @@ class NIMSManifestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: isShipped ? 0.6 : 1.0,
-      child: InkWell(
-        onTap: onTapManifest,
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            border: Border.all(
-              color: isShipped
-                  ? Theme.of(context).colorScheme.outline.withAlpha(100)
-                  : isSelected
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.outline,
-              width: 0.5,
-            ),
-            color: isShipped
-                ? Theme.of(
-                    context,
-                  ).colorScheme.surfaceContainerHighest.withAlpha(100)
-                : null,
+    return InkWell(
+      onTap: onTapManifest,
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline,
+            width: 0.5,
           ),
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
               Row(
                 children: [
                   Container(
@@ -86,14 +77,17 @@ class NIMSManifestCard extends StatelessWidget {
                   // Sync status indicator
                   _buildSyncStatusIndicator(context, manifest.syncStatus),
                   if (shipmentStage != null) ...[
-                    const Spacer(),
+                    const SizedBox(width: 8),
                     Builder(
                       builder: (context) {
+                        developer.log("shipmentStage: $shipmentStage");
+                        developer.log("manifesstStage: ${manifest.stage}");
                         // Cap the manifest's stage by the shipment's stage
                         final cappedStage = Stage.getCappedDisplayName(
                           manifest.stage,
                           shipmentStage,
                         );
+                        developer.log("cappedStage: $cappedStage");
                         return Container(
                           padding: const EdgeInsets.symmetric(
                             vertical: 2,
@@ -128,7 +122,7 @@ class NIMSManifestCard extends StatelessWidget {
                       },
                     ),
                   ],
-                  const SizedBox(width: 12,),
+                  const Spacer(),
                   Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 16,
@@ -224,8 +218,7 @@ class NIMSManifestCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );

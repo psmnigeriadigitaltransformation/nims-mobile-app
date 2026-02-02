@@ -188,7 +188,6 @@ SliverList _buildList(
     delegate: SliverChildBuilderDelegate((context, index) {
       final manifest = items[index];
       final shipmentStage = shippedManifestStatuses[manifest.manifestNo];
-      final isShipped = shipmentStage != null;
 
       return Padding(
         padding: EdgeInsetsGeometry.symmetric(vertical: 4),
@@ -207,7 +206,6 @@ SliverList _buildList(
             );
           },
           isSelected: false,
-          isShipped: isShipped,
           shipmentStage: shipmentStage,
           currentUserId: currentUserId,
           onTapDelete: () => onDeleteManifest(manifest),

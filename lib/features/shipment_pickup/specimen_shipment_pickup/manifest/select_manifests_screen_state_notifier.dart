@@ -131,11 +131,14 @@ class SelectManifestsScreenStateNotifier
       switch (manifestsResult) {
         case Success<List<DomainManifest>>(payload: final payload):
           // Filter manifests based on origin type
-          // - Non-Hub origin: Only show manifests with non-empty userId
+          // - Non-Hub origin (spoke): Only show manifests with non-empty userId AND not shipped
           // - Hub origin: Show all manifests (including hub-created ones with empty userId)
+          final shippedStatuses = currentState?.shippedManifestStatuses ?? {};
           final availableManifests = isHubOrigin
               ? payload
-              : payload.where((manifest) => manifest.userId.isNotEmpty).toList();
+              : payload.where((manifest) =>
+                  manifest.userId.isNotEmpty &&
+                  !shippedStatuses.containsKey(manifest.manifestNo)).toList();
 
           state = state.whenData(
             (data) => data.copyWith(

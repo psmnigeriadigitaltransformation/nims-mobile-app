@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 /// Represents the various stages in the shipment/sample lifecycle.
 ///
 /// Stages are ranked to indicate progression through the workflow.
@@ -7,13 +9,13 @@ enum Stage {
   pending(1, 'Pending'),
   inTransit(2, 'In-Transit'),
   storage(3, 'Storage'),
-  delivered(5, 'Delivered'),
-  testing(5, 'Testing'),
-  resultPicked(6, 'Result Picked'),
-  closed(6, 'Closed'),
-  resultReturned(7, 'Result Returned'),
-  rejected(8, 'Rejected'),
-  loss(9, 'Loss');
+  delivered(4, 'Delivered'),
+  testing(4, 'Testing'),
+  resultPicked(5, 'Result Picked'),
+  closed(5, 'Closed'),
+  resultReturned(6, 'Result Returned'),
+  rejected(7, 'Rejected'),
+  loss(8, 'Loss');
 
   final int rank;
   final String displayName;
@@ -75,6 +77,7 @@ enum Stage {
     if (child == null) return childStage ?? '';
     if (parent == null) return child.displayName;
     return child.cappedBy(parent).displayName;
+
   }
 
   @override
