@@ -172,7 +172,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
               Container(
                 padding: EdgeInsetsGeometry.symmetric(vertical: 16),
                 child: SearchBar(
-                  hintText: "Search for facilities, manifests and shipments",
+                  hintText: "Search for facilities, manifests, shipments and routes",
                   controller: searchController,
                   onChanged: (value) {
                     ref
@@ -342,7 +342,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
     final hasNoResults =
         state.searchedFacilities.isEmpty &&
         state.searchedManifests.isEmpty &&
-        state.searchedShipments.isEmpty;
+        state.searchedShipments.isEmpty &&
+        state.searchedRoutes.isEmpty;
 
     if (hasNoResults) {
       return Center(
@@ -449,6 +450,28 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen>
                 ),
               ),
               childCount: state.searchedShipments.length,
+            ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+        ],
+
+        // Routes Section
+        if (state.searchedRoutes.isNotEmpty) ...[
+          SliverToBoxAdapter(
+            child: _buildSectionHeader(
+              context,
+              "Routes",
+              state.searchedRoutes.length,
+              Icons.route_rounded,
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => Padding(
+                padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+                child: NIMSRouteCard(route: state.searchedRoutes[index]),
+              ),
+              childCount: state.searchedRoutes.length,
             ),
           ),
         ],

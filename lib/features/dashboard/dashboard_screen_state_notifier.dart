@@ -84,6 +84,7 @@ class DashboardScreenStateNotifier
         searchedFacilities: [],
         searchedManifests: [],
         searchedShipments: [],
+        searchedRoutes: [],
       ));
       return;
     }
@@ -93,11 +94,13 @@ class DashboardScreenStateNotifier
       ref.read(facilitiesRepositoryProvider).searchFacilities(query),
       ref.read(manifestRepositoryProvider).searchManifests(query),
       ref.read(shipmentsRepositoryProvider).searchShipments(query),
+      ref.read(shipmentRouteRepositoryProvider).searchShipmentRoutes(query),
     ]);
 
     final facilitiesResult = results[0] as Result<List<DomainFacility>>;
     final manifestsResult = results[1] as Result<List<DomainManifest>>;
     final shipmentsResult = results[2] as Result<List<DomainShipment>>;
+    final routesResult = results[3] as Result<List<DomainShipmentRoute>>;
 
     state = AsyncData(currentState.copyWith(
       isSearching: true,
@@ -110,6 +113,9 @@ class DashboardScreenStateNotifier
           : [],
       searchedShipments: shipmentsResult is Success<List<DomainShipment>>
           ? shipmentsResult.payload
+          : [],
+      searchedRoutes: routesResult is Success<List<DomainShipmentRoute>>
+          ? routesResult.payload
           : [],
     ));
   }

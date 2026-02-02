@@ -31,7 +31,8 @@ mixin _$DashboardScreenState {
   String get searchQuery => throw _privateConstructorUsedError;
   List<Facility> get searchedFacilities => throw _privateConstructorUsedError;
   List<Manifest> get searchedManifests => throw _privateConstructorUsedError;
-  List<Shipment> get searchedShipments =>
+  List<Shipment> get searchedShipments => throw _privateConstructorUsedError;
+  List<ShipmentRoute> get searchedRoutes =>
       throw _privateConstructorUsedError; // Sync state fields
   int get pendingSyncCount => throw _privateConstructorUsedError;
   bool get isSyncing => throw _privateConstructorUsedError;
@@ -65,6 +66,7 @@ abstract class $DashboardScreenStateCopyWith<$Res> {
     List<Facility> searchedFacilities,
     List<Manifest> searchedManifests,
     List<Shipment> searchedShipments,
+    List<ShipmentRoute> searchedRoutes,
     int pendingSyncCount,
     bool isSyncing,
     DateTime? lastSyncTime,
@@ -104,6 +106,7 @@ class _$DashboardScreenStateCopyWithImpl<
     Object? searchedFacilities = null,
     Object? searchedManifests = null,
     Object? searchedShipments = null,
+    Object? searchedRoutes = null,
     Object? pendingSyncCount = null,
     Object? isSyncing = null,
     Object? lastSyncTime = freezed,
@@ -159,6 +162,10 @@ class _$DashboardScreenStateCopyWithImpl<
                 ? _value.searchedShipments
                 : searchedShipments // ignore: cast_nullable_to_non_nullable
                       as List<Shipment>,
+            searchedRoutes: null == searchedRoutes
+                ? _value.searchedRoutes
+                : searchedRoutes // ignore: cast_nullable_to_non_nullable
+                      as List<ShipmentRoute>,
             pendingSyncCount: null == pendingSyncCount
                 ? _value.pendingSyncCount
                 : pendingSyncCount // ignore: cast_nullable_to_non_nullable
@@ -213,6 +220,7 @@ abstract class _$$DashboardScreenStateImplCopyWith<$Res>
     List<Facility> searchedFacilities,
     List<Manifest> searchedManifests,
     List<Shipment> searchedShipments,
+    List<ShipmentRoute> searchedRoutes,
     int pendingSyncCount,
     bool isSyncing,
     DateTime? lastSyncTime,
@@ -249,6 +257,7 @@ class __$$DashboardScreenStateImplCopyWithImpl<$Res>
     Object? searchedFacilities = null,
     Object? searchedManifests = null,
     Object? searchedShipments = null,
+    Object? searchedRoutes = null,
     Object? pendingSyncCount = null,
     Object? isSyncing = null,
     Object? lastSyncTime = freezed,
@@ -304,6 +313,10 @@ class __$$DashboardScreenStateImplCopyWithImpl<$Res>
             ? _value._searchedShipments
             : searchedShipments // ignore: cast_nullable_to_non_nullable
                   as List<Shipment>,
+        searchedRoutes: null == searchedRoutes
+            ? _value._searchedRoutes
+            : searchedRoutes // ignore: cast_nullable_to_non_nullable
+                  as List<ShipmentRoute>,
         pendingSyncCount: null == pendingSyncCount
             ? _value.pendingSyncCount
             : pendingSyncCount // ignore: cast_nullable_to_non_nullable
@@ -341,6 +354,7 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
     final List<Facility> searchedFacilities = const [],
     final List<Manifest> searchedManifests = const [],
     final List<Shipment> searchedShipments = const [],
+    final List<ShipmentRoute> searchedRoutes = const [],
     this.pendingSyncCount = 0,
     this.isSyncing = false,
     this.lastSyncTime,
@@ -350,7 +364,8 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
        _shipmentRoutes = shipmentRoutes,
        _searchedFacilities = searchedFacilities,
        _searchedManifests = searchedManifests,
-       _searchedShipments = searchedShipments;
+       _searchedShipments = searchedShipments,
+       _searchedRoutes = searchedRoutes;
 
   @override
   final String userFullName;
@@ -424,6 +439,15 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
     return EqualUnmodifiableListView(_searchedShipments);
   }
 
+  final List<ShipmentRoute> _searchedRoutes;
+  @override
+  @JsonKey()
+  List<ShipmentRoute> get searchedRoutes {
+    if (_searchedRoutes is EqualUnmodifiableListView) return _searchedRoutes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_searchedRoutes);
+  }
+
   // Sync state fields
   @override
   @JsonKey()
@@ -439,7 +463,7 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
 
   @override
   String toString() {
-    return 'DashboardScreenState(userFullName: $userFullName, userRole: $userRole, userId: $userId, deviceSerialNo: $deviceSerialNo, specimensMovementTypes: $specimensMovementTypes, resultsMovementTypes: $resultsMovementTypes, shipmentRoutes: $shipmentRoutes, isSearching: $isSearching, searchQuery: $searchQuery, searchedFacilities: $searchedFacilities, searchedManifests: $searchedManifests, searchedShipments: $searchedShipments, pendingSyncCount: $pendingSyncCount, isSyncing: $isSyncing, lastSyncTime: $lastSyncTime, syncAlert: $syncAlert)';
+    return 'DashboardScreenState(userFullName: $userFullName, userRole: $userRole, userId: $userId, deviceSerialNo: $deviceSerialNo, specimensMovementTypes: $specimensMovementTypes, resultsMovementTypes: $resultsMovementTypes, shipmentRoutes: $shipmentRoutes, isSearching: $isSearching, searchQuery: $searchQuery, searchedFacilities: $searchedFacilities, searchedManifests: $searchedManifests, searchedShipments: $searchedShipments, searchedRoutes: $searchedRoutes, pendingSyncCount: $pendingSyncCount, isSyncing: $isSyncing, lastSyncTime: $lastSyncTime, syncAlert: $syncAlert)';
   }
 
   @override
@@ -482,6 +506,10 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
               other._searchedShipments,
               _searchedShipments,
             ) &&
+            const DeepCollectionEquality().equals(
+              other._searchedRoutes,
+              _searchedRoutes,
+            ) &&
             (identical(other.pendingSyncCount, pendingSyncCount) ||
                 other.pendingSyncCount == pendingSyncCount) &&
             (identical(other.isSyncing, isSyncing) ||
@@ -507,6 +535,7 @@ class _$DashboardScreenStateImpl implements _DashboardScreenState {
     const DeepCollectionEquality().hash(_searchedFacilities),
     const DeepCollectionEquality().hash(_searchedManifests),
     const DeepCollectionEquality().hash(_searchedShipments),
+    const DeepCollectionEquality().hash(_searchedRoutes),
     pendingSyncCount,
     isSyncing,
     lastSyncTime,
@@ -540,6 +569,7 @@ abstract class _DashboardScreenState implements DashboardScreenState {
     final List<Facility> searchedFacilities,
     final List<Manifest> searchedManifests,
     final List<Shipment> searchedShipments,
+    final List<ShipmentRoute> searchedRoutes,
     final int pendingSyncCount,
     final bool isSyncing,
     final DateTime? lastSyncTime,
@@ -569,7 +599,9 @@ abstract class _DashboardScreenState implements DashboardScreenState {
   @override
   List<Manifest> get searchedManifests;
   @override
-  List<Shipment> get searchedShipments; // Sync state fields
+  List<Shipment> get searchedShipments;
+  @override
+  List<ShipmentRoute> get searchedRoutes; // Sync state fields
   @override
   int get pendingSyncCount;
   @override
