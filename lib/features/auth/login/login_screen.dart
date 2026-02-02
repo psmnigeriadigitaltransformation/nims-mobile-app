@@ -11,14 +11,27 @@ import '../../../core/ui/widgets/nims_alert_dialog_content.dart';
 import '../../../core/ui/widgets/nims_error_content.dart';
 import 'providers.dart';
 
-class LoginScreen extends ConsumerWidget {
-  final loginIdController = TextEditingController(text: "SK0012");
-  final passwordController = TextEditingController(text: "password");
-
-  LoginScreen({super.key});
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final loginIdController = TextEditingController(text: "SK0012");
+  final passwordController = TextEditingController(text: "password");
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    loginIdController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(loginScreenStateNotifierProvider);
 
     ref.listen(
@@ -125,15 +138,26 @@ class LoginScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
-                obscureText: true,
-                decoration: const InputDecoration(
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
                   labelText: "Password",
                   hintText: "Enter your password",
                   helperText: "",
                   errorText: null,
                   suffixIcon: Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 16),
-                    child: Icon(Icons.visibility_off),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                      child: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                    ),
                   ),
                 ),
               ),

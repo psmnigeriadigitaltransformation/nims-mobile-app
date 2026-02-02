@@ -80,8 +80,6 @@ class NIMSManifestCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Builder(
                       builder: (context) {
-                        developer.log("shipmentStage: $shipmentStage");
-                        developer.log("manifesstStage: ${manifest.stage}");
                         // Cap the manifest's stage by the shipment's stage
                         final cappedStage = Stage.getCappedDisplayName(
                           manifest.stage,
