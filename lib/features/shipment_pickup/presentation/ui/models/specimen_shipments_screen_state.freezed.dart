@@ -30,6 +30,10 @@ mixin _$SpecimenShipmentScreenState {
   Map<int, List<String>> get facilityTypesMap =>
       throw _privateConstructorUsedError;
 
+  /// Whether the destination location type was reliably auto-detected (locked for editing)
+  bool get isDestinationLocationTypeLocked =>
+      throw _privateConstructorUsedError;
+
   /// Create a copy of SpecimenShipmentScreenState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -57,6 +61,7 @@ abstract class $SpecimenShipmentScreenStateCopyWith<$Res> {
     List<ETokenData> usedETokens,
     Lsp? lsp,
     Map<int, List<String>> facilityTypesMap,
+    bool isDestinationLocationTypeLocked,
   });
 
   $MovementTypeCopyWith<$Res>? get movementType;
@@ -90,6 +95,7 @@ class _$SpecimenShipmentScreenStateCopyWithImpl<
     Object? usedETokens = null,
     Object? lsp = freezed,
     Object? facilityTypesMap = null,
+    Object? isDestinationLocationTypeLocked = null,
   }) {
     return _then(
       _value.copyWith(
@@ -125,6 +131,11 @@ class _$SpecimenShipmentScreenStateCopyWithImpl<
                 ? _value.facilityTypesMap
                 : facilityTypesMap // ignore: cast_nullable_to_non_nullable
                       as Map<int, List<String>>,
+            isDestinationLocationTypeLocked:
+                null == isDestinationLocationTypeLocked
+                ? _value.isDestinationLocationTypeLocked
+                : isDestinationLocationTypeLocked // ignore: cast_nullable_to_non_nullable
+                      as bool,
           )
           as $Val,
     );
@@ -193,6 +204,7 @@ abstract class _$$SpecimenShipmentsScreenStateImplCopyWith<$Res>
     List<ETokenData> usedETokens,
     Lsp? lsp,
     Map<int, List<String>> facilityTypesMap,
+    bool isDestinationLocationTypeLocked,
   });
 
   @override
@@ -229,6 +241,7 @@ class __$$SpecimenShipmentsScreenStateImplCopyWithImpl<$Res>
     Object? usedETokens = null,
     Object? lsp = freezed,
     Object? facilityTypesMap = null,
+    Object? isDestinationLocationTypeLocked = null,
   }) {
     return _then(
       _$SpecimenShipmentsScreenStateImpl(
@@ -264,6 +277,10 @@ class __$$SpecimenShipmentsScreenStateImplCopyWithImpl<$Res>
             ? _value._facilityTypesMap
             : facilityTypesMap // ignore: cast_nullable_to_non_nullable
                   as Map<int, List<String>>,
+        isDestinationLocationTypeLocked: null == isDestinationLocationTypeLocked
+            ? _value.isDestinationLocationTypeLocked
+            : isDestinationLocationTypeLocked // ignore: cast_nullable_to_non_nullable
+                  as bool,
       ),
     );
   }
@@ -281,6 +298,7 @@ class _$SpecimenShipmentsScreenStateImpl extends _SpecimenShipmentsScreenState {
     final List<ETokenData> usedETokens = const [],
     this.lsp,
     final Map<int, List<String>> facilityTypesMap = const {},
+    this.isDestinationLocationTypeLocked = false,
   }) : _facilities = facilities,
        _locations = locations,
        _shipments = shipments,
@@ -341,9 +359,14 @@ class _$SpecimenShipmentsScreenStateImpl extends _SpecimenShipmentsScreenState {
     return EqualUnmodifiableMapView(_facilityTypesMap);
   }
 
+  /// Whether the destination location type was reliably auto-detected (locked for editing)
+  @override
+  @JsonKey()
+  final bool isDestinationLocationTypeLocked;
+
   @override
   String toString() {
-    return 'SpecimenShipmentScreenState(facilities: $facilities, locations: $locations, movementType: $movementType, shipments: $shipments, selectedDestinationFacility: $selectedDestinationFacility, usedETokens: $usedETokens, lsp: $lsp, facilityTypesMap: $facilityTypesMap)';
+    return 'SpecimenShipmentScreenState(facilities: $facilities, locations: $locations, movementType: $movementType, shipments: $shipments, selectedDestinationFacility: $selectedDestinationFacility, usedETokens: $usedETokens, lsp: $lsp, facilityTypesMap: $facilityTypesMap, isDestinationLocationTypeLocked: $isDestinationLocationTypeLocked)';
   }
 
   @override
@@ -379,7 +402,13 @@ class _$SpecimenShipmentsScreenStateImpl extends _SpecimenShipmentsScreenState {
             const DeepCollectionEquality().equals(
               other._facilityTypesMap,
               _facilityTypesMap,
-            ));
+            ) &&
+            (identical(
+                  other.isDestinationLocationTypeLocked,
+                  isDestinationLocationTypeLocked,
+                ) ||
+                other.isDestinationLocationTypeLocked ==
+                    isDestinationLocationTypeLocked));
   }
 
   @override
@@ -393,6 +422,7 @@ class _$SpecimenShipmentsScreenStateImpl extends _SpecimenShipmentsScreenState {
     const DeepCollectionEquality().hash(_usedETokens),
     lsp,
     const DeepCollectionEquality().hash(_facilityTypesMap),
+    isDestinationLocationTypeLocked,
   );
 
   /// Create a copy of SpecimenShipmentScreenState
@@ -420,6 +450,7 @@ abstract class _SpecimenShipmentsScreenState
     final List<ETokenData> usedETokens,
     final Lsp? lsp,
     final Map<int, List<String>> facilityTypesMap,
+    final bool isDestinationLocationTypeLocked,
   }) = _$SpecimenShipmentsScreenStateImpl;
   const _SpecimenShipmentsScreenState._() : super._();
 
@@ -441,6 +472,10 @@ abstract class _SpecimenShipmentsScreenState
   /// Maps facilityId to all its types (for auto-detection when facility has multiple types)
   @override
   Map<int, List<String>> get facilityTypesMap;
+
+  /// Whether the destination location type was reliably auto-detected (locked for editing)
+  @override
+  bool get isDestinationLocationTypeLocked;
 
   /// Create a copy of SpecimenShipmentScreenState
   /// with the given fields replaced by the non-null parameter values.

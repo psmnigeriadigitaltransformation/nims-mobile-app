@@ -260,6 +260,9 @@ class SpecimenShipmentScreenStateNotifier
         name: "SpecimenShipmentScreenStateNotifier:updateDestinationFacility",
       );
 
+      // Lock the dropdown if exactly one location was reliably detected
+      final isLocked = matchedLocations.length == 1;
+
       final updatedShipments = data.shipments.map((shp) {
         return shp.copyWith(
           destinationFacilityName: facility.facilityName ?? "",
@@ -271,6 +274,7 @@ class SpecimenShipmentScreenStateNotifier
       final newState = data.copyWith(
         selectedDestinationFacility: facility,
         shipments: updatedShipments,
+        isDestinationLocationTypeLocked: isLocked,
       );
       _cachedState = newState;
       return newState;

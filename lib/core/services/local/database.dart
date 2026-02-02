@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 14,
+      version: 15,
       onCreate: (db, version) async {
 
         // Tables
@@ -447,6 +447,63 @@ class NIMSDatabase {
           await db.execute('''
             CREATE UNIQUE INDEX IF NOT EXISTS idx_manifests_manifest_no_unique ON manifests(manifest_no)
           ''');
+        }
+        if (oldVersion < 15) {
+          // Properly make manifest_no nullable for result shipments.
+          // SQLite doesn't support ALTER COLUMN, so we recreate the table.
+
+          // 1. Create new table with nullable manifest_no
+          await db.execute('''
+            CREATE TABLE shipments_new (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              shipment_no TEXT NOT NULL UNIQUE,
+              route_no TEXT NOT NULL,
+              manifest_no TEXT,
+              origin_id TEXT NOT NULL,
+              origin_type TEXT NOT NULL,
+              origin_facility_name TEXT NOT NULL DEFAULT '',
+              destination_location_type TEXT NOT NULL,
+              destination_facility_id TEXT NOT NULL,
+              destination_facility_name TEXT NOT NULL,
+              pickup_latitude DECIMAL(10,6) NOT NULL,
+              pickup_longitude DECIMAL(10,6) NOT NULL,
+              sample_type TEXT NOT NULL,
+              sample_count INT NOT NULL,
+              payload_type TEXT NOT NULL DEFAULT 'specimen',
+              pickup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+              delivery_date TEXT,
+              sync_status TEXT NOT NULL DEFAULT 'pending',
+              stage TEXT NOT NULL DEFAULT 'Pending',
+              FOREIGN KEY (route_no) REFERENCES routes(route_no)
+                  ON DELETE CASCADE
+                  ON UPDATE CASCADE
+            )
+          ''');
+
+          // 2. Copy data from old table (converting empty strings to NULL)
+          await db.execute('''
+            INSERT INTO shipments_new (
+              id, shipment_no, route_no, manifest_no, origin_id, origin_type,
+              origin_facility_name, destination_location_type, destination_facility_id,
+              destination_facility_name, pickup_latitude, pickup_longitude,
+              sample_type, sample_count, payload_type, pickup_date, delivery_date,
+              sync_status, stage
+            )
+            SELECT
+              id, shipment_no, route_no,
+              CASE WHEN manifest_no = '' THEN NULL ELSE manifest_no END,
+              origin_id, origin_type, origin_facility_name, destination_location_type,
+              destination_facility_id, destination_facility_name, pickup_latitude,
+              pickup_longitude, sample_type, sample_count, payload_type, pickup_date,
+              delivery_date, sync_status, stage
+            FROM shipments
+          ''');
+
+          // 3. Drop old table
+          await db.execute('DROP TABLE shipments');
+
+          // 4. Rename new table
+          await db.execute('ALTER TABLE shipments_new RENAME TO shipments');
         }
       },
     );

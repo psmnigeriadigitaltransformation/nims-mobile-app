@@ -252,6 +252,7 @@ class _SpecimenShipmentScreenState extends ConsumerState<SpecimenShipmentScreen>
                                 shipment: shipment,
                                 facilities: state.facilities,
                                 locations: state.locations,
+                                isLocationTypeLocked: state.isDestinationLocationTypeLocked,
                                 onTap: () {
                                   // Get the latest shipment from state (in case destination location type was updated)
                                   final currentState = ref.read(specimenShipmentsScreenStateNotifierProvider(_providerKey)).value;

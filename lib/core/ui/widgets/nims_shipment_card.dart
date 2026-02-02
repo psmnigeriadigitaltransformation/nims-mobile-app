@@ -13,6 +13,8 @@ class NIMSShipmentCard extends StatefulWidget {
   final VoidCallback onTap;
   final Function(DomainLocation)? onSelectDestinationLocationType;
   final String? routeStage;
+  /// When true, the destination location type dropdown is disabled (auto-detected)
+  final bool isLocationTypeLocked;
 
   late final TextEditingController selectedLocationController =
       TextEditingController(text: shipment.destinationLocationType);
@@ -25,6 +27,7 @@ class NIMSShipmentCard extends StatefulWidget {
     required this.onTap,
     this.onSelectDestinationLocationType,
     this.routeStage,
+    this.isLocationTypeLocked = false,
   });
 
   @override
@@ -136,50 +139,72 @@ class _NIMSShipmentCardState extends State<NIMSShipmentCard> {
             ),
             SizedBox(height: 16),
             if (widget.onSelectDestinationLocationType != null)
-              DropdownMenu<String>(
-                initialSelection:
-                    widget.shipment.destinationLocationType.isNotEmpty
-                    ? widget.shipment.destinationLocationType
-                    : null,
-                textStyle: Theme.of(context).textTheme.bodySmall,
-                inputDecorationTheme: NIMSTheme.secondaryInputDecorationTheme,
-                trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
-                width: size.width - 80,
-                label: Text("Destination Location Type"),
-                hintText: "",
-                dropdownMenuEntries: [
-                  ...widget.locations.map(
-                    (location) => DropdownMenuEntry(
-                      value: location.location ?? "",
-                      labelWidget: Center(
-                        child: Text(
-                          location.location ?? "",
-                          style: Theme.of(context).textTheme.bodySmall,
+              widget.isLocationTypeLocked
+                  // When locked, show a read-only text field with the auto-detected value
+                  ? SizedBox(
+                      width: size.width - 80,
+                      child: TextField(
+                        readOnly: true,
+                        enabled: false,
+                        controller: TextEditingController(
+                          text: widget.shipment.destinationLocationType,
                         ),
-                      ),
-                      label: location.location ?? "",
-                      style: ButtonStyle().copyWith(
-                        shape: WidgetStateProperty.all(
-                          RoundedRectangleBorder(
-                            side: BorderSide(
-                              width: 0.25,
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
+                        style: Theme.of(context).textTheme.bodySmall,
+                        decoration: InputDecoration(
+                          labelText: "Destination Location Type",
+                          suffixIcon: Icon(
+                            Icons.lock_outline,
+                            size: 18,
+                            color: Theme.of(context).colorScheme.outline,
                           ),
                         ),
                       ),
+                    )
+                  // When not locked, show the dropdown for manual selection
+                  : DropdownMenu<String>(
+                      initialSelection:
+                          widget.shipment.destinationLocationType.isNotEmpty
+                          ? widget.shipment.destinationLocationType
+                          : null,
+                      textStyle: Theme.of(context).textTheme.bodySmall,
+                      inputDecorationTheme: NIMSTheme.secondaryInputDecorationTheme,
+                      trailingIcon: Icon(Icons.keyboard_arrow_down_rounded),
+                      selectedTrailingIcon: Icon(Icons.keyboard_arrow_up_rounded),
+                      width: size.width - 80,
+                      label: Text("Destination Location Type"),
+                      hintText: "",
+                      dropdownMenuEntries: [
+                        ...widget.locations.map(
+                          (location) => DropdownMenuEntry(
+                            value: location.location ?? "",
+                            labelWidget: Center(
+                              child: Text(
+                                location.location ?? "",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                            label: location.location ?? "",
+                            style: ButtonStyle().copyWith(
+                              shape: WidgetStateProperty.all(
+                                RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    width: 0.25,
+                                    color: Theme.of(context).colorScheme.outline,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                      onSelected: (value) {
+                        widget.onSelectDestinationLocationType!(
+                          widget.locations.firstWhere(
+                            (location) => location.location == value,
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                ],
-                onSelected: (value) {
-                  widget.onSelectDestinationLocationType!(
-                    widget.locations.firstWhere(
-                      (location) => location.location == value,
-                    ),
-                  );
-                },
-              ),
           ],
         ),
       ),

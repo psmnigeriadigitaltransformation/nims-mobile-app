@@ -26,6 +26,8 @@ class SpecimenShipmentScreenState with _$SpecimenShipmentScreenState {
     DomainLsp? lsp,
     /// Maps facilityId to all its types (for auto-detection when facility has multiple types)
     @Default({}) Map<int, List<String>> facilityTypesMap,
+    /// Whether the destination location type was reliably auto-detected (locked for editing)
+    @Default(false) bool isDestinationLocationTypeLocked,
   }) = _SpecimenShipmentsScreenState;
 
   // factory ShipmentsScreenState.initial() => const ShipmentsScreenState(
