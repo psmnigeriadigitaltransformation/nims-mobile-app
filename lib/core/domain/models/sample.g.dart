@@ -17,6 +17,10 @@ _$SampleImpl _$$SampleImplFromJson(Map<String, dynamic> json) => _$SampleImpl(
   comment: json['comment'] as String?,
   syncStatus: json['sync_status'] as String? ?? 'pending',
   stage: json['stage'] as String? ?? 'Order',
+  isRejected: (json['is_rejected'] as num?)?.toInt() ?? 0,
+  rejectionReason: json['rejection_reason'] as String?,
+  rejectionDate: json['rejection_date'] as String?,
+  rejectionSyncStatus: json['rejection_sync_status'] as String?,
 );
 
 Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
@@ -31,4 +35,8 @@ Map<String, dynamic> _$$SampleImplToJson(_$SampleImpl instance) =>
       'comment': instance.comment,
       'sync_status': instance.syncStatus,
       'stage': instance.stage,
+      'is_rejected': instance.isRejected,
+      'rejection_reason': instance.rejectionReason,
+      'rejection_date': instance.rejectionDate,
+      'rejection_sync_status': instance.rejectionSyncStatus,
     };

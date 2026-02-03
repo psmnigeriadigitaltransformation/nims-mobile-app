@@ -164,6 +164,7 @@ class _SpecimenDeliveryApprovalScreenState
                       padding: const EdgeInsetsGeometry.symmetric(vertical: 4),
                       child: NIMSSpecimenShipmentSummaryCard(
                         shipment: shipment,
+                        isDeliveryMode: true,
                       ),
                     );
                   },

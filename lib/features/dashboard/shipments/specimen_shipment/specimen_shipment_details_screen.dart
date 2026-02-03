@@ -4,24 +4,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/core/domain/models/approval.dart';
+import 'package:nims_mobile_app/core/domain/models/sample.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment.dart';
 import 'package:nims_mobile_app/core/ui/theme/colors.dart';
+import 'package:nims_mobile_app/core/ui/widgets/nims_alert_dialog_content.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_origin_dest_facilities_link_view.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_round_icon_button.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_specimen_card.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_status_chip.dart';
 import 'package:nims_mobile_app/core/utils/string_extensions.dart';
 import 'package:nims_mobile_app/features/dashboard/shipments/specimen_shipment/providers.dart';
+import 'package:nims_mobile_app/features/shipment_delivery/specimen_shipment_delivery/sample_rejection_confirmation_dialog.dart';
 
 class SpecimenShipmentDetailsScreen extends ConsumerWidget {
   final Shipment shipment;
+  final bool isDeliveryMode;
 
-  const SpecimenShipmentDetailsScreen({super.key, required this.shipment});
+  const SpecimenShipmentDetailsScreen({
+    super.key,
+    required this.shipment,
+    this.isDeliveryMode = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncState = ref.watch(
       specimenShipmentDetailsScreenStateNotifierProvider(shipment),
+    );
+
+    // Listen for alert dialogs
+    ref.listen(
+      specimenShipmentDetailsScreenStateNotifierProvider(shipment)
+          .select((s) => s.value?.alert),
+      (prev, next) {
+        final prevShow = prev?.show ?? false;
+        final nextShow = next?.show ?? false;
+        if (!prevShow && nextShow) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (buildContext) => NIMSAlertDialogContent(
+              message: next?.message ?? '',
+              onTapActionButton: () {
+                context.pop();
+                ref
+                    .read(
+                      specimenShipmentDetailsScreenStateNotifierProvider(shipment)
+                          .notifier,
+                    )
+                    .onDismissAlertDialog();
+              },
+              actionButtonLabel: 'Okay',
+            ),
+          );
+        }
+      },
     );
 
     return Scaffold(
@@ -162,6 +199,14 @@ class SpecimenShipmentDetailsScreen extends ConsumerWidget {
                             child: NIMSSpecimenCard(
                               sample: sample,
                               manifestStage: state.manifest?.stage,
+                              isRejecting: state.rejectingSampleCodes.contains(sample.sampleCode),
+                              onTapReject: isDeliveryMode
+                                  ? () => _showRejectConfirmationDialog(
+                                        context,
+                                        ref,
+                                        sample,
+                                      )
+                                  : null,
                             ),
                           ),
                         ),
@@ -231,6 +276,29 @@ class SpecimenShipmentDetailsScreen extends ConsumerWidget {
         const SizedBox(width: 40),
       ],
     );
+  }
+
+  /// Show confirmation dialog for sample rejection
+  void _showRejectConfirmationDialog(
+    BuildContext context,
+    WidgetRef ref,
+    Sample sample,
+  ) {
+    showDialog<String>(
+      context: context,
+      builder: (buildContext) => SampleRejectionConfirmationDialog(
+        sample: sample,
+      ),
+    ).then((reason) {
+      if (reason != null) {
+        ref
+            .read(
+              specimenShipmentDetailsScreenStateNotifierProvider(shipment)
+                  .notifier,
+            )
+            .rejectSample(sample.sampleCode, reason);
+      }
+    });
   }
 
   Widget _buildStatusChip(String status) {

@@ -4,6 +4,7 @@ import 'package:nims_mobile_app/core/domain/models/manifest.dart';
 import 'package:nims_mobile_app/core/domain/models/sample.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment_route.dart';
+import 'package:nims_mobile_app/core/ui/model/alert.dart';
 
 part 'specimen_shipment_details_screen_state.freezed.dart';
 
@@ -17,5 +18,7 @@ class SpecimenShipmentDetailsScreenState with _$SpecimenShipmentDetailsScreenSta
     Approval? pickupApproval,
     Approval? deliveryApproval,
     @Default(true) bool isLoading,
+    @Default({}) Set<String> rejectingSampleCodes,
+    @Default(Alert(show: false, message: '')) Alert alert,
   }) = _SpecimenShipmentDetailsScreenState;
 }

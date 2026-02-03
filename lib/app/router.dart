@@ -502,6 +502,8 @@ final router = GoRouter(
         final shipmentJson = state.uri.queryParameters[shipmentQueryParam];
         final sampleCodesJson =
             state.uri.queryParameters[shipmentSampleCodesQueryParam];
+        final isDeliveryModeStr =
+            state.uri.queryParameters[isDeliveryModeQueryParam];
         if (shipmentJson == null) {
           return NIMSErrorContent(
             message: "Something went wrong",
@@ -510,6 +512,7 @@ final router = GoRouter(
           );
         } else {
           final shipment = DomainShipment.fromJson(jsonDecode(shipmentJson));
+          final isDeliveryMode = isDeliveryModeStr == 'true';
           // Navigate based on payload type
           if (shipment.payloadType.toLowerCase() == 'result') {
             final sampleCodes = sampleCodesJson != null
@@ -520,7 +523,10 @@ final router = GoRouter(
               sampleCodes: sampleCodes,
             );
           }
-          return SpecimenShipmentDetailsScreen(shipment: shipment);
+          return SpecimenShipmentDetailsScreen(
+            shipment: shipment,
+            isDeliveryMode: isDeliveryMode,
+          );
         }
       },
     ),

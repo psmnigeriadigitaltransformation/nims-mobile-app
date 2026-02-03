@@ -24,6 +24,8 @@ mixin _$SpecimenShipmentDetailsScreenState {
   Approval? get pickupApproval => throw _privateConstructorUsedError;
   Approval? get deliveryApproval => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
+  Set<String> get rejectingSampleCodes => throw _privateConstructorUsedError;
+  Alert get alert => throw _privateConstructorUsedError;
 
   /// Create a copy of SpecimenShipmentDetailsScreenState
   /// with the given fields replaced by the non-null parameter values.
@@ -53,6 +55,8 @@ abstract class $SpecimenShipmentDetailsScreenStateCopyWith<$Res> {
     Approval? pickupApproval,
     Approval? deliveryApproval,
     bool isLoading,
+    Set<String> rejectingSampleCodes,
+    Alert alert,
   });
 
   $ShipmentCopyWith<$Res> get shipment;
@@ -60,6 +64,7 @@ abstract class $SpecimenShipmentDetailsScreenStateCopyWith<$Res> {
   $ManifestCopyWith<$Res>? get manifest;
   $ApprovalCopyWith<$Res>? get pickupApproval;
   $ApprovalCopyWith<$Res>? get deliveryApproval;
+  $AlertCopyWith<$Res> get alert;
 }
 
 /// @nodoc
@@ -87,6 +92,8 @@ class _$SpecimenShipmentDetailsScreenStateCopyWithImpl<
     Object? pickupApproval = freezed,
     Object? deliveryApproval = freezed,
     Object? isLoading = null,
+    Object? rejectingSampleCodes = null,
+    Object? alert = null,
   }) {
     return _then(
       _value.copyWith(
@@ -118,6 +125,14 @@ class _$SpecimenShipmentDetailsScreenStateCopyWithImpl<
                 ? _value.isLoading
                 : isLoading // ignore: cast_nullable_to_non_nullable
                       as bool,
+            rejectingSampleCodes: null == rejectingSampleCodes
+                ? _value.rejectingSampleCodes
+                : rejectingSampleCodes // ignore: cast_nullable_to_non_nullable
+                      as Set<String>,
+            alert: null == alert
+                ? _value.alert
+                : alert // ignore: cast_nullable_to_non_nullable
+                      as Alert,
           )
           as $Val,
     );
@@ -188,6 +203,16 @@ class _$SpecimenShipmentDetailsScreenStateCopyWithImpl<
       return _then(_value.copyWith(deliveryApproval: value) as $Val);
     });
   }
+
+  /// Create a copy of SpecimenShipmentDetailsScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $AlertCopyWith<$Res> get alert {
+    return $AlertCopyWith<$Res>(_value.alert, (value) {
+      return _then(_value.copyWith(alert: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -207,6 +232,8 @@ abstract class _$$SpecimenShipmentDetailsScreenStateImplCopyWith<$Res>
     Approval? pickupApproval,
     Approval? deliveryApproval,
     bool isLoading,
+    Set<String> rejectingSampleCodes,
+    Alert alert,
   });
 
   @override
@@ -219,6 +246,8 @@ abstract class _$$SpecimenShipmentDetailsScreenStateImplCopyWith<$Res>
   $ApprovalCopyWith<$Res>? get pickupApproval;
   @override
   $ApprovalCopyWith<$Res>? get deliveryApproval;
+  @override
+  $AlertCopyWith<$Res> get alert;
 }
 
 /// @nodoc
@@ -246,6 +275,8 @@ class __$$SpecimenShipmentDetailsScreenStateImplCopyWithImpl<$Res>
     Object? pickupApproval = freezed,
     Object? deliveryApproval = freezed,
     Object? isLoading = null,
+    Object? rejectingSampleCodes = null,
+    Object? alert = null,
   }) {
     return _then(
       _$SpecimenShipmentDetailsScreenStateImpl(
@@ -277,6 +308,14 @@ class __$$SpecimenShipmentDetailsScreenStateImplCopyWithImpl<$Res>
             ? _value.isLoading
             : isLoading // ignore: cast_nullable_to_non_nullable
                   as bool,
+        rejectingSampleCodes: null == rejectingSampleCodes
+            ? _value._rejectingSampleCodes
+            : rejectingSampleCodes // ignore: cast_nullable_to_non_nullable
+                  as Set<String>,
+        alert: null == alert
+            ? _value.alert
+            : alert // ignore: cast_nullable_to_non_nullable
+                  as Alert,
       ),
     );
   }
@@ -294,7 +333,10 @@ class _$SpecimenShipmentDetailsScreenStateImpl
     this.pickupApproval,
     this.deliveryApproval,
     this.isLoading = true,
-  }) : _samples = samples;
+    final Set<String> rejectingSampleCodes = const {},
+    this.alert = const Alert(show: false, message: ''),
+  }) : _samples = samples,
+       _rejectingSampleCodes = rejectingSampleCodes;
 
   @override
   final Shipment shipment;
@@ -318,10 +360,23 @@ class _$SpecimenShipmentDetailsScreenStateImpl
   @override
   @JsonKey()
   final bool isLoading;
+  final Set<String> _rejectingSampleCodes;
+  @override
+  @JsonKey()
+  Set<String> get rejectingSampleCodes {
+    if (_rejectingSampleCodes is EqualUnmodifiableSetView)
+      return _rejectingSampleCodes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableSetView(_rejectingSampleCodes);
+  }
+
+  @override
+  @JsonKey()
+  final Alert alert;
 
   @override
   String toString() {
-    return 'SpecimenShipmentDetailsScreenState(shipment: $shipment, samples: $samples, route: $route, manifest: $manifest, pickupApproval: $pickupApproval, deliveryApproval: $deliveryApproval, isLoading: $isLoading)';
+    return 'SpecimenShipmentDetailsScreenState(shipment: $shipment, samples: $samples, route: $route, manifest: $manifest, pickupApproval: $pickupApproval, deliveryApproval: $deliveryApproval, isLoading: $isLoading, rejectingSampleCodes: $rejectingSampleCodes, alert: $alert)';
   }
 
   @override
@@ -340,7 +395,12 @@ class _$SpecimenShipmentDetailsScreenStateImpl
             (identical(other.deliveryApproval, deliveryApproval) ||
                 other.deliveryApproval == deliveryApproval) &&
             (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading));
+                other.isLoading == isLoading) &&
+            const DeepCollectionEquality().equals(
+              other._rejectingSampleCodes,
+              _rejectingSampleCodes,
+            ) &&
+            (identical(other.alert, alert) || other.alert == alert));
   }
 
   @override
@@ -353,6 +413,8 @@ class _$SpecimenShipmentDetailsScreenStateImpl
     pickupApproval,
     deliveryApproval,
     isLoading,
+    const DeepCollectionEquality().hash(_rejectingSampleCodes),
+    alert,
   );
 
   /// Create a copy of SpecimenShipmentDetailsScreenState
@@ -379,6 +441,8 @@ abstract class _SpecimenShipmentDetailsScreenState
     final Approval? pickupApproval,
     final Approval? deliveryApproval,
     final bool isLoading,
+    final Set<String> rejectingSampleCodes,
+    final Alert alert,
   }) = _$SpecimenShipmentDetailsScreenStateImpl;
 
   @override
@@ -395,6 +459,10 @@ abstract class _SpecimenShipmentDetailsScreenState
   Approval? get deliveryApproval;
   @override
   bool get isLoading;
+  @override
+  Set<String> get rejectingSampleCodes;
+  @override
+  Alert get alert;
 
   /// Create a copy of SpecimenShipmentDetailsScreenState
   /// with the given fields replaced by the non-null parameter values.

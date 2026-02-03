@@ -16,6 +16,10 @@ class Sample with _$Sample {
     String? comment,
     @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
     @Default('Order') String stage,
+    @JsonKey(name: 'is_rejected') @Default(0) int isRejected,
+    @JsonKey(name: 'rejection_reason') String? rejectionReason,
+    @JsonKey(name: 'rejection_date') String? rejectionDate,
+    @JsonKey(name: 'rejection_sync_status') String? rejectionSyncStatus,
     // @JsonKey(name: 'created_at') String? createdAt,
   }) = _Sample;
 

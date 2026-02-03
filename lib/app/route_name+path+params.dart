@@ -85,3 +85,4 @@ const routeQueryParam = "route";
 const sampleCodesQueryParam = "sample_codes";
 const selectedResultsQueryParam = "selected_results";
 const shipmentSampleCodesQueryParam = "shipment_sample_codes";
+const isDeliveryModeQueryParam = "is_delivery_mode";

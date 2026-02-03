@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 15,
+      version: 16,
       onCreate: (db, version) async {
 
         // Tables
@@ -165,6 +165,10 @@ class NIMSDatabase {
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             sync_status TEXT NOT NULL DEFAULT 'pending',
             stage TEXT NOT NULL DEFAULT 'Order',
+            is_rejected INTEGER DEFAULT 0,
+            rejection_reason TEXT,
+            rejection_date TEXT,
+            rejection_sync_status TEXT,
             FOREIGN KEY (manifest_no) REFERENCES manifests(manifest_no) ON DELETE CASCADE
           )
           ''');
@@ -504,6 +508,21 @@ class NIMSDatabase {
 
           // 4. Rename new table
           await db.execute('ALTER TABLE shipments_new RENAME TO shipments');
+        }
+        if (oldVersion < 16) {
+          // Add rejection fields to samples table for sample rejection during delivery
+          await db.execute('''
+            ALTER TABLE samples ADD COLUMN is_rejected INTEGER DEFAULT 0
+          ''');
+          await db.execute('''
+            ALTER TABLE samples ADD COLUMN rejection_reason TEXT
+          ''');
+          await db.execute('''
+            ALTER TABLE samples ADD COLUMN rejection_date TEXT
+          ''');
+          await db.execute('''
+            ALTER TABLE samples ADD COLUMN rejection_sync_status TEXT
+          ''');
         }
       },
     );

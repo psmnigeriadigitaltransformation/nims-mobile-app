@@ -36,6 +36,14 @@ mixin _$Sample {
   @JsonKey(name: 'sync_status')
   String get syncStatus => throw _privateConstructorUsedError;
   String get stage => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_rejected')
+  int get isRejected => throw _privateConstructorUsedError;
+  @JsonKey(name: 'rejection_reason')
+  String? get rejectionReason => throw _privateConstructorUsedError;
+  @JsonKey(name: 'rejection_date')
+  String? get rejectionDate => throw _privateConstructorUsedError;
+  @JsonKey(name: 'rejection_sync_status')
+  String? get rejectionSyncStatus => throw _privateConstructorUsedError;
 
   /// Serializes this Sample to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -62,6 +70,10 @@ abstract class $SampleCopyWith<$Res> {
     String? comment,
     @JsonKey(name: 'sync_status') String syncStatus,
     String stage,
+    @JsonKey(name: 'is_rejected') int isRejected,
+    @JsonKey(name: 'rejection_reason') String? rejectionReason,
+    @JsonKey(name: 'rejection_date') String? rejectionDate,
+    @JsonKey(name: 'rejection_sync_status') String? rejectionSyncStatus,
   });
 }
 
@@ -90,6 +102,10 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
     Object? comment = freezed,
     Object? syncStatus = null,
     Object? stage = null,
+    Object? isRejected = null,
+    Object? rejectionReason = freezed,
+    Object? rejectionDate = freezed,
+    Object? rejectionSyncStatus = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -133,6 +149,22 @@ class _$SampleCopyWithImpl<$Res, $Val extends Sample>
                 ? _value.stage
                 : stage // ignore: cast_nullable_to_non_nullable
                       as String,
+            isRejected: null == isRejected
+                ? _value.isRejected
+                : isRejected // ignore: cast_nullable_to_non_nullable
+                      as int,
+            rejectionReason: freezed == rejectionReason
+                ? _value.rejectionReason
+                : rejectionReason // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            rejectionDate: freezed == rejectionDate
+                ? _value.rejectionDate
+                : rejectionDate // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            rejectionSyncStatus: freezed == rejectionSyncStatus
+                ? _value.rejectionSyncStatus
+                : rejectionSyncStatus // ignore: cast_nullable_to_non_nullable
+                      as String?,
           )
           as $Val,
     );
@@ -158,6 +190,10 @@ abstract class _$$SampleImplCopyWith<$Res> implements $SampleCopyWith<$Res> {
     String? comment,
     @JsonKey(name: 'sync_status') String syncStatus,
     String stage,
+    @JsonKey(name: 'is_rejected') int isRejected,
+    @JsonKey(name: 'rejection_reason') String? rejectionReason,
+    @JsonKey(name: 'rejection_date') String? rejectionDate,
+    @JsonKey(name: 'rejection_sync_status') String? rejectionSyncStatus,
   });
 }
 
@@ -185,6 +221,10 @@ class __$$SampleImplCopyWithImpl<$Res>
     Object? comment = freezed,
     Object? syncStatus = null,
     Object? stage = null,
+    Object? isRejected = null,
+    Object? rejectionReason = freezed,
+    Object? rejectionDate = freezed,
+    Object? rejectionSyncStatus = freezed,
   }) {
     return _then(
       _$SampleImpl(
@@ -228,6 +268,22 @@ class __$$SampleImplCopyWithImpl<$Res>
             ? _value.stage
             : stage // ignore: cast_nullable_to_non_nullable
                   as String,
+        isRejected: null == isRejected
+            ? _value.isRejected
+            : isRejected // ignore: cast_nullable_to_non_nullable
+                  as int,
+        rejectionReason: freezed == rejectionReason
+            ? _value.rejectionReason
+            : rejectionReason // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        rejectionDate: freezed == rejectionDate
+            ? _value.rejectionDate
+            : rejectionDate // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        rejectionSyncStatus: freezed == rejectionSyncStatus
+            ? _value.rejectionSyncStatus
+            : rejectionSyncStatus // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -247,6 +303,10 @@ class _$SampleImpl implements _Sample {
     this.comment,
     @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
     this.stage = 'Order',
+    @JsonKey(name: 'is_rejected') this.isRejected = 0,
+    @JsonKey(name: 'rejection_reason') this.rejectionReason,
+    @JsonKey(name: 'rejection_date') this.rejectionDate,
+    @JsonKey(name: 'rejection_sync_status') this.rejectionSyncStatus,
   });
 
   factory _$SampleImpl.fromJson(Map<String, dynamic> json) =>
@@ -278,10 +338,22 @@ class _$SampleImpl implements _Sample {
   @override
   @JsonKey()
   final String stage;
+  @override
+  @JsonKey(name: 'is_rejected')
+  final int isRejected;
+  @override
+  @JsonKey(name: 'rejection_reason')
+  final String? rejectionReason;
+  @override
+  @JsonKey(name: 'rejection_date')
+  final String? rejectionDate;
+  @override
+  @JsonKey(name: 'rejection_sync_status')
+  final String? rejectionSyncStatus;
 
   @override
   String toString() {
-    return 'Sample(id: $id, manifestNo: $manifestNo, originId: $originId, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, comment: $comment, syncStatus: $syncStatus, stage: $stage)';
+    return 'Sample(id: $id, manifestNo: $manifestNo, originId: $originId, sampleCode: $sampleCode, patientCode: $patientCode, age: $age, gender: $gender, comment: $comment, syncStatus: $syncStatus, stage: $stage, isRejected: $isRejected, rejectionReason: $rejectionReason, rejectionDate: $rejectionDate, rejectionSyncStatus: $rejectionSyncStatus)';
   }
 
   @override
@@ -303,7 +375,15 @@ class _$SampleImpl implements _Sample {
             (identical(other.comment, comment) || other.comment == comment) &&
             (identical(other.syncStatus, syncStatus) ||
                 other.syncStatus == syncStatus) &&
-            (identical(other.stage, stage) || other.stage == stage));
+            (identical(other.stage, stage) || other.stage == stage) &&
+            (identical(other.isRejected, isRejected) ||
+                other.isRejected == isRejected) &&
+            (identical(other.rejectionReason, rejectionReason) ||
+                other.rejectionReason == rejectionReason) &&
+            (identical(other.rejectionDate, rejectionDate) ||
+                other.rejectionDate == rejectionDate) &&
+            (identical(other.rejectionSyncStatus, rejectionSyncStatus) ||
+                other.rejectionSyncStatus == rejectionSyncStatus));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -320,6 +400,10 @@ class _$SampleImpl implements _Sample {
     comment,
     syncStatus,
     stage,
+    isRejected,
+    rejectionReason,
+    rejectionDate,
+    rejectionSyncStatus,
   );
 
   /// Create a copy of Sample
@@ -348,6 +432,10 @@ abstract class _Sample implements Sample {
     final String? comment,
     @JsonKey(name: 'sync_status') final String syncStatus,
     final String stage,
+    @JsonKey(name: 'is_rejected') final int isRejected,
+    @JsonKey(name: 'rejection_reason') final String? rejectionReason,
+    @JsonKey(name: 'rejection_date') final String? rejectionDate,
+    @JsonKey(name: 'rejection_sync_status') final String? rejectionSyncStatus,
   }) = _$SampleImpl;
 
   factory _Sample.fromJson(Map<String, dynamic> json) = _$SampleImpl.fromJson;
@@ -377,6 +465,18 @@ abstract class _Sample implements Sample {
   String get syncStatus;
   @override
   String get stage;
+  @override
+  @JsonKey(name: 'is_rejected')
+  int get isRejected;
+  @override
+  @JsonKey(name: 'rejection_reason')
+  String? get rejectionReason;
+  @override
+  @JsonKey(name: 'rejection_date')
+  String? get rejectionDate;
+  @override
+  @JsonKey(name: 'rejection_sync_status')
+  String? get rejectionSyncStatus;
 
   /// Create a copy of Sample
   /// with the given fields replaced by the non-null parameter values.

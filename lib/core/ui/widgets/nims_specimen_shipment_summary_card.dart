@@ -13,11 +13,13 @@ import 'package:nims_mobile_app/core/utils/string_extensions.dart';
 class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
   final DomainShipment shipment;
   final String? routeStage;
+  final bool isDeliveryMode;
 
   const NIMSSpecimenShipmentSummaryCard({
     super.key,
     required this.shipment,
     this.routeStage,
+    this.isDeliveryMode = false,
   });
 
   bool get isResultShipment => shipment.payloadType.toLowerCase() == 'result';
@@ -105,6 +107,7 @@ class NIMSSpecimenShipmentSummaryCard extends StatelessWidget {
           shipmentDetailsScreen,
           queryParameters: {
             shipmentQueryParam: jsonEncode(shipment.toJson()),
+            if (isDeliveryMode) isDeliveryModeQueryParam: 'true',
           },
         );
       },

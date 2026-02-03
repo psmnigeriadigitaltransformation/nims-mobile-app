@@ -6,16 +6,20 @@ import 'package:nims_mobile_app/core/ui/widgets/nims_status_chip.dart';
 
 class NIMSSpecimenCard extends StatefulWidget {
   final VoidCallback? onTapDelete;
+  final VoidCallback? onTapReject;
   final String? actionLabel;
   final DomainSample sample;
   final String? manifestStage;
+  final bool isRejecting;
 
   const NIMSSpecimenCard({
     super.key,
     this.onTapDelete,
+    this.onTapReject,
     this.actionLabel,
     required this.sample,
     this.manifestStage,
+    this.isRejecting = false,
   });
 
   @override
@@ -25,8 +29,14 @@ class NIMSSpecimenCard extends StatefulWidget {
 class _NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
   bool isCommentRevealed = false;
 
+  /// Check if sample is rejected
+  bool get _isRejected => widget.sample.isRejected == 1;
+
   /// Get the displayed stage (capped by parent manifest stage if provided)
   String get _displayedStage {
+    if (_isRejected) {
+      return 'Rejected';
+    }
     return Stage.getCappedDisplayName(
       widget.sample.stage,
       widget.manifestStage,
@@ -35,6 +45,9 @@ class _NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
 
   /// Get stage color based on stage value
   Color _getStageColor() {
+    if (_isRejected) {
+      return NIMSColors.red05;
+    }
     switch (_displayedStage.toLowerCase()) {
       case 'delivered':
         return NIMSColors.green05;
@@ -49,6 +62,9 @@ class _NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
 
   /// Get stage background color based on stage value
   Color _getStageBackgroundColor() {
+    if (_isRejected) {
+      return NIMSColors.red02.withAlpha(50);
+    }
     switch (_displayedStage.toLowerCase()) {
       case 'delivered':
         return NIMSColors.green02.withAlpha(50);
@@ -121,9 +137,12 @@ class _NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               border: Border.all(
-                color: Theme.of(context).colorScheme.outline,
-                width: 0.5,
+                color: _isRejected
+                    ? NIMSColors.red05.withAlpha(150)
+                    : Theme.of(context).colorScheme.outline,
+                width: _isRejected ? 1.0 : 0.5,
               ),
+              color: _isRejected ? NIMSColors.red02.withAlpha(30) : null,
             ),
             padding: const EdgeInsets.all(12),
             child: Column(
@@ -191,6 +210,44 @@ class _NIMSSpecimenCardState extends State<NIMSSpecimenCard> {
                           ),
                         ),
                       ),
+                    ],
+                    // Show reject button if onTapReject is provided and sample is not already rejected
+                    if (widget.onTapReject != null && !_isRejected) ...[
+                      const SizedBox(width: 12),
+                      widget.isRejecting
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Theme.of(context).colorScheme.error,
+                              ),
+                            )
+                          : InkWell(
+                              onTap: widget.onTapReject,
+                              borderRadius: const BorderRadius.all(Radius.circular(4)),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .errorContainer
+                                      .withAlpha(150),
+                                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 2,
+                                    horizontal: 8,
+                                  ),
+                                  child: Text(
+                                    "Reject",
+                                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                      color: Theme.of(context).colorScheme.error,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                     ],
                   ],
                 ),

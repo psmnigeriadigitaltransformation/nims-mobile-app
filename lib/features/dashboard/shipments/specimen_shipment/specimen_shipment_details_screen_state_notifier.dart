@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nims_mobile_app/core/data/providers.dart';
 import 'package:nims_mobile_app/core/domain/models/approval.dart';
 import 'package:nims_mobile_app/core/domain/models/manifest.dart';
 import 'package:nims_mobile_app/core/domain/models/sample.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment.dart';
+import 'package:nims_mobile_app/core/ui/model/alert.dart';
+import 'package:nims_mobile_app/core/utils/result.dart';
 import 'package:nims_mobile_app/features/dashboard/shipments/specimen_shipment/specimen_shipment_details_screen_state.dart';
 
 import '../../../../core/services/providers.dart';
@@ -69,5 +72,69 @@ class ShipmentDetailsScreenStateNotifier
   Future<void> refresh() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => _fetchDetails(arg));
+  }
+
+  /// Reject a sample during delivery
+  Future<void> rejectSample(String sampleCode, String reason) async {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    // Add sample code to rejecting set (loading state)
+    state = AsyncValue.data(
+      currentState.copyWith(
+        rejectingSampleCodes: {...currentState.rejectingSampleCodes, sampleCode},
+      ),
+    );
+
+    final samplesRepository = ref.read(samplesRepositoryProvider);
+    final result = await samplesRepository.rejectSampleDuringDelivery(
+      sampleCode,
+      reason,
+    );
+
+    switch (result) {
+      case Success<Sample>(payload: final rejectedSample):
+        // Update the sample in the list with rejection info
+        final updatedSamples = currentState.samples.map((sample) {
+          if (sample.sampleCode == sampleCode) {
+            return rejectedSample;
+          }
+          return sample;
+        }).toList();
+
+        state = AsyncValue.data(
+          currentState.copyWith(
+            samples: updatedSamples,
+            rejectingSampleCodes: currentState.rejectingSampleCodes
+                .where((code) => code != sampleCode)
+                .toSet(),
+          ),
+        );
+        break;
+
+      case Error<Sample>(message: final errorMessage):
+        // Remove from rejecting set and show error
+        state = AsyncValue.data(
+          currentState.copyWith(
+            rejectingSampleCodes: currentState.rejectingSampleCodes
+                .where((code) => code != sampleCode)
+                .toSet(),
+            alert: Alert(show: true, message: errorMessage),
+          ),
+        );
+        break;
+    }
+  }
+
+  /// Dismiss the alert dialog
+  void onDismissAlertDialog() {
+    final currentState = state.value;
+    if (currentState == null) return;
+
+    state = AsyncValue.data(
+      currentState.copyWith(
+        alert: const Alert(show: false, message: ''),
+      ),
+    );
   }
 }

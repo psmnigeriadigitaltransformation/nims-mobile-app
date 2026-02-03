@@ -294,4 +294,65 @@ class SamplesRepository {
       return Error(e.toString(), exception: e as Exception, stackTrace: s);
     }
   }
+
+  /// Reject a sample during delivery - marks sample as rejected and updates locally
+  /// This is different from rejectSample which deletes the sample.
+  /// During delivery, we want to keep the sample record but mark it as rejected.
+  Future<Result<DomainSample>> rejectSampleDuringDelivery(
+    String sampleCode,
+    String reason,
+  ) async {
+    try {
+      final existing = await _localService.getSampleByCode(sampleCode);
+
+      if (existing == null) {
+        return Error("Sample not found");
+      }
+
+      // Server-first: must be online to reject
+      final isConnected = await _connectivityService.isConnected;
+      if (!isConnected) {
+        return Error("Cannot reject sample while offline. Please connect to the internet and try again.");
+      }
+
+      final rejectionDate = DateTime.now().toIso8601String();
+
+      // Reject on server first
+      final result = await _apiService.rejectSample(
+        sample: RejectSampleRequest(
+          sampleCode: sampleCode,
+          reason: reason,
+          rejectionDate: rejectionDate,
+        ),
+      );
+
+      if (result is Success) {
+        // Update locally with rejection info instead of deleting
+        final rejectedSample = existing.copyWith(
+          isRejected: 1,
+          rejectionReason: reason,
+          rejectionDate: rejectionDate,
+          rejectionSyncStatus: 'synced',
+        );
+        await _localService.updateSampleLocally(rejectedSample);
+
+        developer.log(
+          "Sample rejected successfully: $sampleCode",
+          name: "SamplesRepository:rejectSampleDuringDelivery",
+        );
+
+        return Success(rejectedSample);
+      } else {
+        return Error("Failed to reject sample: ${(result as Error).message}");
+      }
+    } catch (e, s) {
+      developer.log(
+        e.toString(),
+        error: e,
+        stackTrace: s,
+        name: "SamplesRepository:rejectSampleDuringDelivery",
+      );
+      return Error(e.toString(), exception: e as Exception, stackTrace: s);
+    }
+  }
 }
