@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/core/domain/models/sample.dart';
 import 'package:nims_mobile_app/core/ui/theme/colors.dart';
-import 'package:nims_mobile_app/core/utils/constants.dart';
 
 import '../../../core/ui/widgets/nims_error_button.dart';
 import '../../../core/ui/widgets/nims_round_icon_button.dart';
@@ -12,10 +11,12 @@ import '../../../core/ui/widgets/nims_secondary_button.dart';
 /// Returns the rejection reason if confirmed, null if cancelled.
 class SampleRejectionConfirmationDialog extends StatefulWidget {
   final Sample sample;
+  final List<String> rejectionReasons;
 
   const SampleRejectionConfirmationDialog({
     super.key,
     required this.sample,
+    required this.rejectionReasons,
   });
 
   @override
@@ -199,7 +200,7 @@ class _SampleRejectionConfirmationDialogState
               width: size.width - 100,
               label: const Text("Reason for Rejection"),
               dropdownMenuEntries: [
-                ...Constants.reasonsForRejection.map(
+                ...widget.rejectionReasons.map(
                   (reason) => DropdownMenuEntry(
                     value: reason,
                     labelWidget: Center(

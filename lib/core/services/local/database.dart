@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 16,
+      version: 17,
       onCreate: (db, version) async {
 
         // Tables
@@ -254,6 +254,13 @@ class NIMSDatabase {
             rejection_reason TEXT,
             rejection_date TEXT,
             route_no TEXT
+          )
+        ''');
+
+        await db.execute('''
+          CREATE TABLE rejection_reasons (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            reason TEXT NOT NULL UNIQUE
           )
         ''');
 
@@ -522,6 +529,15 @@ class NIMSDatabase {
           ''');
           await db.execute('''
             ALTER TABLE samples ADD COLUMN rejection_sync_status TEXT
+          ''');
+        }
+        if (oldVersion < 17) {
+          // Add rejection_reasons table for caching rejection reasons master data
+          await db.execute('''
+            CREATE TABLE rejection_reasons (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              reason TEXT NOT NULL UNIQUE
+            )
           ''');
         }
       },

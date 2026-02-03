@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nims_mobile_app/app/route_name+path+params.dart';
+import 'package:nims_mobile_app/core/data/providers.dart';
 import 'package:nims_mobile_app/core/ui/screens/nims_screen.dart';
 import 'package:nims_mobile_app/core/ui/widgets/nims_round_icon_button.dart';
 import 'rejection_reason_dialog.dart';
@@ -336,11 +337,17 @@ class _SelectResultsScreenState extends ConsumerState<SelectResultsScreen> {
                                                                 )
                                                                 .onAcceptResult(result.sampleCode);
                                                           } else {
+                                                            // Fetch rejection reasons from repository
+                                                            final rejectionReasons = await ref
+                                                                .read(rejectionReasonsRepositoryProvider)
+                                                                .getRejectionReasonStrings();
+                                                            if (!context.mounted) return;
                                                             // Show rejection dialog
                                                             final reason = await showDialog<String>(
                                                               context: context,
                                                               builder: (builder) => RejectionReasonDialog(
                                                                 result: result,
+                                                                rejectionReasons: rejectionReasons,
                                                               ),
                                                             );
                                                             if (reason != null && reason.isNotEmpty) {

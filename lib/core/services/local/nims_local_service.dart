@@ -109,6 +109,12 @@ class NIMSLocalService {
   Future<List<DomainMovementType>> getCachedMovementTypes() =>
       _masterDataDao.getCachedMovementTypes();
 
+  Future<void> cacheRejectionReasons(List<DomainRejectionReason> reasons) =>
+      _masterDataDao.cacheRejectionReasons(reasons);
+
+  Future<List<DomainRejectionReason>> getCachedRejectionReasons() =>
+      _masterDataDao.getCachedRejectionReasons();
+
   // ==================== ETOKEN OPERATIONS ====================
 
   Future<void> cacheETokenData(List<DomainETokenData> eTokenDataList) =>

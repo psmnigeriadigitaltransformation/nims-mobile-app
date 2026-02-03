@@ -4,6 +4,7 @@ import 'package:nims_mobile_app/core/data/repository/etoken_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/locations_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/manifest_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/movement_types_repository.dart';
+import 'package:nims_mobile_app/core/data/repository/rejection_reasons_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/result_delivery_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/result_pickup_repository.dart';
 import 'package:nims_mobile_app/core/data/repository/samples_repository.dart';
@@ -100,4 +101,9 @@ final resultDeliveryRepositoryProvider = Provider(
   ),
 );
 
-
+final rejectionReasonsRepositoryProvider = Provider(
+      (ref) => RejectionReasonsRepository(
+    ref.watch(nimsApiServiceProvider),
+    ref.watch(nimsLocalServiceProvider),
+  ),
+);

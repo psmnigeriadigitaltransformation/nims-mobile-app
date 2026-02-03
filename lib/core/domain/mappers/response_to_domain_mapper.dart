@@ -118,3 +118,9 @@ extension RemoteETokenDataExtension on RemoteETokenData {
     return DomainETokenData(id: null, etokenId: etokenId, serialNo: serialNo);
   }
 }
+
+extension RemoteRejectionReasonExtension on RemoteRejectionReason {
+  DomainRejectionReason toDomain() {
+    return DomainRejectionReason(id: null, reason: reason ?? '');
+  }
+}

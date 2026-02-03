@@ -18,6 +18,7 @@ class Tables {
   static const shipments = 'shipments';
   static const approvals = 'approvals';
   static const results = 'results';
+  static const rejectionReasons = 'rejection_reasons';
 }
 
 /// Constants for common column names used across multiple tables

@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 
 import 'package:nims_mobile_app/core/data/repository/etoken_repository.dart';
+import 'package:nims_mobile_app/core/data/repository/rejection_reasons_repository.dart';
 import 'package:nims_mobile_app/core/utils/result.dart';
 import 'package:nims_mobile_app/core/data/repository/facilities_repository.dart';
 
@@ -14,13 +15,15 @@ class DownloadMasterDataUseCase {
   final LocationsRepository locationsRepository;
   final MovementTypesRepository movementTypesRepository;
   final ETokenRepository eTokenRepository;
+  final RejectionReasonsRepository rejectionReasonsRepository;
 
   DownloadMasterDataUseCase({
     required this.facilitiesRepository,
     required this.sampleTypesRepository,
     required this.locationsRepository,
     required this.movementTypesRepository,
-    required this.eTokenRepository
+    required this.eTokenRepository,
+    required this.rejectionReasonsRepository,
   });
 
   Future<Result<bool>> execute(bool refresh) async {
@@ -29,6 +32,7 @@ class DownloadMasterDataUseCase {
       await sampleTypesRepository.getSampleTypes(refresh);
       await locationsRepository.getLocations(refresh);
       await movementTypesRepository.getMovementTypes(refresh);
+      await rejectionReasonsRepository.getRejectionReasons(refresh);
       final int eTokenBalance = await eTokenRepository.getETokenBalance();
       if (eTokenBalance < 5) {
         await eTokenRepository.generateETokens(5);

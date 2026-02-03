@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nims_mobile_app/core/data/providers.dart';
 import 'package:nims_mobile_app/core/domain/models/approval.dart';
 import 'package:nims_mobile_app/core/domain/models/sample.dart';
 import 'package:nims_mobile_app/core/domain/models/shipment.dart';
@@ -279,26 +280,33 @@ class SpecimenShipmentDetailsScreen extends ConsumerWidget {
   }
 
   /// Show confirmation dialog for sample rejection
-  void _showRejectConfirmationDialog(
+  Future<void> _showRejectConfirmationDialog(
     BuildContext context,
     WidgetRef ref,
     Sample sample,
-  ) {
-    showDialog<String>(
+  ) async {
+    // Fetch rejection reasons from repository
+    final rejectionReasons = await ref
+        .read(rejectionReasonsRepositoryProvider)
+        .getRejectionReasonStrings();
+    if (!context.mounted) return;
+
+    final reason = await showDialog<String>(
       context: context,
       builder: (buildContext) => SampleRejectionConfirmationDialog(
         sample: sample,
+        rejectionReasons: rejectionReasons,
       ),
-    ).then((reason) {
-      if (reason != null) {
-        ref
-            .read(
-              specimenShipmentDetailsScreenStateNotifierProvider(shipment)
-                  .notifier,
-            )
-            .rejectSample(sample.sampleCode, reason);
-      }
-    });
+    );
+
+    if (reason != null) {
+      ref
+          .read(
+            specimenShipmentDetailsScreenStateNotifierProvider(shipment)
+                .notifier,
+          )
+          .rejectSample(sample.sampleCode, reason);
+    }
   }
 
   Widget _buildStatusChip(String status) {

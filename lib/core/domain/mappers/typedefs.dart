@@ -35,6 +35,9 @@ import 'package:nims_mobile_app/core/domain/models/result.dart' as domain_result
 
 import 'package:nims_mobile_app/core/services/remote/models/results_response.dart' as available_results_response;
 
+import 'package:nims_mobile_app/core/services/remote/models/rejection_reasons_response.dart' as rejection_reasons_response;
+import 'package:nims_mobile_app/core/domain/models/rejection_reason.dart' as domain_rejection_reason;
+
 typedef RemoteUser = login_response.User;
 typedef DomainUser = domain_user.User;
 
@@ -82,3 +85,6 @@ typedef DomainApproval = domain_approval.Approval;
 
 typedef RemoteAvailableResultItem = available_results_response.ResultItem;
 typedef DomainResult = domain_result.LabResult;
+
+typedef RemoteRejectionReason = rejection_reasons_response.RejectionReasonItem;
+typedef DomainRejectionReason = domain_rejection_reason.RejectionReason;

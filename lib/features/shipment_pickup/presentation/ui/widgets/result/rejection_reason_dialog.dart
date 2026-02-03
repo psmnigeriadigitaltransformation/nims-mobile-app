@@ -5,13 +5,13 @@ import 'package:nims_mobile_app/core/domain/models/result.dart';
 import '../../../../../../core/ui/widgets/nims_error_button.dart';
 import '../../../../../../core/ui/widgets/nims_round_icon_button.dart';
 import '../../../../../../core/ui/widgets/nims_secondary_button.dart';
-import '../../../../../../core/utils/constants.dart';
 
 class RejectionReasonDialog extends StatefulWidget {
   final LabResult? result;
   final String? sampleCode;
   final String? age;
   final String? gender;
+  final List<String> rejectionReasons;
 
   const RejectionReasonDialog({
     super.key,
@@ -19,6 +19,7 @@ class RejectionReasonDialog extends StatefulWidget {
     this.sampleCode,
     this.age,
     this.gender,
+    required this.rejectionReasons,
   });
 
   @override
@@ -98,7 +99,7 @@ class _RejectionReasonDialogState extends State<RejectionReasonDialog> {
               width: size.width - 100,
               label: Text("Reason for Rejection"),
               dropdownMenuEntries: [
-                ...Constants.reasonsForRejection.map(
+                ...widget.rejectionReasons.map(
                   (reason) => DropdownMenuEntry(
                     value: reason,
                     labelWidget: Center(

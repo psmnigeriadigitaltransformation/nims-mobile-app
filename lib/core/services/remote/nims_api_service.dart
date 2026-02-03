@@ -13,6 +13,7 @@ import 'package:nims_mobile_app/core/services/remote/models/locations_response.d
 import 'package:nims_mobile_app/core/services/remote/models/login_response.dart';
 import 'package:nims_mobile_app/core/services/remote/models/movement_types_response.dart';
 import 'package:nims_mobile_app/core/services/remote/models/reject_sample_response.dart';
+import 'package:nims_mobile_app/core/services/remote/models/rejection_reasons_response.dart';
 import 'package:nims_mobile_app/core/services/remote/models/request/create_specimen_shipment_route_request_body.dart';
 import 'package:nims_mobile_app/core/services/remote/models/request/delete_manifest_request_body.dart';
 import 'package:nims_mobile_app/core/services/remote/models/request/delete_sample_request_body.dart';
@@ -578,6 +579,29 @@ class NIMSAPIService {
       }
     } catch (e, s) {
       developer.log("e: $e, s: $s", name: "NIMSAPIService:getManifestSamples");
+      return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
+    }
+  }
+
+
+  Future<Result<RejectionReasonsResponse>> getRejectionReasons() async {
+    try {
+      final response = await dio.get("sample/rejection/lists");
+      developer.log(
+        "api get rejection reasons response: $response",
+        name: "NIMSAPIService:getRejectionReasons",
+      );
+      final decodedResponse = RejectionReasonsResponse.fromJson(response.data);
+      if (decodedResponse.resultCode == 200) {
+        return Success(decodedResponse);
+      } else {
+        return Error(
+          decodedResponse.message ??
+              "${decodedResponse.resultCode}: Request failed! please try again",
+        );
+      }
+    } catch (e, s) {
+      developer.log("e: $e, s: $s", name: "NIMSAPIService:getRejectionReasons");
       return Error(e.toString(), exception: Exception(e.toString()), stackTrace: s);
     }
   }

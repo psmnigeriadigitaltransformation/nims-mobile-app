@@ -114,4 +114,23 @@ class MasterDataDao extends BaseDao {
     log('movement_types: $result', method: 'getCachedMovementTypes');
     return result.map((m) => DomainMovementType.fromJson(m)).toList();
   }
+
+  // ==================== REJECTION REASONS ====================
+
+  /// Caches rejection reasons
+  Future<void> cacheRejectionReasons(List<DomainRejectionReason> reasons) async {
+    log('rejection_reasons: $reasons', method: 'cacheRejectionReasons');
+    await batchInsert(
+      Tables.rejectionReasons,
+      reasons.map((r) => r.toJson()).toList(),
+      clearTable: true,
+    );
+  }
+
+  /// Gets all cached rejection reasons
+  Future<List<DomainRejectionReason>> getCachedRejectionReasons() async {
+    final result = await queryAll(Tables.rejectionReasons);
+    log('rejection_reasons: $result', method: 'getCachedRejectionReasons');
+    return result.map((r) => DomainRejectionReason.fromJson(r)).toList();
+  }
 }
