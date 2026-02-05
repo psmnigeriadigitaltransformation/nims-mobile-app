@@ -35,6 +35,7 @@ mixin _$CreateSpecimenShipmentRouteRequest {
   String get riderUserId => throw _privateConstructorUsedError;
   String get latitude => throw _privateConstructorUsedError;
   String get longitude => throw _privateConstructorUsedError;
+  String get temperature => throw _privateConstructorUsedError;
   List<Shipment> get shipment => throw _privateConstructorUsedError;
   Approval get approval => throw _privateConstructorUsedError;
 
@@ -69,6 +70,7 @@ abstract class $CreateSpecimenShipmentRouteRequestCopyWith<$Res> {
     @JsonKey(name: 'rider_user_id') String riderUserId,
     String latitude,
     String longitude,
+    String temperature,
     List<Shipment> shipment,
     Approval approval,
   });
@@ -101,6 +103,7 @@ class _$CreateSpecimenShipmentRouteRequestCopyWithImpl<
     Object? riderUserId = null,
     Object? latitude = null,
     Object? longitude = null,
+    Object? temperature = null,
     Object? shipment = null,
     Object? approval = null,
   }) {
@@ -133,6 +136,10 @@ class _$CreateSpecimenShipmentRouteRequestCopyWithImpl<
             longitude: null == longitude
                 ? _value.longitude
                 : longitude // ignore: cast_nullable_to_non_nullable
+                      as String,
+            temperature: null == temperature
+                ? _value.temperature
+                : temperature // ignore: cast_nullable_to_non_nullable
                       as String,
             shipment: null == shipment
                 ? _value.shipment
@@ -175,6 +182,7 @@ abstract class _$$CreateSpecimenShipmentRouteRequestImplCopyWith<$Res>
     @JsonKey(name: 'rider_user_id') String riderUserId,
     String latitude,
     String longitude,
+    String temperature,
     List<Shipment> shipment,
     Approval approval,
   });
@@ -208,6 +216,7 @@ class __$$CreateSpecimenShipmentRouteRequestImplCopyWithImpl<$Res>
     Object? riderUserId = null,
     Object? latitude = null,
     Object? longitude = null,
+    Object? temperature = null,
     Object? shipment = null,
     Object? approval = null,
   }) {
@@ -241,6 +250,10 @@ class __$$CreateSpecimenShipmentRouteRequestImplCopyWithImpl<$Res>
             ? _value.longitude
             : longitude // ignore: cast_nullable_to_non_nullable
                   as String,
+        temperature: null == temperature
+            ? _value.temperature
+            : temperature // ignore: cast_nullable_to_non_nullable
+                  as String,
         shipment: null == shipment
             ? _value._shipment
             : shipment // ignore: cast_nullable_to_non_nullable
@@ -267,6 +280,7 @@ class _$CreateSpecimenShipmentRouteRequestImpl
     @JsonKey(name: 'rider_user_id') required this.riderUserId,
     required this.latitude,
     required this.longitude,
+    required this.temperature,
     required final List<Shipment> shipment,
     required this.approval,
   }) : _shipment = shipment;
@@ -294,6 +308,8 @@ class _$CreateSpecimenShipmentRouteRequestImpl
   final String latitude;
   @override
   final String longitude;
+  @override
+  final String temperature;
   final List<Shipment> _shipment;
   @override
   List<Shipment> get shipment {
@@ -307,7 +323,7 @@ class _$CreateSpecimenShipmentRouteRequestImpl
 
   @override
   String toString() {
-    return 'CreateSpecimenShipmentRouteRequest(routeNo: $routeNo, originFacilityId: $originFacilityId, destinationFacilityId: $destinationFacilityId, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude, shipment: $shipment, approval: $approval)';
+    return 'CreateSpecimenShipmentRouteRequest(routeNo: $routeNo, originFacilityId: $originFacilityId, destinationFacilityId: $destinationFacilityId, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude, temperature: $temperature, shipment: $shipment, approval: $approval)';
   }
 
   @override
@@ -327,6 +343,8 @@ class _$CreateSpecimenShipmentRouteRequestImpl
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
+            (identical(other.temperature, temperature) ||
+                other.temperature == temperature) &&
             const DeepCollectionEquality().equals(other._shipment, _shipment) &&
             (identical(other.approval, approval) ||
                 other.approval == approval));
@@ -343,6 +361,7 @@ class _$CreateSpecimenShipmentRouteRequestImpl
     riderUserId,
     latitude,
     longitude,
+    temperature,
     const DeepCollectionEquality().hash(_shipment),
     approval,
   );
@@ -377,6 +396,7 @@ abstract class _CreateSpecimenShipmentRouteRequest
     @JsonKey(name: 'rider_user_id') required final String riderUserId,
     required final String latitude,
     required final String longitude,
+    required final String temperature,
     required final List<Shipment> shipment,
     required final Approval approval,
   }) = _$CreateSpecimenShipmentRouteRequestImpl;
@@ -404,6 +424,8 @@ abstract class _CreateSpecimenShipmentRouteRequest
   String get latitude;
   @override
   String get longitude;
+  @override
+  String get temperature;
   @override
   List<Shipment> get shipment;
   @override

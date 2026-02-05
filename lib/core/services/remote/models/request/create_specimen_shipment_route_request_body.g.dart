@@ -16,6 +16,7 @@ _$$CreateSpecimenShipmentRouteRequestImplFromJson(Map<String, dynamic> json) =>
       riderUserId: json['rider_user_id'] as String,
       latitude: json['latitude'] as String,
       longitude: json['longitude'] as String,
+      temperature: json['temperature'] as String,
       shipment: (json['shipment'] as List<dynamic>)
           .map((e) => Shipment.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -32,6 +33,7 @@ Map<String, dynamic> _$$CreateSpecimenShipmentRouteRequestImplToJson(
   'rider_user_id': instance.riderUserId,
   'latitude': instance.latitude,
   'longitude': instance.longitude,
+  'temperature': instance.temperature,
   'shipment': instance.shipment,
   'approval': instance.approval,
 };

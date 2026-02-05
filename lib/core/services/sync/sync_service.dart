@@ -162,13 +162,13 @@ class SyncService {
       await syncPendingRejections();
 
       // Step 4: Sync pending specimen deliveries (after routes)
-      await syncPendingSpecimenShipmentDeliveries();
+      await syncPendingSpecimenDeliveries();
 
       // Step 5: Sync pending result shipment routes
       await syncPendingResultShipmentRoutes();
 
       // Step 6: Sync pending result shipment deliveries (after result shipment routes)
-      await syncPendingResultShipmentDeliveries();
+      await syncPendingResultDeliveries();
 
       // Check if there are still failed records after sync attempt
       final failedCount = await _localService.getFailedSyncCount();
@@ -193,6 +193,128 @@ class SyncService {
     } finally {
       _isSyncing = false;
     }
+  }
+
+  /// Sync all pending rejections to server
+  Future<void> syncPendingRejections() async {
+    developer.log(
+      "Syncing pending rejections",
+      name: "SyncService:syncPendingRejections",
+    );
+
+    final pendingRejections = await _localService.getPendingRejections();
+
+    if (pendingRejections.isEmpty) {
+      developer.log(
+        "No pending rejections to sync",
+        name: "SyncService:syncPendingRejections",
+      );
+      return;
+    }
+
+    developer.log(
+      "Found ${pendingRejections.length} pending rejections",
+      name: "SyncService:syncPendingRejections",
+    );
+
+    for (final result in pendingRejections) {
+      final apiResult = await _apiService.rejectSample(
+        sample: RejectSampleRequest(
+          sampleCode: result.sampleCode,
+          reason: result.rejectionReason ?? "No reason provided",
+          rejectionDate:
+              result.rejectionDate ?? DateTime.now().toIso8601String(),
+        ),
+      );
+
+      if (apiResult is Success) {
+        developer.log(
+          "Rejection for ${result.sampleCode} synced successfully, deleting from cache",
+          name: "SyncService:syncPendingRejections",
+        );
+        // Delete the result from cache after successful sync
+        await _localService.deleteResult(result.sampleCode);
+      } else {
+        developer.log(
+          "Failed to sync rejection for ${result.sampleCode}: ${(apiResult as Error).message}",
+          name: "SyncService:syncPendingRejections",
+        );
+        // Mark as failed for retry
+        await _localService.updateResultRejection(
+          result.sampleCode,
+          true,
+          result.rejectionReason,
+          result.rejectionDate,
+          SyncStatus.failed,
+        );
+      }
+    }
+  }
+
+  /// Sync a single manifest immediately (called after creation)
+  Future<bool> syncManifestNow(
+    DomainManifest manifest,
+    List<DomainSample> samples,
+  ) async {
+    final isConnected = await _connectivityService.isConnected;
+    if (!isConnected) {
+      return false;
+    }
+
+    return await _syncSingleManifest(manifest);
+  }
+
+  /// Sync a single manifest to the server
+  Future<bool> _syncSingleManifest(DomainManifest manifest) async {
+    final samples = await _localService.getCachedSamplesByManifestNo(
+      manifest.manifestNo,
+    );
+
+    final manifestRequest = ManifestRequestItem(
+      manifestNo: manifest.manifestNo,
+      originId: manifest.originId,
+      destinationId: manifest.destinationId,
+      sampleType: manifest.sampleType,
+      sampleCount: manifest.sampleCount,
+      phlebotomyNo: manifest.phlebotomyNo,
+      lspCode: manifest.lspCode,
+      temperature: manifest.temperature ?? "",
+      userId: manifest.userId,
+      samples: samples
+          .map(
+            (s) => ManifestSampleRequest(
+              sampleCode: s.sampleCode,
+              patientCode: s.patientCode,
+              age: _formatAgeForServer(s.age),
+              gender: _formatGenderForServer(s.gender),
+            ),
+          )
+          .toList(),
+    );
+
+    final result = await _apiService.createManifests(
+      manifests: [manifestRequest],
+    );
+
+    if (result is Success) {
+      await _localService.updateSyncStatus(
+        Tables.manifests,
+        Columns.manifestNo,
+        manifest.manifestNo,
+        SyncStatus.synced,
+      );
+      for (final sample in samples) {
+        await _localService.updateSyncStatus(
+          Tables.samples,
+          Columns.sampleCode,
+          sample.sampleCode,
+          SyncStatus.synced,
+        );
+      }
+      return true;
+    }
+
+    return false;
   }
 
   /// Sync all pending manifest to server
@@ -300,6 +422,120 @@ class SyncService {
     }
   }
 
+  /// Sync a route immediately (called after creation)
+  Future<bool> syncSpecimenShipmentRouteNow(
+    DomainShipmentRoute route,
+    List<DomainShipment> shipments,
+    DomainApproval approval,
+  ) async {
+    final isConnected = await _connectivityService.isConnected;
+    if (!isConnected) {
+      return false;
+    }
+
+    // Ensure all manifest are synced first
+    for (final shipment in shipments) {
+      // Skip manifest check for result shipments (manifestNo is null)
+      if (shipment.manifestNo == null) continue;
+
+      final manifest = await _localService.getManifestByNo(
+        shipment.manifestNo!,
+      );
+      if (manifest != null && manifest.syncStatus != SyncStatus.synced) {
+        final synced = await _syncSingleManifest(manifest);
+        if (!synced) {
+          developer.log(
+            "Cannot sync route - manifest ${shipment.manifestNo} failed to sync",
+            name: "SyncService:syncRouteNow",
+          );
+          return false;
+        }
+      }
+    }
+
+    // Build the request
+    final specimenShipmentRoute = CreateSpecimenShipmentRouteRequest(
+      routeNo: route.routeNo,
+      originFacilityId: route.originFacilityId,
+      destinationFacilityId: route.destinationFacilityId,
+      lspCode: route.lspCode,
+      riderUserId: route.riderUserId,
+      latitude: route.latitude?.toString() ?? "0.0",
+      longitude: route.longitude?.toString() ?? "0.0",
+      temperature: route.temperature ?? "",
+      shipment: shipments
+          .map(
+            (s) => Shipment(
+              shipmentNo: s.shipmentNo,
+              manifestNo: s.manifestNo ?? '',
+              originType: s.originType,
+              destinationType: s.destinationLocationType,
+              pickupLatitude: s.pickupLatitude.toString(),
+              pickupLongitude: s.pickupLongitude.toString(),
+              sampleType: s.sampleType,
+              sampleCount: s.sampleCount,
+              pickupDate: s.pickupDate ?? DateTime.now().toIso8601String(),
+            ),
+          )
+          .toList(),
+      approval: Approval(
+        approvalNo: approval.approvalNo,
+        approvalType: _formatApprovalTypeForServer(approval.approvalType),
+        fullname: _valueOrNA(approval.fullname),
+        phone: _valueOrNA(approval.phone),
+        designation: _valueOrNA(approval.designation),
+        signature: _valueOrNA(approval.signature),
+        approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
+      ),
+    );
+
+    final result = await _apiService.createSpecimenShipmentRoute(
+      shipmentRoute: specimenShipmentRoute,
+    );
+
+    if (result is Success) {
+      // Mark as synced
+      await _localService.updateSyncStatus(
+        Tables.routes,
+        Columns.routeNo,
+        route.routeNo,
+        SyncStatus.synced,
+      );
+      // Update route stage to In-Transit
+      await _localService.updateRouteStageToInTransit(route.routeNo);
+      for (final shipment in shipments) {
+        await _localService.updateSyncStatus(
+          Tables.shipments,
+          Columns.shipmentNo,
+          shipment.shipmentNo,
+          SyncStatus.synced,
+        );
+        // Transition shipment stage to Stage.inTransit
+        await _localService.updateShipmentStage(
+          shipment.shipmentNo,
+          Stage.inTransit,
+        );
+        // Update shipment, manifest, and samples stage to In-Transit
+        // Only for specimen shipments (result shipments have null manifestNo)
+        if (shipment.manifestNo != null) {
+          await _localService.updateShipmentStageToInTransit(
+            shipment.shipmentNo,
+            shipment.manifestNo!,
+          );
+        }
+      }
+      await _localService.updateSyncStatus(
+        Tables.approvals,
+        Columns.approvalNo,
+        approval.approvalNo,
+        SyncStatus.synced,
+      );
+      return true;
+    }
+
+    return false;
+  }
+
   /// Sync all pending routes to server
   Future<void> syncPendingSpecimenShipmentRoutes() async {
     developer.log(
@@ -387,6 +623,7 @@ class SyncService {
         riderUserId: route.riderUserId,
         latitude: route.latitude?.toString() ?? "0.0",
         longitude: route.longitude?.toString() ?? "0.0",
+        temperature: route.temperature ?? "",
         shipment: shipments
             .map(
               (s) => Shipment(
@@ -476,159 +713,13 @@ class SyncService {
     }
   }
 
-  /// Sync all pending rejections to server
-  Future<void> syncPendingRejections() async {
-    developer.log(
-      "Syncing pending rejections",
-      name: "SyncService:syncPendingRejections",
-    );
-
-    final pendingRejections = await _localService.getPendingRejections();
-
-    if (pendingRejections.isEmpty) {
-      developer.log(
-        "No pending rejections to sync",
-        name: "SyncService:syncPendingRejections",
-      );
-      return;
-    }
-
-    developer.log(
-      "Found ${pendingRejections.length} pending rejections",
-      name: "SyncService:syncPendingRejections",
-    );
-
-    for (final result in pendingRejections) {
-      final apiResult = await _apiService.rejectSample(
-        sample: RejectSampleRequest(
-          sampleCode: result.sampleCode,
-          reason: result.rejectionReason ?? "No reason provided",
-          rejectionDate:
-              result.rejectionDate ?? DateTime.now().toIso8601String(),
-        ),
-      );
-
-      if (apiResult is Success) {
-        developer.log(
-          "Rejection for ${result.sampleCode} synced successfully, deleting from cache",
-          name: "SyncService:syncPendingRejections",
-        );
-        // Delete the result from cache after successful sync
-        await _localService.deleteResult(result.sampleCode);
-      } else {
-        developer.log(
-          "Failed to sync rejection for ${result.sampleCode}: ${(apiResult as Error).message}",
-          name: "SyncService:syncPendingRejections",
-        );
-        // Mark as failed for retry
-        await _localService.updateResultRejection(
-          result.sampleCode,
-          true,
-          result.rejectionReason,
-          result.rejectionDate,
-          SyncStatus.failed,
-        );
-      }
-    }
-  }
-
-  /// Sync a single manifest to the server
-  Future<bool> _syncSingleManifest(DomainManifest manifest) async {
-    final samples = await _localService.getCachedSamplesByManifestNo(
-      manifest.manifestNo,
-    );
-
-    final manifestRequest = ManifestRequestItem(
-      manifestNo: manifest.manifestNo,
-      originId: manifest.originId,
-      destinationId: manifest.destinationId,
-      sampleType: manifest.sampleType,
-      sampleCount: manifest.sampleCount,
-      phlebotomyNo: manifest.phlebotomyNo,
-      lspCode: manifest.lspCode,
-      temperature: manifest.temperature ?? "",
-      userId: manifest.userId,
-      samples: samples
-          .map(
-            (s) => ManifestSampleRequest(
-              sampleCode: s.sampleCode,
-              patientCode: s.patientCode,
-              age: _formatAgeForServer(s.age),
-              gender: _formatGenderForServer(s.gender),
-            ),
-          )
-          .toList(),
-    );
-
-    final result = await _apiService.createManifests(
-      manifests: [manifestRequest],
-    );
-
-    if (result is Success) {
-      await _localService.updateSyncStatus(
-        Tables.manifests,
-        Columns.manifestNo,
-        manifest.manifestNo,
-        SyncStatus.synced,
-      );
-      for (final sample in samples) {
-        await _localService.updateSyncStatus(
-          Tables.samples,
-          Columns.sampleCode,
-          sample.sampleCode,
-          SyncStatus.synced,
-        );
-      }
-      return true;
-    }
-
-    return false;
-  }
-
-  /// Sync a single manifest immediately (called after creation)
-  Future<bool> syncManifestNow(
-    DomainManifest manifest,
-    List<DomainSample> samples,
-  ) async {
-    final isConnected = await _connectivityService.isConnected;
-    if (!isConnected) {
-      return false;
-    }
-
-    return await _syncSingleManifest(manifest);
-  }
-
-  /// Sync a route immediately (called after creation)
-  Future<bool> syncRouteNow(
+  /// Sync a single route to the server
+  Future<bool> _syncSingleSpecimenShipmentRoute(
     DomainShipmentRoute route,
     List<DomainShipment> shipments,
     DomainApproval approval,
   ) async {
-    final isConnected = await _connectivityService.isConnected;
-    if (!isConnected) {
-      return false;
-    }
-
-    // Ensure all manifest are synced first
-    for (final shipment in shipments) {
-      // Skip manifest check for result shipments (manifestNo is null)
-      if (shipment.manifestNo == null) continue;
-
-      final manifest = await _localService.getManifestByNo(shipment.manifestNo!);
-      if (manifest != null && manifest.syncStatus != SyncStatus.synced) {
-        final synced = await _syncSingleManifest(manifest);
-        if (!synced) {
-          developer.log(
-            "Cannot sync route - manifest ${shipment.manifestNo} failed to sync",
-            name: "SyncService:syncRouteNow",
-          );
-          return false;
-        }
-      }
-    }
-
-    // Build the request
-    final specimenShipmentRoute = CreateSpecimenShipmentRouteRequest(
+    final routeRequest = CreateSpecimenShipmentRouteRequest(
       routeNo: route.routeNo,
       originFacilityId: route.originFacilityId,
       destinationFacilityId: route.destinationFacilityId,
@@ -636,6 +727,7 @@ class SyncService {
       riderUserId: route.riderUserId,
       latitude: route.latitude?.toString() ?? "0.0",
       longitude: route.longitude?.toString() ?? "0.0",
+      temperature: route.temperature ?? "",
       shipment: shipments
           .map(
             (s) => Shipment(
@@ -663,11 +755,10 @@ class SyncService {
     );
 
     final result = await _apiService.createSpecimenShipmentRoute(
-      shipmentRoute: specimenShipmentRoute,
+      shipmentRoute: routeRequest,
     );
 
     if (result is Success) {
-      // Mark as synced
       await _localService.updateSyncStatus(
         Tables.routes,
         Columns.routeNo,
@@ -709,8 +800,137 @@ class SyncService {
     return false;
   }
 
+  /// Sync a specimen delivery immediately (called after approval)
+  Future<bool> syncSpecimenDeliveryNow(
+    DomainShipmentRoute route,
+    List<DomainShipment> shipments,
+    DomainApproval deliveryApproval,
+  ) async {
+    final isConnected = await _connectivityService.isConnected;
+    if (!isConnected) {
+      return false;
+    }
+
+    var currentRoute = route;
+
+    // Step 1: Ensure all manifest are synced first
+    for (final shipment in shipments) {
+      // Skip manifest check for result shipments (manifestNo is null)
+      if (shipment.manifestNo == null) continue;
+
+      final manifest = await _localService.getManifestByNo(
+        shipment.manifestNo!,
+      );
+      if (manifest != null && manifest.syncStatus != SyncStatus.synced) {
+        developer.log(
+          "Manifest ${shipment.manifestNo} not synced, attempting sync first",
+          name: "SyncService:syncSpecimenDeliveryNow",
+        );
+        final synced = await _syncSingleManifest(manifest);
+        if (!synced) {
+          developer.log(
+            "Failed to sync manifest ${shipment.manifestNo}, delivery sync deferred",
+            name: "SyncService:syncSpecimenDeliveryNow",
+          );
+          return false;
+        }
+      }
+    }
+
+    // Step 2: Ensure the route is synced
+    if (currentRoute.syncStatus != SyncStatus.synced) {
+      developer.log(
+        "Route ${currentRoute.routeNo} not synced, attempting sync first",
+        name: "SyncService:syncSpecimenDeliveryNow",
+      );
+
+      // Get the pickup approval for this route
+      final pickupApprovals = await _localService
+          .getCachedPickupApprovalsByRouteNo(currentRoute.routeNo);
+      final pickupApproval = pickupApprovals.isNotEmpty
+          ? pickupApprovals.first
+          : null;
+
+      if (pickupApproval == null) {
+        developer.log(
+          "No pickup approval found for route ${currentRoute.routeNo}, delivery sync deferred",
+          name: "SyncService:syncSpecimenDeliveryNow",
+        );
+        return false;
+      }
+
+      final routeSynced = await _syncSingleSpecimenShipmentRoute(
+        currentRoute,
+        shipments,
+        pickupApproval,
+      );
+      if (!routeSynced) {
+        developer.log(
+          "Failed to sync route ${currentRoute.routeNo}, delivery sync deferred",
+          name: "SyncService:syncSpecimenDeliveryNow",
+        );
+        return false;
+      }
+
+      // Refresh route
+      final refreshedRoute = await _localService.getCachedRouteByRouteNo(
+        currentRoute.routeNo,
+      );
+      if (refreshedRoute == null ||
+          refreshedRoute.syncStatus != SyncStatus.synced) {
+        return false;
+      }
+      currentRoute = refreshedRoute;
+    }
+
+    // Step 3: Now sync the delivery
+    final deliveryRequests = shipments
+        .map<SpecimenDeliveryRequest>(
+          (shipment) => SpecimenDeliveryRequest(
+            routeNo: currentRoute.routeNo,
+            shipmentNo: shipment.shipmentNo,
+            manifestNo: shipment.manifestNo ?? '',
+            latitude: currentRoute.latitude?.toString() ?? "0.0",
+            longitude: currentRoute.longitude?.toString() ?? "0.0",
+            deliveryDate:
+                shipment.deliveryDate ?? DateTime.now().toIso8601String(),
+            destinationType: shipment.destinationLocationType,
+            approval: SpecimenDeliveryApproval(
+              approvalNo: deliveryApproval.approvalNo,
+              approvalType: _formatApprovalTypeForServer(
+                deliveryApproval.approvalType,
+              ),
+              fullname: _valueOrNA(deliveryApproval.fullname),
+              phone: _valueOrNA(deliveryApproval.phone),
+              designation: _valueOrNA(deliveryApproval.designation),
+              signature: _valueOrNA(deliveryApproval.signature),
+              approvalDate:
+                  deliveryApproval.approvalDate ??
+                  DateTime.now().toIso8601String(),
+            ),
+          ),
+        )
+        .toList();
+
+    final result = await _apiService.deliverSpecimenShipments(
+      deliveries: deliveryRequests,
+    );
+
+    if (result is Success) {
+      await _localService.updateSyncStatus(
+        Tables.approvals,
+        Columns.approvalNo,
+        deliveryApproval.approvalNo,
+        SyncStatus.synced,
+      );
+      return true;
+    }
+
+    return false;
+  }
+
   /// Sync all pending specimen deliveries to server
-  Future<void> syncPendingSpecimenShipmentDeliveries() async {
+  Future<void> syncPendingSpecimenDeliveries() async {
     developer.log(
       "Syncing pending specimen deliveries",
       name: "SyncService:syncPendingSpecimenDeliveries",
@@ -805,7 +1025,7 @@ class SyncService {
         }
 
         // Sync the route
-        final routeSynced = await _syncSingleRoute(
+        final routeSynced = await _syncSingleSpecimenShipmentRoute(
           route,
           shipments,
           pickupApproval,
@@ -903,36 +1123,38 @@ class SyncService {
     }
   }
 
-  /// Sync a single route to the server
-  Future<bool> _syncSingleRoute(
+  /// Sync a result pickup immediately (called after creation)
+  Future<bool> syncResultShipmentRouteNow(
     DomainShipmentRoute route,
-    List<DomainShipment> shipments,
+    DomainShipment shipment,
     DomainApproval approval,
+    List<String> sampleCodes,
   ) async {
-    final routeRequest = CreateSpecimenShipmentRouteRequest(
+    final isConnected = await _connectivityService.isConnected;
+    if (!isConnected) {
+      return false;
+    }
+
+    final routeRequest = CreateResultShipmentRouteRequest(
       routeNo: route.routeNo,
       originFacilityId: route.originFacilityId,
       destinationFacilityId: route.destinationFacilityId,
       lspCode: route.lspCode,
       riderUserId: route.riderUserId,
+      // temperature not applicable for result shipments
+      temperature: "",
       latitude: route.latitude?.toString() ?? "0.0",
       longitude: route.longitude?.toString() ?? "0.0",
-      shipment: shipments
-          .map(
-            (s) => Shipment(
-              shipmentNo: s.shipmentNo,
-              manifestNo: s.manifestNo ?? '',
-              originType: s.originType,
-              destinationType: s.destinationLocationType,
-              pickupLatitude: s.pickupLatitude.toString(),
-              pickupLongitude: s.pickupLongitude.toString(),
-              sampleType: s.sampleType,
-              sampleCount: s.sampleCount,
-              pickupDate: s.pickupDate ?? DateTime.now().toIso8601String(),
-            ),
-          )
-          .toList(),
-      approval: Approval(
+      shipment: ResultShipment(
+        shipmentNo: shipment.shipmentNo,
+        originType: shipment.originType,
+        destinationType: shipment.destinationLocationType,
+        sampleType: shipment.sampleType,
+        sampleCount: shipment.sampleCount,
+        pickupDate: shipment.pickupDate ?? DateTime.now().toIso8601String(),
+      ),
+      samples: sampleCodes,
+      approval: ResultShipmentApproval(
         approvalNo: approval.approvalNo,
         approvalType: _formatApprovalTypeForServer(approval.approvalType),
         fullname: _valueOrNA(approval.fullname),
@@ -943,11 +1165,22 @@ class SyncService {
       ),
     );
 
-    final result = await _apiService.createSpecimenShipmentRoute(
-      shipmentRoute: routeRequest,
+    developer.log(
+      "api syncResultPickupNow routeRequest: $routeRequest",
+      name: "SyncService:syncResultPickupNow",
+    );
+
+    final result = await _apiService.createResultShipmentRoute(
+      routes: [routeRequest],
     );
 
     if (result is Success) {
+      await _localService.updateSyncStatus(
+        Tables.approvals,
+        Columns.approvalNo,
+        approval.approvalNo,
+        SyncStatus.synced,
+      );
       await _localService.updateSyncStatus(
         Tables.routes,
         Columns.routeNo,
@@ -956,160 +1189,25 @@ class SyncService {
       );
       // Update route stage to In-Transit
       await _localService.updateRouteStageToInTransit(route.routeNo);
-      for (final shipment in shipments) {
-        await _localService.updateSyncStatus(
-          Tables.shipments,
-          Columns.shipmentNo,
-          shipment.shipmentNo,
-          SyncStatus.synced,
-        );
-        // Transition shipment stage to Stage.inTransit
-        await _localService.updateShipmentStage(
-          shipment.shipmentNo,
-          Stage.inTransit,
-        );
-        // Update shipment, manifest, and samples stage to In-Transit
-        // Only for specimen shipments (result shipments have null manifestNo)
-        if (shipment.manifestNo != null) {
-          await _localService.updateShipmentStageToInTransit(
-            shipment.shipmentNo,
-            shipment.manifestNo!,
-          );
-        }
-      }
       await _localService.updateSyncStatus(
-        Tables.approvals,
-        Columns.approvalNo,
-        approval.approvalNo,
+        Tables.shipments,
+        Columns.shipmentNo,
+        shipment.shipmentNo,
         SyncStatus.synced,
       );
-      return true;
-    }
-
-    return false;
-  }
-
-  /// Sync a specimen delivery immediately (called after approval)
-  Future<bool> syncSpecimenDeliveryNow(
-    DomainShipmentRoute route,
-    List<DomainShipment> shipments,
-    DomainApproval deliveryApproval,
-  ) async {
-    final isConnected = await _connectivityService.isConnected;
-    if (!isConnected) {
-      return false;
-    }
-
-    var currentRoute = route;
-
-    // Step 1: Ensure all manifest are synced first
-    for (final shipment in shipments) {
-      // Skip manifest check for result shipments (manifestNo is null)
-      if (shipment.manifestNo == null) continue;
-
-      final manifest = await _localService.getManifestByNo(shipment.manifestNo!);
-      if (manifest != null && manifest.syncStatus != SyncStatus.synced) {
-        developer.log(
-          "Manifest ${shipment.manifestNo} not synced, attempting sync first",
-          name: "SyncService:syncSpecimenDeliveryNow",
-        );
-        final synced = await _syncSingleManifest(manifest);
-        if (!synced) {
-          developer.log(
-            "Failed to sync manifest ${shipment.manifestNo}, delivery sync deferred",
-            name: "SyncService:syncSpecimenDeliveryNow",
-          );
-          return false;
-        }
-      }
-    }
-
-    // Step 2: Ensure the route is synced
-    if (currentRoute.syncStatus != SyncStatus.synced) {
-      developer.log(
-        "Route ${currentRoute.routeNo} not synced, attempting sync first",
-        name: "SyncService:syncSpecimenDeliveryNow",
+      // Transition shipment stage to Stage.inTransit
+      await _localService.updateShipmentStage(
+        shipment.shipmentNo,
+        Stage.inTransit,
       );
-
-      // Get the pickup approval for this route
-      final pickupApprovals = await _localService
-          .getCachedPickupApprovalsByRouteNo(currentRoute.routeNo);
-      final pickupApproval = pickupApprovals.isNotEmpty
-          ? pickupApprovals.first
-          : null;
-
-      if (pickupApproval == null) {
-        developer.log(
-          "No pickup approval found for route ${currentRoute.routeNo}, delivery sync deferred",
-          name: "SyncService:syncSpecimenDeliveryNow",
-        );
-        return false;
-      }
-
-      final routeSynced = await _syncSingleRoute(
-        currentRoute,
-        shipments,
-        pickupApproval,
+      // Update shipment stage to In-Transit (for result pickups, manifest is not local so we just update shipment)
+      await _localService.updateStage(
+        Tables.shipments,
+        Columns.shipmentNo,
+        shipment.shipmentNo,
+        Stage.inTransit,
       );
-      if (!routeSynced) {
-        developer.log(
-          "Failed to sync route ${currentRoute.routeNo}, delivery sync deferred",
-          name: "SyncService:syncSpecimenDeliveryNow",
-        );
-        return false;
-      }
-
-      // Refresh route
-      final refreshedRoute = await _localService.getCachedRouteByRouteNo(
-        currentRoute.routeNo,
-      );
-      if (refreshedRoute == null ||
-          refreshedRoute.syncStatus != SyncStatus.synced) {
-        return false;
-      }
-      currentRoute = refreshedRoute;
-    }
-
-    // Step 3: Now sync the delivery
-    final deliveryRequests = shipments
-        .map<SpecimenDeliveryRequest>(
-          (shipment) => SpecimenDeliveryRequest(
-            routeNo: currentRoute.routeNo,
-            shipmentNo: shipment.shipmentNo,
-            manifestNo: shipment.manifestNo ?? '',
-            latitude: currentRoute.latitude?.toString() ?? "0.0",
-            longitude: currentRoute.longitude?.toString() ?? "0.0",
-            deliveryDate:
-                shipment.deliveryDate ?? DateTime.now().toIso8601String(),
-            destinationType: shipment.destinationLocationType,
-            approval: SpecimenDeliveryApproval(
-              approvalNo: deliveryApproval.approvalNo,
-              approvalType: _formatApprovalTypeForServer(
-                deliveryApproval.approvalType,
-              ),
-              fullname: _valueOrNA(deliveryApproval.fullname),
-              phone: _valueOrNA(deliveryApproval.phone),
-              designation: _valueOrNA(deliveryApproval.designation),
-              signature: _valueOrNA(deliveryApproval.signature),
-              approvalDate:
-                  deliveryApproval.approvalDate ??
-                  DateTime.now().toIso8601String(),
-            ),
-          ),
-        )
-        .toList();
-
-    final result = await _apiService.deliverSpecimenShipments(
-      deliveries: deliveryRequests,
-    );
-
-    if (result is Success) {
-      await _localService.updateSyncStatus(
-        Tables.approvals,
-        Columns.approvalNo,
-        deliveryApproval.approvalNo,
-        SyncStatus.synced,
-      );
+      // Note: Results are kept until delivery sync completes
       return true;
     }
 
@@ -1179,7 +1277,8 @@ class SyncService {
           destinationFacilityId: route.destinationFacilityId,
           lspCode: route.lspCode,
           riderUserId: route.riderUserId,
-          temperature: "0",
+          // temperature not applicable for result shipments
+          temperature: "",
           latitude: route.latitude?.toString() ?? "0.0",
           longitude: route.longitude?.toString() ?? "0.0",
           shipment: ResultShipment(
@@ -1270,8 +1369,8 @@ class SyncService {
     }
   }
 
-  /// Sync a result pickup immediately (called after creation)
-  Future<bool> syncResultPickupNow(
+  /// Sync a result delivery immediately (called after approval)
+  Future<bool> syncResultDeliveryNow(
     DomainShipmentRoute route,
     DomainShipment shipment,
     DomainApproval approval,
@@ -1282,26 +1381,20 @@ class SyncService {
       return false;
     }
 
-    final routeRequest = CreateResultShipmentRouteRequest(
+    final deliveryRequest = ResultDeliveryRequest(
       routeNo: route.routeNo,
-      originFacilityId: route.originFacilityId,
-      destinationFacilityId: route.destinationFacilityId,
-      lspCode: route.lspCode,
-      riderUserId: route.riderUserId,
-      temperature: "0",
-      // to be removed once API is updated
       latitude: route.latitude?.toString() ?? "0.0",
       longitude: route.longitude?.toString() ?? "0.0",
-      shipment: ResultShipment(
+      shipment: ResultDeliveryShipment(
         shipmentNo: shipment.shipmentNo,
         originType: shipment.originType,
         destinationType: shipment.destinationLocationType,
         sampleType: shipment.sampleType,
         sampleCount: shipment.sampleCount,
-        pickupDate: shipment.pickupDate ?? DateTime.now().toIso8601String(),
+        deliveryDate: shipment.deliveryDate ?? DateTime.now().toIso8601String(),
       ),
       samples: sampleCodes,
-      approval: ResultShipmentApproval(
+      approval: ResultDeliveryApproval(
         approvalNo: approval.approvalNo,
         approvalType: _formatApprovalTypeForServer(approval.approvalType),
         fullname: _valueOrNA(approval.fullname),
@@ -1312,13 +1405,8 @@ class SyncService {
       ),
     );
 
-    developer.log(
-      "api syncResultPickupNow routeRequest: $routeRequest",
-      name: "SyncService:syncResultPickupNow",
-    );
-
-    final result = await _apiService.createResultShipmentRoute(
-      routes: [routeRequest],
+    final result = await _apiService.deliverResultShipments(
+      deliveries: [deliveryRequest],
     );
 
     if (result is Success) {
@@ -1328,33 +1416,7 @@ class SyncService {
         approval.approvalNo,
         SyncStatus.synced,
       );
-      await _localService.updateSyncStatus(
-        Tables.routes,
-        Columns.routeNo,
-        route.routeNo,
-        SyncStatus.synced,
-      );
-      // Update route stage to In-Transit
-      await _localService.updateRouteStageToInTransit(route.routeNo);
-      await _localService.updateSyncStatus(
-        Tables.shipments,
-        Columns.shipmentNo,
-        shipment.shipmentNo,
-        SyncStatus.synced,
-      );
-      // Transition shipment stage to Stage.inTransit
-      await _localService.updateShipmentStage(
-        shipment.shipmentNo,
-        Stage.inTransit,
-      );
-      // Update shipment stage to In-Transit (for result pickups, manifest is not local so we just update shipment)
-      await _localService.updateStage(
-        Tables.shipments,
-        Columns.shipmentNo,
-        shipment.shipmentNo,
-        Stage.inTransit,
-      );
-      // Note: Results are kept until delivery sync completes
+      // Note: Picked results are kept in cache and filtered out on the results screen
       return true;
     }
 
@@ -1362,7 +1424,7 @@ class SyncService {
   }
 
   /// Sync all pending result deliveries to server
-  Future<void> syncPendingResultShipmentDeliveries() async {
+  Future<void> syncPendingResultDeliveries() async {
     developer.log(
       "Syncing pending result deliveries",
       name: "SyncService:syncPendingResultDeliveries",
@@ -1478,59 +1540,5 @@ class SyncService {
         }
       }
     }
-  }
-
-  /// Sync a result delivery immediately (called after approval)
-  Future<bool> syncResultDeliveryNow(
-    DomainShipmentRoute route,
-    DomainShipment shipment,
-    DomainApproval approval,
-    List<String> sampleCodes,
-  ) async {
-    final isConnected = await _connectivityService.isConnected;
-    if (!isConnected) {
-      return false;
-    }
-
-    final deliveryRequest = ResultDeliveryRequest(
-      routeNo: route.routeNo,
-      latitude: route.latitude?.toString() ?? "0.0",
-      longitude: route.longitude?.toString() ?? "0.0",
-      shipment: ResultDeliveryShipment(
-        shipmentNo: shipment.shipmentNo,
-        originType: shipment.originType,
-        destinationType: shipment.destinationLocationType,
-        sampleType: shipment.sampleType,
-        sampleCount: shipment.sampleCount,
-        deliveryDate: shipment.deliveryDate ?? DateTime.now().toIso8601String(),
-      ),
-      samples: sampleCodes,
-      approval: ResultDeliveryApproval(
-        approvalNo: approval.approvalNo,
-        approvalType: _formatApprovalTypeForServer(approval.approvalType),
-        fullname: _valueOrNA(approval.fullname),
-        phone: _valueOrNA(approval.phone),
-        designation: _valueOrNA(approval.designation),
-        signature: _valueOrNA(approval.signature),
-        approvalDate: approval.approvalDate ?? DateTime.now().toIso8601String(),
-      ),
-    );
-
-    final result = await _apiService.deliverResultShipments(
-      deliveries: [deliveryRequest],
-    );
-
-    if (result is Success) {
-      await _localService.updateSyncStatus(
-        Tables.approvals,
-        Columns.approvalNo,
-        approval.approvalNo,
-        SyncStatus.synced,
-      );
-      // Note: Picked results are kept in cache and filtered out on the results screen
-      return true;
-    }
-
-    return false;
   }
 }

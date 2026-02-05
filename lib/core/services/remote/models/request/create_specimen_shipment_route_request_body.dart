@@ -13,6 +13,7 @@ class CreateSpecimenShipmentRouteRequest with _$CreateSpecimenShipmentRouteReque
     @JsonKey(name: 'rider_user_id') required String riderUserId,
     required String latitude,
     required String longitude,
+    required String temperature,
     required List<Shipment> shipment,
     required Approval approval,
   }) = _CreateSpecimenShipmentRouteRequest;

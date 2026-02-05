@@ -116,6 +116,7 @@ class SpecimenShipmentApprovalScreenStateNotifier
         destinationFacilityName: state.destinationFacility.facilityName ?? "",
         latitude: ref.read(geoLocationServiceProvider).latitude,
         longitude: ref.read(geoLocationServiceProvider).longitude,
+        temperature: state.pickUpTemperature,
       );
 
       final approval = DomainApproval(

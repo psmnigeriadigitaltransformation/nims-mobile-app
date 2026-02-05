@@ -14,7 +14,7 @@ class NIMSDatabase {
     final path = join(await getDatabasesPath(), 'nims.db');
     return await openDatabase(
       path,
-      version: 17,
+      version: 18,
       onCreate: (db, version) async {
 
         // Tables
@@ -186,6 +186,7 @@ class NIMSDatabase {
             rider_user_id TEXT NOT NULL,
             latitude DECIMAL(10,6),
             longitude DECIMAL(10,6),
+            temperature TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             sync_status TEXT NOT NULL DEFAULT 'pending',
             stage TEXT NOT NULL DEFAULT 'Pending'
@@ -538,6 +539,12 @@ class NIMSDatabase {
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               reason TEXT NOT NULL UNIQUE
             )
+          ''');
+        }
+        if (oldVersion < 18) {
+          // Add temperature column to routes table for specimen shipment routes
+          await db.execute('''
+            ALTER TABLE routes ADD COLUMN temperature TEXT
           ''');
         }
       },

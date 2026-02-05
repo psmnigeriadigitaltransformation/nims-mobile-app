@@ -40,6 +40,7 @@ mixin _$ShipmentRoute {
   String get riderUserId => throw _privateConstructorUsedError;
   double? get latitude => throw _privateConstructorUsedError;
   double? get longitude => throw _privateConstructorUsedError;
+  String? get temperature => throw _privateConstructorUsedError;
   @JsonKey(name: 'sync_status')
   String get syncStatus => throw _privateConstructorUsedError;
   String get stage => throw _privateConstructorUsedError;
@@ -73,6 +74,7 @@ abstract class $ShipmentRouteCopyWith<$Res> {
     @JsonKey(name: 'rider_user_id') String riderUserId,
     double? latitude,
     double? longitude,
+    String? temperature,
     @JsonKey(name: 'sync_status') String syncStatus,
     String stage,
   });
@@ -104,6 +106,7 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
     Object? riderUserId = null,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? temperature = freezed,
     Object? syncStatus = null,
     Object? stage = null,
   }) {
@@ -153,6 +156,10 @@ class _$ShipmentRouteCopyWithImpl<$Res, $Val extends ShipmentRoute>
                 ? _value.longitude
                 : longitude // ignore: cast_nullable_to_non_nullable
                       as double?,
+            temperature: freezed == temperature
+                ? _value.temperature
+                : temperature // ignore: cast_nullable_to_non_nullable
+                      as String?,
             syncStatus: null == syncStatus
                 ? _value.syncStatus
                 : syncStatus // ignore: cast_nullable_to_non_nullable
@@ -188,6 +195,7 @@ abstract class _$$ShipmentRouteImplCopyWith<$Res>
     @JsonKey(name: 'rider_user_id') String riderUserId,
     double? latitude,
     double? longitude,
+    String? temperature,
     @JsonKey(name: 'sync_status') String syncStatus,
     String stage,
   });
@@ -218,6 +226,7 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
     Object? riderUserId = null,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? temperature = freezed,
     Object? syncStatus = null,
     Object? stage = null,
   }) {
@@ -267,6 +276,10 @@ class __$$ShipmentRouteImplCopyWithImpl<$Res>
             ? _value.longitude
             : longitude // ignore: cast_nullable_to_non_nullable
                   as double?,
+        temperature: freezed == temperature
+            ? _value.temperature
+            : temperature // ignore: cast_nullable_to_non_nullable
+                  as String?,
         syncStatus: null == syncStatus
             ? _value.syncStatus
             : syncStatus // ignore: cast_nullable_to_non_nullable
@@ -297,6 +310,7 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
     @JsonKey(name: 'rider_user_id') required this.riderUserId,
     this.latitude,
     this.longitude,
+    this.temperature,
     @JsonKey(name: 'sync_status') this.syncStatus = 'pending',
     this.stage = 'Pending',
   });
@@ -335,6 +349,8 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
   @override
   final double? longitude;
   @override
+  final String? temperature;
+  @override
   @JsonKey(name: 'sync_status')
   final String syncStatus;
   @override
@@ -343,7 +359,7 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
 
   @override
   String toString() {
-    return 'ShipmentRoute(id: $id, routeNo: $routeNo, routeType: $routeType, originFacilityId: $originFacilityId, originFacilityName: $originFacilityName, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude, syncStatus: $syncStatus, stage: $stage)';
+    return 'ShipmentRoute(id: $id, routeNo: $routeNo, routeType: $routeType, originFacilityId: $originFacilityId, originFacilityName: $originFacilityName, destinationFacilityId: $destinationFacilityId, destinationFacilityName: $destinationFacilityName, lspCode: $lspCode, riderUserId: $riderUserId, latitude: $latitude, longitude: $longitude, temperature: $temperature, syncStatus: $syncStatus, stage: $stage)';
   }
 
   @override
@@ -373,6 +389,8 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
+            (identical(other.temperature, temperature) ||
+                other.temperature == temperature) &&
             (identical(other.syncStatus, syncStatus) ||
                 other.syncStatus == syncStatus) &&
             (identical(other.stage, stage) || other.stage == stage));
@@ -393,6 +411,7 @@ class _$ShipmentRouteImpl implements _ShipmentRoute {
     riderUserId,
     latitude,
     longitude,
+    temperature,
     syncStatus,
     stage,
   );
@@ -427,6 +446,7 @@ abstract class _ShipmentRoute implements ShipmentRoute {
     @JsonKey(name: 'rider_user_id') required final String riderUserId,
     final double? latitude,
     final double? longitude,
+    final String? temperature,
     @JsonKey(name: 'sync_status') final String syncStatus,
     final String stage,
   }) = _$ShipmentRouteImpl;
@@ -464,6 +484,8 @@ abstract class _ShipmentRoute implements ShipmentRoute {
   double? get latitude;
   @override
   double? get longitude;
+  @override
+  String? get temperature;
   @override
   @JsonKey(name: 'sync_status')
   String get syncStatus;

@@ -17,6 +17,7 @@ class ShipmentRoute with _$ShipmentRoute {
     @JsonKey(name: 'rider_user_id') required String riderUserId,
     double? latitude,
     double? longitude,
+    String? temperature,
     @JsonKey(name: 'sync_status') @Default('pending') String syncStatus,
     @Default('Pending') String stage,
   }) = _ShipmentRoute;
