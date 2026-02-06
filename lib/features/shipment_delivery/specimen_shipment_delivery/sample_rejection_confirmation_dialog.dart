@@ -203,13 +203,11 @@ class _SampleRejectionConfirmationDialogState
                 ...widget.rejectionReasons.map(
                   (reason) => DropdownMenuEntry(
                     value: reason,
-                    labelWidget: Center(
-                      child: Text(
-                        reason,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
+                    labelWidget: Text(
+                      _stripAlphaPrefix(reason),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    label: reason,
+                    label: _stripAlphaPrefix(reason),
                     style: ButtonStyle().copyWith(
                       shape: WidgetStateProperty.all(
                         RoundedRectangleBorder(
@@ -256,6 +254,12 @@ class _SampleRejectionConfirmationDialogState
         ),
       ),
     );
+  }
+
+  /// Strips alphabetical prefix (e.g., "A: ", "B: ") from reason text
+  String _stripAlphaPrefix(String text) {
+    final pattern = RegExp(r'^[A-Z]:\s*');
+    return text.replaceFirst(pattern, '');
   }
 
   Widget _buildInfoItem(
