@@ -24,7 +24,8 @@ final requestLoggerInterceptor = InterceptorsWrapper(
       'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
       name: "requestLoggerInterceptor",
     );
-    debugPrint('DATA: ${response.data}');
+    developer.log('RESPONSE: $response',  name: "requestLoggerInterceptor",);
+    developer.log('DATA: ${response.data}',  name: "requestLoggerInterceptor",);
     return handler.next(response);
   },
   onError: (DioException e, handler) {

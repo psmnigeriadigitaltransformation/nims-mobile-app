@@ -258,7 +258,7 @@ class NIMSAPIService {
       final data = manifest.toJson();
       await _saveToJsonFile("updateManifest", data);
 
-      final response = await dio.post(
+      final response = await dio.put(
         "manifests/update",
         data: data,
       );
@@ -378,7 +378,7 @@ class NIMSAPIService {
       final data = sample.toJson();
       await _saveToJsonFile("rejectSample", data);
 
-      final response = await dio.post(
+      final response = await dio.put(
         "sample/reject",
         data: data,
       );

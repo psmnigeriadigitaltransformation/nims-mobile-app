@@ -35,7 +35,7 @@ class ShipmentRoutesRepository {
       // 2. If online, try to sync immediately
       final isConnected = await _connectivityService.isConnected;
       if (isConnected) {
-        final synced = await _syncService.syncRouteNow(
+        final synced = await _syncService.syncSpecimenShipmentRouteNow(
           shipmentRoute,
           shipments,
           approval,
@@ -172,7 +172,7 @@ class ShipmentRoutesRepository {
       // 3. If online, try to sync immediately
       final isConnected = await _connectivityService.isConnected;
       if (isConnected) {
-        final synced = await _syncService.syncResultPickupNow(
+        final synced = await _syncService.syncResultShipmentRouteNow(
           shipmentRoute,
           shipments.first, // Use first specimen for compatibility
           approval,

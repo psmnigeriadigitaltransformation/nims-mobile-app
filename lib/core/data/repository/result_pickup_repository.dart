@@ -250,7 +250,7 @@ class ResultPickupRepository {
           name: "ResultPickupRepository:saveResultPickup",
         );
 
-        final synced = await _syncService.syncResultPickupNow(
+        final synced = await _syncService.syncResultShipmentRouteNow(
           route,
           shipment,
           approval,
